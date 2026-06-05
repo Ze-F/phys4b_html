@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>14 · 宏观熵与第二定律 — PHYS 4B 复习</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="theme.js"></script>
+  <style>
+    .entropy-widget {
+      background: white;
+      border: 1px solid #ddd6fe;
+      border-radius: 8px;
+      padding: 1rem;
+      margin: 1rem 0;
+    }
+    .entropy-widget .controls {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(200px, 1fr));
+      gap: .6rem 1.2rem;
+      margin-bottom: .75rem;
+    }
+    .entropy-widget .control-row {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+    }
+    .entropy-widget label {
+      font-family: -apple-system, 'PingFang SC', sans-serif;
+      font-size: .9rem;
+      color: #475569;
+      min-width: 60px;
+    }
+    .entropy-widget input[type=range] {
+      flex: 1;
+      accent-color: #6b21a8;
+    }
+    .entropy-widget .readout {
+      font-family: 'Charter', serif;
+      font-size: .95rem;
+      color: #6b21a8;
+      font-weight: 600;
+      min-width: 70px;
+      text-align: right;
+    }
+    .entropy-widget .output {
+      background: #f5f3ff;
+      border-radius: 6px;
+      padding: .8rem 1rem;
+      margin-top: .5rem;
+      font-family: 'Charter', serif;
+      font-size: .95rem;
+      line-height: 1.7;
+      color: #44403c;
+    }
+    .entropy-widget .output strong { color: #6b21a8; }
+    .entropy-widget .output .sign-pos { color: #15803d; font-weight: 700; }
+    .entropy-widget .output .sign-neg { color: #b91c1c; font-weight: 700; }
+    .entropy-widget canvas {
+      display: block;
+      margin: .3rem auto .6rem;
+      background: #fafaf5;
+      border: 1px solid #e7e5e4;
+      border-radius: 6px;
+    }
+    .leg-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0;
+      font-size: .92rem;
+    }
+    .leg-table th, .leg-table td {
+      border: 1px solid #d6d3d1;
+      padding: .55rem .65rem;
+      text-align: left;
+      vertical-align: top;
+    }
+    .leg-table thead th {
+      background: #0f766e;
+      color: white;
+      font-family: -apple-system, 'PingFang SC', sans-serif;
+      font-weight: 600;
+    }
+    .leg-table tbody tr:nth-child(even) { background: #f7f5f0; }
+    .answer-box {
+      background: #eff6ff;
+      border-left: 3px solid #2563eb;
+      padding: .55rem .8rem;
+      margin: .65rem 0 .25rem;
+      font-weight: 500;
+      color: #1e3a8a;
+      font-family: -apple-system, 'PingFang SC', 'Helvetica Neue', sans-serif;
+    }
+    .answer-box::before {
+      content: '✓ 答案：';
+      color: #2563eb;
+      font-weight: 700;
+    }
+    .problem-statement {
+      background: #fafaf9;
+      border-left: 3px solid #a8a29e;
+      padding: .6rem .8rem;
+      margin: .35rem 0 .75rem;
+      font-style: italic;
+      color: #44403c;
+    }
+  </style>
+  <script>
+    MathJax = {
+      tex: { inlineMath: [['\\(', '\\)']], displayMath: [['$$', '$$']] },
+      svg: { fontCache: 'global' }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" async></script>
+</head>
+<body>
+
+<header class="site-header">
+  <a class="home-link" href="index.html">← PHYS 4B 复习</a>
+  <nav>
+    <a href="13_carnot_second_law.html">← Carnot 与第二定律</a>
+    <a href="index.html">总目录</a>
+    <a href="15_boltzmann_statistical.html">Boltzmann 统计熵 →</a>
+  </nav>
+</header>
+
+<main class="container">
+
+<div class="topic-header">
+  <h1>14 · 宏观熵与第二定律的完整工作</h1>
+  <p class="meta">Lec 9.1 · 9.2 · 9.3 · Shankar §24.1–24.3 · OpenStax Vol.2 Ch.4</p>
+  <p class="blurb">File 13 末尾我们定义了 \(dS=\delta Q_{\text{rev}}/T\) 作为态函数，并预告了 \(\Delta S_{\text{universe}}\geq 0\)——但还没<em>用</em>它做任何具体的事。本页是把这套机器跑起来的过程：理想气体的<strong>熵主公式</strong>（一条式子收四种过程），<strong>替代可逆路径</strong>技巧（用它算自由膨胀、热接触等不可逆过程），<strong>Clausius 不等式</strong>的完整推导（从循环到两态之间），<strong>第二定律的熵表述</strong> \(\Delta S_{\text{universe}}\geq 0\) 等价地推出 Clausius 和 Kelvin–Planck 两个经典陈述，以及 Lec 9.3 末尾的<strong>声速 Newton–Laplace</strong> 小尾声（呼应 File 04）。下一页 File 15 把熵从 Boltzmann 微观计数推出来。</p>
+</div>
+
+<!-- ======================================================== -->
+
+<div class="box key-result">
+  <p class="box-title">一页速览</p>
+  <ul>
+    <li><strong>熵作为态函数：</strong>\(dS=\delta Q_{\text{rev}}/T\)、\(\Delta S=\int_a^b \delta Q_{\text{rev}}/T\)。<em>实际</em>过程不可逆也没关系——找一条端点相同的可逆桥来积分。</li>
+    <li><strong>理想气体熵主公式：</strong>\(\boxed{\Delta S=nC_V\ln(T_2/T_1)+nR\ln(V_2/V_1)}\)。一条式子包含所有四种过程；只依赖端点 \(T, V\)，与实际路径是否可逆<em>无关</em>。</li>
+    <li><strong>四种特殊情形：</strong>等温 \(nR\ln(V_2/V_1)\)；等容 \(nC_V\ln(T_2/T_1)\)；等压 \(nC_P\ln(T_2/T_1)\)（用 Mayer \(C_P=C_V+R\)）；可逆绝热 \(\Delta S=0\)（isentropic）。</li>
+    <li><strong>Clausius 不等式：</strong>对<em>任何</em>循环 \(\oint\delta Q/T\leq 0\)，等号仅可逆。两态之间 \(\Delta S\geq\int_a^b\delta Q/T\)。</li>
+    <li><strong>第二定律的熵表述：</strong>\(\boxed{\Delta S_{\text{universe}}\geq 0}\)。等价于 Kelvin–Planck 与 Clausius 两个经典陈述。</li>
+    <li><strong>不可逆绝热 \(\neq\) 等熵：</strong>\(Q=0\) 仅意味着 \(\delta Q=0\)；内部耗散使 \(\Delta S>0\)。自由膨胀 \(\Delta S=nR\ln 2>0\) 是教科书例子。</li>
+    <li><strong>热接触：</strong>\(T_f=(C_1T_1+C_2T_2)/(C_1+C_2)\)；\(\Delta S_{\text{tot}}=C_1\ln(T_f/T_1)+C_2\ln(T_f/T_2)>0\)（finite-\(\Delta T\) 不可逆）。</li>
+    <li><strong>声速 coda：</strong>声波太快、来不及导热，所以 \(B\) 取<em>绝热</em>值 \(B_S=\gamma P\)，给 \(v_s=\sqrt{\gamma RT/M}\)（修正 Newton 等温估计 18%）。</li>
+  </ul>
+</div>
+
+<!-- ======================================================== -->
+
+<h2>§1 熵作为态函数：核心原则</h2>
+
+<p>File 13 的最后一节，从 Carnot 恒等式 \(Q_1/T_1=Q_2/T_2\) 重写成 \(\oint\delta Q_{\text{rev}}/T=0\)，让我们能<em>定义</em>一个新的态函数</p>
+
+$$ dS \;\equiv\; \dfrac{\delta Q_{\text{rev}}}{T},\qquad
+   \Delta S=\int_a^b\dfrac{\delta Q_{\text{rev}}}{T}. $$
+
+<p>这里要小心三件事：</p>
+
+<div class="box remark">
+  <p class="box-title">用熵之前必须搞清楚的三件事</p>
+  <ul>
+    <li><strong>"\(rev\)" 不可省。</strong> \(\delta Q_{\text{rev}}/T\) 才是 \(dS\)；用实际（可能不可逆的）\(\delta Q/T\) 沿真实路径积分得到的不是 \(\Delta S\)。</li>
+    <li><strong>态函数 = 端点决定。</strong>由于 \(S\) 是态函数，\(\Delta S\) 只依赖初末态——<em>不管</em>实际过程是不是可逆。</li>
+    <li><strong>实际不可逆？换条桥。</strong>具体计算时，把真实路径替换成一条<em>端点相同的可逆路径</em>，沿这条桥积分就得到 \(\Delta S\)。</li>
+  </ul>
+</div>
+
+<svg viewBox="0 0 360 200" xmlns="http://www.w3.org/2000/svg" style="display:block;margin:1rem auto;max-width:420px">
+  <line x1="40" y1="20" x2="40" y2="170" stroke="#475569" stroke-width="1.5"/>
+  <line x1="40" y1="170" x2="340" y2="170" stroke="#475569" stroke-width="1.5"/>
+  <text x="20" y="16" font-size="12" font-family="serif" fill="#475569">P</text>
+  <text x="345" y="174" font-size="12" font-family="serif" fill="#475569">V</text>
+  <circle cx="80" cy="50" r="4" fill="#0f172a"/>
+  <text x="62" y="44" font-size="12" font-family="serif" font-weight="700" fill="#0f172a">a</text>
+  <circle cx="300" cy="140" r="4" fill="#0f172a"/>
+  <text x="305" y="135" font-size="12" font-family="serif" font-weight="700" fill="#0f172a">b</text>
+  <!-- reversible bridge (blue) -->
+  <path d="M 80 50 Q 200 50 260 110 T 300 140" stroke="#2563eb" stroke-width="2.2" fill="none"/>
+  <text x="180" y="40" font-size="11" font-family="serif" fill="#2563eb">可逆桥</text>
+  <!-- irreversible (red dashed) -->
+  <path d="M 80 50 Q 80 130 170 150 T 300 140" stroke="#dc2626" stroke-width="2" fill="none" stroke-dasharray="4 3"/>
+  <text x="100" y="170" font-size="11" font-family="serif" fill="#dc2626">真实不可逆路径</text>
+  <text x="170" y="100" font-size="12" font-family="serif" fill="#0f172a">ΔS = S_b − S_a</text>
+</svg>
+
+<p>两条路径可以截然不同——做的功不同、吸的热不同、中间态甚至不是平衡态——但 \(\Delta S\) 是同一个，因为它是端点 \(a, b\) 的状态函数。</p>
+
+<!-- ======================================================== -->
+
+<h2>§2 可逆 vs 不可逆：清单</h2>
+
+<p>可逆过程 = 通过<em>无穷小</em>外界改变就能反向、且<em>不留下任何环境净痕迹</em>的过程。要同时满足两点：</p>
+
+<ul>
+  <li><strong>准静态</strong>：系统每一刻都处于平衡态；</li>
+  <li><strong>无耗散</strong>：无摩擦、黏性、湍流、电阻热、有限温差导热；</li>
+  <li>热传递只在<em>无穷小</em>温差下进行；膨胀/压缩外压与内压只差无穷小。</li>
+</ul>
+
+<p>不可逆来源——也就是<em>实际过程</em>会发生的事：</p>
+
+<table class="leg-table">
+  <thead><tr><th>过程</th><th>可逆？</th><th>主要原因</th></tr></thead>
+  <tbody>
+    <tr><td>无限慢、无摩擦活塞压缩</td><td>可逆</td><td>准静态 + 无耗散</td></tr>
+    <tr><td>可逆绝热（\(\delta Q_{\text{rev}}=0\)）</td><td>可逆</td><td>无热交换 + 无耗散 ⇒ \(\Delta S=0\)</td></tr>
+    <tr><td>Carnot 循环</td><td>可逆</td><td>每段都可逆</td></tr>
+    <tr><td>热从热物体传到冷物体（有限 \(\Delta T\)）</td><td>不可逆</td><td>\(\Delta S_{\text{univ}}>0\)（§8 推）</td></tr>
+    <tr><td>气体自由膨胀进真空</td><td>不可逆</td><td>非准静态，无法自发收回</td></tr>
+    <tr><td>有摩擦的活塞运动</td><td>不可逆</td><td>机械能耗散为热</td></tr>
+    <tr><td>两种气体混合</td><td>不可逆</td><td>无法自发分离</td></tr>
+    <tr><td>电阻发热（Joule heating）</td><td>不可逆</td><td>电能 → 内能</td></tr>
+    <tr><td>非准静态快速压缩</td><td>不可逆</td><td>系统内有压强/温度梯度</td></tr>
+    <tr><td>扩散（高浓度→低浓度）</td><td>不可逆</td><td>无法自发反扩散</td></tr>
+  </tbody>
+</table>
+
+<div class="box insight">
+  <p class="box-title">可逆是理想极限</p>
+  <p>真实世界的过程<em>都</em>有有限速率与一定耗散。"可逆"是无限慢、零耗散的理论极限。第二定律说的就是：耗散产生的熵不为负。</p>
+</div>
+
+<!-- ======================================================== -->
+
+<h2>§3 理想气体熵主公式</h2>
+
+<p>从第一定律 \(dU=\delta Q-P\,dV\) 沿一条可逆路径出发：</p>
+
+$$ \delta Q_{\text{rev}}=dU+P\,dV. $$
+
+<p>对理想气体 \(dU=nC_V\,dT\) 与 \(P=nRT/V\)：</p>
+
+$$ dS=\dfrac{\delta Q_{\text{rev}}}{T}=\dfrac{nC_V\,dT+P\,dV}{T}=nC_V\,\dfrac{dT}{T}+nR\,\dfrac{dV}{V}. $$
+
+<p>积分（任意可逆路径，端点 1→2）：</p>
+
+<div class="box key-result">
+  <p class="box-title">理想气体熵主公式</p>
+  $$ \boxed{\;\Delta S=nC_V\ln\dfrac{T_2}{T_1}+nR\ln\dfrac{V_2}{V_1}\;.} $$
+  <p><strong>只依赖端点 \(T, V\)</strong>。即使真实过程不可逆，端点的 \(T_2, V_2\) 一旦确定，\(\Delta S\) 就由这条公式给出。</p>
+</div>
+
+<h3>四个特殊情形</h3>
+
+<table class="leg-table">
+  <thead><tr><th>过程</th><th>条件</th><th>\(\Delta S\)</th></tr></thead>
+  <tbody>
+    <tr><td>等温</td><td>\(T_2=T_1\)</td><td>\(nR\ln(V_2/V_1)\)（膨胀 &gt; 0，压缩 &lt; 0）</td></tr>
+    <tr><td>等容</td><td>\(V_2=V_1\)</td><td>\(nC_V\ln(T_2/T_1)\)</td></tr>
+    <tr><td>等压</td><td>\(P_2=P_1\)</td><td>\(nC_P\ln(T_2/T_1)\)（用 Mayer）</td></tr>
+    <tr><td>可逆绝热</td><td>\(\delta Q_{\text{rev}}=0\)</td><td>\(\Delta S=0\)（isentropic）</td></tr>
+  </tbody>
+</table>
+
+<details class="more-detail">
+  <summary>等压情形：两种推导都给 \(nC_P\ln(T_2/T_1)\)</summary>
+  <p><strong>方法 1（直接）：</strong>沿等压路径 \(\delta Q_{\text{rev}}=nC_P\,dT\)，所以 \(dS=nC_P\,dT/T\)，积分给 \(nC_P\ln(T_2/T_1)\)。</p>
+  <p><strong>方法 2（从主公式）：</strong>等压时 \(V\propto T\)，所以 \(V_2/V_1=T_2/T_1\)。代入主公式：</p>
+  $$ \Delta S=nC_V\ln\frac{T_2}{T_1}+nR\ln\frac{T_2}{T_1}=n(C_V+R)\ln\frac{T_2}{T_1}=nC_P\ln\frac{T_2}{T_1}, $$
+  <p>用了 Mayer 关系 \(C_P=C_V+R\)。两种方法一致。</p>
+</details>
+
+<div class="box interactive">
+  <p class="box-title">交互：理想气体 \(\Delta S\) 计算器</p>
+  <p style="margin:.3rem 0 .8rem">拉动滑块改变端点 \((T_1,V_1)\to(T_2,V_2)\)，下方实时显示两项分解 \(\Delta S=nC_V\ln(T_2/T_1)+nR\ln(V_2/V_1)\) 以及总和的符号。</p>
+  <div class="entropy-widget" id="dscalc">
+    <div class="controls">
+      <div class="control-row"><label>T₁ (K)</label><input type="range" id="ds-T1" min="100" max="600" step="10" value="300"/><span class="readout" id="ds-T1r">300</span></div>
+      <div class="control-row"><label>T₂ (K)</label><input type="range" id="ds-T2" min="100" max="600" step="10" value="450"/><span class="readout" id="ds-T2r">450</span></div>
+      <div class="control-row"><label>V₁ (L)</label><input type="range" id="ds-V1" min="1" max="20" step="0.5" value="5"/><span class="readout" id="ds-V1r">5</span></div>
+      <div class="control-row"><label>V₂ (L)</label><input type="range" id="ds-V2" min="1" max="20" step="0.5" value="10"/><span class="readout" id="ds-V2r">10</span></div>
+      <div class="control-row"><label>n (mol)</label><input type="range" id="ds-n" min="0.1" max="5" step="0.1" value="1"/><span class="readout" id="ds-nr">1</span></div>
+      <div class="control-row"><label>原子类型</label><select id="ds-type" style="flex:1;padding:.3rem;font-size:.9rem"><option value="mono">单原子 (C_V=3R/2)</option><option value="di">双原子 (C_V=5R/2)</option></select><span class="readout" id="ds-typer"></span></div>
+    </div>
+    <div class="output" id="ds-out"></div>
+  </div>
+</div>
+
+<!-- ======================================================== -->
+
+<h2>§4 用可逆替代路径计算 \(\Delta S\)</h2>
+
+<p>真实过程难积分？换一条<em>端点相同</em>的可逆桥。最常用的是<strong>两段折线</strong>：</p>
+
+<h3>方法 A：1 → 3 → 2 = 等温 + 等容</h3>
+
+<p>令中间态 \(3\) 在 \(T_3=T_1, V_3=V_2\)（先在 \(T_1\) 等温到目标体积，再在 \(V_2\) 等容到目标温度）：</p>
+
+<svg viewBox="0 0 360 240" xmlns="http://www.w3.org/2000/svg" style="display:block;margin:1rem auto;max-width:420px">
+  <line x1="40" y1="20" x2="40" y2="210" stroke="#475569" stroke-width="1.5"/>
+  <line x1="40" y1="210" x2="340" y2="210" stroke="#475569" stroke-width="1.5"/>
+  <text x="20" y="16" font-size="12" font-family="serif" fill="#475569">P</text>
+  <text x="345" y="214" font-size="12" font-family="serif" fill="#475569">V</text>
+  <!-- state 1 at (V1=80,P1=50) high -->
+  <circle cx="80" cy="50" r="4" fill="#0f172a"/>
+  <text x="62" y="44" font-size="12" font-family="serif" font-weight="700" fill="#0f172a">1</text>
+  <!-- state 2 at (V2=260,P2=85) -->
+  <circle cx="260" cy="85" r="4" fill="#0f172a"/>
+  <text x="265" y="80" font-size="12" font-family="serif" font-weight="700" fill="#0f172a">2</text>
+  <!-- state 3 at (V2=260,P3=160) low isotherm -->
+  <circle cx="260" cy="160" r="4" fill="#0f172a"/>
+  <text x="265" y="175" font-size="12" font-family="serif" font-weight="700" fill="#0f172a">3</text>
+  <!-- isothermal 1->3 -->
+  <path d="M 80 50 Q 150 110 260 160" stroke="#2563eb" stroke-width="2" fill="none"/>
+  <text x="120" y="135" font-size="11" font-family="serif" fill="#2563eb">等温 T₁</text>
+  <!-- isochoric 3->2 -->
+  <line x1="260" y1="160" x2="260" y2="85" stroke="#2563eb" stroke-width="2"/>
+  <text x="270" y="125" font-size="11" font-family="serif" fill="#2563eb">等容 V₂</text>
+  <!-- direct dashed -->
+  <line x1="80" y1="50" x2="260" y2="85" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4 3"/>
+  <text x="120" y="60" font-size="11" font-family="serif" fill="#64748b">真实路径（任意）</text>
+  <!-- ticks -->
+  <line x1="80" y1="208" x2="80" y2="214" stroke="#475569"/>
+  <text x="74" y="226" font-size="11" font-family="serif" fill="#475569">V₁</text>
+  <line x1="260" y1="208" x2="260" y2="214" stroke="#475569"/>
+  <text x="250" y="226" font-size="11" font-family="serif" fill="#475569">V₂=V₃</text>
+</svg>
+
+<p>沿 1→3（等温 \(T_1\)）：\(\Delta S_{13}=nR\ln(V_3/V_1)=nR\ln(V_2/V_1)\)。</p>
+<p>沿 3→2（等容，\(T_3=T_1\)）：\(\Delta S_{32}=nC_V\ln(T_2/T_3)=nC_V\ln(T_2/T_1)\)。</p>
+<p>加和：\(\Delta S=nR\ln(V_2/V_1)+nC_V\ln(T_2/T_1)\)，正是主公式。</p>
+
+<h3>方法 B：1 → 3' → 2 = 等压 + 等容</h3>
+
+<p>令 \(3'\) 在 \(P_{3'}=P_1, V_{3'}=V_2\)（先在 \(P_1\) 等压到 \(V_2\)，再在 \(V_2\) 等容到 \(T_2\)）。</p>
+
+<details class="more-detail">
+  <summary>展开：方法 B 也回到同一公式</summary>
+  <p>沿等压 1→3'，\(V/T=\)const，所以 \(T_{3'}/T_1=V_2/V_1\)，且 \(\Delta S_{1,3'}=nC_P\ln(T_{3'}/T_1)=nC_P\ln(V_2/V_1)\)。</p>
+  <p>沿等容 3'→2，\(\Delta S_{3',2}=nC_V\ln(T_2/T_{3'})=nC_V\ln(T_2/T_1)-nC_V\ln(V_2/V_1)\)。</p>
+  <p>加：\(\Delta S=nC_P\ln(V_2/V_1)+nC_V\ln(T_2/T_1)-nC_V\ln(V_2/V_1)=(C_P-C_V)n\ln(V_2/V_1)+nC_V\ln(T_2/T_1)=nR\ln(V_2/V_1)+nC_V\ln(T_2/T_1)\) ✓</p>
+</details>
+
+<div class="box remark">
+  <p class="box-title">两条桥得到同一答案 = 态函数的最干净证明</p>
+  <p>两条<em>截然不同</em>的可逆桥（等温+等容 vs 等压+等容）给出<em>相同</em>的 \(\Delta S\)——这就是熵作为态函数的具象化证据。理论上 Carnot 恒等式 \(\oint\delta Q_{\text{rev}}/T=0\) 已经证明了这件事，但具体算两遍能让感觉更踏实。</p>
+</div>
+
+<!-- ======================================================== -->
+
+<h2>§5 Carnot 极限：所有热机 \(\eta\leq 1-T_c/T_h\)</h2>
+
+<p>File 13 用 Carnot 循环具体构造证明可逆热机 \(\eta_{\text{rev}}=1-T_2/T_1\)。本节解释为什么<em>所有</em>热机（不只 Carnot）都受这条上限约束。</p>
+
+<p>考虑在同一对热库 \(T_h, T_c\) 间工作的<em>不可逆</em>热机，吸同样的 \(Q_h\)。第二定律要求</p>
+
+$$ Q_c'>Q_c\quad\text{(同一 } Q_h\text{ 下不可逆机必须多放热)}, $$
+
+<p>所以 \(W'=Q_h-Q_c'<Q_h-Q_c=W\)，因此</p>
+
+$$ \boxed{\;\eta_{\text{real}}\;\leq\;\eta_{\max}\;=\;1-\dfrac{T_c}{T_h}\;,} $$
+
+<p>等号仅可逆。这条不等式叫 <strong>Carnot 极限</strong>（也叫 Carnot 定理）。</p>
+
+<div class="box insight">
+  <p class="box-title">为什么只依赖 \(T_h, T_c\)？</p>
+  <p>Carnot 极限只跟两个热库温度有关——<em>不</em>依赖工作物质（理想气体、水蒸气、超临界 CO₂ 都一样），<em>不</em>依赖循环细节（Otto, Diesel, Stirling, Brayton 都受同一上限），<em>不</em>依赖摩尔数 \(n\) 或绝热指数 \(\gamma\)。这是经典物理中最干净的普适极限之一。</p>
+</div>
+
+<!-- ======================================================== -->
+
+<h2>§6 Clausius 不等式</h2>
+
+<h3>可逆循环（File 13 已推）</h3>
+
+<p>对<em>可逆</em>循环，</p>
+
+$$ \oint\dfrac{\delta Q_{\text{rev}}}{T}=0. $$
+
+<p>这就是 \(dS\) 是恰当微分的来源——能定义态函数。</p>
+
+<h3>不可逆循环</h3>
+
+<div class="box key-result">
+  <p class="box-title">Clausius 不等式</p>
+  $$ \boxed{\;\oint\dfrac{\delta Q}{T}\;\leq\;0\;,} $$
+  <p>等号当且仅当循环可逆。不可逆循环严格 \(<0\)。</p>
+</div>
+
+<p>这里 \(T\) 是<strong>热库</strong>（与系统交换热的边界）的温度，\(\delta Q\) 是<em>实际</em>的热——不是想象的可逆桥上的 \(\delta Q_{\text{rev}}\)。</p>
+
+<h3>两态之间的形式</h3>
+
+<p>设 \(a\to b\) 是不可逆过程。把它接上一条<em>可逆</em>的 \(b\to a\) 回路，构成一个完整循环。Clausius 不等式给</p>
+
+$$ \int_a^b\dfrac{\delta Q}{T}\bigg|_{\text{irrev}}+\int_b^a\dfrac{\delta Q_{\text{rev}}}{T}\;<\;0. $$
+
+<p>第二段是可逆的，所以 \(\int_b^a\delta Q_{\text{rev}}/T=S_a-S_b=-\Delta S\)，代入得</p>
+
+$$ \int_a^b\dfrac{\delta Q}{T}\bigg|_{\text{irrev}}<\Delta S, $$
+
+<p>合并可逆情形：</p>
+
+<div class="box key-result">
+  <p class="box-title">两态间的 Clausius 不等式</p>
+  $$ \boxed{\;\Delta S\;\geq\;\int_a^b\dfrac{\delta Q}{T}\;,}\qquad dS\geq\dfrac{\delta Q}{T}. $$
+  <p>等号仅可逆。这就是<strong>第二定律的局部形式</strong>。</p>
+</div>
+
+<!-- ======================================================== -->
+
+<h2>§7 第二定律的熵表述与 \(\Delta S_{\text{universe}}\geq 0\)</h2>
+
+<p>把宇宙拆成系统 + 环境：</p>
+
+$$ \Delta S_{\text{universe}}=\Delta S_{\text{system}}+\Delta S_{\text{environment}}. $$
+
+<div class="box key-result">
+  <p class="box-title">第二定律（熵表述）</p>
+  $$ \boxed{\;\Delta S_{\text{universe}}\;\geq\;0\;,}\qquad
+     \boxed{\;\Delta S_{\text{isolated}}\;\geq\;0\;.} $$
+  <p>等号当且仅当过程可逆。等价于（也强于）Kelvin–Planck 与 Clausius 两个经典陈述（§9 推）。</p>
+</div>
+
+<h3>可逆 vs 不可逆绝热</h3>
+
+<p><strong>可逆绝热：</strong>\(\delta Q_{\text{rev}}=0\) 且无内部耗散 \(\Rightarrow dS=0\)（isentropic）。</p>
+
+<p><strong>不可逆绝热：</strong>\(\delta Q=0\)（绝热壁），但内部耗散使 \(dS>0\)。</p>
+
+<div class="box insight">
+  <p class="box-title">自由膨胀：教科书例子</p>
+  <p>理想气体在<em>绝热、刚性</em>容器里，一边气一边真空，打开隔板。</p>
+  <ul>
+    <li>\(Q=0\)（绝热）；</li>
+    <li>\(W=0\)（对真空无外功）；</li>
+    <li>第一定律 \(\Delta U=0\)，理想气体 \(U=U(T)\Rightarrow\Delta T=0\)；</li>
+    <li>但体积加倍：用主公式 \(\Delta S=nR\ln(V_2/V_1)=nR\ln 2>0\)。</li>
+  </ul>
+  <p>\(Q=0\) 与 \(\Delta S>0\) <em>同时成立</em>——这是不可逆性的标志，绝热不等于等熵。</p>
+</div>
+
+<!-- ======================================================== -->
+
+<h2>§8 热接触：两物体达共同温度</h2>
+
+<p>两个热容 \(C_1, C_2\) 的物体，初温 \(T_1>T_2\)，接触后绝热达到共同温度 \(T_f\)。能量守恒：</p>
+
+$$ C_1(T_1-T_f)+C_2(T_2-T_f)=0\quad\Longrightarrow\quad
+   \boxed{\;T_f=\dfrac{C_1T_1+C_2T_2}{C_1+C_2}\;,} $$
+
+<p>这是按热容加权的算术平均。</p>
+
+<p>有限温差导热是不可逆的，但 \(S\) 是态函数——每个物体沿<em>可逆</em>的等容/等压加热路径算各自的 \(\Delta S\)：</p>
+
+$$ \Delta S_1=\int_{T_1}^{T_f}\dfrac{C_1\,dT}{T}=C_1\ln\dfrac{T_f}{T_1},\qquad
+   \Delta S_2=C_2\ln\dfrac{T_f}{T_2}. $$
+
+<div class="box key-result">
+  <p class="box-title">热接触总熵变</p>
+  $$ \boxed{\;\Delta S_{\text{tot}}=C_1\ln\dfrac{T_f}{T_1}+C_2\ln\dfrac{T_f}{T_2}>0\;.} $$
+  <p>正性来自 \(T_f\) 介于 \(T_1, T_2\) 之间但 \(\ln T\) 是<em>凹函数</em>。下面的 widget 让你拉滑块亲眼看到这点永远成立。</p>
+</div>
+
+<h3>等热容特例</h3>
+
+<p>令 \(C_1=C_2=C\)：</p>
+
+$$ T_f=\frac{T_1+T_2}{2},\qquad \Delta S_{\text{tot}}=C\ln\frac{T_f^2}{T_1T_2}. $$
+
+<p>因 AM-GM 不等式 \((T_1+T_2)^2/4>T_1T_2\)（\(T_1\neq T_2\) 时严格），所以 \(\Delta S_{\text{tot}}>0\)。</p>
+
+<div class="box insight">
+  <p class="box-title">几何意义</p>
+  <p>能量守恒是<em>线性</em>的 \(\Rightarrow T_f\) 是算术平均；熵涉及 \(\ln T\) 是<em>凹函数</em> \(\Rightarrow\) 冷物体熵的增加超过热物体熵的减少。线性能量平衡 vs 凹的熵——这就是不可逆性的几何来源。</p>
+</div>
+
+<div class="box interactive">
+  <p class="box-title">交互：热接触熵变</p>
+  <p style="margin:.3rem 0 .8rem">两个物体的初温 \(T_1, T_2\) 与热容 \(C_1, C_2\) 可调，下面实时显示 \(T_f\)、\(\Delta S_1\)、\(\Delta S_2\)、总熵变。注意 \(\Delta S_{\text{tot}}\) <em>永远</em> \(\geq 0\)，等号仅 \(T_1=T_2\)。</p>
+  <div class="entropy-widget" id="tcalc">
+    <div class="controls">
+      <div class="control-row"><label>T₁ (K)</label><input type="range" id="tc-T1" min="100" max="600" step="10" value="500"/><span class="readout" id="tc-T1r">500</span></div>
+      <div class="control-row"><label>T₂ (K)</label><input type="range" id="tc-T2" min="100" max="600" step="10" value="200"/><span class="readout" id="tc-T2r">200</span></div>
+      <div class="control-row"><label>C₁ (J/K)</label><input type="range" id="tc-C1" min="0.5" max="10" step="0.1" value="2"/><span class="readout" id="tc-C1r">2.0</span></div>
+      <div class="control-row"><label>C₂ (J/K)</label><input type="range" id="tc-C2" min="0.5" max="10" step="0.1" value="2"/><span class="readout" id="tc-C2r">2.0</span></div>
+    </div>
+    <canvas id="tc-canvas" width="540" height="80"></canvas>
+    <div class="output" id="tc-out"></div>
+  </div>
+</div>
+
+<!-- ======================================================== -->
+
+<h2>§9 Clausius 与 Kelvin–Planck 两陈述的熵证明</h2>
+
+<h3>Clausius 陈述</h3>
+
+<p>"热不会自发从冷物体流到热物体。" 若 \(Q\) 自发从 \(T_c\) 流到 \(T_h>T_c\)：</p>
+
+$$ \Delta S_{\text{cold}}=-Q/T_c,\quad \Delta S_{\text{hot}}=+Q/T_h
+   \Rightarrow \Delta S_{\text{tot}}=Q\left(\dfrac{1}{T_h}-\dfrac{1}{T_c}\right)<0, $$
+
+<p>违反 \(\Delta S_{\text{universe}}\geq 0\)。所以这种过程不能自发发生 ✓。</p>
+
+<h3>Kelvin–Planck 陈述</h3>
+
+<p>"不存在循环热机，其唯一效果是从单一热库吸热全部转为功。" 若热机从 \(T\) 吸 \(Q\) 全转功：</p>
+
+$$ \Delta S_{\text{source}}=-Q/T<0,\quad \Delta S_{\text{engine}}=0\text{（循环）}
+   \Rightarrow \Delta S_{\text{universe}}=-Q/T<0, $$
+
+<p>违反 \(\Delta S_{\text{universe}}\geq 0\) ✓。</p>
+
+<div class="box remark">
+  <p class="box-title">三种陈述的等价性</p>
+  <p>Clausius、Kelvin–Planck、和 \(\Delta S_{\text{universe}}\geq 0\)——三者两两等价（File 13 §8 已展示前两者等价；本节展示熵表述如何<em>同时</em>含蕴它们）。熵表述最强：它<em>定量</em>而非定性，能直接判定任何过程能否发生。</p>
+</div>
+
+<!-- ======================================================== -->
+
+<h2>§10 制冷机与热泵：熵账本</h2>
+
+<p>制冷机从冷库 \(T_c\) 取 \(Q_c\)、外加功 \(W\)、向热库 \(T_h\) 放 \(Q_h=Q_c+W\)。总熵变：</p>
+
+$$ \Delta S_{\text{tot}}=\dfrac{Q_h}{T_h}-\dfrac{Q_c}{T_c}=\dfrac{Q_c+W}{T_h}-\dfrac{Q_c}{T_c}. $$
+
+<p>若 \(W=0\)：</p>
+
+$$ \Delta S_{\text{tot}}=Q_c\left(\dfrac{1}{T_h}-\dfrac{1}{T_c}\right)<0, $$
+
+<p>被禁。所以制冷必须有 \(W>0\)，最小功 \(W_{\min}\) 由 \(\Delta S_{\text{tot}}=0\)（可逆操作）给出：</p>
+
+$$ \dfrac{Q_c+W_{\min}}{T_h}=\dfrac{Q_c}{T_c}\Rightarrow
+   \boxed{\;W_{\min}=Q_c\dfrac{T_h-T_c}{T_c}\;,} $$
+
+<p>对应 Carnot COP \(\kappa_{\text{ref}}^{\max}=Q_c/W_{\min}=T_c/(T_h-T_c)\)——回到 File 13 §7 的结果，但这里是<em>从熵直接推出的</em>，不必再走 Carnot 反向。</p>
+
+<div class="box insight">
+  <p class="box-title">Clausius 陈述穿便服</p>
+  <p>制冷机就是 Clausius 陈述的具体化：热能从冷→热，但<em>必须付出功</em>。"价钱"由温度比固定：温差越大、Carnot COP 越低、需要越多电费。</p>
+</div>
+
+<!-- ======================================================== -->
+
+<h2>§11 声速 coda：Newton vs Laplace（呼应 File 04）</h2>
+
+<p>Lec 9.3 末尾的小尾声：把熵的视角带回 Lec 3.2 的声速。声波传播时，气体微元经历快速压缩-膨胀；过程<em>太快</em>了，邻近区域来不及交换热——所以是<strong>绝热</strong>，不是<strong>等温</strong>。</p>
+
+<p>声速 \(v_s=\sqrt{B/\rho}\) 里的 \(B\) 必须取<em>绝热</em>值。沿 \(PV^\gamma=\text{const}\) 微分：</p>
+
+$$ V^\gamma dP+\gamma PV^{\gamma-1}dV=0\Rightarrow
+   \left.\dfrac{\partial P}{\partial V}\right|_S=-\gamma\dfrac{P}{V}
+   \Rightarrow B_S=-V\dfrac{\partial P}{\partial V}\bigg|_S=\gamma P. $$
+
+<p>用 \(P/\rho=RT/M\)（理想气体）：</p>
+
+<div class="box key-result">
+  <p class="box-title">Newton–Laplace 声速</p>
+  $$ \boxed{\;v_s=\sqrt{\dfrac{\gamma RT}{M}}=\sqrt{\dfrac{\gamma k_BT}{m_{\text{mol}}}}\;.} $$
+  <p>\(R\) 必须跟摩尔质量 \(M\) 配；\(k_B\) 必须跟单分子质量 \(m_{\text{mol}}\) 配。</p>
+</div>
+
+<div class="box insight">
+  <p class="box-title">Newton 历史误差</p>
+  <p>Newton（1687）用<em>等温</em>压缩算声速 \(v_s=\sqrt{P/\rho}\)，得 \(\approx 290\) m/s——比测量低 18%。Laplace（1816）指出应该用<em>绝热</em>压缩，\(B\to\gamma P\)，校正因子 \(\sqrt{\gamma}=\sqrt{7/5}\approx 1.183\)，给 \(\approx 343\) m/s，与测量完全吻合。这是<strong>热力学时间尺度</strong>第一次进入波动力学：声波频率远高于分子导热的时间尺度，所以"绝热近似"成立。</p>
+</div>
+
+<p><em>声速的完整推导见 File 04（声波微观推导），那里有从 \(F=ma\) 直接导出声波方程并对比 Young's modulus；本节只补"为什么用 \(B_S\) 而不用 \(B_T\)"这一熵的视角。</em></p>
+
+<!-- ======================================================== -->
+
+<h2>§12 Worked Examples</h2>
+
+<div class="example">
+  <h4>Example A (★): 自由膨胀的熵增</h4>
+  <p class="source">Shankar §24.2 Example</p>
+  <p class="problem-statement">1 mol 单原子理想气体在 \(T=300\) K 下做自由膨胀，体积从 \(V_1=1\) L 加倍到 \(V_2=2\) L。求 \(\Delta S_{\text{gas}}\)、\(\Delta S_{\text{env}}\)、\(\Delta S_{\text{universe}}\)，并核对第二定律。</p>
+
+  <div class="solution-step"><strong>Step 1：识别端点。</strong>自由膨胀，绝热刚性箱：\(Q=0, W=0, \Delta U=0\)，所以 \(T_2=T_1=300\) K。端点 \((T_1, V_1)\to(T_1, 2V_1)\)。</div>
+
+  <div class="solution-step"><strong>Step 2：系统熵变（用主公式）。</strong>\(\Delta T=0\)，只剩体积项：
+  $$ \Delta S_{\text{gas}}=nR\ln(V_2/V_1)=1\cdot 8.314\cdot \ln 2\approx 5.76\text{ J/K}. $$
+  注意：实际过程不可逆，但 \(\Delta S_{\text{gas}}\) 由<em>端点</em>决定。</div>
+
+  <div class="solution-step"><strong>Step 3：环境熵变。</strong>系统与环境没有热交换（绝热壁）\(\Rightarrow Q_{\text{env}}=0\Rightarrow\Delta S_{\text{env}}=0\)。</div>
+
+  <div class="solution-step"><strong>Step 4：宇宙熵变与第二定律核对。</strong>
+  $$ \Delta S_{\text{universe}}=\Delta S_{\text{gas}}+\Delta S_{\text{env}}=5.76+0=5.76\text{ J/K}>0\text{ ✓}. $$
+  正值 \(\Rightarrow\) 过程不可逆 \(\Rightarrow\) 不会反向（气体不会自发回到一半体积）。</div>
+
+  <div class="answer-box">\(\Delta S_{\text{gas}}\approx 5.76\) J/K, \(\Delta S_{\text{env}}=0\), \(\Delta S_{\text{universe}}\approx 5.76\) J/K \(>0\)。</div>
+</div>
+
+<div class="example">
+  <h4>Example B (★★): 两等热容物体的热接触</h4>
+  <p class="source">改编自 Shankar §24.3</p>
+  <p class="problem-statement">两块铜块，质量都为 \(m=1\) kg（比热 \(c=386\) J/(kg·K)，所以 \(C_1=C_2=386\) J/K），初温分别 \(T_1=400\) K, T_2=200 K。接触后绝热达到共同温度。求 \(T_f\)、\(\Delta S_1\)、\(\Delta S_2\)、\(\Delta S_{\text{tot}}\)，并核对 \(>0\)。</p>
+
+  <div class="solution-step"><strong>Step 1：等热容情形 \(T_f\)。</strong>
+  $$ T_f=\frac{T_1+T_2}{2}=\frac{400+200}{2}=300\text{ K}. $$</div>
+
+  <div class="solution-step"><strong>Step 2：逐块熵变。</strong>
+  $$ \Delta S_1=C\ln(T_f/T_1)=386\ln(300/400)=386\cdot(-0.288)\approx -111\text{ J/K}, $$
+  $$ \Delta S_2=C\ln(T_f/T_2)=386\ln(300/200)=386\cdot(+0.405)\approx +156\text{ J/K}. $$
+  热块降温损失熵 \(111\)，冷块升温获得熵 \(156\)。</div>
+
+  <div class="solution-step"><strong>Step 3：总熵变与 AM-GM 验证。</strong>
+  $$ \Delta S_{\text{tot}}=-111+156=+45\text{ J/K}>0\text{ ✓}. $$
+  AM-GM 解释：\((400+200)^2/4=90000>400\cdot 200=80000\)，所以 \(T_f^2>T_1T_2\)，\(\ln(T_f^2/T_1T_2)>0\)。</div>
+
+  <div class="answer-box">\(T_f=300\) K；\(\Delta S_1\approx-111\) J/K，\(\Delta S_2\approx+156\) J/K，\(\Delta S_{\text{tot}}\approx+45\) J/K \(>0\)。冷块的熵增超过热块的熵损——典型的有限 \(\Delta T\) 不可逆迹象。</div>
+</div>
+
+<div class="example">
+  <h4>Example C (★★): 不可逆 vs 可逆等温膨胀</h4>
+  <p class="source">概念区分题</p>
+  <p class="problem-statement">1 mol 理想气体在 \(T=300\) K 下从 \(V_1=2\) L 等温膨胀到 \(V_2=4\) L。考虑两种情形：(a) 可逆等温膨胀（与热库无穷小温差），(b) 不可逆等温膨胀（外压突然降到 \(P_2\) 然后等待）。分别求 \(W, Q, \Delta U, \Delta S_{\text{gas}}, \Delta S_{\text{env}}, \Delta S_{\text{universe}}\)。</p>
+
+  <div class="solution-step"><strong>共同：\(\Delta U\) 与 \(\Delta S_{\text{gas}}\)。</strong>等温 \(\Rightarrow\Delta T=0\Rightarrow\Delta U=0\)；端点决定 \(\Delta S_{\text{gas}}=nR\ln(V_2/V_1)=1\cdot 8.314\cdot\ln 2\approx 5.76\) J/K（两种情形都一样，因为端点一样）。</div>
+
+  <div class="solution-step"><strong>(a) 可逆：</strong>
+  $$ W_{\text{rev}}=nRT\ln(V_2/V_1)=8.314\cdot 300\cdot\ln 2\approx 1729\text{ J}=Q_{\text{rev}}. $$
+  环境（热库）失热 \(Q_{\text{env}}=-1729\) J 在 \(T=300\) K：
+  $$ \Delta S_{\text{env}}=-1729/300\approx-5.76\text{ J/K}, $$
+  $$ \Delta S_{\text{universe}}=+5.76-5.76=0\text{ ✓（可逆）}. $$</div>
+
+  <div class="solution-step"><strong>(b) 不可逆（恒外压 \(P_{\text{ext}}=P_2=nRT/V_2\)）：</strong>气体对抗 \(P_2\) 膨胀做的功
+  $$ W_{\text{irrev}}=P_2(V_2-V_1)=\dfrac{nRT}{V_2}(V_2-V_1)=nRT(1-V_1/V_2)=8.314\cdot 300\cdot 0.5\approx 1247\text{ J}, $$
+  比可逆少（\(1247<1729\)）。等温 \(\Delta U=0\Rightarrow Q_{\text{irrev}}=W_{\text{irrev}}\approx 1247\) J。环境失热 \(1247\) J 在 \(300\) K：
+  $$ \Delta S_{\text{env}}=-1247/300\approx-4.16\text{ J/K}, $$
+  $$ \Delta S_{\text{universe}}=+5.76-4.16\approx+1.60\text{ J/K}>0\text{ ✓（不可逆）}. $$</div>
+
+  <div class="solution-step"><strong>关键观察。</strong>系统熵变 \(\Delta S_{\text{gas}}\) 两种情形<em>相同</em>（端点决定），但环境熵变 \(\Delta S_{\text{env}}\) 不同（因为实际 \(Q\) 不同）。可逆情形 \(\Delta S_{\text{universe}}=0\)，不可逆情形 \(>0\)——熵增的"代价"就是少做的那 \(482\) J 功。</div>
+
+  <div class="answer-box">两种情形 \(\Delta S_{\text{gas}}\approx+5.76\) J/K；可逆 \(W=Q\approx 1729\) J、\(\Delta S_{\text{universe}}=0\)；不可逆 \(W=Q\approx 1247\) J、\(\Delta S_{\text{universe}}\approx+1.60\) J/K。</div>
+</div>
+
+<!-- ======================================================== -->
+
+<h2>§13 Self-check</h2>
+
+<div class="self-check">
+  <p class="question">Q1. 自由膨胀里 \(Q=0\)，为什么熵增？这跟 \(dS=\delta Q_{\text{rev}}/T\) 不矛盾吗？</p>
+  <details><summary>查看答案</summary>
+  <p>不矛盾——关键词是 "\(_{\text{rev}}\)"。自由膨胀<em>实际</em> \(\delta Q=0\)，但它<em>不是可逆过程</em>。计算 \(\Delta S\) 不能沿实际路径积分，要找一条端点相同的<em>可逆桥</em>——例如可逆等温膨胀，沿这条桥 \(\delta Q_{\text{rev}}\neq 0\)。端点 \((T, V_1)\to(T, 2V_1)\) 给 \(\Delta S=nR\ln 2>0\)。<strong>实际过程 \(\delta Q=0\) 与 \(\Delta S>0\) 同时成立——这正是不可逆的标志。</strong></p>
+  </details>
+</div>
+
+<div class="self-check">
+  <p class="question">Q2. "可逆绝热" 与 "不可逆绝热" 都满足 \(Q=0\)。它们的熵变怎么不同？</p>
+  <details><summary>查看答案</summary>
+  <p>可逆绝热：无热交换<em>且无耗散</em>，所以 \(dS=\delta Q_{\text{rev}}/T=0\)，\(\Delta S=0\)（isentropic）。\(PV^\gamma=\text{const}\) 沿这条路径成立。</p>
+  <p>不可逆绝热（如自由膨胀、有摩擦的活塞快速压缩）：\(Q=0\) 但内部有耗散，所以 \(\Delta S>0\)。<strong>\(PV^\gamma=\text{const}\) <em>不</em>沿这条路径成立</strong>——不要把它用在不可逆过程上！</p>
+  </details>
+</div>
+
+<div class="self-check">
+  <p class="question">Q3. 一个号称"COP \(=15\)"的家用空调，工作于 \(T_h=305\) K, T_c=295 K 之间。可能吗？</p>
+  <details><summary>查看答案</summary>
+  <p>Carnot 上限 \(\kappa_{\text{ref}}^{\max}=T_c/(T_h-T_c)=295/10=29.5\)。<strong>COP \(=15\) 没违反第二定律</strong>——它低于 Carnot 上限。但温差小（\(\Delta T=10\) K）使 Carnot 上限非常宽松，能效在合理范围里。<br>如果温差更大（如 \(T_h=320\) K, T_c=270 K，\(\Delta T=50\) K），Carnot 上限会变成 \(270/50=5.4\)，那时 COP=15 就违反第二定律了。"COP 的合法性"取决于温差。</p>
+  </details>
+</div>
+
+<div class="self-check">
+  <p class="question">Q4. 热接触里，热块的 \(|\Delta S_1|\) 永远小于冷块的 \(\Delta S_2\)（等热容情形）。为什么？</p>
+  <details><summary>查看答案</summary>
+  <p>因为 \(\ln T\) 是<em>凹函数</em>。\(T_1\to T_f\) 的温度变化 \(|T_f-T_1|=|T_f-T_2|\)（等热容下能量平衡是<em>线性</em>的），所以两边温度走的"距离"相同。但是从热到冷的方向上，\(\ln T\) 的斜率（即 \(1/T\)）在<em>低温端</em>更大。冷块从 \(T_2\) 走到 \(T_f\) 时穿过了 "\(1/T\) 更大"的区域，所以 \(C\int dT/T\) 积出的熵增<em>大于</em>热块的熵损。</p>
+  <p>同样的几何：能量是<em>线性</em>守恒，熵是<em>凹函数</em>累积——线性 vs 凹的不匹配就是不可逆性的来源。</p>
+  </details>
+</div>
+
+<div class="self-check">
+  <p class="question">Q5. 为什么用 \(S=k_B\ln\Omega\) 时，"\(\ln\)" 而不是"\(\Omega\) 本身"？</p>
+  <details><summary>查看答案</summary>
+  <p>熵在"两个独立子系统加起来"时必须<em>相加</em>（\(S_{\text{total}}=S_1+S_2\)）——这是热力学的可加性要求。但两个子系统的微观态数<em>相乘</em>（\(\Omega_{\text{total}}=\Omega_1\Omega_2\)，因为独立选择）。要把"乘"变成"加"，必须用 \(\ln\)：\(\ln(\Omega_1\Omega_2)=\ln\Omega_1+\ln\Omega_2\)。所以 \(\ln\) 是"使可加性自动满足"的唯一选择（差一个常数）。</p>
+  <p>File 15 会从这条思路出发把 \(k_B\) 的具体值钉死。</p>
+  </details>
+</div>
+
+<div class="self-check">
+  <p class="question">Q6. 声速的 Newton 错误是 18%，但 Newton 用 \(B_T=P\) 也"对得上"——错在哪？</p>
+  <details><summary>查看答案</summary>
+  <p>Newton 的 \(B_T=P\) 是<em>等温</em>压缩的 bulk modulus——这是<em>慢</em>压缩（与环境随时热平衡）的有效弹性。但声波频率远<em>高于</em>分子导热的弛豫率（声波周期 \(\sim 1/f\sim 10^{-4}\) s，导热弛豫 \(\sim L^2/\kappa_{\text{therm}}\sim\) 几秒甚至更长），所以邻近气体微元根本来不及交换热——温度不能均匀化。压缩沿绝热路径而非等温路径，所以应该用 \(B_S=\gamma P\)（绝热 bulk modulus），多出来的 \(\sqrt{\gamma}=\sqrt{7/5}\approx 1.18\) 就是 Laplace 校正。</p>
+  </details>
+</div>
+
+<!-- ======================================================== -->
+
+<h2>§14 公式速查表</h2>
+
+<table class="formula-table">
+  <thead><tr><th>主题</th><th>公式</th><th>备注</th></tr></thead>
+  <tbody>
+    <tr><td>熵定义</td><td>\(dS=\delta Q_{\text{rev}}/T\)</td><td>沿可逆路径</td></tr>
+    <tr><td>熵变（任意端点）</td><td>\(\Delta S=\int_a^b\delta Q_{\text{rev}}/T\)</td><td>态函数</td></tr>
+    <tr><td>理想气体主公式</td><td>\(\Delta S=nC_V\ln(T_2/T_1)+nR\ln(V_2/V_1)\)</td><td>含全部四种过程</td></tr>
+    <tr><td>等温</td><td>\(nR\ln(V_2/V_1)\)</td><td></td></tr>
+    <tr><td>等容</td><td>\(nC_V\ln(T_2/T_1)\)</td><td></td></tr>
+    <tr><td>等压</td><td>\(nC_P\ln(T_2/T_1)\)</td><td>用 Mayer \(C_P=C_V+R\)</td></tr>
+    <tr><td>可逆绝热</td><td>\(\Delta S=0\)</td><td>isentropic</td></tr>
+    <tr><td>不可逆绝热</td><td>\(\Delta S>0\)</td><td>例：自由膨胀 \(\Delta S=nR\ln 2\)</td></tr>
+    <tr><td>可逆循环</td><td>\(\oint\delta Q_{\text{rev}}/T=0\)</td><td>态函数身份</td></tr>
+    <tr><td>Clausius 不等式</td><td>\(\oint\delta Q/T\leq 0\)</td><td>等号仅可逆</td></tr>
+    <tr><td>两态间</td><td>\(\Delta S\geq\int_a^b\delta Q/T\)</td><td></td></tr>
+    <tr><td>第二定律（熵）</td><td>\(\Delta S_{\text{universe}}\geq 0\)</td><td>等号仅可逆</td></tr>
+    <tr><td>热库熵变</td><td>\(\Delta S_{\text{res}}=-Q_{\text{sys}}/T_{\text{res}}\)</td><td>\(T_{\text{res}}\) 不变</td></tr>
+    <tr><td>Carnot 极限</td><td>\(\eta\leq 1-T_c/T_h\)</td><td>所有热机</td></tr>
+    <tr><td>制冷机最小功</td><td>\(W_{\min}=Q_c(T_h-T_c)/T_c\)</td><td>对应 Carnot COP</td></tr>
+    <tr><td>热接触 \(T_f\)</td><td>\((C_1T_1+C_2T_2)/(C_1+C_2)\)</td><td>能量守恒</td></tr>
+    <tr><td>热接触 \(\Delta S_{\text{tot}}\)</td><td>\(C_1\ln(T_f/T_1)+C_2\ln(T_f/T_2)>0\)</td><td>finite-\(\Delta T\) 不可逆</td></tr>
+    <tr><td>声速（绝热）</td><td>\(v_s=\sqrt{\gamma RT/M}=\sqrt{\gamma k_BT/m_{\text{mol}}}\)</td><td>Newton 校正 18%</td></tr>
+    <tr><td>绝热 bulk modulus</td><td>\(B_S=\gamma P\)</td><td>由 \(PV^\gamma=\text{const}\)</td></tr>
+  </tbody>
+</table>
+
+<!-- ======================================================== -->
+
+<h2>§15 术语</h2>
+
+<dl>
+  <dt>熵 (entropy) \(S\)</dt>
+  <dd>态函数，\(dS=\delta Q_{\text{rev}}/T\)。对孤立系统 \(\Delta S\geq 0\)。Boltzmann 统计形式 \(S=k_B\ln\Omega\)（File 15 推导）。</dd>
+
+  <dt>可逆过程 (reversible process)</dt>
+  <dd>准静态 + 无耗散；可由无穷小外参数变化反向。\(\Delta S_{\text{universe}}=0\)。仅是理想极限。</dd>
+
+  <dt>不可逆过程 (irreversible process)</dt>
+  <dd>反向需要外界<em>额外</em>变化才能完成。\(\Delta S_{\text{universe}}>0\)。所有实际过程都不可逆。</dd>
+
+  <dt>替代路径 (replacement path)</dt>
+  <dd>真实过程不可逆时，用一条端点相同的<em>可逆</em>路径来积分 \(\delta Q_{\text{rev}}/T\) 得 \(\Delta S\)。\(S\) 是态函数 ⇒ 结果不依赖具体桥的选取。</dd>
+
+  <dt>等熵过程 (isentropic process)</dt>
+  <dd>\(\Delta S=0\) 的过程。可逆绝热<em>是</em>等熵；但不可逆绝热（如自由膨胀）<em>不是</em>等熵——前者 \(\delta Q_{\text{rev}}=0\)，后者只 \(\delta Q=0\)。</dd>
+
+  <dt>Clausius 不等式</dt>
+  <dd>对任何循环 \(\oint\delta Q/T\leq 0\)。等号仅可逆。两态间形式 \(\Delta S\geq\int_a^b\delta Q/T\)。</dd>
+
+  <dt>第二定律（熵表述）</dt>
+  <dd>\(\Delta S_{\text{universe}}\geq 0\)；孤立系统 \(\Delta S\geq 0\)。等号仅可逆。与 Clausius、Kelvin–Planck 等价但更强。</dd>
+
+  <dt>Carnot 极限</dt>
+  <dd>\(\eta_{\text{any engine}}\leq 1-T_c/T_h\)；等号仅可逆。由第二定律推出。</dd>
+
+  <dt>热库 (thermal reservoir)</dt>
+  <dd>热容无限大的物体；与之交换有限的热不改变其温度。从反演者角度，热库的熵变 \(\Delta S=-Q_{\text{sys}}/T_{\text{res}}\)。</dd>
+
+  <dt>绝热 bulk modulus \(B_S\)</dt>
+  <dd>\(B_S=-V(\partial P/\partial V)_S=\gamma P\)（理想气体）。声波传播太快、不能导热，所以声速用 \(B_S\) 而非等温 \(B_T=P\)。</dd>
+
+  <dt>Newton–Laplace 校正</dt>
+  <dd>Newton 用 \(B_T\) 得 \(v_s=\sqrt{P/\rho}\) 错 18%。Laplace 改用 \(B_S=\gamma P\) 得 \(v_s=\sqrt{\gamma P/\rho}=\sqrt{\gamma RT/M}\) 完美匹配测量。校正因子 \(\sqrt{\gamma}\approx 1.18\)（双原子气）。</dd>
+</dl>
+
+<p class="back-link" style="margin-top:2rem"><a href="index.html">← 回到复习总目录</a> · <a href="13_carnot_second_law.html">← Carnot 与第二定律</a> · <a href="15_boltzmann_statistical.html">Boltzmann 统计熵 →</a></p>
+
+</main>
+
+<!-- ======================================================== -->
+<!-- Widget JS -->
+
+<script>
+(function(){
+  const R = 8.314; // J/(mol·K)
+  // -- Widget 1: Ideal-gas Delta S calculator --
+  function updDS(){
+    const T1 = +document.getElementById('ds-T1').value;
+    const T2 = +document.getElementById('ds-T2').value;
+    const V1 = +document.getElementById('ds-V1').value;
+    const V2 = +document.getElementById('ds-V2').value;
+    const n  = +document.getElementById('ds-n').value;
+    const ty = document.getElementById('ds-type').value;
+    document.getElementById('ds-T1r').textContent = T1;
+    document.getElementById('ds-T2r').textContent = T2;
+    document.getElementById('ds-V1r').textContent = V1;
+    document.getElementById('ds-V2r').textContent = V2;
+    document.getElementById('ds-nr').textContent  = n.toFixed(1);
+    const Cv = ty === 'mono' ? 1.5*R : 2.5*R;
+    const Cp = Cv + R;
+    document.getElementById('ds-typer').textContent = (ty==='mono'?'C_V=12.5':'C_V=20.8') + ' J/(mol·K)';
+    const tT = n*Cv*Math.log(T2/T1);
+    const tV = n*R *Math.log(V2/V1);
+    const tot = tT + tV;
+    const sign = (x) => x > 1e-4 ? '<span class="sign-pos">+</span>' : (x < -1e-4 ? '<span class="sign-neg">−</span>' : '0');
+    const fmt = (x) => (Math.abs(x)<1e-4?'0':x.toFixed(3));
+    document.getElementById('ds-out').innerHTML =
+      'T 项 (温度变化): <strong>' + sign(tT) + fmt(tT) + ' J/K</strong> = n·C_V·ln(T₂/T₁) = '+n.toFixed(1)+'·'+Cv.toFixed(2)+'·ln('+T2+'/'+T1+')<br>'
+      +'V 项 (体积变化): <strong>' + sign(tV) + fmt(tV) + ' J/K</strong> = n·R·ln(V₂/V₁) = '+n.toFixed(1)+'·8.314·ln('+V2+'/'+V1+')<br>'
+      +'<strong style="font-size:1.05rem">总 ΔS = ' + sign(tot) + fmt(tot) + ' J/K</strong>'
+      +(tot>1e-4?' ✓（熵增）':(tot<-1e-4?' ⚠（熵减——需要外界做功才能实现）':' （等熵）'));
+  }
+  ['ds-T1','ds-T2','ds-V1','ds-V2','ds-n','ds-type'].forEach(id=>document.getElementById(id).addEventListener('input',updDS));
+  updDS();
+
+  // -- Widget 2: Thermal contact --
+  const tcCanvas = document.getElementById('tc-canvas');
+  const tcCtx = tcCanvas.getContext('2d');
+  function updTC(){
+    const T1 = +document.getElementById('tc-T1').value;
+    const T2 = +document.getElementById('tc-T2').value;
+    const C1 = +document.getElementById('tc-C1').value;
+    const C2 = +document.getElementById('tc-C2').value;
+    document.getElementById('tc-T1r').textContent = T1;
+    document.getElementById('tc-T2r').textContent = T2;
+    document.getElementById('tc-C1r').textContent = C1.toFixed(1);
+    document.getElementById('tc-C2r').textContent = C2.toFixed(1);
+    const Tf = (C1*T1 + C2*T2) / (C1+C2);
+    const dS1 = C1*Math.log(Tf/T1);
+    const dS2 = C2*Math.log(Tf/T2);
+    const dStot = dS1 + dS2;
+    // canvas: temperature line, mark T1, T2, Tf
+    const W = tcCanvas.width, H = tcCanvas.height;
+    tcCtx.clearRect(0,0,W,H);
+    // temperature axis 100-600 K
+    const Tmin = 100, Tmax = 600;
+    const x = (T)=> 40 + (T-Tmin)/(Tmax-Tmin) * (W-80);
+    // axis line
+    tcCtx.strokeStyle = '#475569'; tcCtx.lineWidth = 1.5;
+    tcCtx.beginPath(); tcCtx.moveTo(40,50); tcCtx.lineTo(W-40,50); tcCtx.stroke();
+    // ticks
+    tcCtx.font = '10px serif'; tcCtx.fillStyle = '#64748b';
+    for (let T=100;T<=600;T+=100){
+      const xx = x(T);
+      tcCtx.beginPath(); tcCtx.moveTo(xx,47); tcCtx.lineTo(xx,53); tcCtx.stroke();
+      tcCtx.fillText(T, xx-8, 68);
+    }
+    // T1 (red, hot)
+    const xT1 = x(T1);
+    tcCtx.fillStyle = '#dc2626'; tcCtx.beginPath(); tcCtx.arc(xT1,50,6,0,2*Math.PI); tcCtx.fill();
+    tcCtx.fillText('T₁='+T1, xT1-12, 28);
+    // T2 (blue, cold)
+    const xT2 = x(T2);
+    tcCtx.fillStyle = '#2563eb'; tcCtx.beginPath(); tcCtx.arc(xT2,50,6,0,2*Math.PI); tcCtx.fill();
+    tcCtx.fillText('T₂='+T2, xT2-12, 28);
+    // Tf (purple)
+    const xTf = x(Tf);
+    tcCtx.fillStyle = '#6b21a8'; tcCtx.beginPath(); tcCtx.arc(xTf,50,7,0,2*Math.PI); tcCtx.fill();
+    tcCtx.fillText('T_f='+Tf.toFixed(1), xTf-22, 42);
+    // arrows from T1/T2 to Tf
+    tcCtx.strokeStyle = '#94a3b8'; tcCtx.lineWidth = 1;
+    tcCtx.beginPath(); tcCtx.moveTo(xT1, 50); tcCtx.lineTo(xTf, 50); tcCtx.stroke();
+    tcCtx.beginPath(); tcCtx.moveTo(xT2, 50); tcCtx.lineTo(xTf, 50); tcCtx.stroke();
+
+    const sign = (x) => x > 1e-4 ? '<span class="sign-pos">+</span>' : (x < -1e-4 ? '<span class="sign-neg">−</span>' : '0');
+    const fmt = (x) => (Math.abs(x)<1e-4?'0':x.toFixed(3));
+    document.getElementById('tc-out').innerHTML =
+      'T_f = (C₁T₁+C₂T₂)/(C₁+C₂) = <strong>'+Tf.toFixed(2)+' K</strong><br>'
+      +'ΔS₁ = C₁·ln(T_f/T₁) = <strong>'+sign(dS1)+fmt(Math.abs(dS1))+' J/K</strong>'+(T1>Tf?'（热块降温，熵减）':'（热块升温，熵增）')+'<br>'
+      +'ΔS₂ = C₂·ln(T_f/T₂) = <strong>'+sign(dS2)+fmt(Math.abs(dS2))+' J/K</strong>'+(T2<Tf?'（冷块升温，熵增）':'（冷块降温，熵减）')+'<br>'
+      +'<strong style="font-size:1.05rem">ΔS_tot = '+sign(dStot)+fmt(Math.abs(dStot))+' J/K</strong>'
+      +(Math.abs(T1-T2)<1?'（T₁=T₂，无热接触，ΔS=0）':(dStot>1e-4?' ✓（有限 ΔT 导热不可逆）':' ⚠'));
+  }
+  ['tc-T1','tc-T2','tc-C1','tc-C2'].forEach(id=>document.getElementById(id).addEventListener('input',updTC));
+  updTC();
+})();
+</script>
+
+</body>
+</html>

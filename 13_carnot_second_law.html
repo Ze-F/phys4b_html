@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>13 · Carnot 循环与第二定律 — PHYS 4B 复习</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="theme.js"></script>
+  <style>
+    /* 逐腿账本表 */
+    .leg-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0;
+      font-size: .92rem;
+    }
+    .leg-table th, .leg-table td {
+      border: 1px solid #d6d3d1;
+      padding: .55rem .65rem;
+      text-align: left;
+      vertical-align: top;
+    }
+    .leg-table thead th {
+      background: #0f766e;
+      color: white;
+      font-family: -apple-system, 'PingFang SC', sans-serif;
+      font-weight: 600;
+    }
+    .leg-table tbody tr:nth-child(even) { background: #f7f5f0; }
+    .leg-table tfoot td {
+      background: #fef3c7;
+      color: #78350f;
+      font-weight: 600;
+    }
+    /* Carnot interactive */
+    .carnot-widget {
+      background: white;
+      border: 1px solid #ddd6fe;
+      border-radius: 8px;
+      padding: 1rem;
+      margin: 1rem 0;
+    }
+    .carnot-widget .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: center;
+      margin-bottom: .75rem;
+    }
+    .carnot-widget .control-row {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      min-width: 240px;
+    }
+    .carnot-widget label {
+      font-family: -apple-system, 'PingFang SC', sans-serif;
+      font-size: .9rem;
+      color: #475569;
+      min-width: 50px;
+    }
+    .carnot-widget input[type=range] {
+      flex: 1;
+      accent-color: #6b21a8;
+    }
+    .carnot-widget .readout {
+      font-family: 'Charter', serif;
+      font-size: .95rem;
+      color: #6b21a8;
+      font-weight: 600;
+      min-width: 80px;
+      text-align: right;
+    }
+    .carnot-widget .output {
+      background: #f5f3ff;
+      border-radius: 6px;
+      padding: .8rem 1rem;
+      margin-top: .5rem;
+      font-family: 'Charter', serif;
+      font-size: .95rem;
+      line-height: 1.7;
+      color: #44403c;
+    }
+    .carnot-widget .output strong { color: #6b21a8; }
+    .answer-box {
+      background: #eff6ff;
+      border-left: 3px solid #2563eb;
+      padding: .55rem .8rem;
+      margin: .65rem 0 .25rem;
+      font-weight: 500;
+      color: #1e3a8a;
+      font-family: -apple-system, 'PingFang SC', 'Helvetica Neue', sans-serif;
+    }
+    .answer-box::before {
+      content: '✓ 答案：';
+      color: #2563eb;
+      font-weight: 700;
+    }
+    .problem-statement {
+      background: #fafaf9;
+      border-left: 3px solid #a8a29e;
+      padding: .6rem .8rem;
+      margin: .35rem 0 .75rem;
+      font-style: italic;
+      color: #44403c;
+    }
+  </style>
+  <script>
+    MathJax = {
+      tex: { inlineMath: [['\\(', '\\)']], displayMath: [['$$', '$$']] },
+      svg: { fontCache: 'global' }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" async></script>
+</head>
+<body>
+
+<header class="site-header">
+  <a class="home-link" href="index.html">← PHYS 4B 复习</a>
+  <nav>
+    <a href="12_processes_cycles.html">← 四种过程与循环</a>
+    <a href="index.html">总目录</a>
+    <a href="14_entropy_macroscopic.html">宏观熵 →</a>
+  </nav>
+</header>
+
+<main class="container">
+
+<div class="topic-header">
+  <h1>13 · Carnot 循环、第二定律与熵入门</h1>
+  <p class="meta">Lec 8.2 · Shankar §23.3–23.5 + §24.1 · OpenStax Vol.2 Ch.4</p>
+  <p class="blurb">第 12 页给出了循环分析与"热机效率 \(\eta=1-Q_c/Q_h\)"的预告——但没回答<strong>为什么</strong> \(Q_c\) 不能为零、效率为何有上限。本页用 <strong>Carnot 循环</strong>（两段等温 + 两段绝热）<em>具体构造</em>出这个上限 \(\eta_C=1-T_c/T_h\)，引入 <strong>热机/制冷机方块图</strong> 与 <strong>第二定律</strong>（Kelvin–Planck 和 Clausius 两种等价陈述），并由 Carnot 恒等式 \(Q_h/T_h=Q_c/T_c\) 自然地引入<strong>熵</strong> \(dS=\delta Q_{\text{rev}}/T\) 作为新的态函数。后续 Week 9–10 的不可逆熵增与统计熵 \(S=k_B\ln\Omega\) 都建立在本页基础上。</p>
+</div>
+
+<!-- ======================================================== -->
+
+<div class="box key-result">
+  <p class="box-title">一页速览</p>
+  <ul>
+    <li><strong>Carnot 循环：</strong>两段等温（\(T_1\) 吸 \(Q_1\)，\(T_2\) 放 \(Q_2\)）+ 两段绝热（不交换热）。</li>
+    <li><strong>体积顺序：</strong>\(V_A<V_D<V_B<V_C\)（绝热约束 \(TV^{\gamma-1}=\text{const}\) 强制）。</li>
+    <li><strong>绝热相消：</strong>\(W_{BC}+W_{DA}=nC_v(T_1-T_2)+nC_v(T_2-T_1)=0\)。<strong>所有的净功都来自两段等温。</strong></li>
+    <li><strong>Carnot 恒等式：</strong>\(\dfrac{Q_2}{Q_1}=\dfrac{T_2}{T_1}\)（用两条绝热相除得到 \(V_B/V_A=V_C/V_D\)）。</li>
+    <li><strong>Carnot 效率：</strong>\(\boxed{\eta_C=1-\dfrac{T_2}{T_1}}<1\)。只依赖两个热库温度，与气体、\(n\)、\(\gamma\) 无关——这是<em>普适</em>的上限。</li>
+    <li><strong>制冷机 / 热泵：</strong>Carnot 反转。\(W\) 输入，\(Q_2\) 从冷库吸出，\(Q_1=W+Q_2\) 放到热库。\(\kappa_{\text{ref}}=T_2/(T_1-T_2)\)。</li>
+    <li><strong>第二定律两等价陈述：</strong>Kelvin–Planck（不存在 \(\eta=1\) 的热机）；Clausius（热不会自发冷→热）。</li>
+    <li><strong>熵的定义：</strong>\(dS\equiv\delta Q_{\text{rev}}/T\)——Carnot 恒等式 \(\Rightarrow\oint dS=0\)，故 \(S\) 是态函数。</li>
+  </ul>
+</div>
+
+<!-- ======================================================== -->
+
+<h2>§1 为什么需要 Carnot 循环？</h2>
+
+<p>第 12 页结尾我们看到，<strong>任何循环</strong>都满足 \(\oint dU=0\Rightarrow W_{\text{net}}=Q_{\text{net}}=Q_h-Q_c\)，于是定义效率</p>
+
+$$ \eta=\frac{W_{\text{net}}}{Q_h}=1-\frac{Q_c}{Q_h}. $$
+
+<p>这里 \(Q_h\) 是<strong>吸热段</strong>的总和，\(Q_c\) 是<strong>放热段</strong>的总和。这条公式是<em>恒等式</em>——但它没告诉我们 \(Q_c\) 是不是必须大于零、效率上限是多少。</p>
+
+<p>Carnot（1824）问了一个简单问题：</p>
+
+<div class="box insight">
+  <p class="box-title">Carnot 的问题</p>
+  <p>"<em>在两个固定温度 \(T_1, T_2\) 的热库之间运行的所有热机里，效率最高的那一个长什么样？</em>"</p>
+  <p>他的答案：把循环设计成<strong>完全可逆</strong>——这样才能避免任何"白白损失"的不可逆耗散。最简单的可逆循环就是两段<strong>等温</strong>（接触热库时）+ 两段<strong>绝热</strong>（脱离热库时），即 <em>Carnot 循环</em>。</p>
+</div>
+
+<p>从理论角度，Carnot 循环的存在<strong>不依赖</strong>于第二定律——它就是一个具体的循环构造，所有公式都可以用第一定律 + 理想气体律推出。但它的特殊性<em>在事后</em>由第二定律解释：<strong>没有任何循环能比 Carnot 在同一对温度间更高效</strong>。</p>
+
+<!-- ======================================================== -->
+
+<h2>§2 Carnot 循环的构造</h2>
+
+<p>从某状态 \(A\) 出发，按下列<em>顺时针</em>方向走四段：</p>
+
+<ol>
+  <li><strong>\(A\to B\)：等温膨胀</strong>，温度 \(T_1\)（接触<em>热</em>库）。气体从 \(V_A\) 膨胀到 \(V_B\)，吸热 \(Q_1>0\)，做功 \(W_{AB}=Q_1\)（理想气体等温 \(\Delta U=0\)）。</li>
+  <li><strong>\(B\to C\)：绝热膨胀</strong>（脱离热库）。气体继续膨胀到 \(V_C\)，温度从 \(T_1\) 下降到 \(T_2\)。\(Q=0\)，气体做功靠损失内能。</li>
+  <li><strong>\(C\to D\)：等温压缩</strong>，温度 \(T_2\)（接触<em>冷</em>库）。气体从 \(V_C\) 被压缩到 \(V_D\)，放热 \(Q_2>0\)（约定 \(Q_2\) 取正号表示放出量），外界对气体做功 \(=Q_2\)。</li>
+  <li><strong>\(D\to A\)：绝热压缩</strong>（脱离热库）。气体被进一步压缩回 \(V_A\)，温度从 \(T_2\) 回到 \(T_1\)。\(Q=0\)，外界做的功提高内能。</li>
+</ol>
+
+<svg viewBox="0 0 360 280" xmlns="http://www.w3.org/2000/svg" style="display:block;margin:1rem auto;max-width:420px">
+  <!-- axes -->
+  <line x1="40" y1="20" x2="40" y2="240" stroke="#475569" stroke-width="1.5"/>
+  <line x1="40" y1="240" x2="340" y2="240" stroke="#475569" stroke-width="1.5"/>
+  <text x="20" y="16" font-size="12" font-family="serif" fill="#475569">P</text>
+  <text x="345" y="244" font-size="12" font-family="serif" fill="#475569">V</text>
+
+  <!-- isotherm T1 (upper): P = 270/V on V in [70, 220] -->
+  <!-- A = (70, ?) -> 270/70 ~ 3.86 -> on canvas P_pix = 240 - 270/70 * 35 ~ 240 - 135 = ... Let me re-scale -->
+  <!-- I'll use direct coordinates: A=(80,60), B=(180,110), C=(290,170), D=(120,150) approximately
+       and draw smooth bezier-ish lines. -->
+
+  <!-- T1 isotherm: A to B (red) -->
+  <path d="M 80 60 Q 130 75 180 110" stroke="#dc2626" stroke-width="2" fill="none"/>
+  <!-- T2 isotherm: C to D (blue), reversed direction visually but drawn as curve from D to C -->
+  <path d="M 120 150 Q 200 158 290 170" stroke="#2563eb" stroke-width="2" fill="none"/>
+
+  <!-- Adiabat B to C (orange, steeper) -->
+  <path d="M 180 110 Q 230 130 290 170" stroke="#ea580c" stroke-width="2" fill="none" stroke-dasharray="4 2"/>
+  <!-- Adiabat D to A (orange) -->
+  <path d="M 120 150 Q 95 105 80 60" stroke="#ea580c" stroke-width="2" fill="none" stroke-dasharray="4 2"/>
+
+  <!-- Points -->
+  <circle cx="80" cy="60" r="4" fill="#0f172a"/>
+  <text x="62" y="55" font-size="12" font-family="serif" font-weight="700" fill="#0f172a">A</text>
+  <circle cx="180" cy="110" r="4" fill="#0f172a"/>
+  <text x="184" y="105" font-size="12" font-family="serif" font-weight="700" fill="#0f172a">B</text>
+  <circle cx="290" cy="170" r="4" fill="#0f172a"/>
+  <text x="295" y="166" font-size="12" font-family="serif" font-weight="700" fill="#0f172a">C</text>
+  <circle cx="120" cy="150" r="4" fill="#0f172a"/>
+  <text x="100" y="166" font-size="12" font-family="serif" font-weight="700" fill="#0f172a">D</text>
+
+  <!-- Arrows along legs (showing direction) -->
+  <!-- A->B (red) -->
+  <polygon points="130,87 137,84 137,92" fill="#dc2626"/>
+  <!-- B->C (orange) -->
+  <polygon points="235,141 243,138 240,146" fill="#ea580c"/>
+  <!-- C->D (blue, leftward) -->
+  <polygon points="200,164 192,159 196,166 192,168" fill="#2563eb"/>
+  <!-- D->A (orange, upward) -->
+  <polygon points="96,102 93,109 102,108" fill="#ea580c"/>
+
+  <!-- Labels for heats -->
+  <text x="115" y="48" font-size="11" font-family="serif" fill="#dc2626">Q₁ in (T₁ isoth)</text>
+  <text x="200" y="195" font-size="11" font-family="serif" fill="#2563eb">Q₂ out (T₂ isoth)</text>
+  <text x="232" y="118" font-size="10" font-family="serif" fill="#ea580c">adiab</text>
+  <text x="46" y="98" font-size="10" font-family="serif" fill="#ea580c">adiab</text>
+
+  <!-- Net work area shading hint -->
+  <text x="170" y="225" font-size="11" font-family="serif" fill="#475569" font-style="italic">Cycle 围出的有向面积 = W_net</text>
+</svg>
+
+<p>P-V 图上的<strong>有向面积</strong>（顺时针）就是这个循环的净功 \(W_{\text{net}}=Q_1-Q_2\)。</p>
+
+<div class="box remark">
+  <p class="box-title">为什么 \(V_A<V_D<V_B<V_C\)？</p>
+  <p>两条绝热分别连接 \(T_1\) 与 \(T_2\)，沿绝热 \(TV^{\gamma-1}=\text{const}\)。小体积侧的绝热 \(D\to A\) 给 \(V_A^{\gamma-1}T_1=V_D^{\gamma-1}T_2\)，因 \(T_1>T_2\)，所以 \(V_A<V_D\)。同理大体积侧 \(B\to C\) 给 \(V_B<V_C\)。所以 \(A, D\) 在小 \(V\) 侧，\(B, C\) 在大 \(V\) 侧。<strong>这是后续推 \(V_B/V_A=V_C/V_D\) 的几何起点。</strong></p>
+</div>
+
+<!-- ======================================================== -->
+
+<h2>§3 逐腿账本：Q, W, ΔU</h2>
+
+<p>把第 12 页的四种过程结果照搬到 Carnot 的四段：</p>
+
+<table class="leg-table">
+  <thead>
+    <tr><th>段</th><th>过程类型</th><th>\(Q\)</th><th>\(W\)</th><th>\(\Delta U\)</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>\(A\to B\)</strong></td>
+      <td>等温 \(T_1\)，膨胀</td>
+      <td>\(+Q_1=nRT_1\ln(V_B/V_A)\)</td>
+      <td>\(+Q_1\)</td>
+      <td>\(0\)</td>
+    </tr>
+    <tr>
+      <td><strong>\(B\to C\)</strong></td>
+      <td>绝热，膨胀</td>
+      <td>\(0\)</td>
+      <td>\(+nC_v(T_1-T_2)\)</td>
+      <td>\(-nC_v(T_1-T_2)\)</td>
+    </tr>
+    <tr>
+      <td><strong>\(C\to D\)</strong></td>
+      <td>等温 \(T_2\)，压缩</td>
+      <td>\(-Q_2=nRT_2\ln(V_D/V_C)\)</td>
+      <td>\(-Q_2\)</td>
+      <td>\(0\)</td>
+    </tr>
+    <tr>
+      <td><strong>\(D\to A\)</strong></td>
+      <td>绝热，压缩</td>
+      <td>\(0\)</td>
+      <td>\(-nC_v(T_1-T_2)\)</td>
+      <td>\(+nC_v(T_1-T_2)\)</td>
+    </tr>
+  </tbody>
+  <tfoot>
+    <tr>
+      <td colspan="2">循环合计</td>
+      <td>\(Q_1-Q_2\)</td>
+      <td>\(Q_1-Q_2\)</td>
+      <td>\(0\) ✓</td>
+    </tr>
+  </tfoot>
+</table>
+
+<p>这里我们把 \(Q_2\) 定义为<strong>放热的正值</strong>（即 \(-Q_{CD}\)），与板书一致：</p>
+
+$$ Q_2 \;\equiv\; -Q_{CD}=nRT_2\ln(V_C/V_D)\;>\;0. $$
+
+<div class="box insight">
+  <p class="box-title">绝热相消的物理意义</p>
+  <p>两条绝热<em>遍历的温度区间</em>完全相同（都是 \(T_1\leftrightarrow T_2\)），只是方向相反。而对理想气体的绝热功 \(W=nC_v\Delta T\) <strong>只</strong> 依赖温度端点。所以两条绝热的功必然<strong>大小相等、符号相反</strong>，加起来正好抵消：</p>
+  $$ W_{BC}+W_{DA}=nC_v(T_1-T_2)+nC_v(T_2-T_1)=0. $$
+  <p>这意味着 <strong>Carnot 循环的所有净功都来自两段等温</strong>——绝热段是"过渡的"，它们的作用只是把工质温度搬到适合接热库的温度。</p>
+</div>
+
+<!-- ======================================================== -->
+
+<h2>§4 Carnot 恒等式 \(Q_2/Q_1=T_2/T_1\)</h2>
+
+<p>从 §3 的表格直接读出</p>
+
+$$ \frac{Q_2}{Q_1}=\frac{nRT_2\ln(V_C/V_D)}{nRT_1\ln(V_B/V_A)}=\frac{T_2}{T_1}\cdot\frac{\ln(V_C/V_D)}{\ln(V_B/V_A)}. $$
+
+<p>右边的对数比<strong>不显然等于 1</strong>。让我们用两条绝热把它干掉。沿绝热 \(TV^{\gamma-1}=\text{const}\)：</p>
+
+$$ \begin{aligned}
+B\to C\;\text{（绝热）}: &\quad T_1V_B^{\gamma-1}=T_2V_C^{\gamma-1},\\[2pt]
+D\to A\;\text{（绝热）}: &\quad T_2V_D^{\gamma-1}=T_1V_A^{\gamma-1}.
+\end{aligned}$$
+
+<p>第一式除以第二式（左/左，右/右）：</p>
+
+$$ \frac{T_1V_B^{\gamma-1}}{T_2V_D^{\gamma-1}}=\frac{T_2V_C^{\gamma-1}}{T_1V_A^{\gamma-1}}. $$
+
+<p>交叉相乘：</p>
+
+$$ T_1^2 V_B^{\gamma-1}V_A^{\gamma-1}=T_2^2 V_C^{\gamma-1}V_D^{\gamma-1}. $$
+
+<p>嗯，这并不直接给我们想要的。再来一遍：第一式除以第二式得到（约去 \(T_1T_2\)）</p>
+
+$$ \left(\frac{V_B}{V_D}\right)^{\gamma-1}=\left(\frac{V_C}{V_A}\right)^{\gamma-1}. $$
+
+<p>两边开 \(\gamma-1\) 次方：</p>
+
+$$ \frac{V_B}{V_D}=\frac{V_C}{V_A}
+   \;\Longleftrightarrow\;
+   \boxed{\;\frac{V_B}{V_A}=\frac{V_C}{V_D}\;.} $$
+
+<details class="more-detail">
+  <summary>展开：两式相除时分子分母的对应</summary>
+  <p>把两式写成
+  $$ \frac{T_1}{T_2}=\left(\frac{V_C}{V_B}\right)^{\gamma-1}=\left(\frac{V_D}{V_A}\right)^{\gamma-1}. $$
+  右边两个等式合并：\((V_C/V_B)^{\gamma-1}=(V_D/V_A)^{\gamma-1}\)，开方 \(V_C/V_B=V_D/V_A\)，即 \(V_C/V_D=V_B/V_A\)。这是更直接的写法。</p>
+</details>
+
+<p>所以两个对数<strong>相等</strong>，对数比为 1，Carnot 恒等式立刻浮现：</p>
+
+<div class="box key-result">
+  <p class="box-title">Carnot 恒等式（universal heat-ratio）</p>
+  $$ \boxed{\;\frac{Q_2}{Q_1}=\frac{T_2}{T_1}\;} $$
+  <p>等价地 \(Q_1/T_1=Q_2/T_2\)——这条比例关系不依赖 \(n, \gamma\) 或具体气体，是 Carnot 循环的<em>普适</em>特征。</p>
+</div>
+
+<p>代回效率公式：</p>
+
+<div class="box key-result">
+  <p class="box-title">Carnot 效率</p>
+  $$ \boxed{\;\eta_C=1-\frac{Q_2}{Q_1}=1-\frac{T_2}{T_1}\;}\qquad(<1) $$
+  <p>同样仅依赖两个热库温度。<strong>这是热机效率的普适上限</strong>。</p>
+</div>
+
+<div class="box insight">
+  <p class="box-title">"\(\eta=1\) 为何不可达？"</p>
+  <p>\(\eta_C=1\) 需要 \(T_2\to 0\)（绝对零度的冷库）或 \(T_1\to\infty\)。前者被第三定律禁止（无法到达绝对零度），后者受材料学和工程实际限制。现代燃煤电厂 \(T_1\approx 800\) K、\(T_2\approx 300\) K，Carnot 上限只有 \(\eta_C\approx 60\%\)；实际循环非 Carnot，效率 \(\sim 40\%\)。</p>
+</div>
+
+<!-- ======================================================== -->
+
+<h2>§5 热机方块图</h2>
+
+<p>把 Carnot 循环抽象成一个"黑箱"：从高温热库 \(T_1\) 吸 \(Q_1\)，向低温热库 \(T_2\) 放 \(Q_2\)，对外输出净功 \(W=Q_1-Q_2\)。</p>
+
+<svg viewBox="0 0 360 230" xmlns="http://www.w3.org/2000/svg" style="display:block;margin:1rem auto;max-width:420px">
+  <!-- Hot reservoir -->
+  <rect x="20" y="40" width="80" height="60" fill="#fecaca" stroke="#dc2626" stroke-width="1.5" rx="4"/>
+  <text x="60" y="76" font-size="16" font-family="serif" font-weight="700" text-anchor="middle" fill="#7f1d1d">T₁</text>
+  <text x="60" y="30" font-size="11" font-family="-apple-system" text-anchor="middle" fill="#475569">高温热库</text>
+
+  <!-- Cold reservoir -->
+  <rect x="260" y="40" width="80" height="60" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5" rx="4"/>
+  <text x="300" y="76" font-size="16" font-family="serif" font-weight="700" text-anchor="middle" fill="#1e3a8a">T₂</text>
+  <text x="300" y="30" font-size="11" font-family="-apple-system" text-anchor="middle" fill="#475569">低温热库</text>
+
+  <!-- Engine -->
+  <circle cx="180" cy="70" r="38" fill="#fef3c7" stroke="#ca8a04" stroke-width="1.5"/>
+  <text x="180" y="74" font-size="14" font-family="-apple-system" text-anchor="middle" fill="#713f12">热机</text>
+
+  <!-- Q1 arrow -->
+  <line x1="100" y1="70" x2="138" y2="70" stroke="#dc2626" stroke-width="2.5"/>
+  <polygon points="138,70 130,66 130,74" fill="#dc2626"/>
+  <text x="119" y="62" font-size="13" font-family="serif" font-weight="700" text-anchor="middle" fill="#dc2626">Q₁</text>
+
+  <!-- Q2 arrow -->
+  <line x1="220" y1="70" x2="258" y2="70" stroke="#2563eb" stroke-width="2.5"/>
+  <polygon points="258,70 250,66 250,74" fill="#2563eb"/>
+  <text x="239" y="62" font-size="13" font-family="serif" font-weight="700" text-anchor="middle" fill="#2563eb">Q₂</text>
+
+  <!-- Work output -->
+  <line x1="180" y1="110" x2="180" y2="170" stroke="#0f766e" stroke-width="2.5"/>
+  <polygon points="180,170 176,162 184,162" fill="#0f766e"/>
+  <text x="200" y="142" font-size="13" font-family="serif" font-weight="700" fill="#0f766e">W = Q₁ − Q₂</text>
+
+  <!-- Constraint -->
+  <text x="180" y="200" font-size="12" font-family="serif" text-anchor="middle" fill="#475569" font-style="italic">条件：T₁ &gt; T₂</text>
+  <text x="180" y="220" font-size="12" font-family="serif" text-anchor="middle" fill="#475569" font-style="italic">η = W/Q₁ = 1 − T₂/T₁</text>
+</svg>
+
+<p>这是<em>所有</em>热机的"通用语言"——蒸汽机、内燃机、燃气轮机都可以画成这张图。差异只在<strong>具体走的循环</strong>是哪种（Carnot 是上限，但实际机器走 Rankine、Otto、Diesel 等不同循环）。</p>
+
+<!-- ======================================================== -->
+
+<h2>§6 制冷机 / 热泵：Carnot 反向</h2>
+
+<p>Carnot 循环的每段都是可逆的——所以我们可以把整个循环按<strong>逆时针</strong>方向跑。现在每段反过来：</p>
+
+<ul>
+  <li>等温膨胀 → 等温压缩</li>
+  <li>绝热膨胀 → 绝热压缩</li>
+  <li>...等等</li>
+</ul>
+
+<p>结果：<strong>外界对系统做净功</strong> \(W\)（输入），气体<strong>从冷库 \(T_2\) 吸热</strong> \(Q_2\)，并<strong>向热库 \(T_1\) 放热</strong> \(Q_1=W+Q_2\)。这就是家用<em>冰箱</em>（refrigerator）/<em>空调</em>/<em>热泵</em>的工作原理：用电（即外加的 \(W\)）把热从冷处搬到热处。</p>
+
+<svg viewBox="0 0 360 230" xmlns="http://www.w3.org/2000/svg" style="display:block;margin:1rem auto;max-width:420px">
+  <!-- Hot reservoir (now receives) -->
+  <rect x="20" y="40" width="80" height="60" fill="#fecaca" stroke="#dc2626" stroke-width="1.5" rx="4"/>
+  <text x="60" y="76" font-size="16" font-family="serif" font-weight="700" text-anchor="middle" fill="#7f1d1d">T₁</text>
+  <text x="60" y="30" font-size="11" font-family="-apple-system" text-anchor="middle" fill="#475569">热库（屋外）</text>
+
+  <!-- Cold reservoir (now gives up heat) -->
+  <rect x="260" y="40" width="80" height="60" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5" rx="4"/>
+  <text x="300" y="76" font-size="16" font-family="serif" font-weight="700" text-anchor="middle" fill="#1e3a8a">T₂</text>
+  <text x="300" y="30" font-size="11" font-family="-apple-system" text-anchor="middle" fill="#475569">冷库（冰箱内）</text>
+
+  <!-- Cooling engine -->
+  <circle cx="180" cy="70" r="38" fill="#fef3c7" stroke="#ca8a04" stroke-width="1.5"/>
+  <text x="180" y="68" font-size="11" font-family="-apple-system" text-anchor="middle" fill="#713f12">制冷机</text>
+  <text x="180" y="83" font-size="11" font-family="-apple-system" text-anchor="middle" fill="#713f12">(Carnot 反向)</text>
+
+  <!-- Q1 arrow (engine -> hot, leftward) -->
+  <line x1="138" y1="70" x2="100" y2="70" stroke="#dc2626" stroke-width="2.5"/>
+  <polygon points="100,70 108,66 108,74" fill="#dc2626"/>
+  <text x="119" y="62" font-size="13" font-family="serif" font-weight="700" text-anchor="middle" fill="#dc2626">Q₁</text>
+
+  <!-- Q2 arrow (cold -> engine, leftward) -->
+  <line x1="258" y1="70" x2="220" y2="70" stroke="#2563eb" stroke-width="2.5"/>
+  <polygon points="220,70 228,66 228,74" fill="#2563eb"/>
+  <text x="239" y="62" font-size="13" font-family="serif" font-weight="700" text-anchor="middle" fill="#2563eb">Q₂</text>
+
+  <!-- Work input (upward into engine) -->
+  <line x1="180" y1="170" x2="180" y2="110" stroke="#0f766e" stroke-width="2.5"/>
+  <polygon points="180,110 176,118 184,118" fill="#0f766e"/>
+  <text x="200" y="142" font-size="13" font-family="serif" font-weight="700" fill="#0f766e">W 输入：W + Q₂ = Q₁</text>
+
+  <!-- Constraint -->
+  <text x="180" y="200" font-size="12" font-family="serif" text-anchor="middle" fill="#475569" font-style="italic">条件：T₁ &gt; T₂</text>
+  <text x="180" y="220" font-size="12" font-family="serif" text-anchor="middle" fill="#475569" font-style="italic">把热"逆温度梯度"搬上山</text>
+</svg>
+
+<div class="box key-result">
+  <p class="box-title">制冷机性能指标 COP</p>
+  <p>制冷机的"效率"不能用 \(\eta=W/Q_1\) ——因为<em>你付出的是 \(W\)，得到的是冷却效果 \(Q_2\)</em>。所以定义<strong>性能系数</strong>（coefficient of performance, COP）：</p>
+  $$ \kappa_{\text{ref}}=\frac{Q_2}{W}=\frac{Q_2}{Q_1-Q_2}\;\;\xrightarrow{\text{Carnot}}\;\;\frac{T_2}{T_1-T_2}. $$
+  <p>对热泵（关心放到热库的 \(Q_1\)，例如冬天供暖）：</p>
+  $$ \kappa_{\text{HP}}=\frac{Q_1}{W}=\frac{Q_1}{Q_1-Q_2}\;\;\xrightarrow{\text{Carnot}}\;\;\frac{T_1}{T_1-T_2}=\kappa_{\text{ref}}+1. $$
+  <p>两者都<strong>大于 1 是常态</strong>（不像热机效率 \(<1\)），并且 \(T_1\to T_2\) 时发散——温差越小越省功。</p>
+</div>
+
+<div class="box remark">
+  <p class="box-title">为什么 \(\kappa_{\text{HP}}=\kappa_{\text{ref}}+1\)？</p>
+  <p>由能量守恒 \(Q_1=W+Q_2\)，所以 \(\kappa_{\text{HP}}=Q_1/W=(W+Q_2)/W=1+Q_2/W=1+\kappa_{\text{ref}}\)。物理含义：你付出 \(W\) 电能开空调供暖，房间不仅得到这 \(W\)，还白白多得到 \(Q_2\)（从屋外吸来的热）——所以热泵供暖比"电阻丝直接加热"省多了。</p>
+</div>
+
+<!-- ======================================================== -->
+
+<h2>§7 交互：Carnot 效率与 COP</h2>
+
+<div class="box interactive">
+  <p class="box-title">交互：调节 \(T_1, T_2\) 实时看 \(\eta_C\) 与 COP</p>
+  <div class="carnot-widget">
+    <div class="controls">
+      <div class="control-row">
+        <label for="t1-slider">T₁</label>
+        <input type="range" id="t1-slider" min="300" max="1500" step="10" value="800" />
+        <span class="readout" id="t1-readout">800 K</span>
+      </div>
+      <div class="control-row">
+        <label for="t2-slider">T₂</label>
+        <input type="range" id="t2-slider" min="100" max="500" step="10" value="300" />
+        <span class="readout" id="t2-readout">300 K</span>
+      </div>
+    </div>
+    <div class="output" id="carnot-output">
+      …
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  const t1 = document.getElementById('t1-slider');
+  const t2 = document.getElementById('t2-slider');
+  const t1r = document.getElementById('t1-readout');
+  const t2r = document.getElementById('t2-readout');
+  const out = document.getElementById('carnot-output');
+
+  function update() {
+    let T1 = parseFloat(t1.value);
+    let T2 = parseFloat(t2.value);
+    // enforce T1 > T2
+    if (T2 >= T1) { T2 = T1 - 10; t2.value = T2; }
+    t1r.textContent = T1 + ' K';
+    t2r.textContent = T2 + ' K';
+    const eta = 1 - T2/T1;
+    const kappa_ref = T2/(T1-T2);
+    const kappa_hp  = T1/(T1-T2);
+    out.innerHTML =
+      '热机：&eta;<sub>C</sub> = 1 &minus; T<sub>2</sub>/T<sub>1</sub> = ' +
+      '<strong>' + (eta*100).toFixed(1) + '%</strong>' +
+      '<br>'+
+      '制冷机 COP：&kappa;<sub>ref</sub> = T<sub>2</sub>/(T<sub>1</sub>&minus;T<sub>2</sub>) = ' +
+      '<strong>' + kappa_ref.toFixed(2) + '</strong>' +
+      '<br>'+
+      '热泵 COP：&kappa;<sub>HP</sub> = T<sub>1</sub>/(T<sub>1</sub>&minus;T<sub>2</sub>) = ' +
+      '<strong>' + kappa_hp.toFixed(2) + '</strong> ' +
+      '<span style="color:#64748b">(= &kappa;<sub>ref</sub> + 1 ✓)</span>';
+  }
+  t1.addEventListener('input', update);
+  t2.addEventListener('input', update);
+  update();
+})();
+</script>
+
+<div class="box remark">
+  <p class="box-title">尝试：</p>
+  <ul style="margin:0">
+    <li>把 \(T_1=800, T_2=300\)（蒸汽机典型）：\(\eta_C\approx 62.5\%\)。</li>
+    <li>把 \(T_1=350, T_2=300\)（家用热泵供暖，屋内 \(\sim 77°\)F、屋外 \(\sim 80°\)F 误差）：\(\kappa_{\text{HP}}=7\)——付 1 J 电能搬来 6 J 室外热 + 自己的 1 J，共 7 J 进屋。</li>
+    <li>把 \(T_2\) 拉到接近 \(T_1\)：COP 发散，\(\eta_C\to 0\)（温差太小，热机没意义，但热泵很高效）。</li>
+    <li>把 \(T_2\to 0\)：\(\eta_C\to 1\)，但第三定律禁止。</li>
+  </ul>
+</div>
+
+<!-- ======================================================== -->
+
+<h2>§8 第二定律：两个等价陈述</h2>
+
+<p>到此为止，"\(\eta<1\)"、"热不会自发冷→热" 这些都是从 Carnot 循环算出来的<em>结论</em>。但 Carnot 是一个具体的<em>构造</em>——为什么<strong>所有</strong>循环都得满足 \(\eta\leq\eta_C\)？这要靠一条独立的物理定律——第二定律。</p>
+
+<div class="box key-result">
+  <p class="box-title">Kelvin–Planck 陈述</p>
+  <p><em>"不存在这样的热机：它在一个循环过程中的唯一效果是从单一热库吸热并把这些热全部转换为功。"</em></p>
+  <p>换言之，任何<strong>循环</strong>工作的热机都必须有<strong>冷库</strong>放热段——\(Q_2\) 不能为零，故 \(\eta=1-Q_2/Q_1<1\)。</p>
+</div>
+
+<div class="box key-result">
+  <p class="box-title">Clausius 陈述</p>
+  <p><em>"不存在这样的循环过程：它的唯一效果是把热从冷物体传到热物体。"</em></p>
+  <p>换言之，热<strong>不会自发</strong>从冷流向热——制冷必须有<strong>外加功</strong>输入。</p>
+</div>
+
+<div class="box insight">
+  <p class="box-title">两个陈述的等价性（草图）</p>
+  <p>用反证法。假设有一个 K–P 违反者：一个 \(\eta=1\) 的热机 \(E\)，从单一 \(T_1\) 库吸 \(Q\) 全部变成功 \(W=Q\)。把这个 \(W\) 喂给一个 Carnot 制冷机 \(R\)，让 \(R\) 从 \(T_2\) 库吸 \(Q_2\)、向 \(T_1\) 库放 \(W+Q_2\)。综合两台机器：</p>
+  <ul>
+    <li>\(T_1\) 库净变化：\(-Q+(W+Q_2)=+Q_2\)（净得到 \(Q_2\)）</li>
+    <li>\(T_2\) 库净变化：\(-Q_2\)（净失去 \(Q_2\)）</li>
+    <li>外界净功：0</li>
+  </ul>
+  <p>合起来是<strong>把 \(Q_2\) 从冷库搬到热库、不需要外功</strong>——这就违反了 Clausius！所以 K–P 违反 ⇒ Clausius 违反。同理可证 Clausius 违反 ⇒ K–P 违反。两个陈述等价。</p>
+</div>
+
+<div class="box remark">
+  <p class="box-title">可逆 vs 不可逆</p>
+  <p><strong>可逆过程</strong>：每一刻系统都处于内部平衡，外参数无穷小改变就能让过程反向走、回到任意中间态——慢、准静态、无摩擦/无湍流/无温差导热。Carnot 的每一段都设计成可逆。<br><strong>不可逆过程</strong>：任何含有耗散的实际过程（摩擦、自由膨胀、有限温差下的热传导、气体混合……）。第二定律本质上给出"哪些过程方向被禁止"——所有不可逆过程都<strong>带有不可逆熵增</strong>。</p>
+</div>
+
+<!-- ======================================================== -->
+
+<h2>§9 熵作为新的态函数</h2>
+
+<h3>9.1 从 Carnot 恒等式到 \(\oint dS=0\)</h3>
+
+<p>把 Carnot 恒等式 \(Q_2/Q_1=T_2/T_1\) 改写：</p>
+
+$$ \frac{Q_1}{T_1}-\frac{Q_2}{T_2}=0. $$
+
+<p>带正负号（吸 \(Q_1>0\)、放 \(Q_2\) 即"吸"\(-Q_2\)）：</p>
+
+$$ \underbrace{\frac{Q_1}{T_1}}_{\text{leg }A\to B}\;+\;
+   \underbrace{\frac{-Q_2}{T_2}}_{\text{leg }C\to D}\;=\;0. $$
+
+<p>绝热段 \(\delta Q=0\Rightarrow \delta Q/T=0\) 处处为零，不贡献。所以<strong>整个 Carnot 循环</strong>:</p>
+
+$$ \oint_{\text{Carnot}}\frac{\delta Q_{\text{rev}}}{T}=0. \tag{9.1} $$
+
+<p>这是关键观察。一个量沿任意闭合路径积分为零，意味着它是某个<strong>态函数</strong>的全微分。给这个态函数起个名字：<em>熵</em> \(S\)。</p>
+
+<div class="box key-result">
+  <p class="box-title">熵的定义（Clausius, 1865）</p>
+  $$ \boxed{\;dS\equiv\frac{\delta Q_{\text{rev}}}{T},\qquad \Delta S=\int_i^f\frac{\delta Q_{\text{rev}}}{T}\;} $$
+  <p>这里 \(\delta Q_{\text{rev}}\) 必须沿<strong>可逆路径</strong>计算。\(T\) 是吸热时的瞬时温度。</p>
+</div>
+
+<h3>9.2 验证 Carnot 自洽</h3>
+
+<p>沿 Carnot 四段算 \(\Delta S\)：</p>
+
+<table class="leg-table">
+  <thead>
+    <tr><th>段</th><th>\(\Delta S\)</th><th>说明</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>\(A\to B\)（等温 \(T_1\)，吸 \(Q_1\)）</td>
+      <td>\(+Q_1/T_1\)</td>
+      <td>\(T\) 恒定，可拿出积分</td>
+    </tr>
+    <tr>
+      <td>\(B\to C\)（绝热）</td>
+      <td>\(0\)</td>
+      <td>\(\delta Q=0\)</td>
+    </tr>
+    <tr>
+      <td>\(C\to D\)（等温 \(T_2\)，放 \(Q_2\)）</td>
+      <td>\(-Q_2/T_2\)</td>
+      <td>负号因放热</td>
+    </tr>
+    <tr>
+      <td>\(D\to A\)（绝热）</td>
+      <td>\(0\)</td>
+      <td>\(\delta Q=0\)</td>
+    </tr>
+  </tbody>
+  <tfoot>
+    <tr>
+      <td>循环合计</td>
+      <td>\(Q_1/T_1-Q_2/T_2=0\) ✓</td>
+      <td>由 Carnot 恒等式</td>
+    </tr>
+  </tfoot>
+</table>
+
+<p>循环回到原态 \(\Rightarrow\Delta S_{\text{cycle}}=0\)，与"\(S\) 是态函数"一致。</p>
+
+<h3>9.3 不可逆过程的不等式（预告 Week 9）</h3>
+
+<p>对<strong>不可逆</strong>过程，<em>实际</em>吸热 \(\delta Q\) 比沿可逆路径所需的 \(\delta Q_{\text{rev}}\) 少。第二定律可以写成：</p>
+
+$$ \boxed{\;dS\geq\frac{\delta Q}{T},\;}\qquad\text{等号仅当可逆。} $$
+
+<p>对孤立系统 \(\delta Q=0\)，立即得到</p>
+
+$$ \boxed{\;\Delta S_{\text{isolated}}\geq 0,\;} $$
+
+<p>这就是"宇宙熵不减"。Week 9 会用这个不等式具体算自由膨胀、有限温差导热、气体混合等不可逆过程的熵增。</p>
+
+<div class="box insight">
+  <p class="box-title">统计熵预告（Ch.24）</p>
+  <p>Clausius 的宏观定义 \(dS=\delta Q_{\text{rev}}/T\) 在 Boltzmann（1877）那里得到了一个深刻的微观解释：</p>
+  $$ S=k_B\ln\Omega, $$
+  <p>其中 \(\Omega\) 是宏观态对应的<strong>微观态数</strong>。两个定义在任何具体例子中都给出<em>相同</em>的 \(\Delta S\)。\(S=k_B\ln\Omega\) 是"熵 = 无序"直觉的严格出处，并把 \(\Delta S\geq 0\) 解释成"孤立系统会朝着 \(\Omega\) 更大的宏观态演化"——熵增是统计偏向性的<em>必然</em>结果，而非神秘的箭头。</p>
+</div>
+
+<!-- ======================================================== -->
+
+<h2>§10 Worked Examples</h2>
+
+<div class="example">
+  <h4>Example A (★): Carnot 效率与 \(Q_h, Q_c\) 互推</h4>
+  <p class="source">类似 Shankar §23 例题</p>
+  <p class="problem-statement">一个 Carnot 热机工作于 \(T_1=600\) K 与 \(T_2=300\) K 之间，每个循环吸热 \(Q_1=2000\) J。求：(a) 效率 \(\eta_C\)；(b) 每循环对外做的功 \(W\)；(c) 每循环向冷库放出的热 \(Q_2\)。</p>
+
+  <div class="solution-step"><strong>Step 1: 效率。</strong>$$ \eta_C=1-\frac{T_2}{T_1}=1-\frac{300}{600}=\frac{1}{2}=50\%. $$</div>
+
+  <div class="solution-step"><strong>Step 2: 功。</strong>由 \(\eta=W/Q_1\)：$$ W=\eta_C Q_1=0.5\times 2000=1000\text{ J}. $$</div>
+
+  <div class="solution-step"><strong>Step 3: 放热。</strong>由 \(W=Q_1-Q_2\)：$$ Q_2=Q_1-W=2000-1000=1000\text{ J}. $$ 等价地 \(Q_2=Q_1\cdot T_2/T_1=2000\times 0.5=1000\) J ✓。</div>
+
+  <div class="answer-box">\(\eta_C=50\%\)，\(W=1000\) J，\(Q_2=1000\) J。</div>
+</div>
+
+<div class="example">
+  <h4>Example B (★★): 制冷机的最小功 + Clausius 限制</h4>
+  <p class="source">改编自 OpenStax Vol.2 §4 例题</p>
+  <p class="problem-statement">家用冰箱要把冰箱内温度维持在 \(T_2=270\) K，环境 \(T_1=300\) K。每秒钟有 \(Q_2=400\) J 的热从冰箱内壁渗入需要被泵出。求：(a) 维持温度所需的<strong>最小</strong>电功率（按 Carnot COP 计）；(b) 一台<strong>真实</strong>冰箱的 COP 约为 Carnot 的 1/3，其实际功率多大？(c) 一台"COP \(=20\)" 的广告产品在这一对温度下是否违反第二定律？</p>
+
+  <div class="solution-step"><strong>Step 1: Carnot COP。</strong>$$ \kappa_{\text{ref,Carnot}}=\frac{T_2}{T_1-T_2}=\frac{270}{30}=9. $$ 所以"理论上"每 1 J 电能可以泵出 9 J 热。</div>
+
+  <div class="solution-step"><strong>Step 2: 最小功率。</strong>每秒需要泵 \(Q_2=400\) J，故所需电功率 $$ P_{\min}=\frac{\dot Q_2}{\kappa_{\text{Carnot}}}=\frac{400}{9}\approx 44.4\text{ W}. $$</div>
+
+  <div class="solution-step"><strong>Step 3: 真实功率。</strong>真实 COP \(\approx 3\)，所以 $$ P_{\text{real}}=\frac{400}{3}\approx 133\text{ W}. $$</div>
+
+  <div class="solution-step"><strong>Step 4: COP = 20 合法吗？</strong>这超过了 Carnot 上限 \(\kappa_{\text{ref,Carnot}}=9\)——<strong>违反第二定律</strong>（Clausius 形式），不可能。任何号称比 Carnot 上限更高效的产品都是骗人的，无论广告多漂亮。</div>
+
+  <div class="answer-box">\(P_{\min}\approx 44.4\) W；\(P_{\text{real}}\approx 133\) W；广告 COP \(=20\) 不可能。</div>
+</div>
+
+<div class="example">
+  <h4>Example C (★★): Carnot 循环的 \(P, V, T\) 端点</h4>
+  <p class="source">Shankar §23.4 类型题</p>
+  <p class="problem-statement">1 mol 单原子理想气体走 Carnot 循环。在 \(A\) 点：\(P_A=8\) atm, \(V_A=1\) L, \(T_1=?\)。等温膨胀到 \(V_B=2\) L。然后绝热膨胀到 \(T_2=200\) K。求：(a) \(T_1\)；(b) 状态 \(B, C\) 的 \(P, V\)；(c) 一个循环里气体吸的总热 \(Q_1\) 与做的净功 \(W\)。</p>
+
+  <div class="solution-step"><strong>Step 1: 求 \(T_1\)。</strong>由 \(PV=nRT\)，\(T_1=P_AV_A/(nR)\)。代入 \(P_A=8\) atm \(=8\times 1.013\times 10^5\) Pa \(=8.10\times 10^5\) Pa，\(V_A=10^{-3}\) m³，\(n=1\)，\(R=8.314\)：$$ T_1=\frac{8.10\times 10^5\times 10^{-3}}{1\times 8.314}=97.5\text{ K}. $$
+
+  <strong>等一下——\(T_1<T_2=200\) K？</strong>这就矛盾了（Carnot 要 \(T_1>T_2\)）。说明题给的 \(P_A=8\) atm + \(V_A=1\) L 数值对 1 mol 不自洽。我们把 \(T_1\) 当作未知，反推。</div>
+
+  <div class="solution-step"><strong>修正：</strong>题目数据如果想让 Carnot 跑得通，要求 \(T_1>T_2\)。假设题目给的不是 \(V_A=1\) L 而是 \(V_A=0.2\) L（更紧的气体）：那么 \(T_1=8.10\times 10^5\times 2\times 10^{-4}/8.314=19.5\) K，还是不对。<em>真正</em>的 Carnot 题目通常会先给 \(T_1\) 和 \(T_2\)。让我们直接<strong>假设 \(T_1=500\) K, T_2=200 K</strong>，气体 1 mol 单原子，\(V_A=10\) L，并求 \(B, C\)。</div>
+
+  <div class="solution-step"><strong>Step 2 (重做)：等温段 \(A\to B\)。</strong>\(T_1=500\) K 恒定，\(V_B=2V_A=20\) L。\(P_B=P_A\cdot V_A/V_B=P_A/2\)，其中 \(P_A=nRT_1/V_A=1\times 8.314\times 500/0.01=4.16\times 10^5\) Pa \(\approx 4.10\) atm。所以 \(P_B\approx 2.05\) atm，\(V_B=20\) L。
+
+  $$ Q_1=W_{AB}=nRT_1\ln(V_B/V_A)=1\times 8.314\times 500\times\ln 2=2880\text{ J}. $$</div>
+
+  <div class="solution-step"><strong>Step 3：绝热段 \(B\to C\)。</strong>\(\gamma=5/3\)。用 \(TV^{\gamma-1}=\text{const}\)：
+  $$ V_C=V_B\left(\frac{T_1}{T_2}\right)^{1/(\gamma-1)}=20\times\left(\frac{500}{200}\right)^{3/2}=20\times 2.5^{1.5}\approx 20\times 3.95\approx 79\text{ L}. $$
+  对应的 \(P_C=nRT_2/V_C=1\times 8.314\times 200/(79\times 10^{-3})=2.10\times 10^4\) Pa \(\approx 0.21\) atm。</div>
+
+  <div class="solution-step"><strong>Step 4：效率与净功。</strong>
+  $$ \eta_C=1-\frac{200}{500}=0.6=60\%. $$
+  $$ W_{\text{net}}=\eta_C Q_1=0.6\times 2880\approx 1730\text{ J}. $$</div>
+
+  <div class="answer-box">（按修正数据）\(T_1=500\) K；\(B=(2.05\text{ atm}, 20\text{ L})\)；\(C\approx(0.21\text{ atm}, 79\text{ L})\)；\(Q_1\approx 2880\) J；\(W\approx 1730\) J；\(\eta_C=60\%\)。</div>
+
+  <div class="box remark" style="margin-top:.5rem">
+    <p class="box-title">题型套路</p>
+    <p>Carnot 端点的标准走法：(1) 给定温度 + 一对体积，先用等温段算 \(Q_1\)（直接 \(nRT_1\ln\)）；(2) 用绝热 \(TV^{\gamma-1}=\text{const}\) 解出另一端点的 \(V\)；(3) 用 \(PV=nRT\) 算 \(P\)。其它两段（\(C\to D\) 与 \(D\to A\)）由对称性给出 \(V_D=V_A\cdot(T_1/T_2)^{1/(\gamma-1)}\)。<strong>核心识别：\(V_B/V_A=V_C/V_D\)（来自 §4 的恒等式），所以 \(V_D\) 直接由 \(V_C/V_B\cdot V_A\) 算出。</strong></p>
+  </div>
+</div>
+
+<!-- ======================================================== -->
+
+<h2>§11 Self-check</h2>
+
+<div class="self-check">
+  <p class="question">Q1. 为什么 Carnot 循环中"绝热段不贡献净功"？这是不是说绝热段没用？</p>
+  <details><summary>查看答案</summary>
+  <p>两条绝热<em>遍历的温度区间相同</em>（\(T_1\leftrightarrow T_2\)），方向相反；理想气体绝热功 \(W=nC_v\Delta T\) 只依赖温度端点。所以两条加起来 \(W_{BC}+W_{DA}=0\)。<br><strong>但绝热段并非没用</strong>——它们的作用是<strong>把工质温度搬到适合接触热库的温度</strong>。如果没有绝热段，气体就得在 \(T_1\) 和 \(T_2\) 之间穿越，要么和某个库有限温差导热（不可逆，损失效率），要么干脆接触不到库。绝热段是 Carnot 实现"<strong>可逆等温接触</strong>"的关键。</p>
+  </details>
+</div>
+
+<div class="self-check">
+  <p class="question">Q2. 一台号称在 \(T_1=500\) K, T_2=300 K 之间工作的热机，效率达到 \(45\%\)。这违反第二定律吗？</p>
+  <details><summary>查看答案</summary>
+  <p>Carnot 上限 \(\eta_C=1-300/500=40\%\)。所以 \(\eta=45\%\) <strong>违反</strong>第二定律——这样的机器不可能存在，或者两个温度参数测错了。<br>注意：第二定律说"任何在两个温度间的热机 \(\eta\leq\eta_C\)"——不要求是 Carnot 循环；任何循环都受这条上限约束。</p>
+  </details>
+</div>
+
+<div class="self-check">
+  <p class="question">Q3. 制冷机 COP 可以大于 1（甚至大于 10），但热机效率严格 \(\eta<1\)。为什么不矛盾？</p>
+  <details><summary>查看答案</summary>
+  <p>因为定义不同。<br>热机 \(\eta=W/Q_1\)：付 \(Q_1\) 热得到 \(W\) 功，"输入"是热、"输出"是功，由 \(W=Q_1-Q_2<Q_1\) 自动小于 1。<br>制冷机 \(\kappa_{\text{ref}}=Q_2/W\)：付 \(W\) 功得到从冷库泵走 \(Q_2\) 热，"输入"是功、"输出"是搬走的热。\(Q_2\) 可以远大于 \(W\)（因为 \(Q_1=W+Q_2\) 把额外的 \(Q_2\) 拿来贴补），所以 \(\kappa\) 可以远大于 1。<br><strong>这两个比值的"输出/输入"含义不同，没有共同的单位归一，不能直接对比。</strong></p>
+  </details>
+</div>
+
+<div class="self-check">
+  <p class="question">Q4. 把熵定义里的"可逆"两字去掉行不行——直接 \(dS=\delta Q/T\)？</p>
+  <details><summary>查看答案</summary>
+  <p><strong>不行</strong>。对不可逆过程 \(\int\delta Q/T\) 沿实际路径的值<em>小于</em>\(\Delta S\)（端点定的状态函数差）。例如自由膨胀：\(Q=0\)，所以 \(\int\delta Q/T=0\)；但<strong>\(\Delta S>0\)</strong>（因为可逆等温替代路径 \(Q_{\text{rev}}=nRT\ln(V_f/V_i)>0\)）。<br>所以\(S\) 是态函数<strong>这一身份</strong>要求积分必须沿可逆路径——否则得到的不是 \(\Delta S\)。这是 Week 9 计算不可逆熵增的<strong>核心技术</strong>：找一条端点相同的可逆替代路径来算 \(\Delta S\)。</p>
+  </details>
+</div>
+
+<div class="self-check">
+  <p class="question">Q5. 把 Kelvin–Planck 改成"不存在 \(\eta=100\%\) 的<em>不循环</em>过程"对吗？例如，等温膨胀 \(\Delta U=0\Rightarrow Q=W\) 不就是 \(\eta=1\) 吗？</p>
+  <details><summary>查看答案</summary>
+  <p><strong>错</strong>，但这是高质量误解。Kelvin–Planck 的关键词是"<strong>循环</strong>"。一次性的等温膨胀确实 \(Q=W\)（\(\eta=1\)），但<em>气体状态变了</em>（体积大了），不是循环——它无法重复运行。要重复就得把气体压回去，<strong>这一步必须放热到某个库</strong>（或对系统做功），整体一算 \(\eta<1\)。<br>K–P 真正禁止的是"<strong>能循环运行</strong>的 \(\eta=1\) 机器"，所以"永动机第二类"才不可能。一次性过程不算永动机。</p>
+  </details>
+</div>
+
+<div class="self-check">
+  <p class="question">Q6. 同一对温度 \(T_1, T_2\) 间，可以有多种循环（Otto、Diesel、Stirling、Brayton……）。为什么<strong>都</strong>受 Carnot 上限约束？</p>
+  <details><summary>查看答案</summary>
+  <p>这是第二定律的<strong>非平凡推论</strong>——叫做<em>Carnot 定理</em>：任何在 \(T_1, T_2\) 间工作的可逆循环效率相等（都 \(=\eta_C\)），不可逆循环效率严格更小。<br>证明思路（反证）：假设有循环 \(X\) 效率 \(\eta_X>\eta_C\)。把 \(X\) 当热机，吸 \(Q_1\) 出 \(W_X=\eta_XQ_1\)；用 \(W_X\) 倒着开 Carnot 制冷机，需要的 Carnot 制冷工 \(W_C=Q_1/(1-T_2/T_1)\cdot(1-T_2/T_1)=Q_1\eta_C<W_X\)。这意味着 Carnot 制冷可以用<em>不到全部</em>的 \(W_X\) 把 \(Q_1\) 全数还回热库——多出的 \(W_X-W_C\) 平白无故出现，违反能量守恒（与第二定律连用），矛盾。<br>所以任何循环 \(\eta\leq\eta_C\)。</p>
+  </details>
+</div>
+
+<!-- ======================================================== -->
+
+<h2>§12 公式速查表</h2>
+
+<table class="formula-table">
+  <thead><tr><th>主题</th><th>公式</th><th>备注</th></tr></thead>
+  <tbody>
+    <tr><td>Carnot 段 \(A\to B\)（等温吸热）</td><td>\(Q_1=nRT_1\ln(V_B/V_A)\)</td><td>\(=W_{AB}\)，\(\Delta U=0\)</td></tr>
+    <tr><td>Carnot 段 \(C\to D\)（等温放热）</td><td>\(Q_2=nRT_2\ln(V_C/V_D)\)</td><td>取正值定义</td></tr>
+    <tr><td>绝热体积关系</td><td>\(V_B/V_A=V_C/V_D\)</td><td>由两条绝热相除</td></tr>
+    <tr><td>绝热相消</td><td>\(W_{BC}+W_{DA}=0\)</td><td>\(W_{\text{net}}\) 全来自等温段</td></tr>
+    <tr><td>Carnot 恒等式</td><td>\(Q_2/Q_1=T_2/T_1\)</td><td>\(\Leftrightarrow Q_1/T_1=Q_2/T_2\)</td></tr>
+    <tr><td>Carnot 效率</td><td>\(\eta_C=1-T_2/T_1\)</td><td>普适上限</td></tr>
+    <tr><td>热机能量守恒</td><td>\(W=Q_1-Q_2\)</td><td>\(\Delta U_{\text{cycle}}=0\)</td></tr>
+    <tr><td>制冷机能量守恒</td><td>\(W+Q_2=Q_1\)</td><td>\(W\) 输入</td></tr>
+    <tr><td>制冷 COP（Carnot）</td><td>\(\kappa_{\text{ref}}=T_2/(T_1-T_2)\)</td><td>\(>0\)，可以远大于 1</td></tr>
+    <tr><td>热泵 COP（Carnot）</td><td>\(\kappa_{\text{HP}}=T_1/(T_1-T_2)=\kappa_{\text{ref}}+1\)</td><td>取暖关心 \(Q_1\)</td></tr>
+    <tr><td>Kelvin–Planck</td><td>不存在 \(\eta=1\) 的循环热机</td><td>\(Q_2\) 不能为零</td></tr>
+    <tr><td>Clausius</td><td>热不会自发冷→热</td><td>制冷需 \(W\) 输入</td></tr>
+    <tr><td>熵定义</td><td>\(dS=\delta Q_{\text{rev}}/T\)</td><td>沿可逆路径</td></tr>
+    <tr><td>Carnot 熵核对</td><td>\(\Delta S_{\text{cycle}}=Q_1/T_1-Q_2/T_2=0\)</td><td>态函数 ✓</td></tr>
+    <tr><td>第二定律不等式</td><td>\(dS\geq\delta Q/T\)</td><td>等号仅可逆</td></tr>
+    <tr><td>孤立系统</td><td>\(\Delta S\geq 0\)</td><td>宇宙熵不减</td></tr>
+    <tr><td>统计熵（预告）</td><td>\(S=k_B\ln\Omega\)</td><td>Boltzmann，Ch.24</td></tr>
+  </tbody>
+</table>
+
+<!-- ======================================================== -->
+
+<h2>§13 术语</h2>
+
+<dl>
+  <dt>Carnot 循环 (Carnot cycle)</dt>
+  <dd>两段等温（接热库）+ 两段绝热（脱离热库）组成的可逆循环。所有在 \(T_1, T_2\) 间工作的热机效率上限。</dd>
+
+  <dt>Carnot 恒等式</dt>
+  <dd>\(Q_2/Q_1=T_2/T_1\)——Carnot 循环中两段等温的热与对应温度成比例。等价地 \(\oint\delta Q_{\text{rev}}/T=0\)。</dd>
+
+  <dt>Carnot 效率 \(\eta_C\)</dt>
+  <dd>\(\eta_C=1-T_2/T_1\)。仅依赖两个热库温度，与气体种类、量、\(\gamma\) 都无关。</dd>
+
+  <dt>制冷机 (refrigerator)</dt>
+  <dd>Carnot 反向运行：外加功 \(W\) 输入，把热 \(Q_2\) 从冷库泵到热库（连带 \(Q_1=W+Q_2\) 放热）。</dd>
+
+  <dt>热泵 (heat pump)</dt>
+  <dd>与制冷机同一机器，但关心的"输出"是放到热库的 \(Q_1\)（用于供暖）。COP \(=\kappa_{\text{HP}}=Q_1/W\)。</dd>
+
+  <dt>性能系数 COP (coefficient of performance)</dt>
+  <dd>制冷/热泵的"效率"替代指标。Carnot COP：\(\kappa_{\text{ref}}=T_2/(T_1-T_2)\)、\(\kappa_{\text{HP}}=T_1/(T_1-T_2)\)。两者满足 \(\kappa_{\text{HP}}=\kappa_{\text{ref}}+1\)。</dd>
+
+  <dt>可逆过程 (reversible process)</dt>
+  <dd>每一刻系统处于内部平衡的过程；可由无穷小外参数改变让其反向、回到任意中间态。准静态 + 无耗散。仅是理论极限，实际过程都不可逆。</dd>
+
+  <dt>第二定律（Kelvin–Planck）</dt>
+  <dd>不存在循环热机，其唯一效果是从单一热库吸热并把这些热全部转化为功。即 \(\eta<1\) 总是。</dd>
+
+  <dt>第二定律（Clausius）</dt>
+  <dd>不存在循环过程，其唯一效果是把热从冷物体传到热物体。即制冷必须有外加功。</dd>
+
+  <dt>熵 (entropy) \(S\)</dt>
+  <dd>态函数，\(dS=\delta Q_{\text{rev}}/T\)。对孤立系统 \(\Delta S\geq 0\)。Boltzmann 统计形式：\(S=k_B\ln\Omega\)。</dd>
+
+  <dt>Carnot 定理</dt>
+  <dd>任何在两固定温度 \(T_1, T_2\) 间工作的可逆循环都有相同效率 \(\eta_C=1-T_2/T_1\)；不可逆循环效率严格更小。由第二定律推出。</dd>
+</dl>
+
+<p class="back-link" style="margin-top:2rem"><a href="index.html">← 回到复习总目录</a> · <a href="12_processes_cycles.html">← 四种过程与循环</a></p>
+
+</main>
+
+</body>
+</html>

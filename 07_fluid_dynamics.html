@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>07 · Bernoulli 与流体动力学 — PHYS 4B 复习</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="theme.js"></script>
+  <script>
+    MathJax = {
+      tex: { inlineMath: [['\\(', '\\)']], displayMath: [['$$', '$$']] },
+      svg: { fontCache: 'global' }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" async></script>
+</head>
+<body>
+
+<header class="site-header">
+  <a class="home-link" href="index.html">← PHYS 4B 复习</a>
+  <nav>
+    <a href="06_fluid_statics.html">← 流体静力学</a>
+    <a href="08_real_fluids_heat.html">真实流体 + 热学 →</a>
+  </nav>
+</header>
+
+<main class="container">
+
+<div class="topic-header">
+  <h1>07 · Bernoulli 与流体动力学</h1>
+  <p class="meta">Lec 5.1 尾 + 5.2 + 5.3 前段 + 6.1 前段 · Shankar §20.3–20.5</p>
+  <p class="blurb">流体一旦动起来，就需要一条新方程：Bernoulli 方程。它把<strong>压强、动能、势能</strong>三者沿流线绑在一起，让我们能用一行公式回答从"罐子里的水射出多远"到"机翼为什么能产生升力"到"Venturi 流量计怎么测流速"的所有问题。</p>
+</div>
+
+<!-- ======================================================== -->
+
+<div class="box key-result">
+  <p class="box-title">一页速览</p>
+  <ul>
+    <li><strong>连续性</strong> (incompressible streamtube)：\(A_1 v_1 = A_2 v_2\)。</li>
+    <li><strong>Bernoulli</strong>（理想、不可压、稳态、沿同一流线）：
+      \(P+\tfrac12\rho v^2+\rho g h = \text{const}\)。</li>
+    <li><strong>Torricelli efflux</strong>：小孔近似 \(v=\sqrt{2gh}\)；一般 \(v_2=\sqrt{2gh/(1-A_2^2/A_1^2)}\)。</li>
+    <li><strong>射程</strong>：\(d(h)=2\sqrt{h(H-h)}\)，最优 \(h_{\text{opt}}=H/2\)，\(d_{\max}=H\)。</li>
+    <li><strong>升力</strong>（Newton 分子模型）：\(L=2\rho v^2 A\sin^2\theta\cos\theta\)。</li>
+    <li><strong>Venturi 流量计</strong>：\(P_1-P_2=\tfrac12\rho(v_2^2-v_1^2)=\rho g(h_1-h_2)\)。</li>
+    <li><strong>旋转水桶自由面</strong>：\(y(r)=\dfrac{\omega^2 r^2}{2g}+C\)（抛物面）。</li>
+  </ul>
+</div>
+
+<!-- ======================================================== -->
+
+<h2>§1 故事线：一条方程，多种应用</h2>
+
+<p>在静止流体里，平衡只需要 \(dP/dh=-\rho g\)。一旦流体动起来，多了一个动能项，平衡变成<strong>沿流线的能量守恒</strong>——这就是 Bernoulli 方程。它的形式简单到欺骗性的程度：</p>
+
+<p>$$ P+\tfrac12\rho v^2+\rho g h \;=\;\text{const along a streamline}. $$</p>
+
+<p>但应用极广。本章会用同一套"配方"求解 5 个看似无关的问题：</p>
+
+<ol>
+  <li>水罐侧壁开个小孔，水射出多快？落地多远？哪个高度射得最远？</li>
+  <li>机翼为什么能产生升力？两种视角分别给出什么？</li>
+  <li>Venturi 流量计怎么从压强差读出流速？</li>
+  <li>旋转的水桶里水面变成什么形状？</li>
+  <li>真实流体里压强为什么沿管道一路下降，即使横截面没变？</li>
+</ol>
+
+<div class="box insight">
+  <p class="box-title">配方</p>
+  <p>每个 Bernoulli 应用都遵循同样的三步配方：(1) <strong>选两点</strong> 1 和 2，确保它们在同一条流线上；(2) <strong>列 Bernoulli</strong> 等式 \(P_1+\tfrac12\rho v_1^2+\rho g h_1=P_2+\tfrac12\rho v_2^2+\rho g h_2\)；(3) 利用<strong>连续性</strong>或边界条件（自由面 \(P=P_{\text{atm}}\)、大水库 \(v\approx 0\)）消未知量。剩下的就是代数。</p>
+</div>
+
+<!-- ======================================================== -->
+
+<h2>§2 连续性方程</h2>
+
+<p>不可压缩流体在管道里流动时，单位时间穿过任一截面的体积必须相等（不然会在某处积累或亏空，违反质量守恒）。对一段从截面 1 到截面 2 的"流管"：</p>
+
+<p>$$ \boxed{\; A_1 v_1 \;=\; A_2 v_2 \;} \tag{2.1}$$</p>
+
+<details class="more-detail">
+  <summary>展开：可压缩 / 一般形式</summary>
+  <p>更一般地，质量在体积 \(V\) 内的变化由穿过表面的质量流量给出：</p>
+  <p>$$ \frac{\partial}{\partial t}\int_V \rho\,dV = -\oint_{\partial V}\rho\,\vec v\cdot\hat n\,dA. $$</p>
+  <p>用散度定理转成微分形式：</p>
+  <p>$$ \frac{\partial \rho}{\partial t}+\nabla\cdot(\rho\vec v)=0. $$</p>
+  <p>稳态 (\(\partial_t=0\)) 加不可压 (\(\rho=\text{const}\)) 给 \(\nabla\cdot\vec v=0\)，对一根流管沿轴向积分恢复 (2.1)。</p>
+</details>
+
+<div class="box remark">
+  <p class="box-title">直觉</p>
+  <p>窄处快、宽处慢——把胶皮水管前端用拇指捏住一半，水会飙得更远，就是连续性的直接体现。</p>
+</div>
+
+<!-- ======================================================== -->
+
+<h2>§3 Bernoulli 方程的推导（功能定理）</h2>
+
+<p>取一段流管，时间 \(dt\) 内截面 1 处的流体被推进 \(v_1\,dt\)，截面 2 处的流体也被推进 \(v_2\,dt\)。我们对这两片"塞子"做功能定理。</p>
+
+<h3>3.1 体积一致性</h3>
+
+<p>由连续性，两塞子体积相等：</p>
+
+<p>$$ dV \equiv A_1 v_1\,dt = A_2 v_2\,dt. $$</p>
+
+<h3>3.2 压强做的功</h3>
+
+<p>截面 1 上游的流体推塞子 1 做正功 \(P_1 A_1\cdot v_1\,dt = P_1 dV\)；截面 2 下游流体反推塞子 2 做负功 \(-P_2 dV\)。净外力做功：</p>
+
+<p>$$ W_{\text{net}} = (P_1-P_2)\,dV. $$</p>
+
+<h3>3.3 动能与势能的变化</h3>
+
+<p>从能量记账角度，相当于把质量为 \(\rho\,dV\) 的流体从截面 1 (速度 \(v_1\)、高度 \(h_1\)) "搬"到了截面 2 (速度 \(v_2\)、高度 \(h_2\))：</p>
+
+<p>$$ dK + dU = \tfrac12\rho\,dV\,(v_2^2-v_1^2)+\rho\,dV\,g(h_2-h_1). $$</p>
+
+<h3>3.4 工作-能量定理</h3>
+
+<p>令 \(W_{\text{net}}=dK+dU\)，两边除以公共体积 \(dV\)，重新分组：</p>
+
+<p>$$ \boxed{\;P_1+\tfrac12\rho v_1^2+\rho g h_1 \;=\; P_2+\tfrac12\rho v_2^2+\rho g h_2.\;} \tag{3.1}$$</p>
+
+<div class="box warning">
+  <p class="box-title">使用前提（很重要）</p>
+  <ol>
+    <li><strong>稳态流</strong>（流场不随时间变化）；</li>
+    <li><strong>不可压缩</strong>（密度沿流线为常数）；</li>
+    <li><strong>无黏</strong>（inviscid，没有摩擦耗散——见下一讲 6.1 的修正）；</li>
+    <li><strong>沿同一条流线</strong>（除非旋度为零的流动，跨流线时常数会变）。</li>
+  </ol>
+  <p>违反任何一条都需要修正。常见错误：把 Bernoulli 当成"流速越快压强越低"的万能口诀——这只在同流线、稳态、无黏条件下成立。</p>
+</div>
+
+<!-- ======================================================== -->
+
+<h2>§4 应用 1：罐子里的水（Torricelli efflux）</h2>
+
+<p>考虑一个开口大水罐，自由液面位于地面之上 \(H\) 米。在距地面 \(h\) 米处侧壁开一个小孔（开口面积 \(A_2\)，自由液面面积 \(A_1\)）。水从孔中水平射出，速度 \(v_2\)。</p>
+
+<h3>4.1 小孔近似（\(A_2\ll A_1\)）</h3>
+
+<p>选两点：1 = 自由液面，2 = 孔口正外。两点都暴露于大气，故 \(P_1=P_2=P_{\text{atm}}\)。Bernoulli：</p>
+
+<p>$$ \rho g(H-h)+\tfrac12\rho v_1^2 = \tfrac12\rho v_2^2. $$</p>
+
+<p>大水罐近似 \(v_1\approx 0\) 于是</p>
+
+<p>$$ \boxed{\;v_2=\sqrt{2g(H-h)}\;.\;}\tag{4.1}$$</p>
+
+<p>这就是"自由落体下落 \(H-h\) 米的速度"——一个非常优雅的结果。流体的所有压强能转化为动能，跟一个石头从液面自由下落到孔口高度的结果完全相同。</p>
+
+<h3>4.2 一般情形（A₁ 与 A₂ 可比）</h3>
+
+<p>不丢 \(v_1\)，配合连续性 \(v_1=(A_2/A_1)v_2\)：</p>
+
+<p>$$ 2g(H-h) = v_2^2\!\left[1-\!\left(\frac{A_2}{A_1}\right)^{\!2}\right]
+   \;\Longrightarrow\;
+   \boxed{\;v_2=\sqrt{\dfrac{2g(H-h)}{1-A_2^2/A_1^2}}\;.\;}\tag{4.2}$$</p>
+
+<p>当 \(A_2\to A_1\) 时分母趋零，速度发散——这表示稳态流近似失效（已经不是"罐子里的小孔"，而是整个底脱落，自由下落）。</p>
+
+<!-- ======================================================== -->
+
+<h2>§5 应用 2：射程优化</h2>
+
+<p>水从孔口（地面上方 \(h\)）水平射出，速度 \(v_2=\sqrt{2g(H-h)}\)。它做平抛，下落时间 \(t=\sqrt{2h/g}\)，落地的水平距离</p>
+
+<p>$$ d(h) = v_2\cdot t = \sqrt{2g(H-h)}\cdot\sqrt{\frac{2h}{g}}
+   = \boxed{\;2\sqrt{h(H-h)}\;.}\tag{5.1}$$</p>
+
+<p>这是一个对称的函数（\(h\) 和 \(H-h\) 互换 \(d\) 不变）。求极值：</p>
+
+<p>$$ \frac{d}{dh}\bigl[h(H-h)\bigr]=H-2h=0
+   \;\Longrightarrow\;
+   h_{\text{opt}}=\frac{H}{2},\quad d_{\max}=H. $$</p>
+
+<p>有趣的事实：<strong>一个落地距离 \(d<H\) 对应两个孔口高度 \(h_1, h_2\)，且 \(h_1+h_2=H\)</strong>（关于 \(H/2\) 对称）。证明见下面交互区。</p>
+
+<div class="box interactive">
+  <p class="box-title">交互：拖动孔口高度，看射出的轨迹与落地距离</p>
+  <p>下图固定 \(H=1\) m。拖动孔口高度 \(h\)，看 (a) 出射速度 \(v_2\)、(b) 抛物轨迹、(c) 落地距离 \(d\) 在 \(d(h)\) 曲线上的位置。试着找出 \(d=0.8\) 米对应的两个 \(h\) 值。</p>
+
+  <div class="widget">
+    <canvas id="range-canvas" width="600" height="320"></canvas>
+    <div class="controls">
+      <div class="control-row">
+        <label>孔口高度 h</label>
+        <input type="range" id="range-h" min="0.05" max="0.95" step="0.01" value="0.5" />
+        <span class="readout" id="range-h-readout"></span>
+      </div>
+      <div class="control-row">
+        <label></label>
+        <span style="font-size:.85rem;color:#6b7280">
+          v₂ = <span id="range-v" style="font-family:Menlo,monospace;color:#0f766e"></span>，
+          d = <span id="range-d" style="font-family:Menlo,monospace;color:#0f766e"></span>
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ======================================================== -->
+
+<h2>§6 应用 3：升力的两种视角</h2>
+
+<p>飞机机翼为什么能产生升力？这是流体力学最有名的问题之一。我们看两种互补的视角。</p>
+
+<h3>6.1 Bernoulli 视角（对弯曲翼型 cambered airfoil）</h3>
+
+<p>翼型上下面长度不同（弯曲使上面比下面长一点）。如果两侧空气分子"同时"分开又"同时"汇合（这其实是简化假设），则上侧空气走过更长路径需要更快，下侧较慢。沿同一流线 Bernoulli：</p>
+
+<p>$$ P_{\text{下}} + \tfrac12\rho v_{\text{下}}^2 = P_{\text{上}}+\tfrac12\rho v_{\text{上}}^2. $$</p>
+
+<p>由于 \(v_{\text{上}}>v_{\text{下}}\)，得 \(P_{\text{下}}>P_{\text{上}}\)，下面压强大产生向上的合力——升力。</p>
+
+<div class="box warning">
+  <p class="box-title">"等时通过"是个简化假设</p>
+  <p>真实空气分子并不严格同时汇合（事实上上侧到达后缘<em>更早</em>，远早于下侧）。Bernoulli 视角抓住了"上面快、压强低"的核心，但严格的升力计算需要用 <strong>Kutta–Joukowski 定理</strong>：\(L=\rho v\,\Gamma\,b\)，\(\Gamma\) 是绕翼型的环量，\(b\) 是翼展。这超出了本课范围。</p>
+</div>
+
+<h3>6.2 Newton 分子模型（动量偏转视角）</h3>
+
+<p>另一种思路：把空气看成均匀的分子流，机翼在空气中以速度 \(v\) 平动，迎角 \(\theta\)。每个分子撞上机翼下表面后弹性反射，给机翼传一个向上的动量。统计大量碰撞 → 升力。</p>
+
+<p><strong>Step 1（每次碰撞动量传递）.</strong> 在机翼参考系下，分子水平射入，速度为 \(v\)。机翼下表面与水平方向夹角为 \(\theta\)。弹性反射使分子速度旋转 \(2\theta\)，竖直分量变化 \(mv\sin(2\theta)\)。机翼受到的反向动量（向上）：</p>
+
+<p>$$ \Delta p_y = m v\sin(2\theta) = 2 m v\sin\theta\cos\theta. $$</p>
+
+<p><strong>Step 2（碰撞率）.</strong> 单位时间机翼"扫过"分子的体积是 \(A\cdot v\sin\theta\)（厚度方向 \(v\sin\theta\)，截面 \(A\)）。空气数密度 \(n\)，所以</p>
+
+<p>$$ \frac{dN}{dt} = n A v\sin\theta. $$</p>
+
+<p><strong>Step 3（合）.</strong> 单位时间总动量传递（即升力）：</p>
+
+<p>$$ L = \frac{dp}{dt}=\Delta p_y\cdot\frac{dN}{dt}
+   = 2 m v\sin\theta\cos\theta\cdot n A v\sin\theta. $$</p>
+
+<p>用 \(\rho=mn\) 整理：</p>
+
+<p>$$ \boxed{\;L = 2\rho v^2 A\sin^2\theta\cos\theta\;.\;}\tag{6.1}$$</p>
+
+<details class="more-detail">
+  <summary>展开：极限检验与定性看法</summary>
+  <ul>
+    <li>\(\theta\to 0\)（无迎角）：\(L\to 0\)。✓</li>
+    <li>\(\theta=\pi/2\)（垂直壁面）：\(L\to 0\) (因 \(\cos\theta=0\)，但此时所有动量都传到水平方向，是"阻力"而非升力)。✓</li>
+    <li>极值：\(\partial L/\partial\theta=0\) 给 \(\theta_{\max}\approx 54.7^\circ\)（\(\tan^2\theta=2\)），但这远超过真实失速角 \(\sim 15^\circ\)，提示这个简单的"自由分子"模型只在空气稀薄/超高速时才准（航天飞机再入大气阶段、高超声速飞行）。</li>
+    <li>低密度极限合理：分子之间没有相互作用，假设成立。</li>
+    <li>常态空气下严重低估升力（差一个量级以上）——参考 §6.1 的注。</li>
+  </ul>
+</details>
+
+<!-- ======================================================== -->
+
+<h2>§7 应用 4：Venturi 流量计</h2>
+
+<p>水平管道在中段缩窄，截面从 \(A_1\) 减到 \(A_2\)。两个开口竖直支管（piezometer）插在宽段和窄段，液面分别升到 \(h_1\) 与 \(h_2\)。从测得的 \(h_1-h_2\) 可以反推流速。</p>
+
+<h3>7.1 理想情形</h3>
+
+<p>连续性：\(v_2=(A_1/A_2)v_1>v_1\)。Bernoulli（同高度，重力项消）：</p>
+
+<p>$$ P_1-P_2 = \tfrac12\rho(v_2^2-v_1^2)>0. $$</p>
+
+<p>窄处快、压强低。竖直支管的静压关系给</p>
+
+<p>$$ P_i = P_{\text{atm}}+\rho g h_i\;\Longrightarrow\;P_1-P_2=\rho g(h_1-h_2). $$</p>
+
+<p>把两个等式与连续性合在一起，可以解出流量 \(Q=A_1 v_1\)：</p>
+
+<p>$$ \boxed{\;Q = A_1 A_2\sqrt{\dfrac{2g(h_1-h_2)}{A_1^2-A_2^2}}\;.\;} \tag{7.1}$$</p>
+
+<h3>7.2 现实修正：黏性损耗</h3>
+
+<p>实际流体有黏度（详见 08）。在带损耗的流动中，即使下游恢复到原来的横截面 \(A_3=A_1\)（连续性给 \(v_3=v_1\)），由于沿途有摩擦耗散，<strong>压强不会恢复</strong>，而是 \(P_3<P_1\)，在第三个 piezometer 上看到 \(h_3<h_1\)。"丢失"的压强能</p>
+
+<p>$$ \Delta P_{\text{loss}}=\rho g(h_1-h_3)>0 $$</p>
+
+<p>变成了热。理想 Bernoulli 不预测此项；要描述损耗须引入 Darcy–Weisbach 公式 \(\Delta P_{\text{loss}}=f(L/D)\cdot\tfrac12\rho v^2\)，其中 \(f\) 是 Reynolds 数与管壁粗糙度的函数。</p>
+
+<!-- ======================================================== -->
+
+<h2>§8 应用 5：旋转水桶——抛物面自由表面</h2>
+
+<p>圆柱形水桶半径 \(R\)，静止时盛水至高度 \(h\)。整个桶以恒定角速度 \(\omega\) 绕中心轴旋转，水也最终随桶刚体旋转。问：稳态自由表面是什么形状？</p>
+
+<h3>8.1 旋转坐标系下的有效势</h3>
+
+<p>在与水共转的参考系里，每质量出现一个沿 \(\hat r\) 向外的离心"伪力" \(\omega^2 \vec r\)，对应每质量势能</p>
+
+<p>$$ \Phi_{\text{cf}}(r) = -\tfrac12 \omega^2 r^2. $$</p>
+
+<p>注意这正好是<strong>抛物形势能</strong>的样子（类比弹簧 \(U=\tfrac12 kx^2\)，但带个负号）。加上重力势能，总有效势：</p>
+
+<p>$$ \Phi_{\text{eff}}(r,y) = g y - \tfrac12 \omega^2 r^2. $$</p>
+
+<h3>8.2 自由面是等势面</h3>
+
+<p>静止于旋转参考系的流体满足 \(\nabla P = -\rho \nabla\Phi_{\text{eff}}\)，即等压面就是等势面。自由面 \(P=P_{\text{atm}}\) 对应 \(\Phi_{\text{eff}}=\)常数：</p>
+
+<p>$$ g y - \tfrac12 \omega^2 r^2 = \text{const}\;\Longrightarrow\;\boxed{\;y(r) = \frac{\omega^2 r^2}{2g}+C\;.\;}\tag{8.1}$$</p>
+
+<p>一个抛物面（paraboloid of revolution）。</p>
+
+<h3>8.3 用体积守恒固定 \(C\)</h3>
+
+<p>水不可压，总体积 \(=\pi R^2 h\)（静止时）。把环面 \(2\pi r\,dr\) 上的高度 \(y(r)\) 积分：</p>
+
+<p>$$ \int_0^R 2\pi r\!\left(\frac{\omega^2 r^2}{2g}+C\right)\!dr
+   = \frac{\pi\omega^2 R^4}{4g}+\pi R^2 C
+   = \pi R^2 h. $$</p>
+
+<p>解出</p>
+
+<p>$$ C = h-\frac{\omega^2 R^2}{4g}. $$</p>
+
+<p>所以中心和边缘的高度</p>
+
+<p>$$ y(0)=h-\frac{\omega^2 R^2}{4g},\quad
+   y(R)=h+\frac{\omega^2 R^2}{4g},\quad
+   \boxed{\;y(R)-y(0)=\frac{\omega^2 R^2}{2g}\;.\;}\tag{8.2}$$</p>
+
+<p>中心下凹和边缘上升<strong>幅度相等</strong>——抛物面关于静止液面对称。</p>
+
+<div class="box interactive">
+  <p class="box-title">交互：旋转水桶</p>
+  <p>下面这个杯子半径 \(R=10\) cm，静止液高 \(h=8\) cm。拖动 \(\omega\) 看抛物面变化与中心/边缘高度差。</p>
+
+  <div class="widget">
+    <canvas id="bucket-canvas" width="600" height="320"></canvas>
+    <div class="controls">
+      <div class="control-row">
+        <label>角速度 ω</label>
+        <input type="range" id="bucket-w" min="0" max="20" step="0.2" value="6" />
+        <span class="readout" id="bucket-w-readout"></span>
+      </div>
+      <div class="control-row">
+        <label></label>
+        <span style="font-size:.85rem;color:#6b7280">
+          y(R)−y(0) = <span id="bucket-dy" style="font-family:Menlo,monospace;color:#0f766e"></span>
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="box insight">
+  <p class="box-title">Newton 水桶实验与"绝对转动"</p>
+  <p>这个抛物面是 Newton 在《原理》中论证<strong>绝对转动</strong>存在的核心实验：水跟桶一起共转、彼此<em>无相对运动</em>，可水面却凹了——能区分静止与转动的不是"相对运动"，必须是"相对绝对空间的转动"。Mach 后来反驳，Einstein 用广义相对论给出新答案。这是物理史上的著名思想实验。实用上：旋转水银面是天然抛物镜，常用于做大口径反射镜（不需要打磨）。</p>
+</div>
+
+<!-- ======================================================== -->
+
+<h2>§9 Worked Examples</h2>
+
+<div class="example">
+  <h4>Example：Pitot 管测飞行速度</h4>
+  <p class="source">改编自 Shankar §20.4 / OpenStax 14.6</p>
+  <p>一架小飞机的 Pitot 管测得"驻点"压强（stagnation point，迎面气流被减到零的地方）与"静压"（飞机外侧未受扰动空气的压强）之差为 \(\Delta P=2.4\times 10^3\) Pa。空气密度 \(\rho=1.225\) kg/m³。求飞行速度 \(v\)。</p>
+
+  <div class="solution-step"><strong>选两点</strong>。在飞机参考系中：1 = 远处自由流（速度 \(v\)、压强 \(P_1\)）；2 = 驻点（速度 0、压强 \(P_2\)）。同高度。</div>
+
+  <div class="solution-step"><strong>Bernoulli</strong>：
+    $$ P_1+\tfrac12\rho v^2 = P_2+0. $$
+    重排：\(\Delta P\equiv P_2-P_1=\tfrac12\rho v^2\)。这就是"动压"(dynamic pressure)。
+  </div>
+
+  <div class="solution-step"><strong>解 v</strong>：
+    $$ v=\sqrt{\frac{2\Delta P}{\rho}}=\sqrt{\frac{2\times 2400}{1.225}}\approx 62.6\text{ m/s}\approx 225\text{ km/h}. $$
+  </div>
+
+  <div class="solution-step"><strong>核查直觉</strong>：对小型客机（巡航 \(\sim 200{-}300\) km/h）合理。Pitot 是飞机最经典的速度感应器，原理就是这条 Bernoulli 等式。</div>
+</div>
+
+<div class="example">
+  <h4>Problem：找出射程相同的两个孔高</h4>
+  <p class="source">改编自 Shankar Ch.20 problem set</p>
+  <p>水罐液面高 \(H=1\) m。希望水柱落地距离 \(d=0.8\) m。问：在罐壁哪两个高度 \(h\) 开孔可以满足要求？</p>
+
+  <div class="solution-step"><strong>用 (5.1)</strong>：\(d=2\sqrt{h(H-h)}\)。代入 \(d=0.8\) m, \(H=1\) m，平方两边：
+    $$ d^2 = 4 h(H-h)\;\Longrightarrow\;0.64 = 4h(1-h)
+       \;\Longrightarrow\;4h^2-4h+0.64=0. $$
+  </div>
+
+  <div class="solution-step"><strong>解二次方程</strong>：
+    $$ h=\frac{4\pm\sqrt{16-4\cdot 4\cdot 0.64}}{2\cdot 4}=\frac{4\pm\sqrt{5.76}}{8}=\frac{4\pm 2.4}{8}. $$
+    $$ h_1=0.80\text{ m},\quad h_2=0.20\text{ m}. $$
+  </div>
+
+  <div class="solution-step"><strong>对称性核查</strong>：\(h_1+h_2=1\) m \(=H\) ✓。两个孔关于 \(H/2=0.5\) m 镜像对称，正如 §5 所述。低孔<strong>射出快、下落久</strong>；高孔<strong>射出慢、下落短</strong>，两者落地距离相等。</div>
+</div>
+
+<div class="example">
+  <h4>Problem (★ harder)：虹吸管 (Siphon)</h4>
+  <p class="source">改编自 OpenStax 14.6 / Shankar Ch.20</p>
+  <p>虹吸管把容器里的水吸出：管口端 1 浸入水中（自由液面 \(y=0\)），中段抬升到自由液面之上 \(H_1\)（最高点 3，\(y=+H_1\)），最后下垂到自由液面之下 \(H_2\) 处出水（点 2，\(y=-H_2\)）。出口开向大气，整根管的截面相同。求：</p>
+  <p>(a) 出口流速 \(v_2\)；(b) 最高点 3 处的压强 \(P_3\)；(c) 虹吸管的"高度上限"。</p>
+
+  <div class="solution-step"><strong>(a) 出口流速</strong>。从自由液面（点 1：\(P=P_{\text{atm}}\)，\(v\approx 0\)）到出口（点 2：\(P=P_{\text{atm}}\)）做 Bernoulli：
+    $$ P_{\text{atm}}+0+\rho g\cdot 0
+       \;=\;P_{\text{atm}}+\tfrac12\rho v_2^2+\rho g\cdot(-H_2). $$
+    化简：\(\boxed{\;v_2=\sqrt{2gH_2}\;}\)。<strong>只取决于自由液面与出口的高度差 \(H_2\)，与中段抬升的 \(H_1\) 无关</strong>——这是反直觉的关键结果。
+  </div>
+
+  <div class="solution-step"><strong>(b) 最高点压强</strong>。截面恒定 ⇒ 管内流速处处相同：\(v_3=v_2=\sqrt{2gH_2}\)。Bernoulli 1 → 3：
+    $$ P_{\text{atm}}=P_3+\tfrac12\rho v_2^2+\rho g H_1
+       \;\Longrightarrow\;
+       P_3=P_{\text{atm}}-\rho g H_2-\rho g H_1
+          =P_{\text{atm}}-\rho g(H_1+H_2). $$
+  </div>
+
+  <div class="solution-step"><strong>(c) 高度上限</strong>。要让虹吸正常工作，最高点压强必须 \(P_3>0\)（更准确地说大于水的饱和蒸气压 \(\sim 2300\) Pa at 20°C）。所以
+    $$ \rho g(H_1+H_2)<P_{\text{atm}}
+       \;\Longrightarrow\;
+       H_1+H_2<\frac{P_{\text{atm}}}{\rho g}\approx 10.3\text{ m}. $$
+  </div>
+
+  <div class="solution-step"><strong>物理解读</strong>：虹吸不是"吸"，是"推"——大气压把源头的水推上中段，重力让水从中段下落到出口。中段顶部因高速而压强极低；如果总扬程超过 \(\sim 10\) m，最高点压强降到水的蒸气压以下，水开始 cavitation（汽化），水柱断裂，虹吸失效。这与水银气压计柱高 760 mm 的物理同源——大气只能"挑"起 \(P_{\text{atm}}/(\rho g)\) 高的同种液柱。</div>
+</div>
+
+<div class="example">
+  <h4>Problem (★ harder)：罐子 + Venturi 收缩管的窄段压强</h4>
+  <p class="source">改编自 Shankar Ch.20 problem set</p>
+  <p>大水罐（液面深度 \(H=2\) m）通过一段水平管道排水。管道大部分是 \(A_1\)，但中间一段窄到 \(A_2=A_1/3\)。求<strong>窄段的压强</strong> \(P_c\)。出口排向大气，\(\rho=1000\) kg/m³。然后讨论：如果 \(H\) 加大到 3 m，会发生什么？</p>
+
+  <div class="solution-step"><strong>策略</strong>：先用 Torricelli 求出口流速；用连续性求窄段流速；再用 Bernoulli（窄段→出口，水平等高）联系压强。</div>
+
+  <div class="solution-step"><strong>Step 1：出口流速</strong>（Bernoulli 自由液面 → 出口，两端皆 \(P_{\text{atm}}\)）：
+    $$ \rho g H=\tfrac12\rho v_1^2
+       \;\Longrightarrow\;
+       v_1=\sqrt{2gH}=\sqrt{2\cdot 9.8\cdot 2}\approx 6.26\text{ m/s}. $$
+  </div>
+
+  <div class="solution-step"><strong>Step 2：窄段流速</strong>（连续性）：
+    $$ A_2 v_c=A_1 v_1,\quad A_2=A_1/3
+       \;\Longrightarrow\;
+       v_c=3v_1\approx 18.8\text{ m/s}. $$
+  </div>
+
+  <div class="solution-step"><strong>Step 3：窄段压强</strong>（Bernoulli 窄段 → 出口，水平）：
+    $$ P_c+\tfrac12\rho v_c^2=P_{\text{atm}}+\tfrac12\rho v_1^2
+       \;\Longrightarrow\;
+       P_c=P_{\text{atm}}-\tfrac12\rho(v_c^2-v_1^2)
+           =P_{\text{atm}}-\tfrac12\rho\cdot 8 v_1^2
+           =P_{\text{atm}}-4\rho gH. $$
+    数值：\(P_c=1.013\times 10^5-4\cdot 10^3\cdot 9.8\cdot 2\approx 2.29\times 10^4\) Pa \(\approx 0.23\) atm — 显著低于大气压。
+  </div>
+
+  <div class="solution-step"><strong>极限思考：cavitation 的边界</strong>。若 \(H=3\) m：
+    $$ P_c=10^5-4\cdot 10^3\cdot 9.8\cdot 3\approx -1.76\times 10^4\text{ Pa}. $$
+    <strong>负压</strong>——物理上不可能（液体不能"拉"超过其抗张极限）。Bernoulli 此时预言会发生 cavitation：窄段水汽化、气泡形成又破裂，破坏稳态流。这正是船桨、水泵叶轮等高速旋转部件 cavitation 现象的来源——气泡破裂的冲击波会侵蚀金属表面，是造船工程的大敌。本题表明：理想 Bernoulli 预言的窄段负压<em>不可信</em>，需要观察 cavitation 阈值并据此重新设计管道（比如加大窄段、降低进口高度）。</div>
+</div>
+
+<!-- ======================================================== -->
+
+<h2>§10 Self-check</h2>
+
+<div class="self-check">
+  <p class="question">Q1. 你站在两条平行高速公路之间的隔离带。一辆大卡车从你身边以 100 km/h 呼啸而过，你感到一股<em>朝向卡车</em>的拉力。为什么？</p>
+  <details>
+    <summary>查看答案</summary>
+    <p>卡车与你之间狭窄通道里空气被压缩、加速（连续性：通道横截面小、流速大），由 Bernoulli 那一侧压强降低；你身体另一侧空气几乎不动，压强是大气压。两侧压差就把你"吸"向卡车。同样原因：浴帘开热水会贴着你的身体（水流加热空气上升、帘内压强降低）；两艘并行的船容易"相撞"（窄水道效应）；公路上两车并行变线时会感到方向盘"飘"。</p>
+  </details>
+</div>
+
+<div class="self-check">
+  <p class="question">Q2. 一个学生说："Bernoulli 方程告诉我们：流速越快的地方压强越低。" 这话对吗？</p>
+  <details>
+    <summary>查看答案</summary>
+    <p><strong>不严谨</strong>。Bernoulli 只在<em>同一条流线上</em>把 \(P+\tfrac12\rho v^2+\rho g h\) 绑死；它<strong>不</strong>说"任意快流处都比任意慢流处压强低"。反例：龙卷风中心是低压、周边是高压，但中心反而流速也低（漩涡核心几乎静止）；高速喷射的水柱内部和远离它的静止空气根本不在同一流线上，没有 Bernoulli 关系。正确理解：在同一稳态、不可压、无黏流线上，速度增加意味着压强下降。</p>
+  </details>
+</div>
+
+<div class="self-check">
+  <p class="question">Q3. 两个完全相同的水罐 A 和 B，液面高度都是 \(H=1\) m。A 的孔在地面以上 0.10 m 处；B 的孔在 0.50 m 处。哪个射出更远？哪个射出速度更快？</p>
+  <details>
+    <summary>查看答案</summary>
+    <p><strong>A 射得快，B 射得远。</strong></p>
+    <p>速度只看孔距液面深度 \(H-h\)：A 的深度是 0.9 m，B 的深度是 0.5 m，所以 \(v_A=\sqrt{2g\cdot 0.9}\approx 4.20\) m/s 比 \(v_B=\sqrt{2g\cdot 0.5}\approx 3.13\) m/s 大。</p>
+    <p>射程 \(d(h)=2\sqrt{h(H-h)}\)：\(d_A=2\sqrt{0.10\cdot 0.90}=0.60\) m，\(d_B=2\sqrt{0.50\cdot 0.50}=1.00\) m。B 恰好在最优位置 \(h_{\text{opt}}=H/2\)，所以射得最远。</p>
+    <p><strong>关键直觉</strong>：低孔速度大但下落时间短；高孔速度小但下落时间长。两者乘积 \(d=v\cdot t\) 在 \(h=H/2\) 取最大。</p>
+  </details>
+</div>
+
+<div class="self-check">
+  <p class="question">Q4. 旋转水桶的中心下凹深度等于边缘上升高度吗？为什么？</p>
+  <details>
+    <summary>查看答案</summary>
+    <p><strong>等于</strong>。因为水不可压，总体积守恒：旋转后从静止液面到自由面之间净体积变化必须为零。抛物面关于静止液面对称的几何意味着"边缘多出来的水量 = 中心少掉的水量"，这正是体积守恒的表述。具体：由 (8.2) 知 \(y(R)-h=h-y(0)=\omega^2 R^2/(4g)\)，两边对称。</p>
+  </details>
+</div>
+
+<div class="self-check">
+  <p class="question">Q5. 你把一个乒乓球放在淋浴喷头喷出的斜向水柱里，乒乓球居然不掉下来反而稳稳"挂"在水柱中。为什么？</p>
+  <details>
+    <summary>查看答案</summary>
+    <p>这是 <strong>Coandă 效应</strong> + Bernoulli 的组合。水柱沿乒乓球弯曲表面流过（流体倾向"贴附"曲面），把乒乓球周围空气也带动加速；高速空气区压强低，外面静止空气压强高，把乒乓球往水柱方向推。同时水柱本身的动量推力提供支撑。这是"球在风扇气流中悬浮"的同一物理。它表明：升力不是"上下压强差"那么简单，流体对曲面的<em>偏转</em>（动量交换）也在源源贡献力——这正是机翼真实升力的部分原因。</p>
+  </details>
+</div>
+
+<!-- ======================================================== -->
+
+<h2>§11 公式速查表</h2>
+
+<table class="formula-table">
+  <tbody>
+    <tr><th>连续性 (incompressible streamtube)</th>
+        <td>\(A_1 v_1 = A_2 v_2\)</td></tr>
+    <tr><th>连续性 (general)</th>
+        <td>\(\partial \rho/\partial t+\nabla\cdot(\rho\vec v)=0\)</td></tr>
+    <tr><th>Bernoulli (沿流线)</th>
+        <td>\(P+\tfrac12\rho v^2+\rho g h=\)const</td></tr>
+    <tr><th>Bernoulli 适用条件</th>
+        <td>稳态、不可压、无黏、同流线</td></tr>
+    <tr><th>Torricelli efflux (小孔)</th>
+        <td>\(v_2=\sqrt{2g(H-h)}\)</td></tr>
+    <tr><th>Torricelli efflux (一般)</th>
+        <td>\(v_2=\sqrt{2g(H-h)/(1-A_2^2/A_1^2)}\)</td></tr>
+    <tr><th>水平射程</th>
+        <td>\(d(h)=2\sqrt{h(H-h)}\)</td></tr>
+    <tr><th>最优孔高</th>
+        <td>\(h_{\text{opt}}=H/2\)，\(d_{\max}=H\)</td></tr>
+    <tr><th>射程对称性</th>
+        <td>\(h_1+h_2=H\Rightarrow d(h_1)=d(h_2)\)</td></tr>
+    <tr><th>升力 (Newton 分子模型)</th>
+        <td>\(L=2\rho v^2 A\sin^2\theta\cos\theta\)</td></tr>
+    <tr><th>动压 (dynamic pressure)</th>
+        <td>\(\tfrac12\rho v^2\)（Pitot 测速核心）</td></tr>
+    <tr><th>Venturi 压差</th>
+        <td>\(P_1-P_2=\tfrac12\rho(v_2^2-v_1^2)=\rho g(h_1-h_2)\)</td></tr>
+    <tr><th>Venturi 流量</th>
+        <td>\(Q=A_1 A_2\sqrt{2g(h_1-h_2)/(A_1^2-A_2^2)}\)</td></tr>
+    <tr><th>黏性损耗</th>
+        <td>\(\Delta P_{\text{loss}}=\rho g(h_1-h_3)>0\) when \(A_3=A_1, v_3=v_1\)</td></tr>
+    <tr><th>旋转坐标系有效势</th>
+        <td>\(\Phi_{\text{eff}}=gy-\tfrac12\omega^2 r^2\)</td></tr>
+    <tr><th>旋转水桶自由面</th>
+        <td>\(y(r)=\omega^2 r^2/(2g)+C\)</td></tr>
+    <tr><th>体积守恒定 C</th>
+        <td>\(C=h-\omega^2 R^2/(4g)\)</td></tr>
+    <tr><th>边缘 vs 中心高差</th>
+        <td>\(y(R)-y(0)=\omega^2 R^2/(2g)\)（关于 \(h\) 对称）</td></tr>
+  </tbody>
+</table>
+
+<!-- ======================================================== -->
+
+<div class="glossary">
+  <h2>术语表</h2>
+  <dl>
+    <dt>流线 (streamline)</dt>
+    <dd>稳态流场中流体粒子的轨迹；切线沿当地速度方向。</dd>
+
+    <dt>流管 (streamtube)</dt>
+    <dd>由一束相邻流线包围的"管子"；流体不能穿过流管侧壁。</dd>
+
+    <dt>连续性方程 (continuity equation)</dt>
+    <dd>质量守恒在流场中的表述；不可压形式 \(A_1 v_1=A_2 v_2\)。</dd>
+
+    <dt>Bernoulli 方程 (Bernoulli equation)</dt>
+    <dd>沿流线的能量守恒：\(P+\tfrac12\rho v^2+\rho g h=\)const。</dd>
+
+    <dt>动压 (dynamic pressure)</dt>
+    <dd>\(\tfrac12\rho v^2\)，Bernoulli 中的速度项；Pitot 管直接测量。</dd>
+
+    <dt>静压 (static pressure)</dt>
+    <dd>流体内部的"机械"压强 \(P\)，piezometer 直接测量。</dd>
+
+    <dt>驻点 (stagnation point)</dt>
+    <dd>流体被减速到零的点；驻点压强 = 静压 + 动压。</dd>
+
+    <dt>Torricelli efflux 律</dt>
+    <dd>水罐侧壁孔口的射出速度 \(v=\sqrt{2gh}\)（小孔近似）。</dd>
+
+    <dt>射程 (range)</dt>
+    <dd>水平射出后落地的水平距离；本节 \(d(h)=2\sqrt{h(H-h)}\)。</dd>
+
+    <dt>升力 (lift)</dt>
+    <dd>流体对物体施加的、垂直于来流方向的合力。</dd>
+
+    <dt>迎角 (angle of attack, θ)</dt>
+    <dd>翼弦与来流方向的夹角。</dd>
+
+    <dt>翼型 (airfoil)</dt>
+    <dd>机翼截面的形状；弯曲翼型 (cambered) 上下表面长度不同。</dd>
+
+    <dt>Kutta–Joukowski 定理</dt>
+    <dd>真实亚音速升力的精确表述：\(L=\rho v\,\Gamma\,b\)，依赖环量 \(\Gamma\)。</dd>
+
+    <dt>Venturi 流量计 (Venturi meter)</dt>
+    <dd>用管道窄段的压强降读出流量的装置。</dd>
+
+    <dt>piezometer 支管</dt>
+    <dd>插入管道顶部、开口与大气相通的细管，液柱高度反映管内静压。</dd>
+
+    <dt>无黏 / inviscid</dt>
+    <dd>\(\eta=0\) 极限；Bernoulli 的前提之一。</dd>
+
+    <dt>黏性损耗 (viscous head loss)</dt>
+    <dd>真实管道中由内摩擦造成的压强能损失；Bernoulli 不预测。</dd>
+
+    <dt>旋转坐标系 (rotating frame)</dt>
+    <dd>以恒定角速度 \(\omega\) 旋转的非惯性系；多出离心力与 Coriolis 力。</dd>
+
+    <dt>有效势 (effective potential)</dt>
+    <dd>引入伪力的势函数，简化非惯性系下的力学分析。</dd>
+  </dl>
+</div>
+
+<!-- ======================================================== -->
+
+<nav class="page-nav">
+  <a class="nav-prev" href="06_fluid_statics.html">流体静力学</a>
+  <a class="nav-next" href="08_real_fluids_heat.html">真实流体 + 热学</a>
+</nav>
+
+</main>
+
+<script src="interactive.js"></script>
+<script>
+  markCurrentReviewing('07_fluid_dynamics.html');
+
+  // -------- Interactive 1: range of jet --------
+  (function() {
+    const setup = setupCanvas('range-canvas', 600, 320);
+    if (!setup) return;
+    const { ctx, w, h } = setup;
+    const H = 1.0; // m
+    const g = 9.8;
+
+    function draw(hCur) {
+      ctx.clearRect(0, 0, w, h);
+
+      // Two-pane layout: left = tank scene, right = d(h) curve.
+      const leftW = 280, rightW = 320;
+
+      // ---- Left: tank + trajectory ----
+      const tankX = 70, tankBaseY = 280;
+      const tankH = 220;            // pixels for H=1m
+      const pxPerM = tankH / H;
+
+      // ground
+      ctx.strokeStyle = '#9ca3af';
+      ctx.beginPath();
+      ctx.moveTo(20, tankBaseY); ctx.lineTo(leftW - 10, tankBaseY); ctx.stroke();
+
+      // tank walls
+      ctx.strokeStyle = '#374151';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(tankX, tankBaseY);
+      ctx.lineTo(tankX, tankBaseY - tankH);
+      ctx.moveTo(tankX + 50, tankBaseY);
+      ctx.lineTo(tankX + 50, tankBaseY - tankH);
+      ctx.stroke();
+      // bottom
+      ctx.beginPath();
+      ctx.moveTo(tankX, tankBaseY); ctx.lineTo(tankX + 50, tankBaseY); ctx.stroke();
+      // water fill
+      ctx.fillStyle = '#dbeafe';
+      ctx.fillRect(tankX, tankBaseY - tankH, 50, tankH);
+
+      // hole at height hCur
+      const holeY = tankBaseY - hCur * pxPerM;
+      ctx.fillStyle = 'white';
+      ctx.fillRect(tankX + 50 - 1, holeY - 3, 5, 6);
+
+      // exit speed
+      const v2 = Math.sqrt(2 * g * (H - hCur));
+      // trajectory: x(t) = v2*t, y_drop = (1/2) g t^2
+      const tFall = Math.sqrt(2 * hCur / g);
+      const dRange = v2 * tFall;
+      ctx.strokeStyle = '#0f766e';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      const startX = tankX + 50;
+      ctx.moveTo(startX, holeY);
+      const Nsteps = 50;
+      for (let i = 1; i <= Nsteps; i++) {
+        const t = (i / Nsteps) * tFall;
+        const x = v2 * t;
+        const yDrop = 0.5 * g * t * t;
+        const px = startX + x * pxPerM * 0.6;  // squish to fit
+        const py = holeY + yDrop * pxPerM;
+        if (py > tankBaseY) break;
+        ctx.lineTo(px, py);
+      }
+      ctx.stroke();
+
+      // arrow at exit showing v2
+      ctx.beginPath();
+      ctx.moveTo(startX, holeY);
+      ctx.lineTo(startX + 35, holeY);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(startX + 35, holeY);
+      ctx.lineTo(startX + 30, holeY - 4);
+      ctx.lineTo(startX + 30, holeY + 4);
+      ctx.closePath();
+      ctx.fillStyle = '#0f766e';
+      ctx.fill();
+
+      // labels
+      ctx.fillStyle = '#374151';
+      ctx.font = "12px -apple-system, sans-serif";
+      ctx.textAlign = 'right';
+      ctx.fillText('H', tankX - 5, tankBaseY - tankH / 2);
+      ctx.fillText('h', tankX - 5, tankBaseY - hCur * pxPerM / 2);
+      ctx.textAlign = 'left';
+      ctx.fillText('地面', leftW - 50, tankBaseY - 4);
+
+      // ---- Right: d(h) curve ----
+      const rightX0 = leftW + 30, rightY0 = 50, rightHt = 220, rightWd = 240;
+      // axes
+      ctx.strokeStyle = '#9ca3af';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(rightX0, rightY0);
+      ctx.lineTo(rightX0, rightY0 + rightHt);
+      ctx.lineTo(rightX0 + rightWd, rightY0 + rightHt);
+      ctx.stroke();
+
+      // map h:[0,H] -> [rightX0, rightX0+rightWd]; d:[0,H] -> [rightY0+rightHt, rightY0]
+      const hToPx = (hh) => rightX0 + (hh / H) * rightWd;
+      const dToPy = (dd) => rightY0 + rightHt - (dd / H) * rightHt;
+
+      // axis labels
+      ctx.fillStyle = '#374151';
+      ctx.font = "11px -apple-system, sans-serif";
+      ctx.textAlign = 'center';
+      ctx.fillText('h (m)', rightX0 + rightWd / 2, rightY0 + rightHt + 18);
+      ctx.save();
+      ctx.translate(rightX0 - 25, rightY0 + rightHt / 2);
+      ctx.rotate(-Math.PI / 2);
+      ctx.fillText('d (m)', 0, 0);
+      ctx.restore();
+
+      // ticks
+      [0, 0.5, 1].forEach(v => {
+        const px = hToPx(v);
+        ctx.beginPath(); ctx.moveTo(px, rightY0 + rightHt); ctx.lineTo(px, rightY0 + rightHt + 4); ctx.stroke();
+        ctx.fillText(v, px, rightY0 + rightHt + 14);
+        const py = dToPy(v);
+        ctx.beginPath(); ctx.moveTo(rightX0, py); ctx.lineTo(rightX0 - 4, py); ctx.stroke();
+        ctx.textAlign = 'right';
+        ctx.fillText(v, rightX0 - 6, py + 3);
+        ctx.textAlign = 'center';
+      });
+
+      // d(h) curve
+      ctx.strokeStyle = '#0f766e';
+      ctx.lineWidth = 2.5;
+      ctx.beginPath();
+      for (let i = 0; i <= 100; i++) {
+        const hh = (i / 100) * H;
+        const dd = 2 * Math.sqrt(hh * (H - hh));
+        const px = hToPx(hh), py = dToPy(dd);
+        if (i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+      }
+      ctx.stroke();
+
+      // current marker
+      const cx = hToPx(hCur), cy = dToPy(dRange);
+      ctx.fillStyle = '#ea580c';
+      ctx.beginPath(); ctx.arc(cx, cy, 5, 0, 2*Math.PI); ctx.fill();
+
+      // mirror marker
+      const hMirror = H - hCur;
+      const mx = hToPx(hMirror), my = dToPy(dRange);
+      ctx.strokeStyle = '#ea580c';
+      ctx.lineWidth = 1;
+      ctx.setLineDash([3,3]);
+      ctx.beginPath(); ctx.arc(mx, my, 5, 0, 2*Math.PI); ctx.stroke();
+      ctx.setLineDash([]);
+
+      // readouts
+      document.getElementById('range-v').textContent = v2.toFixed(2) + ' m/s';
+      document.getElementById('range-d').textContent = dRange.toFixed(3) + ' m';
+    }
+
+    bindSlider('range-h', 'range-h-readout',
+      v => draw(v),
+      v => v.toFixed(2) + ' m'
+    );
+  })();
+
+  // -------- Interactive 2: rotating bucket --------
+  (function() {
+    const setup = setupCanvas('bucket-canvas', 600, 320);
+    if (!setup) return;
+    const { ctx, w, h } = setup;
+    const R = 0.10;     // m
+    const hRest = 0.08; // m
+    const g = 9.8;
+
+    function draw(omega) {
+      ctx.clearRect(0, 0, w, h);
+
+      // bucket centered, scale: 1 m = 800 px? we use 1m -> 1500px? Let's pick:
+      const cx = w / 2;
+      const baseY = 260;
+      const pxPerM = 1500;  // tunable: with R=0.1, bucket is 150px wide on each side
+      const wallH = 220;
+
+      // walls
+      ctx.strokeStyle = '#374151';
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(cx - R*pxPerM, baseY);
+      ctx.lineTo(cx - R*pxPerM, baseY - wallH);
+      ctx.moveTo(cx + R*pxPerM, baseY);
+      ctx.lineTo(cx + R*pxPerM, baseY - wallH);
+      ctx.moveTo(cx - R*pxPerM, baseY);
+      ctx.lineTo(cx + R*pxPerM, baseY);
+      ctx.stroke();
+
+      // free surface y(r) = omega^2 r^2/(2g) + C; C = h - omega^2 R^2/(4g)
+      const C = hRest - omega * omega * R * R / (4 * g);
+      const yEdge = C + omega * omega * R * R / (2 * g);
+      const yCenter = C;
+
+      // safety: don't allow center to go below 0 (bucket floor) — physical breakdown
+      const breakdown = (yCenter < 0);
+
+      // water fill
+      ctx.fillStyle = '#dbeafe';
+      ctx.beginPath();
+      ctx.moveTo(cx - R*pxPerM, baseY);
+      const Nx = 80;
+      for (let i = 0; i <= Nx; i++) {
+        const r = -R + (2*R) * (i / Nx); // [-R, R]
+        const yLocal = C + omega * omega * r * r / (2 * g);
+        const px = cx + r * pxPerM;
+        const py = baseY - Math.max(0, yLocal) * pxPerM;
+        ctx.lineTo(px, py);
+      }
+      ctx.lineTo(cx + R*pxPerM, baseY);
+      ctx.closePath();
+      ctx.fill();
+
+      // surface line
+      ctx.strokeStyle = '#0f766e';
+      ctx.lineWidth = 2.5;
+      ctx.beginPath();
+      for (let i = 0; i <= Nx; i++) {
+        const r = -R + (2*R) * (i / Nx);
+        const yLocal = C + omega * omega * r * r / (2 * g);
+        const px = cx + r * pxPerM;
+        const py = baseY - Math.max(0, yLocal) * pxPerM;
+        if (i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+      }
+      ctx.stroke();
+
+      // rest level (dashed)
+      ctx.strokeStyle = '#9ca3af';
+      ctx.lineWidth = 1;
+      ctx.setLineDash([4,4]);
+      ctx.beginPath();
+      ctx.moveTo(cx - R*pxPerM, baseY - hRest*pxPerM);
+      ctx.lineTo(cx + R*pxPerM, baseY - hRest*pxPerM);
+      ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.fillStyle = '#6b7280';
+      ctx.font = "11px -apple-system, sans-serif";
+      ctx.textAlign = 'right';
+      ctx.fillText('静止 h=8cm', cx - R*pxPerM - 6, baseY - hRest*pxPerM);
+
+      // ω arrow
+      ctx.fillStyle = '#0f766e';
+      ctx.font = "13px -apple-system, sans-serif";
+      ctx.textAlign = 'center';
+      ctx.fillText('ω', cx, 30);
+      ctx.strokeStyle = '#0f766e';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.arc(cx, 45, 16, Math.PI*0.2, Math.PI*0.95);
+      ctx.stroke();
+      // arrowhead
+      ctx.beginPath();
+      ctx.moveTo(cx + 16*Math.cos(Math.PI*0.2), 45 + 16*Math.sin(Math.PI*0.2));
+      ctx.lineTo(cx + 22*Math.cos(Math.PI*0.05), 45 + 22*Math.sin(Math.PI*0.05));
+      ctx.lineTo(cx + 14*Math.cos(Math.PI*0.30), 45 + 14*Math.sin(Math.PI*0.30));
+      ctx.closePath();
+      ctx.fill();
+
+      // R label
+      ctx.fillStyle = '#374151';
+      ctx.textAlign = 'center';
+      ctx.font = "11px -apple-system, sans-serif";
+      ctx.fillText('R = 10 cm', cx, baseY + 18);
+
+      // breakdown warning
+      if (breakdown) {
+        ctx.fillStyle = '#dc2626';
+        ctx.font = "12px -apple-system, sans-serif";
+        ctx.textAlign = 'center';
+        ctx.fillText('⚠ 中心已露底 — 物理上水溢出/断裂', cx, baseY - wallH - 8);
+      }
+
+      const dy = (yEdge - yCenter) * 100; // cm
+      document.getElementById('bucket-dy').textContent =
+        dy.toFixed(2) + ' cm';
+    }
+
+    bindSlider('bucket-w', 'bucket-w-readout',
+      v => draw(v),
+      v => v.toFixed(1) + ' rad/s'
+    );
+  })();
+</script>
+
+</body>
+</html>

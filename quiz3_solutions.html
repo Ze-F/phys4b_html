@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quiz 3 解答 — PHYS 4B 复习</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="theme.js"></script>
+  <style>
+    .problem-toc {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: .4rem;
+      margin: 1rem 0 2rem;
+      font-family: -apple-system, 'PingFang SC', sans-serif;
+      font-size: .85rem;
+    }
+    .problem-toc a {
+      display: block;
+      padding: .45rem .65rem;
+      background: white;
+      border: 1px solid #d6d3d1;
+      border-radius: 4px;
+      color: #134e4a;
+      text-decoration: none;
+      text-align: center;
+      transition: all .12s;
+    }
+    .problem-toc a:hover {
+      background: #0f766e;
+      color: white;
+      border-color: #0f766e;
+    }
+    .answer-box {
+      background: #eff6ff;
+      border-left: 3px solid #2563eb;
+      padding: .55rem .8rem;
+      margin: .65rem 0 .25rem;
+      font-weight: 500;
+      color: #1e3a8a;
+      font-family: -apple-system, 'PingFang SC', 'Helvetica Neue', sans-serif;
+    }
+    .answer-box::before {
+      content: '✓ 答案：';
+      color: #2563eb;
+      font-weight: 700;
+    }
+    .problem-statement {
+      background: #fafaf9;
+      border-left: 3px solid #a8a29e;
+      padding: .7rem .9rem;
+      margin: .35rem 0 1rem;
+      color: #44403c;
+    }
+    .problem-statement .stem {
+      font-style: italic;
+      margin-bottom: .4rem;
+    }
+    .problem-statement ol.subq {
+      margin: .3rem 0 .2rem 1.2rem;
+      padding: 0;
+      font-style: italic;
+    }
+    .problem-statement ol.subq li { margin-bottom: .2rem; }
+    .given {
+      font-size: .9rem;
+      background: #f5f5f4;
+      padding: .45rem .7rem;
+      margin: .5rem 0 .9rem;
+      border-radius: 4px;
+      font-family: -apple-system, 'PingFang SC', sans-serif;
+      color: #57534e;
+    }
+    .given strong { color: #292524; }
+    .subpart {
+      margin-top: 1.4rem;
+      padding-top: .6rem;
+      border-top: 1px dashed #e7e5e4;
+    }
+    .subpart-label {
+      display: inline-block;
+      font-weight: 700;
+      color: #b45309;
+      font-family: -apple-system, 'PingFang SC', sans-serif;
+      margin-bottom: .3rem;
+      font-size: .98rem;
+    }
+  </style>
+  <script>
+    MathJax = {
+      tex: { inlineMath: [['\\(', '\\)']], displayMath: [['$$', '$$']] },
+      svg: { fontCache: 'global' }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" async></script>
+</head>
+<body>
+
+<header class="site-header">
+  <a class="home-link" href="index.html">← PHYS 4B 复习</a>
+  <nav>
+    <a href="quiz3_problems.html">Shankar 习题集</a>
+    <a href="06_fluid_statics.html">06 流体静</a>
+    <a href="07_fluid_dynamics.html">07 流体动</a>
+    <a href="08_real_fluids_heat.html">08 真实+热</a>
+  </nav>
+</header>
+
+<main class="container">
+
+<div class="topic-header">
+  <h1>Quiz 3 解答（2026 春）</h1>
+  <p class="meta">UCSD PHYS 4B · 4 题完整解答与物理解读</p>
+  <p class="blurb">Quiz 3 现场考四道题：(1) 浮球 + 鸟 + 张力（Archimedes 三连击）；(2) 灌溉管 Bernoulli + 多孔流量（连续性 + 单孔 Torricelli）；(3) Helium 气球的载客 / 升限（含等温大气与刚性 vs 柔性壁的对比）；(4) 冰水混合两情形（一个剩冰、一个全融化）。每题给完整推导、单位核查、极限解读。</p>
+</div>
+
+<div class="box insight">
+  <p class="box-title">用到的常数（formula sheet）</p>
+  <p>\(g=9.81\) m/s²；\(\rho_{\text{water}}=10^3\) kg/m³；\(\rho_{\text{air}}=1.204\) kg/m³（海平面 20℃）；\(P_{\text{atm}}=1.01325\times 10^5\) Pa；大气标高 \(H=8581\) m；\(c_{\text{water}}=1\) kcal/(kg·℃)；\(c_{\text{ice}}=0.5\) kcal/(kg·℃)；\(L_f=80\) kcal/kg。</p>
+</div>
+
+<div class="problem-toc">
+  <a href="#p1">P1 浮球 + 鸟</a>
+  <a href="#p2">P2 灌溉管</a>
+  <a href="#p3">P3 He 气球</a>
+  <a href="#p4">P4 冰水混合</a>
+</div>
+
+<!-- ======================================================== -->
+<!-- ============== Problem 1 ============== -->
+<!-- ======================================================== -->
+
+<h2 id="p1">Problem 1 — 浮球、落鸟、绳张力</h2>
+
+<div class="example">
+  <h4>P1 题面</h4>
+  <div class="problem-statement">
+    <p class="stem">一只球漂在游泳池里，体积的 50% 浸在水里。一只质量 \(m_b=26.2\) g 的鸟落到球上，球上下振动后稳定下来，此时 55% 浸在水里。</p>
+    <ol class="subq">
+      <li>球的密度（g/cm³）？</li>
+      <li>球的半径（cm）？</li>
+      <li>把球（不带鸟）用绳子系到池底，使球处于水面以下 1 m 处（即整个球完全浸没）。绳的张力（N）？</li>
+    </ol>
+  </div>
+
+  <div class="given"><strong>已知</strong>：\(f_1=0.50,\;f_2=0.55,\;m_b=0.0262\) kg，\(\rho_w=1000\) kg/m³。</div>
+
+  <!-- (a) -->
+  <div class="subpart">
+    <div class="subpart-label">(a) 球的密度</div>
+
+    <div class="solution-step"><strong>策略</strong>：原始平衡（无鸟）由 Archimedes 给出——球的<strong>重力 = 排开水的浮力</strong>。这是浮力问题最干净的入口。</div>
+
+    <div class="solution-step"><strong>列方程</strong>：设球体积 \(V\)，密度 \(\rho_b\)。
+      $$ \rho_b V g \;=\; \rho_w \,(f_1 V)\, g
+         \;\Longrightarrow\;
+         \rho_b = f_1\,\rho_w. $$
+      代入：\(\rho_b = 0.50\times 1000 = 500\) kg/m³ \(= 0.500\) g/cm³。
+    </div>
+
+    <div class="answer-box">\(\rho_b = 0.500\) g/cm³</div>
+  </div>
+
+  <!-- (b) -->
+  <div class="subpart">
+    <div class="subpart-label">(b) 球的半径</div>
+
+    <div class="solution-step"><strong>策略</strong>：鸟落上去后新平衡——<strong>球 + 鸟的总重力 = 新的浮力</strong>。鸟的质量虽小，但带来的<em>额外</em> 5% 排水量正是它的重量来源。</div>
+
+    <div class="solution-step"><strong>列方程</strong>：
+      $$ (\rho_b V + m_b)\,g \;=\; \rho_w\,(f_2 V)\,g. $$
+      用 \(\rho_b = f_1\rho_w\) 代入：
+      $$ f_1\rho_w V + m_b = f_2\rho_w V
+         \;\Longrightarrow\;
+         m_b = (f_2 - f_1)\rho_w V. $$
+      解出体积：
+      $$ V = \frac{m_b}{(f_2-f_1)\rho_w}
+           = \frac{0.0262}{0.05\times 1000}
+           = 5.24\times 10^{-4}\text{ m}^3 = 524\text{ cm}^3. $$
+    </div>
+
+    <div class="solution-step"><strong>球半径</strong>：\(V=\tfrac{4}{3}\pi r^3\Rightarrow r=\!\left(\dfrac{3V}{4\pi}\right)^{1/3}\)。
+      $$ r = \left(\frac{3\times 524}{4\pi}\right)^{1/3}\!\text{cm}
+           = (125.07)^{1/3}\text{ cm}
+           \approx 5.00\text{ cm}. $$
+    </div>
+
+    <div class="box insight" style="font-size:.92rem">
+      <p class="box-title">直觉核查</p>
+      <p>26.2 g 的鸟让排水量增加 5%。这意味着 5% \(\times\) 球体积 = 26.2 cm³（水的密度恰好让 g↔cm³ 互换）。所以 \(V=26.2/0.05=524\) cm³，半径 5 cm——题目给的 26.2 g 显然是为了凑整数答案（\(4\pi/3\times 125 = 523.6\) ≈ 524）。</p>
+    </div>
+
+    <div class="answer-box">\(r \approx 5.00\) cm</div>
+  </div>
+
+  <!-- (c) -->
+  <div class="subpart">
+    <div class="subpart-label">(c) 完全浸没时绳的张力</div>
+
+    <div class="solution-step"><strong>关键观察</strong>：球被绳子<strong>拉到水下完全浸没</strong>，所以浮力对应<em>整</em>个球体积，而不是 50%。"水面以下 1 m" 这个深度信息<strong>无关</strong>——浮力与深度无关（Archimedes）；深度只影响压强分布，不影响净浮力。</div>
+
+    <div class="solution-step"><strong>受力分析</strong>（以向上为正）：
+      <ul>
+        <li>浮力 \(F_b = \rho_w V g\)（向上）</li>
+        <li>重力 \(W = \rho_b V g\)（向下）</li>
+        <li>张力 \(T\)（向下，绳系在底部把球往下拉）</li>
+      </ul>
+      平衡：\(F_b = W + T\)，所以
+      $$ T = (\rho_w - \rho_b)\,V g
+           = (1000 - 500)\times 5.24\!\times\!10^{-4}\times 9.81
+           \approx 2.57\text{ N}. $$
+    </div>
+
+    <div class="solution-step"><strong>另一种写法</strong>：用 (a) 的结果 \(\rho_b=f_1\rho_w\) 直接得
+      $$ T = (1-f_1)\rho_w V g = 0.5\times 1000\times 5.24\!\times\!10^{-4}\times 9.81 \approx 2.57\text{ N}. $$
+      数值上等价于"再排开 50% 体积水的多余浮力"——即用绳把另外那一半也强行压进水里要付出的力。
+    </div>
+
+    <div class="answer-box">\(T \approx 2.57\) N</div>
+  </div>
+</div>
+
+<!-- ======================================================== -->
+<!-- ============== Problem 2 ============== -->
+<!-- ======================================================== -->
+
+<h2 id="p2">Problem 2 — 灌溉水管 Bernoulli + 多孔流量</h2>
+
+<div class="example">
+  <h4>P2 题面</h4>
+  <div class="problem-statement">
+    <p class="stem">一根灌溉水管以恒定流量经过两块不同高度的花圃。下层（lower）花圃处管径 \(d_1=2\) cm，绝对压强 \(P_1=145{,}000\) Pa，水流速 \(v_1=3\) m/s。然后管道爬高 \(\Delta h=2.5\) m 到上层（upper）花圃，那里管径 \(d_2=4\) cm。设 \(P_{\text{atm}}=101{,}325\) Pa。</p>
+    <ol class="subq">
+      <li>上层花圃处管内的绝对压强 \(P_2\)？</li>
+      <li>管壁开有小孔（提示：小孔不改变管内压强）：下层孔径 0.75 mm，上层孔径 0.5 mm。两个花圃喷出水柱的速度各是多少？</li>
+      <li>下层有 10 个孔。上层大约要多少个孔，才能保证它每秒得到与下层相同的总水量？</li>
+    </ol>
+  </div>
+
+  <div class="given"><strong>已知</strong>：\(\rho=10^3\) kg/m³，\(g=9.81\) m/s²。</div>
+
+  <!-- (a) -->
+  <div class="subpart">
+    <div class="subpart-label">(a) 上层管内压强</div>
+
+    <div class="solution-step"><strong>策略</strong>：连续性给 \(v_2\)，Bernoulli 给 \(P_2\)。两件事必须按这个顺序做——压强既要看高度差，也要看流速变化。</div>
+
+    <div class="solution-step"><strong>连续性</strong>：\(A_1 v_1 = A_2 v_2\)。同心圆截面 \(A=\pi d^2/4\)，所以
+      $$ v_2 = v_1\,\frac{A_1}{A_2} = v_1\!\left(\frac{d_1}{d_2}\right)^{\!2}
+            = 3\times\!\left(\frac{2}{4}\right)^{\!2}
+            = 3\times\frac{1}{4} = 0.75\text{ m/s}. $$
+    </div>
+
+    <div class="solution-step"><strong>Bernoulli</strong>：\(P_1+\tfrac12\rho v_1^2 + \rho g h_1 = P_2+\tfrac12\rho v_2^2 + \rho g h_2\)。解出 \(P_2\)：
+      $$ P_2 = P_1 + \tfrac12\rho(v_1^2 - v_2^2) - \rho g\,\Delta h. $$
+      代入数值：
+      $$ \tfrac12\rho(v_1^2-v_2^2) = 500\times(9 - 0.5625) = 500\times 8.4375 = 4218.75\text{ Pa}, $$
+      $$ \rho g\,\Delta h = 1000\times 9.81\times 2.5 = 24{,}525\text{ Pa}. $$
+      $$ P_2 = 145{,}000 + 4{,}218.75 - 24{,}525 = 124{,}694\text{ Pa}\approx 1.247\!\times\!10^5\text{ Pa}. $$
+    </div>
+
+    <div class="box remark" style="font-size:.92rem">
+      <p class="box-title">物理分解</p>
+      <p>从下到上，压强变化由两项构成：(1) 高度上升 2.5 m → 重力位能"借走" \(\rho g\Delta h\approx 24.5\) kPa；(2) 管子<em>变粗</em>使流速减小 → 由 Bernoulli 折回压强 \(\approx 4.2\) kPa（管粗的地方压强反而<em>高</em>）。第一项是主导，所以净结果 \(P_2 < P_1\)。</p>
+    </div>
+
+    <div class="answer-box">\(P_2 \approx 1.247\times 10^5\) Pa（≈ 124.7 kPa）</div>
+  </div>
+
+  <!-- (b) -->
+  <div class="subpart">
+    <div class="subpart-label">(b) 各层喷出速度</div>
+
+    <div class="solution-step"><strong>策略</strong>：把 Bernoulli 用在<em>同一根流线</em>上——从管子内部（压强 \(P_i\)，速度 \(v_i\)）到刚出小孔的水柱（压强 \(P_{\text{atm}}\)，速度 \(v_{\text{jet}}\)）。同一高度。
+      $$ P_i + \tfrac12\rho v_i^2 = P_{\text{atm}} + \tfrac12\rho v_{\text{jet}}^2
+         \;\Longrightarrow\;
+         v_{\text{jet}} = \sqrt{\frac{2(P_i - P_{\text{atm}})}{\rho} + v_i^2}. $$
+    </div>
+
+    <div class="solution-step"><strong>下层孔（\(P_i=P_1=145{,}000\) Pa, \(v_i=3\) m/s）</strong>：
+      $$ v_{\text{jet},1} = \sqrt{\frac{2(43{,}675)}{1000} + 9} = \sqrt{87.35 + 9} = \sqrt{96.35} \approx 9.82\text{ m/s}. $$
+    </div>
+
+    <div class="solution-step"><strong>上层孔（\(P_i=P_2\approx 124{,}694\) Pa, \(v_i=0.75\) m/s）</strong>：
+      $$ v_{\text{jet},2} = \sqrt{\frac{2(23{,}369)}{1000} + 0.5625} = \sqrt{46.74+0.56} = \sqrt{47.30}\approx 6.88\text{ m/s}. $$
+    </div>
+
+    <div class="box warning" style="font-size:.9rem">
+      <p class="box-title">注意：管内动能项要不要保留？</p>
+      <p>严格 Bernoulli 包含 \(v_i^2\)。在下层 \(v_i=3\) m/s 时贡献 9 m²/s²，相对 \(2\Delta P/\rho=87\) m²/s² 大约 10%——不是完全可忽略。如果嫌麻烦做近似 \(v_{\text{jet}}\!\approx\!\sqrt{2(P_i-P_{\text{atm}})/\rho}\) 得到 9.35 m/s 与 6.84 m/s，最终的孔数比也只差一两个。但本题最干净的处理是<strong>保留管内动能项</strong>。</p>
+    </div>
+
+    <div class="answer-box">\(v_{\text{jet},1}\approx 9.82\) m/s；\(v_{\text{jet},2}\approx 6.88\) m/s</div>
+  </div>
+
+  <!-- (c) -->
+  <div class="subpart">
+    <div class="subpart-label">(c) 上层需要多少孔</div>
+
+    <div class="solution-step"><strong>策略</strong>：单孔体积流率 \(q = A_{\text{hole}}\cdot v_{\text{jet}}\)。要求两层<em>总</em>流率相等：
+      $$ N_2\,A_{h2}\,v_{\text{jet},2} \;=\; N_1\,A_{h1}\,v_{\text{jet},1}
+         \;\Longrightarrow\;
+         N_2 = N_1\,\frac{A_{h1}}{A_{h2}}\,\frac{v_{\text{jet},1}}{v_{\text{jet},2}}. $$
+    </div>
+
+    <div class="solution-step"><strong>面积比</strong>：\(A_h\propto d_h^2\)，
+      $$ \frac{A_{h1}}{A_{h2}} = \!\left(\frac{0.75}{0.5}\right)^{\!2} = 2.25. $$
+    </div>
+
+    <div class="solution-step"><strong>速度比</strong>：\(v_{\text{jet},1}/v_{\text{jet},2}=9.82/6.88\approx 1.427\)。</div>
+
+    <div class="solution-step"><strong>合并</strong>：
+      $$ N_2 = 10\times 2.25\times 1.427 \approx 32.1. $$
+      取整 \(\boxed{N_2\approx 32}\) 孔。
+    </div>
+
+    <div class="box insight" style="font-size:.92rem">
+      <p class="box-title">物理解读</p>
+      <p>上层孔数比下层多 3 倍多，原因有二：上层小孔本身面积更小（孔径 0.5 mm vs 0.75 mm 给出 2.25 倍劣势），且上层喷射速度低（驱动压差小）。两个因素叠加，需要 ≈3.2 倍数量的孔来补偿。</p>
+    </div>
+
+    <div class="answer-box">\(N_2\approx 32\) 个孔</div>
+  </div>
+</div>
+
+<!-- ======================================================== -->
+<!-- ============== Problem 3 ============== -->
+<!-- ======================================================== -->
+
+<h2 id="p3">Problem 3 — Helium 气球的最大载客与升限</h2>
+
+<div class="example">
+  <h4>P3 题面</h4>
+  <div class="problem-statement">
+    <p class="stem">一只<strong>刚性壁</strong>氦气球，体积 \(V=559\) m³，氦气密度 \(\rho_{\text{He}}=0.1664\) kg/m³，吊篮+设备 \(M=100\) kg。每位乘客 80 kg。设各处温度均为 20℃。\(P_{\text{atm}}=101{,}325\) Pa；海平面空气密度 \(\rho_0=1.204\) kg/m³。忽略吊篮、设备、乘客的体积。</p>
+    <ol class="subq">
+      <li>最多能载多少乘客？</li>
+      <li>若实际载比最大数少 1 人，能飞多高？</li>
+      <li>（额外加分）如果壁是<strong>柔性</strong>的，使球内外压强始终相等，(b) 的答案变成什么？提示：等温下 \(PV=\) 常数。</li>
+    </ol>
+  </div>
+
+  <div class="given"><strong>已知</strong>：等温大气标高 \(H=8581\) m，氦气量 \(m_{\text{He}}=\rho_{\text{He}}V=0.1664\!\times\!559\approx 93.02\) kg。</div>
+
+  <!-- (a) -->
+  <div class="subpart">
+    <div class="subpart-label">(a) 最大载客数</div>
+
+    <div class="solution-step"><strong>起飞条件</strong>：在海平面浮力 \(\geq\) 总重力。
+      $$ \rho_0 V g \;\geq\; (m_{\text{He}} + M + N\,m_p)\,g. $$
+      消去 \(g\)、解出 \(N\)：
+      $$ N \leq \frac{\rho_0 V - m_{\text{He}} - M}{m_p}
+            = \frac{(\rho_0 - \rho_{\text{He}})V - M}{m_p}. $$
+    </div>
+
+    <div class="solution-step"><strong>代入数值</strong>：
+      $$ (\rho_0-\rho_{\text{He}})V = (1.204 - 0.1664)\times 559 = 1.0376\times 559 = 580.02\text{ kg}, $$
+      $$ N \leq \frac{580.02 - 100}{80} = \frac{480.02}{80} = 6.000. $$
+      取整 \(\boxed{N_{\max}=6}\)。
+    </div>
+
+    <div class="box remark" style="font-size:.92rem">
+      <p class="box-title">数字暗示</p>
+      <p>结果<em>恰好</em>是整数 6——题目数据是这么设计的（580.02 故意接近 480+100）。如果你算出 6.00x 别犹豫，就是 6。</p>
+    </div>
+
+    <div class="answer-box">\(N_{\max}=6\) 名乘客</div>
+  </div>
+
+  <!-- (b) -->
+  <div class="subpart">
+    <div class="subpart-label">(b) 5 名乘客时的升限（刚性壁）</div>
+
+    <div class="solution-step"><strong>关键</strong>：刚性壁 → 体积 \(V\) 与质量 \(m_{\text{He}}\) 都不随高度变化。<em>只</em>有空气密度 \(\rho_{\text{air}}(h)=\rho_0 e^{-h/H}\) 随高度衰减。气球升至浮力 = 重力的高度 \(h^\star\) 后悬停。</div>
+
+    <div class="solution-step"><strong>列方程</strong>：总质量
+      $$ m_{\text{tot}} = m_{\text{He}} + M + 5\,m_p = 93.02 + 100 + 400 = 593.02\text{ kg}. $$
+      平衡：
+      $$ \rho_{\text{air}}(h^\star)\,V = m_{\text{tot}}
+         \;\Longrightarrow\;
+         \rho_0 e^{-h^\star/H} = \frac{m_{\text{tot}}}{V}. $$
+      解出
+      $$ h^\star = H\,\ln\!\left(\frac{\rho_0 V}{m_{\text{tot}}}\right). $$
+    </div>
+
+    <div class="solution-step"><strong>代入数值</strong>：
+      $$ \frac{\rho_0 V}{m_{\text{tot}}} = \frac{1.204\times 559}{593.02} = \frac{673.04}{593.02} = 1.1349. $$
+      $$ h^\star = 8581\times \ln(1.1349) = 8581\times 0.1266 \approx 1086\text{ m}. $$
+    </div>
+
+    <div class="answer-box">\(h^\star \approx 1086\) m \(\approx 1.09\) km</div>
+  </div>
+
+  <!-- (c) -->
+  <div class="subpart">
+    <div class="subpart-label">(c) 柔性壁（额外加分）</div>
+
+    <div class="solution-step"><strong>核心机制</strong>：柔性壁 \(\Rightarrow P_{\text{in}}=P_{\text{out}}=P(h)\)。氦气在同一温度下满足 \(PV=mRT/M\)（理想气体）：
+      <ul>
+        <li>氦气质量守恒 \(\Rightarrow\) 球体积 \(V(h) = m_{\text{He}}RT/(M\,P(h)) = V_0\,P_0/P(h)\)。</li>
+        <li>等温大气 \(P(h)=P_0 e^{-h/H}\) \(\Rightarrow\) \(V(h)=V_0\,e^{+h/H}\)（球随高度<em>变大</em>）。</li>
+        <li>同样 \(\rho_{\text{air}}(h)=\rho_0 e^{-h/H}\)（恒温下密度与压强同步衰减）。</li>
+      </ul>
+    </div>
+
+    <div class="solution-step"><strong>浮力随高度的变化</strong>：
+      $$ F_b(h) = \rho_{\text{air}}(h)\,V(h)\,g
+        = \rho_0 e^{-h/H}\cdot V_0 e^{+h/H}\cdot g
+        = \rho_0 V_0 g
+        = \text{const!} $$
+      <strong>浮力与高度无关</strong>——指数因子精确抵消。
+    </div>
+
+    <div class="solution-step"><strong>结论</strong>：在海平面气球能起飞（浮力 673.04 kg·g \(>\) 重力 593.02 kg·g，净 80 kg·g 向上），那么<em>同样</em>的 80 kg·g 净力<strong>在任何高度都不变</strong>。气球永远在向上加速，没有平衡高度。
+      $$ \boxed{h^\star \to \infty.} $$
+    </div>
+
+    <div class="box insight" style="font-size:.92rem">
+      <p class="box-title">为什么会这样？</p>
+      <p>等温大气下，<em>每一个</em>气压标高 \(H\) 之内，外部空气和内部氦气的密度都按 \(e^{-h/H}\) 同比例稀释。但球的体积同步按 \(e^{+h/H}\) 膨胀去匹配外压。两者相乘：<strong>排开的空气总质量 = const</strong>。物理上，"浮力 = 排开的空气重量"在等温模型下与高度无关。</p>
+      <p>现实中这不成立：(i) 大气有温度梯度（troposphere 约 -6.5 K/km），密度衰减比等温模型更快；(ii) 球壁有强度极限，会在某高度爆开；(iii) 氦气会从壁面渗漏。</p>
+    </div>
+
+    <div class="answer-box">柔性壁：\(F_b\) 与高度无关 \(\Rightarrow\) 升限 \(\to \infty\)（理想等温模型）</div>
+  </div>
+</div>
+
+<!-- ======================================================== -->
+<!-- ============== Problem 4 ============== -->
+<!-- ======================================================== -->
+
+<h2 id="p4">Problem 4 — 冰水混合</h2>
+
+<div class="example">
+  <h4>P4 题面</h4>
+  <div class="problem-statement">
+    <p class="stem">使用 cal/kcal 与 ℃，不要用 J 与 K。</p>
+    <ol class="subq">
+      <li>把 1 kg 冰（−20℃）放入装有 2 kg 水（10℃）的桶中。最终系统的状态（各相的质量）和温度？</li>
+      <li>同上，但只放 0.1 kg 冰。</li>
+    </ol>
+    <p style="font-size:.9rem;color:#9a3412;font-style:italic;margin-top:.3rem">提示：冰的比热是水的一半。</p>
+  </div>
+
+  <div class="given"><strong>常量</strong>：\(c_w=1\) kcal/(kg·℃)，\(c_i=0.5\) kcal/(kg·℃)，\(L_f=80\) kcal/kg。</div>
+
+  <div class="box remark" style="font-size:.92rem">
+    <p class="box-title">通用策略：用"能量预算"判定终态</p>
+    <p>不要直接列 \(\sum m_i c_i\,(T_f-T_i)=0\) 然后求 \(T_f\)——这只在<strong>没有相变</strong>时对。带冰水混合时先按"假定终态在 0℃"做<strong>能量预算核查</strong>：</p>
+    <ol style="margin: .3rem 0 .2rem 1.4rem;">
+      <li>\(Q_{\text{warm ice to 0℃}} = m_i c_i\,|T_i|\)</li>
+      <li>\(Q_{\text{melt all ice}} = m_i L_f\)</li>
+      <li>\(Q_{\text{cool water to 0℃}} = m_w c_w\,T_w\)（可释放）</li>
+    </ol>
+    <p>比较 (1)+(2) 与 (3)：</p>
+    <ul style="margin: .2rem 0 .2rem 1.4rem;">
+      <li>(3) &lt; (1)：水自己都到不了 0℃，不可能（题目里这种情况通常给一开始就是冰水混合）。</li>
+      <li>(1) ≤ (3) &lt; (1)+(2)：终态<strong>在 0℃</strong>，部分冰融化，水量增加，多余的能量按 \(L_f\) 比例分配给冰的融化部分。</li>
+      <li>(3) ≥ (1)+(2)：终态<strong>高于 0℃</strong>，冰全融化，剩余能量再升温混合水。</li>
+    </ul>
+  </div>
+
+  <!-- (a) -->
+  <div class="subpart">
+    <div class="subpart-label">(a) 1 kg 冰 + 2 kg 水</div>
+
+    <div class="solution-step"><strong>能量预算</strong>：
+      <ul>
+        <li>\(Q_1\)（暖冰到 0℃）\(= 1\times 0.5\times 20 = 10\) kcal</li>
+        <li>\(Q_2\)（融化 1 kg 冰）\(= 1\times 80 = 80\) kcal</li>
+        <li>\(Q_3\)（水降到 0℃）\(= 2\times 1\times 10 = 20\) kcal</li>
+      </ul>
+    </div>
+
+    <div class="solution-step"><strong>判定</strong>：\(Q_3=20 < Q_1+Q_2=90\)，但 \(Q_3>Q_1\)。所以水有足够能量把冰升温到 0℃（用掉 10 kcal），<strong>剩 10 kcal</strong> 但不够把全部冰融化（需 80 kcal）。终态<strong>在 0℃，剩冰</strong>。</div>
+
+    <div class="solution-step"><strong>分配剩余 10 kcal 用来融化冰</strong>：融化的冰量
+      $$ m_{\text{melt}} = \frac{10}{L_f} = \frac{10}{80} = 0.125\text{ kg}. $$
+    </div>
+
+    <div class="solution-step"><strong>终态</strong>：
+      <ul>
+        <li>剩余冰：\(1 - 0.125 = 0.875\) kg</li>
+        <li>水量：\(2 + 0.125 = 2.125\) kg</li>
+        <li>温度：\(T_f=0\)℃</li>
+      </ul>
+    </div>
+
+    <div class="answer-box">0.875 kg 冰 + 2.125 kg 水，均在 0℃</div>
+  </div>
+
+  <!-- (b) -->
+  <div class="subpart">
+    <div class="subpart-label">(b) 0.1 kg 冰 + 2 kg 水</div>
+
+    <div class="solution-step"><strong>能量预算</strong>：
+      <ul>
+        <li>\(Q_1 = 0.1\times 0.5\times 20 = 1\) kcal</li>
+        <li>\(Q_2 = 0.1\times 80 = 8\) kcal</li>
+        <li>\(Q_3 = 2\times 1\times 10 = 20\) kcal</li>
+      </ul>
+      \(Q_3=20 \;>\; Q_1+Q_2=9\) \(\Rightarrow\) 冰<strong>全部融化</strong>，终温<strong>高于 0℃</strong>。
+    </div>
+
+    <div class="solution-step"><strong>统一为水后再做混合方程</strong>：所有冰先消耗 \(Q_1+Q_2=9\) kcal 变成 0℃ 水（0.1 kg）。剩下的水（2 kg @ 10℃）与新水（0.1 kg @ 0℃）混合。能量守恒：
+      $$ m_w c_w (T_f - 10) + m_i c_w (T_f - 0) + (Q_1+Q_2) = 0. $$
+      把"暖冰+融冰"那 9 kcal 写到等号一边：
+      $$ 2(T_f-10) + 0.1\,T_f + 9 = 0
+         \;\Longrightarrow\;
+         2.1\,T_f = 11
+         \;\Longrightarrow\;
+         T_f = \frac{11}{2.1}\approx 5.24\text{℃}. $$
+    </div>
+
+    <div class="solution-step"><strong>核查</strong>：水放热 \(2\times 1\times(10-5.24)=9.52\) kcal；冰吸热（升 + 融 + 升）\(=1+8+0.1\times 1\times 5.24=9.52\) kcal。✓</div>
+
+    <div class="answer-box">2.1 kg 水（无冰），\(T_f\approx 5.24\)℃</div>
+  </div>
+
+  <div class="box insight">
+    <p class="box-title">物理对比 (a) vs (b)</p>
+    <p>同样的 2 kg 水（10℃），冰量从 1 kg → 0.1 kg 让结局发生<em>定性</em>跃变：<strong>(a) 多冰</strong>——水的"热量预算"不够融完所有冰，被 0℃ 锁死，剩下 87.5% 的冰；<strong>(b) 少冰</strong>——水的预算绰绰有余，冰全融，混合水升温到 ~5.2℃。判断关键就是把 \(Q_3\) 与 \(Q_1+Q_2\) 比大小，这是冰水混合题的标准模板。</p>
+  </div>
+</div>
+
+<!-- ======================================================== -->
+<!-- ============== Summary ============== -->
+<!-- ======================================================== -->
+
+<div class="box key-result" style="margin-top:3rem">
+  <p class="box-title">Quiz 3 答案速览</p>
+  <ul>
+    <li><strong>P1</strong>：\(\rho_b=0.5\) g/cm³； \(r=5.0\) cm； \(T\approx 2.57\) N。</li>
+    <li><strong>P2</strong>：\(P_2\approx 1.247\!\times\!10^5\) Pa； \(v_{\text{jet},1}\approx 9.82\) m/s, \(v_{\text{jet},2}\approx 6.88\) m/s； \(N_2\approx 32\) 孔。</li>
+    <li><strong>P3</strong>：\(N_{\max}=6\)； 升限 ≈ 1086 m； 柔性壁 \(\Rightarrow\) 升限 \(\to\infty\)（浮力恒定）。</li>
+    <li><strong>P4(a)</strong>：0.875 kg 冰 + 2.125 kg 水 @ 0℃；<strong>P4(b)</strong>：2.1 kg 水 @ 5.24℃。</li>
+  </ul>
+</div>
+
+<div class="box remark">
+  <p class="box-title">Quiz 3 复盘要点</p>
+  <ul>
+    <li><strong>浮力 ⊥ 深度</strong>：P1(c) 中"1 m 深"是干扰项；只要完全浸没，浮力只看体积。</li>
+    <li><strong>Bernoulli 在花园灌溉里的两种用法</strong>：(i) 沿管子主流（P2a）——同时管含 \(\Delta h\) 与 \(\Delta v\)；(ii) 从管内到喷嘴（P2b）——同高度，把管内压差转为出口动能。两者用同一个公式但要分清"哪两个点"。</li>
+    <li><strong>等温大气的两个不同情境</strong>：刚性壁（P3b）只有 \(\rho_{\text{air}}\) 衰减；柔性壁（P3c）\(\rho_{\text{air}}\) 衰减但 \(V\) 同步膨胀，浮力恒定。</li>
+    <li><strong>冰水混合先做能量预算</strong>：直接列 \(\sum m_i c_i\Delta T=0\) 而不判断终态相态，是最常见的失分点。</li>
+  </ul>
+</div>
+
+</main>
+
+</body>
+</html>

@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>10 · Maxwell-Boltzmann 分布 — PHYS 4B 复习</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="theme.js"></script>
+  <script>
+    MathJax = {
+      tex: { inlineMath: [['\\(', '\\)']], displayMath: [['$$', '$$']] },
+      svg: { fontCache: 'global' }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" async></script>
+</head>
+<body>
+
+<header class="site-header">
+  <a class="home-link" href="index.html">← PHYS 4B 复习</a>
+  <nav>
+    <a href="09_kinetic_theory.html">← 动理论</a>
+    <a href="11_first_law.html">第一定律 →</a>
+  </nav>
+</header>
+
+<main class="container">
+
+<div class="topic-header">
+  <h1>10 · Maxwell-Boltzmann 分布</h1>
+  <p class="meta">Lec 7.1 · Shankar §22.3–22.5</p>
+  <p class="blurb">上一节我们得到了一个<strong>平均值</strong> \(\tfrac12 m\langle v^2\rangle=\tfrac32 kT\)，但气体里的分子不是全跑同一个速度——它们有<strong>分布</strong>。这一节用 Maxwell 1860 年的简洁两条公理（各向同性 + 各分量独立）推出这个分布必为高斯，再用归一化和已知方差钉死全部常数，最终得到 Maxwell-Boltzmann 分布的三种形式（1D 分量、3D 速度向量、速率），以及钟形曲线上的三个特征速率 \(v_0,\bar v,v_{\text{rms}}\)。Boltzmann 因子 \(e^{-E/kT}\) 第一次在这里登场——它会贯穿统计力学、化学动力学、半导体、天体物理。</p>
+</div>
+
+<!-- ======================================================== -->
+
+<div class="box key-result">
+  <p class="box-title">一页速览</p>
+  <ul>
+    <li><strong>两条公理：</strong>各向同性 \(F=\Phi(v^2)\)；分量独立 \(F=f(v_x)f(v_y)f(v_z)\)。二者相容 ⇒ \(f\) 必为高斯。</li>
+    <li><strong>1D 分量：</strong>\(f(v_x)=\sqrt{m/(2\pi kT)}\;e^{-mv_x^2/(2kT)}\)（零均值、方差 \(kT/m\)）。</li>
+    <li><strong>3D 速度：</strong>\(F(\vec v)=(m/(2\pi kT))^{3/2}\,e^{-mv^2/(2kT)}\)。</li>
+    <li><strong>速率：</strong>\(g(v)=4\pi v^2\,(m/(2\pi kT))^{3/2}\,e^{-mv^2/(2kT)}\)（用 \(4\pi v^2 dv\) 球壳体积转换）。</li>
+    <li><strong>最可能速率：</strong>\(v_0=\sqrt{2kT/m}\)。</li>
+    <li><strong>平均速率：</strong>\(\bar v=\sqrt{8kT/(\pi m)}\)。</li>
+    <li><strong>RMS 速率：</strong>\(v_{\text{rms}}=\sqrt{3kT/m}\)。</li>
+    <li><strong>比值：</strong>\(v_0:\bar v:v_{\text{rms}}=\sqrt 2:\sqrt{8/\pi}:\sqrt 3\approx 1.414:1.596:1.732\)。</li>
+    <li><strong>Boltzmann 因子：</strong>\(P(\text{能量}E)\propto e^{-E/kT}\)——本课处的第一个实例。</li>
+  </ul>
+</div>
+
+<!-- ======================================================== -->
+
+<h2>§1 故事线：从一个平均值到完整分布</h2>
+
+<p>Lec 6.3 收尾时我们写下了 \(\tfrac12 m\langle v^2\rangle=\tfrac32 kT\)。这告诉我们<strong>平均</strong>的分子动能；它没告诉我们任何关于个别分子的事情。同温度的气体中：</p>
+
+<ul>
+  <li>有些分子近乎静止（瞬时碰撞中失去了所有速度的家伙）。</li>
+  <li>有些分子以两倍、三倍 \(v_{\text{rms}}\) 的速度狂奔（高速尾里的"幸运儿"）。</li>
+  <li>更高速的分子越来越少，但是<em>不会</em>突然降到零。</li>
+</ul>
+
+<p>这个<strong>速率分布</strong>的完整形状是什么？它决定了化学反应速率（只有动能超过活化能的分子才能反应）、大气逃逸（只有动能超过逃逸势的分子能跑掉）、激光冷却（移除分布中的高速尾）等一切微观-宏观的桥接现象。这一节就是干这件事。</p>
+
+<div class="box remark">
+  <p class="box-title">Maxwell 1860 的优雅</p>
+  <p>这是物理史上数一数二漂亮的论证：用纯粹的对称性（各向同性 + 独立性）就推出了气体分子<strong>必须</strong>服从高斯分布的速度分量分布。物理输入只在最后两步——归一化（\(\int f=1\)）和方差（\(\langle v_x^2\rangle=kT/m\)）——才进来，决定两个常数。这种"先用对称性卡到唯一函数形式，再用边界条件定常数"的套路，是统计力学/场论里反复出现的思路。</p>
+</div>
+
+<!-- ======================================================== -->
+
+<h2>§2 Lec 6.3 短 recap</h2>
+
+<p>立方盒边长 \(L\)、体积 \(V=L^3\)、\(N\) 个质量 \(m\) 的分子。一个分子绕盒往返：\(\Delta p=2mv_x\) 一次碰撞、\(\Delta t=2L/v_x\) 两次连续碰撞间隔，所以这一个分子时间平均给右墙的力 \(F_1=m v_x^2/L\)，压强贡献 \(P_{1\text{molec}}=mv_x^2/V\)。求和：</p>
+
+<p>$$ P=\sum_i \frac{m v_{x,i}^2}{V}=\frac{Nm}{V}\,\langle v_x^2\rangle. \tag{2.1}$$</p>
+
+<p>与实验 \(P=NkT/V\) 比较 ⇒ <strong>每个方向的方差：</strong></p>
+
+<p>$$ \boxed{\;\tfrac12 m\langle v_x^2\rangle=\tfrac12 kT\;,\qquad \langle v_x^2\rangle=\tfrac{kT}{m}.\;}\tag{2.2}$$</p>
+
+<div class="box warning">
+  <p class="box-title">"均方"与"方均"是两件事</p>
+  <p>板书专门画了大大的 ≠。对一组数 \(\{a_i\}\)：</p>
+  <p>$$ \langle a^2\rangle\equiv\tfrac{1}{N}\sum a_i^2 \neq \langle a\rangle^2\equiv\!\!\left(\tfrac{1}{N}\sum a_i\right)^{\!\!2}. $$</p>
+  <p>二者之差就是<strong>方差</strong>：\(\mathrm{Var}(a)=\langle a^2\rangle-\langle a\rangle^2\ge 0\)，仅当所有 \(a_i\) 相同才取等。平衡态气体 \(\langle v_x\rangle=0\)（没有整体流），所以 \(\langle v_x^2\rangle\) 就是 \(v_x\) 的方差。</p>
+</div>
+
+<p>结合各向同性 \(\langle v_x^2\rangle=\langle v_y^2\rangle=\langle v_z^2\rangle\) 与 \(v^2=v_x^2+v_y^2+v_z^2\)：</p>
+
+<p>$$ \boxed{\;\tfrac12 m\langle v^2\rangle=\tfrac32 kT,\qquad v_{\text{rms}}=\sqrt{\tfrac{3kT}{m}}.\;} \tag{2.3}$$</p>
+
+<p>(2.2) 的方差结果将在 §5 用来钉死高斯的"宽度"参数。</p>
+
+<!-- ======================================================== -->
+
+<h2>§3 两条公理</h2>
+
+<p>定义速度概率密度 \(F(\vec v)\)：在 \(\vec v\) 周围的小盒 \(d^3v\) 中找到一个分子的概率为 \(F(\vec v)\,d^3v\)。两个公理：</p>
+
+<div class="box key-result">
+  <p class="box-title">公理 1：各向同性</p>
+  <p>平衡态无优先方向，所以 \(F\) 只通过旋转不变量 \(v^2=v_x^2+v_y^2+v_z^2\) 出现：</p>
+  <p>$$ F(v_x,v_y,v_z)=\Phi(v_x^2+v_y^2+v_z^2). \tag{3.1}$$</p>
+</div>
+
+<div class="box key-result">
+  <p class="box-title">公理 2：分量独立</p>
+  <p>\(v_x,v_y,v_z\) 统计独立：</p>
+  <p>$$ F(v_x,v_y,v_z)=f(v_x)\,f(v_y)\,f(v_z). \tag{3.2}$$</p>
+</div>
+
+<div class="box insight">
+  <p class="box-title">独立性为什么合理？</p>
+  <p>分子之间的碰撞按动量分量逐个交换；经过许多次碰撞后，各分量之间的相关性被洗掉。严格的证明走 Boltzmann \(H\)-定理：固定平均能量后，"熵最大"的分布唯一是高斯乘积。独立性在平衡态自动成立——但它在非平衡态短时间内可能失败（比如分子刚被加热不久）。</p>
+</div>
+
+<!-- ======================================================== -->
+
+<h2>§4 两条公理 → 高斯唯一性定理</h2>
+
+<p>把 (3.1) 和 (3.2) 设为相等：</p>
+
+<p>$$ f(v_x)f(v_y)f(v_z)=\Phi(v_x^2+v_y^2+v_z^2). \tag{4.1}$$</p>
+
+<p>取对数。记 \(h(u)\equiv\ln f(u)\)、\(\Psi(s)\equiv\ln\Phi(s)\)：</p>
+
+<p>$$ h(v_x)+h(v_y)+h(v_z)=\Psi(v_x^2+v_y^2+v_z^2). \tag{4.2}$$</p>
+
+<p>对 \(v_x\) 求偏导（\(v_y,v_z\) 当常数）：</p>
+
+<p>$$ h'(v_x)=2v_x\,\Psi'(v_x^2+v_y^2+v_z^2)\quad\Longrightarrow\quad \frac{h'(v_x)}{2v_x}=\Psi'(v_x^2+v_y^2+v_z^2). \tag{4.3}$$</p>
+
+<p>同理对 \(v_y\)：</p>
+
+<p>$$ \frac{h'(v_y)}{2v_y}=\Psi'(v_x^2+v_y^2+v_z^2)=\frac{h'(v_x)}{2v_x}. \tag{4.4}$$</p>
+
+<p>左边只与 \(v_y\) 有关，右边只与 \(v_x\) 有关——只有它们恒等于一个公共常数才行。记这个常数为 \(-\lambda\)（负号是为最后让 \(f\) 可积，要求 \(\lambda>0\)）：</p>
+
+<p>$$ \frac{h'(v_x)}{2v_x}=-\lambda\;\Longrightarrow\;h'(v_x)=-2\lambda v_x\;\Longrightarrow\;h(v_x)=-\lambda v_x^2+\text{const}. $$</p>
+
+<p>所以</p>
+
+<p>$$ \boxed{\;f(v_x)=C\,e^{-\lambda v_x^2}\;.\;}\tag{4.5}$$</p>
+
+<p>把它代回 (3.2)：</p>
+
+<p>$$ F(v_x,v_y,v_z)=C^3\,e^{-\lambda(v_x^2+v_y^2+v_z^2)}=C^3\,e^{-\lambda v^2}. \tag{4.6}$$</p>
+
+<div class="box remark">
+  <p class="box-title">这是一个唯一性定理</p>
+  <p>所谓"高斯唯一性"是说：在两条公理的约束下，\(f\) 必须是 \(e^{-\lambda v_x^2}\) 形式，没有其他选择。注意这一步还没有用任何物理——这是纯函数方程的结论。物理只在下一节通过 \(C\) 和 \(\lambda\) 的取值进入。</p>
+</div>
+
+<!-- ======================================================== -->
+
+<h2>§5 Gaussian 积分工具箱</h2>
+
+<p>要定 \(C\) 和 \(\lambda\)，需要三个高斯积分。板书展示了头两个，我们再补一个偶幂和奇幂的版本。</p>
+
+<h3>5.1 零次：\(I_0(\lambda)=\int_{-\infty}^{\infty} e^{-\lambda x^2}\,dx\)</h3>
+
+<p>经典技巧——算 \(I_0^2\) 而不是 \(I_0\)：</p>
+
+<p>$$ I_0^2=\int\!\!\int_{\mathbb{R}^2} e^{-\lambda(x^2+y^2)}\,dx\,dy
+   =\int_0^{2\pi}\!d\theta\int_0^\infty r e^{-\lambda r^2}\,dr
+   =2\pi\cdot\frac{1}{2\lambda}=\frac{\pi}{\lambda}. $$</p>
+
+<p>$$ \boxed{\;I_0(\lambda)=\sqrt{\frac{\pi}{\lambda}}\;.\;}\tag{5.1}$$</p>
+
+<h3>5.2 二次：\(I_2(\lambda)=\int_{-\infty}^{\infty} x^2 e^{-\lambda x^2}\,dx\) (Feynman trick)</h3>
+
+<p>注意 \(\partial_\lambda e^{-\lambda x^2}=-x^2 e^{-\lambda x^2}\)，所以可以把 \(x^2\) 因子"拉"到积分外：</p>
+
+<p>$$ I_2(\lambda)=-\frac{\partial I_0}{\partial\lambda}=-\frac{\partial}{\partial\lambda}\!\left[\sqrt{\pi}\,\lambda^{-1/2}\right]
+   =\sqrt{\pi}\cdot\tfrac12\lambda^{-3/2}. $$</p>
+
+<p>$$ \boxed{\;I_2(\lambda)=\tfrac12\sqrt{\frac{\pi}{\lambda^3}}\;.\;}\tag{5.2}$$</p>
+
+<div class="box insight">
+  <p class="box-title">为什么 Feynman trick 这么有用？</p>
+  <p>这一招是 Leibniz 发现、Feynman 在《You Must Be Joking, Mr. Feynman》里大力推广的"differentiation under the integral sign"。它的核心是把<strong>积分变量里的多项式因子</strong>，转化成<strong>参数的导数</strong>——把"难积分"换成"容易积分 + 求导"。这一招在 Ch.22 推 partition function 时还会大量用到（\(Z(\beta)=\sum e^{-\beta E}\)，所有期望值用 \(-\partial_\beta\ln Z\) 之类提取）。</p>
+</div>
+
+<h3>5.3 四次：\(I_4(\lambda)=\int_{-\infty}^{\infty} x^4 e^{-\lambda x^2}\,dx\)（验证用）</h3>
+
+<p>$$ I_4=\frac{\partial^2 I_0}{\partial\lambda^2}=\tfrac34\sqrt{\frac{\pi}{\lambda^5}}. \tag{5.3}$$</p>
+
+<h3>5.4 奇幂半轴积分 \(J_n(a)=\int_0^\infty x^n e^{-ax^2}\,dx\)</h3>
+
+<p>偶幂奇对称地对 \(-\infty\to\infty\) 区间给 0，但<strong>奇幂在半轴上不为零</strong>。我们后面算 \(\bar v\) 需要它们：</p>
+
+<p>替换 \(u=ax^2\)：</p>
+
+<p>$$ J_1(a)=\int_0^\infty x e^{-ax^2}\,dx=\frac{1}{2a}\int_0^\infty e^{-u}du=\frac{1}{2a}. \tag{5.4}$$</p>
+
+<p>对 \(a\) 求导一次：</p>
+
+<p>$$ J_3(a)=\int_0^\infty x^3 e^{-ax^2}\,dx=-\frac{\partial J_1}{\partial a}=\frac{1}{2a^2}. \tag{5.5}$$</p>
+
+<h3>5.5 速查表</h3>
+
+<table class="formula-table">
+  <thead><tr><th>积分</th><th>结果</th><th>用途</th></tr></thead>
+  <tbody>
+    <tr><td>\(\int_{-\infty}^{\infty} e^{-\lambda x^2}\,dx\)</td><td>\(\sqrt{\pi/\lambda}\)</td><td>归一化定 \(C\)</td></tr>
+    <tr><td>\(\int_{-\infty}^{\infty} x^2 e^{-\lambda x^2}\,dx\)</td><td>\(\tfrac12\sqrt{\pi/\lambda^3}\)</td><td>\(\langle v_x^2\rangle\) 定 \(\lambda\)</td></tr>
+    <tr><td>\(\int_{-\infty}^{\infty} x^4 e^{-\lambda x^2}\,dx\)</td><td>\(\tfrac34\sqrt{\pi/\lambda^5}\)</td><td>\(\langle v^2\rangle\) 自洽验证</td></tr>
+    <tr><td>\(\int_0^\infty x e^{-ax^2}\,dx\)</td><td>\(1/(2a)\)</td><td>奇幂半轴基础</td></tr>
+    <tr><td>\(\int_0^\infty x^3 e^{-ax^2}\,dx\)</td><td>\(1/(2a^2)\)</td><td>\(\bar v\) 计算</td></tr>
+  </tbody>
+</table>
+
+<!-- ======================================================== -->
+
+<h2>§6 钉死 \(C\) 与 \(\lambda\)</h2>
+
+<h3>6.1 归一化定 \(C\)</h3>
+
+<p>$$ 1=\int_{-\infty}^\infty f(v_x)dv_x = C\int e^{-\lambda v_x^2}dv_x = C\sqrt{\frac{\pi}{\lambda}}\;\Longrightarrow\;C=\sqrt{\frac{\lambda}{\pi}}. \tag{6.1}$$</p>
+
+<h3>6.2 已知 \(\langle v_x^2\rangle=kT/m\) 定 \(\lambda\)</h3>
+
+<p>$$ \langle v_x^2\rangle=\int v_x^2\,f(v_x)\,dv_x=C\cdot I_2(\lambda)=\sqrt{\frac{\lambda}{\pi}}\cdot\tfrac12\sqrt{\frac{\pi}{\lambda^3}}=\frac{1}{2\lambda}. $$</p>
+
+<p>设等于 \(kT/m\)：</p>
+
+<p>$$ \frac{1}{2\lambda}=\frac{kT}{m}\;\Longrightarrow\;\boxed{\;\lambda=\frac{m}{2kT}.\;}\tag{6.2}$$</p>
+
+<p>再代回 (6.1)：</p>
+
+<p>$$ \boxed{\;C=\sqrt{\frac{m}{2\pi kT}}.\;}\tag{6.3}$$</p>
+
+<!-- ======================================================== -->
+
+<h2>§7 完整的三种分布</h2>
+
+<h3>7.1 1D 分量分布 \(f(v_x)\)</h3>
+
+<div class="box key-result">
+  <p>$$ \boxed{\;f(v_x)=\sqrt{\frac{m}{2\pi kT}}\,\exp\!\left(-\frac{mv_x^2}{2kT}\right).\;}\tag{7.1}$$</p>
+  <p>零均值、方差 \(\sigma_x^2=kT/m\) 的高斯。</p>
+</div>
+
+<div class="box insight">
+  <p class="box-title">Boltzmann 因子第一次登场</p>
+  <p>指数项 \(-mv_x^2/(2kT)=-(\tfrac12 mv_x^2)/(kT)=-E_x/kT\)，即"该方向的动能比上热能 \(kT\)"。<strong>能量超过 \(kT\) 的状态被指数压制。</strong>这就是 Boltzmann 因子 \(P(E)\propto e^{-E/kT}\) 的最简单实例。后面我们会在大气标高 \(\rho\propto e^{-mgh/kT}\)、Arrhenius 反应速率 \(k(T)\propto e^{-E_a/kT}\)、半导体载流子 \(n\propto e^{-E_g/kT}\) 等处反复见到。</p>
+</div>
+
+<h3>7.2 3D 速度分布 \(F(\vec v)\)</h3>
+
+<div class="box key-result">
+  <p>$$ \boxed{\;F(v_x,v_y,v_z)=\!\left(\frac{m}{2\pi kT}\right)^{\!3/2}\!\exp\!\left(-\frac{mv^2}{2kT}\right).\;}\tag{7.2}$$</p>
+  <p>注意它确实只通过 \(v^2=v_x^2+v_y^2+v_z^2\) 出现（公理 1 得到自洽验证）。</p>
+</div>
+
+<h3>7.3 速率分布 \(g(v)\)（球壳论证）</h3>
+
+<p>许多应用只关心速率 \(v=|\vec v|\) 而不关心方向。在 \(\vec v\)-空间中，速率属于 \([v,v+dv]\) 的所有速度向量构成一个<strong>球壳</strong>，球壳的体积是</p>
+
+<p>$$ 4\pi v^2\,dv. $$</p>
+
+<p>\(F\) 在球壳上是常数（只依赖 \(v\)），所以</p>
+
+<p>$$ g(v)\,dv=F(v)\cdot 4\pi v^2\,dv. $$</p>
+
+<div class="box key-result">
+  <p>$$ \boxed{\;g(v)=4\pi v^2\!\left(\frac{m}{2\pi kT}\right)^{\!3/2}\!\exp\!\left(-\frac{mv^2}{2kT}\right),\quad v\ge 0.\;}\tag{7.3}$$</p>
+</div>
+
+<div class="box insight">
+  <p class="box-title">为什么 \(g(v)\) 右偏（有长尾）</p>
+  <p>两个因子在打架：</p>
+  <ul>
+    <li><strong>多项式 \(4\pi v^2\)</strong>：速率越大，对应的速度向量越多（球壳面积按 \(v^2\) 长大）。</li>
+    <li><strong>指数 \(e^{-mv^2/(2kT)}\)</strong>：速率越大，能量越大，越被压制。</li>
+  </ul>
+  <p>小 \(v\) 多项式赢（\(g\to 0\) 当 \(v\to 0\)）；大 \(v\) 指数赢（\(g\to 0\) 当 \(v\to\infty\)）。峰位 \(v_0=\sqrt{2kT/m}\) 就是二者导数互相抵消的位置。</p>
+</div>
+
+<h3>7.4 自洽核查（板书没做完整）</h3>
+
+<p>用 \(g(v)\) 重新计算 \(\langle v^2\rangle\) ，应该回到 \(3kT/m\)：</p>
+
+<p>$$ \langle v^2\rangle=\int_0^\infty v^2 g(v)dv=4\pi\!\left(\frac{m}{2\pi kT}\right)^{\!3/2}\!\int_0^\infty v^4 e^{-\alpha v^2}dv, $$</p>
+
+<p>其中 \(\alpha=m/(2kT)\)。\(v^4 e^{-\alpha v^2}\) 是偶函数，所以 \(\int_0^\infty=\tfrac12 I_4(\alpha)=\tfrac38\sqrt{\pi/\alpha^5}\)。代入：</p>
+
+<p>$$ \langle v^2\rangle=4\pi\cdot\frac{\alpha^{3/2}}{\pi^{3/2}}\cdot\tfrac38\sqrt{\frac{\pi}{\alpha^5}}=\frac{3}{2\alpha}=\frac{3kT}{m}. \quad\checkmark $$</p>
+
+<p>三步独立路径——1D 方差 → 高斯 → 速率分布——给出一致结果，分布是自洽的。</p>
+
+<!-- ======================================================== -->
+
+<h2>§8 三个特征速率</h2>
+
+<h3>8.1 最可能速率 \(v_0\)（钟形峰）</h3>
+
+<p>对 \(g(v)\) 求导。除掉常数：</p>
+
+<p>$$ \frac{d}{dv}\!\left[v^2 e^{-\alpha v^2}\right]=2v e^{-\alpha v^2}-2\alpha v^3 e^{-\alpha v^2}=2ve^{-\alpha v^2}(1-\alpha v^2). $$</p>
+
+<p>非零零点：\(\alpha v_0^2=1\)，所以</p>
+
+<p>$$ \boxed{\;v_0=\frac{1}{\sqrt\alpha}=\sqrt{\frac{2kT}{m}}.\;}\tag{8.1}$$</p>
+
+<h3>8.2 平均速率 \(\bar v\)（板书没拍到，这里补全）</h3>
+
+<p>$$ \bar v=\int_0^\infty v\,g(v)\,dv=4\pi\!\left(\frac{m}{2\pi kT}\right)^{\!3/2}\!\int_0^\infty v^3 e^{-\alpha v^2}dv. $$</p>
+
+<p>用 \(J_3(\alpha)=1/(2\alpha^2)\)：\(\int_0^\infty v^3 e^{-\alpha v^2}dv=\frac{1}{2\alpha^2}=\frac{1}{2}\!\left(\frac{2kT}{m}\right)^{\!2}=\frac{2(kT)^2}{m^2}\)。</p>
+
+<p>合起来：</p>
+
+<p>$$ \bar v=4\pi\cdot\frac{m^{3/2}}{(2\pi kT)^{3/2}}\cdot\frac{2(kT)^2}{m^2}
+   =\frac{8\pi(kT)^2}{(2\pi kT)^{3/2}\sqrt m}
+   =\frac{8\pi}{(2\pi)^{3/2}}\sqrt{\frac{kT}{m}}. $$</p>
+
+<p>化简 \(8\pi/(2\pi)^{3/2}=8\pi/(2\sqrt 2 \pi^{3/2})=4/\sqrt{2\pi}=\sqrt{16/(2\pi)}=\sqrt{8/\pi}\)：</p>
+
+<p>$$ \boxed{\;\bar v=\sqrt{\frac{8kT}{\pi m}}.\;}\tag{8.2}$$</p>
+
+<h3>8.3 RMS 速率 \(v_{\text{rms}}\)（从 (2.3) 已知）</h3>
+
+<p>$$ \boxed{\;v_{\text{rms}}=\sqrt{\langle v^2\rangle}=\sqrt{\frac{3kT}{m}}.\;}\tag{8.3}$$</p>
+
+<h3>8.4 三者比较</h3>
+
+<p>提出公共因子 \(\sqrt{kT/m}\)：</p>
+
+<p>$$ v_0:\bar v:v_{\text{rms}}=\sqrt 2:\sqrt{8/\pi}:\sqrt 3\approx 1.414:1.596:1.732. \tag{8.4}$$</p>
+
+<p>严格有 \(v_0<\bar v<v_{\text{rms}}\)——对任何<em>右偏</em>分布都如此。每个加权方式（mode → first moment → √second moment）都更多地"往尾里拉"。</p>
+
+<div class="box remark">
+  <p class="box-title">三个速率各管什么</p>
+  <ul>
+    <li><strong>\(v_0\)</strong> 决定<em>分布在哪儿</em>——大多数分子在峰附近聚集。</li>
+    <li><strong>\(\bar v\)</strong> 决定<em>通量</em>——单位时间穿过单位面积的分子数 \(\sim n\bar v/4\)（Knudsen 效应、effusion）；平均自由程也用它。</li>
+    <li><strong>\(v_{\text{rms}}\)</strong> 决定<em>能量</em>——动能密度、压强、声速 \(v_s=\sqrt{\gamma kT/m}\)。</li>
+  </ul>
+</div>
+
+<!-- ======================================================== -->
+
+<h2>§9 交互：MB 分布探索器</h2>
+
+<div class="box interactive">
+  <p class="box-title">交互：拖动温度和分子质量，看分布如何变化</p>
+  <p>下图绘制 \(g(v)\) 与速率轴。拖动 \(T\) 和分子质量 \(m\)（用 amu 即原子质量单位）滑块，曲线随之伸缩；三根竖虚线标 \(v_0,\bar v,v_{\text{rms}}\)。</p>
+  <p>额外功能：拖动"逃逸速度阈值" \(v_{\text{esc}}\)，曲线下高于 \(v_{\text{esc}}\) 的尾部会被着色，并显示该尾部所占的归一化面积（即"超过 \(v_{\text{esc}}\) 的分子比例"）。这是行星大气逃逸、化学反应速率的核心物理量。</p>
+
+  <div class="widget">
+    <canvas id="mb-canvas" width="600" height="320"></canvas>
+    <div class="controls">
+      <div class="control-row">
+        <label>温度 T (K)</label>
+        <input type="range" id="mb-T" min="50" max="2000" step="10" value="300" />
+        <span class="readout" id="mb-T-readout"></span>
+      </div>
+      <div class="control-row">
+        <label>分子质量 (amu)</label>
+        <input type="range" id="mb-M" min="1" max="80" step="1" value="28" />
+        <span class="readout" id="mb-M-readout"></span>
+      </div>
+      <div class="control-row">
+        <label>\(v_{\text{esc}}\) (m/s)</label>
+        <input type="range" id="mb-vesc" min="0" max="5000" step="50" value="2000" />
+        <span class="readout" id="mb-vesc-readout"></span>
+      </div>
+      <div class="control-row">
+        <label></label>
+        <span style="font-size:.85rem;color:#6b7280">
+          \(v_0\) = <span id="mb-v0" style="font-family:Menlo,monospace;color:#0f766e"></span>，
+          \(\bar v\) = <span id="mb-vbar" style="font-family:Menlo,monospace;color:#0f766e"></span>，
+          \(v_{\text{rms}}\) = <span id="mb-vrms" style="font-family:Menlo,monospace;color:#0f766e"></span>
+        </span>
+      </div>
+      <div class="control-row">
+        <label></label>
+        <span style="font-size:.85rem;color:#6b7280">尾部比例（\(v>v_{\text{esc}}\)）= <span id="mb-tail" style="font-family:Menlo,monospace;color:#ea580c;font-weight:600"></span></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="box remark">
+  <p class="box-title">试一试</p>
+  <ul>
+    <li><strong>把温度从 300 K 拉到 1000 K：</strong>分布变宽变矮，三个速率都增大（按 \(\sqrt T\)）。</li>
+    <li><strong>把分子质量从 28（N₂）调到 4（He）：</strong>分布大幅右移、变宽，因为 \(v\propto 1/\sqrt m\)。He 比 N₂ 跑得快约 \(\sqrt 7\approx 2.65\) 倍。</li>
+    <li><strong>设 \(v_{\text{esc}}=11200\) m/s（超出滑块上限，但你可以脑补）：</strong>这是地球第二宇宙速度。对 N₂ 在 300 K，尾部比例 \(\approx e^{-mv_{\text{esc}}^2/(2kT)}\sim e^{-1100}\)——几何意义上的零，地球几十亿年丢不掉氮气。</li>
+    <li><strong>用 \(M=4\)（He）和 \(T=1000\) K（外热层温度）测试：</strong>尾部比例显著——这就是为什么地球大气中的氦原子不断从大气顶端流失。</li>
+  </ul>
+</div>
+
+<!-- ======================================================== -->
+
+<h2>§10 物理应用</h2>
+
+<div class="box insight">
+  <p class="box-title">化学反应的 Arrhenius 速率律</p>
+  <p>反应需要分子碰撞时携带的动能超过活化能 \(E_a\)。"超 \(E_a\) 比例" \(\propto e^{-E_a/kT}\)，所以反应速率 \(k(T)=A e^{-E_a/kT}\)。这是 Arrhenius 公式（1889）。微观本质：MB 分布的高速尾。</p>
+  <p>经验规则："温度升 10 K，反应速率翻倍"——对应 \(E_a\approx kT^2\cdot\ln 2/10\)，在室温下 \(E_a\sim 50\) kJ/mol，化学反应常见的活化能范围。</p>
+</div>
+
+<div class="box insight">
+  <p class="box-title">行星大气的"逃逸"</p>
+  <p>分子能从行星大气逃逸（达到无穷远）当 \(v>v_{\text{esc}}=\sqrt{2GM/R}\)（地球 11.2 km/s、月球 2.4 km/s、火星 5.0 km/s）。MB 尾部比例（粗估）\(\sim e^{-mv_{\text{esc}}^2/(2kT)}\)。</p>
+  <ul>
+    <li>地球，N₂，外热层 \(T\sim 1000\) K：\(e^{-(28)(11200)^2/(2kT)}\sim e^{-1100}\)：完全留住。</li>
+    <li>地球，He：\(e^{-(4)(11200)^2/(2kT)}\sim e^{-160}\)：天文时标内流失（地球的氦全部来自地下放射性 α 衰变补给）。</li>
+    <li>月球，任何气体：\(v_{\text{esc}}\) 太小，几乎全部跑光——月球没有大气。</li>
+    <li>水星：温度高、引力小，结果类似。</li>
+  </ul>
+  <p>这就是 Jeans 逃逸理论（1925）的核心。</p>
+</div>
+
+<div class="box insight">
+  <p class="box-title">激光冷却：把 MB 分布"砍尾"</p>
+  <p>激光冷却（1997 年 Nobel 奖给 Chu/Cohen-Tannoudji/Phillips）的核心思路：用恰当频率的激光向迎面而来的高速原子开火，对每个原子带去一点动量，把 MB 分布的<strong>高速尾</strong>系统性削掉。多普勒匹配选择性地撞击 \(v\) 与激光方向相反的快原子——剩下的就是窄分布、低 \(T\) 的冷原子气。</p>
+  <p>这一招让原子温度从室温降到 \(\sim\mu\)K（百万分之一开尔文），是 BEC 实验、原子钟、量子模拟器的基础。</p>
+</div>
+
+<div class="box insight">
+  <p class="box-title">何时 MB 失效——经典 vs 量子统计</p>
+  <p>MB 分布是经典极限。热力学 de Broglie 波长 \(\lambda_T=h/\sqrt{2\pi mkT}\)。当 \(n\lambda_T^3\ll 1\)（数密度 × 波包体积 ≪ 1）时分子可分辨——经典 OK。逼近或超过 1 时量子统计开始：</p>
+  <ul>
+    <li>Bose（自旋整数）：低温堆积到基态——Bose-Einstein 凝聚。</li>
+    <li>Fermi（自旋半整数）：泡利不相容，电子在金属里填到 \(E_F\sim\) eV，根本不服从 MB。</li>
+  </ul>
+  <p>空气 STP：\(n\lambda_T^3\sim 10^{-6}\)——MB 极好。液氦：\(\sim 1\)——量子。这是<strong>下学期</strong>统计物理的入口。</p>
+</div>
+
+<!-- ======================================================== -->
+
+<h2>§11 Worked Examples</h2>
+
+<div class="example">
+  <h4>Example：N₂ 在 300 K 的三种速率数值</h4>
+  <p class="source">Shankar §22.3 直接应用</p>
+
+  <div class="solution-step"><strong>用摩尔形式</strong>：\(v_X=\sqrt{cRT/M}\)，\(c\) 是 2、\(8/\pi\)、3 之一。\(M=28\times 10^{-3}\) kg/mol，\(R=8.314\)，\(T=300\) K。</div>
+
+  <div class="solution-step"><strong>\(v_0\)</strong>：
+    $$ v_0=\sqrt{\frac{2\cdot 8.314\cdot 300}{0.028}}=\sqrt{1.78\times 10^5}\approx 422\text{ m/s}. $$
+  </div>
+
+  <div class="solution-step"><strong>\(\bar v\)</strong>：
+    $$ \bar v=\sqrt{\frac{8\cdot 8.314\cdot 300}{\pi\cdot 0.028}}=\sqrt{2.27\times 10^5}\approx 476\text{ m/s}. $$
+  </div>
+
+  <div class="solution-step"><strong>\(v_{\text{rms}}\)</strong>：
+    $$ v_{\text{rms}}=\sqrt{\frac{3\cdot 8.314\cdot 300}{0.028}}\approx 517\text{ m/s}. $$
+  </div>
+
+  <div class="solution-step"><strong>比值核查</strong>：\(422:476:517\) → 除以 \(\sqrt{RT/M}\approx 298.5\)：\(1.414:1.596:1.732\) ✓。</div>
+</div>
+
+<div class="example">
+  <h4>Example：算 \(\langle 1/v\rangle\)（出现在某些散射截面里）</h4>
+  <p class="source">Shankar Ch.22 综合题</p>
+  <p>对 MB 分布算 \(\langle 1/v\rangle\)，并与 \(1/\bar v\) 比较。</p>
+
+  <div class="solution-step"><strong>建立积分</strong>：
+    $$ \left\langle\frac{1}{v}\right\rangle=\int_0^\infty\frac{1}{v}g(v)dv=4\pi\!\left(\frac{m}{2\pi kT}\right)^{\!3/2}\!\int_0^\infty v\,e^{-\alpha v^2}dv. $$
+  </div>
+
+  <div class="solution-step"><strong>用 \(J_1\)</strong>：\(\int_0^\infty v e^{-\alpha v^2}dv=\frac{1}{2\alpha}=\frac{kT}{m}\)。
+    $$ \left\langle\frac{1}{v}\right\rangle=4\pi\cdot\frac{m^{3/2}}{(2\pi kT)^{3/2}}\cdot\frac{kT}{m}=\frac{4\pi\sqrt m\sqrt{kT}}{(2\pi)^{3/2}(kT)}\cdot\frac{1}{\sqrt{kT}}\cdot kT $$
+    <em>(化简过程)</em>
+    $$ =\frac{4\pi}{(2\pi)^{3/2}}\sqrt{\frac{m}{kT}}=\sqrt{\frac{2}{\pi}}\sqrt{\frac{m}{kT}}=\sqrt{\frac{2m}{\pi kT}}. $$
+  </div>
+
+  <div class="solution-step"><strong>对比 \(1/\bar v\)</strong>：\(1/\bar v=\sqrt{\pi m/(8kT)}\)。比值：
+    $$ \frac{\langle 1/v\rangle}{1/\bar v}=\sqrt{\frac{2m}{\pi kT}}\cdot\sqrt{\frac{8kT}{\pi m}}=\sqrt{\frac{16}{\pi^2}}=\frac{4}{\pi}\approx 1.273. $$
+    所以 \(\langle 1/v\rangle\ne 1/\bar v\)，差 \(4/\pi\)。这又是 Cauchy-Schwarz 不等式的一个示例：\(\langle f\rangle\langle 1/f\rangle\ge 1\)。
+  </div>
+
+  <div class="solution-step"><strong>物理含义</strong>：散射截面 \(\sigma_{\text{scat}}\propto 1/v^a\) 的反应（\(a\ne 0\)）需要算 \(\langle\sigma\bar v\rangle=\langle\sigma v\rangle\)，不能简单代入平均速度。中子在反应堆里的"1/v 律"截面就是个例子。</div>
+</div>
+
+<div class="example">
+  <h4>Problem ★：地球损失氢的"等效温度"</h4>
+  <p class="source">改编自 Shankar Ch.22 问题集</p>
+  <p>大气逃逸的简化判据：若 \(v_{\text{rms}}>v_{\text{esc}}/6\) 大致就会在地质时标内逃逸。问：地球（\(v_{\text{esc}}=11.2\) km/s）需要外热层 \(T\) 多高才能让氢气（\(M=2\) g/mol）"逃光"？</p>
+
+  <div class="solution-step"><strong>建立条件</strong>：
+    $$ \sqrt{\frac{3RT}{M}}>\frac{v_{\text{esc}}}{6}=\frac{11200}{6}\approx 1867\text{ m/s}. $$
+  </div>
+
+  <div class="solution-step"><strong>解 \(T\)</strong>：
+    $$ T>\frac{M v_{\text{esc}}^2}{6^2\cdot 3R}=\frac{0.002\cdot(11200)^2}{108\cdot 8.314}\approx\frac{2.51\times 10^5}{898}\approx 280\text{ K}. $$
+  </div>
+
+  <div class="solution-step"><strong>结论</strong>：H 在 280 K 以上就会大量逃逸。地球外热层 \(T\sim 1000\) K 远超此阈值——所以地球大气中几乎没有 H₂（火星类似，但火星外热层更冷，损失稍慢）。</div>
+
+  <div class="solution-step"><strong>对比 He、N₂</strong>：把上式 \(M\) 改为 4（He）得 \(T\gtrsim 560\) K，外热层 1000 K 也超——所以氦也跑得掉，只是慢一些；改为 28（N₂）得 \(T\gtrsim 3920\) K，外热层永远到不了——所以氮气稳稳留住。<em>这定性解释了地球大气的主要成分构成。</em></div>
+</div>
+
+<div class="example">
+  <h4>Problem ★★：用 MB 推 Arrhenius 公式</h4>
+  <p class="source">Shankar Ch.22 + 化学动力学综合</p>
+  <p>反应需要动能 \(\tfrac12 mv^2>E_a\)。求"反应概率"——即超过此动能的<strong>分布占比</strong> \(P(v>v_a)\)，其中 \(v_a=\sqrt{2E_a/m}\)，假设 \(E_a\gg kT\)。</p>
+
+  <div class="solution-step"><strong>设置积分</strong>：
+    $$ P(v>v_a)=\int_{v_a}^\infty g(v)dv=4\pi\!\left(\frac{m}{2\pi kT}\right)^{\!3/2}\!\int_{v_a}^\infty v^2 e^{-\alpha v^2}dv. $$
+  </div>
+
+  <div class="solution-step"><strong>大 \(v_a\) 极限的渐近</strong>：当 \(\alpha v_a^2=mv_a^2/(2kT)=E_a/kT\gg 1\)，被积函数在 \(v=v_a\) 附近 sharply 衰减。用 Laplace 法（即 \(v\to v_a\) 附近的展开）：</p>
+
+    <p>设 \(v=v_a+u\)，\(v^2\approx v_a^2+2v_a u\)（\(u\ll v_a\)）。指数 \(e^{-\alpha v^2}\approx e^{-\alpha v_a^2}\cdot e^{-2\alpha v_a u}\)。\(v^2\approx v_a^2\) 可作常数提出：
+    $$ \int_{v_a}^\infty v^2 e^{-\alpha v^2}dv \approx v_a^2 e^{-\alpha v_a^2}\int_0^\infty e^{-2\alpha v_a u}du
+       =\frac{v_a^2 e^{-\alpha v_a^2}}{2\alpha v_a}=\frac{v_a e^{-E_a/kT}}{2\alpha}. $$
+  </div>
+
+  <div class="solution-step"><strong>合并系数</strong>：
+    $$ P(v>v_a)\approx 4\pi\!\left(\frac{m}{2\pi kT}\right)^{\!3/2}\!\cdot\frac{v_a\,e^{-E_a/kT}}{2\alpha}. $$
+    \(\alpha=m/(2kT)\)，所以 \(1/(2\alpha)=kT/m\)；\(v_a=\sqrt{2E_a/m}\)。代入并化简（数代数细节略），主要量级是：
+    $$ P(v>v_a)\propto \sqrt{\frac{E_a}{kT}}\,e^{-E_a/kT}. $$
+  </div>
+
+  <div class="solution-step"><strong>主导：\(e^{-E_a/kT}\)</strong>。所有的"次主导"前因子（多项式）在指数变化前面都是慢变。所以反应速率
+    $$ \boxed{\;k(T)=A\,e^{-E_a/kT}\;}\quad\text{(Arrhenius)}. $$
+    <strong>这是 MB 分布的高速尾</strong>给出的——经验律有了微观解释。</div>
+</div>
+
+<!-- ======================================================== -->
+
+<h2>§12 Self-check</h2>
+
+<div class="self-check">
+  <p class="question">Q1. 把温度 \(T\) 加倍，\(v_0、\bar v、v_{\text{rms}}\) 各变什么倍？峰高呢？</p>
+  <details>
+    <summary>查看答案</summary>
+    <p>三个速率都按 \(\sqrt T\) 增大，所以都变 \(\sqrt 2\approx 1.414\) 倍。<br>
+    峰高：在峰位 \(v=v_0\) 处，\(g(v_0)=4\pi\cdot(2kT/m)\cdot(m/(2\pi kT))^{3/2}e^{-1}\propto 1/\sqrt T\)。所以峰高<strong>下降</strong>到 \(1/\sqrt 2\)。<br>
+    几何意义：分布<em>更宽更矮</em>（被"摊开"了），但总面积 \(=1\) 不变（归一化保持）。</p>
+  </details>
+</div>
+
+<div class="self-check">
+  <p class="question">Q2. 为什么 \(g(v)\) 在 \(v=0\) 处取零，而 \(f(v_x)\) 在 \(v_x=0\) 处取最大？</p>
+  <details>
+    <summary>查看答案</summary>
+    <p>\(f(v_x)\) 是 1D 分量的概率密度：\(v_x=0\) 对应"\(x\) 方向没动"的状态，这种状态最常见（高斯峰在零）。</p>
+    <p>\(g(v)\) 是<strong>速率</strong>的概率密度——速率 \(v=|\vec v|\) 是<em>三个分量平方和的开根号</em>，所以 \(v=0\) 严格要求 \(v_x=v_y=v_z=0\)，这是个零体积的点。\(g(v)\) 多出来一个 \(4\pi v^2\) 的"球壳因子"，把 \(v=0\) 处压成 0。<br>
+    打个比方：在 \(\mathbb R^3\) 里"原点附近一小段距离"的体积是 \(\frac43\pi r^3\)，对小 \(r\) 来说几乎为零；速率分布反映的就是这个几何。</p>
+  </details>
+</div>
+
+<div class="self-check">
+  <p class="question">Q3. 公理 1（各向同性）和公理 2（独立性）是否必须<strong>同时</strong>成立才能推出高斯？只有其中之一不够吗？</p>
+  <details>
+    <summary>查看答案</summary>
+    <p>只有公理 1 不够：\(F=\Phi(v^2)\) 可以是任何关于 \(v^2\) 的函数（例如 \(F\propto e^{-(v^2)^2}\) 也行）。</p>
+    <p>只有公理 2 不够：\(F=f(v_x)f(v_y)f(v_z)\) 没限制 \(f\) 的形式（例如各分量独立的指数分布、均匀分布都行）。</p>
+    <p><strong>必须两条同时</strong>：才能逼出"乘积形式 = 平方和的函数"这一函数方程，进而把 \(f\) 钉死成高斯。<em>这正是 Maxwell 1860 论证的精髓——两条简单的对称性结合在一起，决定了答案。</em></p>
+  </details>
+</div>
+
+<div class="self-check">
+  <p class="question">Q4. 对 1D 分布 \(f(v_x)\)，"最可能值"是多少？这与 \(g(v)\) 的最可能值 \(v_0\) 不同吗？</p>
+  <details>
+    <summary>查看答案</summary>
+    <p>1D 分布 \(f(v_x)\) 是中心高斯，最可能值在 \(v_x=0\)。<br>
+    速率分布 \(g(v)\) 的最可能值是 \(v_0=\sqrt{2kT/m}\)（远非零）。<br>
+    这两个不矛盾——一个是<em>分量</em>的分布（\(v_x\) 可正可负，最常见为 0），另一个是<em>速率</em>的分布（速率非负，最常见值是个有限值）。<strong>不要把"\(v_x\) 的分布"与"\(v\) 的分布"混淆。</strong></p>
+  </details>
+</div>
+
+<div class="self-check">
+  <p class="question">Q5. 两个气体 He（\(M=4\)）和 Ar（\(M=40\)）在<strong>同温度</strong>下混合。哪种分子跑得快？哪种<strong>平均动能</strong>大？</p>
+  <details>
+    <summary>查看答案</summary>
+    <p><strong>速率</strong>：\(v\propto 1/\sqrt m\)。He 比 Ar 轻 10 倍，所以 He 的所有特征速率（\(v_0,\bar v,v_{\text{rms}}\)）都是 Ar 的 \(\sqrt{10}\approx 3.16\) 倍。He 跑得快。</p>
+    <p><strong>动能</strong>：\(\tfrac12 m\langle v^2\rangle=\tfrac32 kT\)，<strong>只依赖 \(T\)，不依赖 \(m\)</strong>。同温度下平均动能相等！He 跑得快但每个分子轻 10 倍，正好抵消 10 倍速率平方差距。<em>这就是平衡态的真正定义——所有自由度共享 \(\tfrac12 kT\) 的能量，不分大小轻重。</em></p>
+  </details>
+</div>
+
+<!-- ======================================================== -->
+
+<h2>§13 公式速查表</h2>
+
+<table class="formula-table">
+  <thead><tr><th>概念</th><th>公式</th></tr></thead>
+  <tbody>
+    <tr><th>公理 1（各向同性）</th><td>\(F=\Phi(v^2)\)</td></tr>
+    <tr><th>公理 2（独立性）</th><td>\(F=f(v_x)f(v_y)f(v_z)\)</td></tr>
+    <tr><th>函数方程的解</th><td>\(f(v_x)=Ce^{-\lambda v_x^2}\)</td></tr>
+    <tr><th>Gaussian: \(I_0\)</th><td>\(\int_{-\infty}^\infty e^{-\lambda x^2}dx=\sqrt{\pi/\lambda}\)</td></tr>
+    <tr><th>Gaussian: \(I_2\)</th><td>\(\int_{-\infty}^\infty x^2 e^{-\lambda x^2}dx=\tfrac12\sqrt{\pi/\lambda^3}\)</td></tr>
+    <tr><th>Gaussian: \(I_4\)</th><td>\(\int_{-\infty}^\infty x^4 e^{-\lambda x^2}dx=\tfrac34\sqrt{\pi/\lambda^5}\)</td></tr>
+    <tr><th>奇幂半轴 \(J_1\)</th><td>\(\int_0^\infty xe^{-ax^2}dx=1/(2a)\)</td></tr>
+    <tr><th>奇幂半轴 \(J_3\)</th><td>\(\int_0^\infty x^3 e^{-ax^2}dx=1/(2a^2)\)</td></tr>
+    <tr><th>归一化定 \(C\)</th><td>\(C=\sqrt{\lambda/\pi}\)</td></tr>
+    <tr><th>\(\langle v_x^2\rangle\) 定 \(\lambda\)</th><td>\(\lambda=m/(2kT)\)</td></tr>
+    <tr><th>1D 分布</th><td>\(f(v_x)=\sqrt{m/(2\pi kT)}\,e^{-mv_x^2/(2kT)}\)</td></tr>
+    <tr><th>3D 速度分布</th><td>\(F(\vec v)=(m/(2\pi kT))^{3/2}e^{-mv^2/(2kT)}\)</td></tr>
+    <tr><th>球壳体积</th><td>\(4\pi v^2 dv\)</td></tr>
+    <tr><th>速率分布</th><td>\(g(v)=4\pi v^2(m/(2\pi kT))^{3/2}e^{-mv^2/(2kT)}\)</td></tr>
+    <tr><th>最可能速率</th><td>\(v_0=\sqrt{2kT/m}\)</td></tr>
+    <tr><th>平均速率</th><td>\(\bar v=\sqrt{8kT/(\pi m)}\)</td></tr>
+    <tr><th>RMS 速率</th><td>\(v_{\text{rms}}=\sqrt{3kT/m}\)</td></tr>
+    <tr><th>速率比</th><td>\(\sqrt 2:\sqrt{8/\pi}:\sqrt 3\approx 1.414:1.596:1.732\)</td></tr>
+    <tr><th>Boltzmann 因子</th><td>\(P(E)\propto e^{-E/kT}\)</td></tr>
+    <tr><th>Arrhenius 律</th><td>\(k(T)=A e^{-E_a/kT}\)</td></tr>
+    <tr><th>Jeans 逃逸（粗估）</th><td>逃逸比例 \(\propto e^{-mv_{\text{esc}}^2/(2kT)}\)</td></tr>
+    <tr><th>热 de Broglie 波长</th><td>\(\lambda_T=h/\sqrt{2\pi mkT}\)</td></tr>
+    <tr><th>经典极限</th><td>\(n\lambda_T^3\ll 1\)</td></tr>
+    <tr><th>N₂@300 K 三速率</th><td>\(v_0\approx 422,\,\bar v\approx 476,\,v_{\text{rms}}\approx 517\) m/s</td></tr>
+    <tr><th>He@300 K 三速率</th><td>\(v_0\approx 1117,\,\bar v\approx 1260,\,v_{\text{rms}}\approx 1370\) m/s</td></tr>
+  </tbody>
+</table>
+
+<!-- ======================================================== -->
+
+<div class="glossary">
+  <h2>术语表</h2>
+  <dl>
+    <dt>概率密度 (probability density)</dt>
+    <dd>\(F(\vec v)d^3v\) 是分子速度落在 \(d^3v\) 体积里的概率；密度本身有量纲 [速度]\(^{-3}\)。</dd>
+
+    <dt>1D 分量分布 \(f(v_x)\)</dt>
+    <dd>仅看 \(x\) 分量时的概率密度；积掉 \(v_y,v_z\) 得到的边际分布。是高斯。</dd>
+
+    <dt>3D 速度分布 \(F(\vec v)\)</dt>
+    <dd>三个分量联合分布；由 \(f(v_x)f(v_y)f(v_z)\) 给出。</dd>
+
+    <dt>速率分布 \(g(v)\)</dt>
+    <dd>速率（速度的模）的边际分布；从 \(F(\vec v)\) 经球壳积分 \(4\pi v^2\) 得到。</dd>
+
+    <dt>球壳体积 (spherical shell volume)</dt>
+    <dd>\(\vec v\)-空间中半径 \(v\)、厚 \(dv\) 的球壳体积 \(4\pi v^2 dv\)；从笛卡尔积分到径向积分的雅可比。</dd>
+
+    <dt>Gaussian / 正态分布</dt>
+    <dd>\(\propto e^{-x^2/(2\sigma^2)}\) 形式；MB 分布的 1D 分量是 Gaussian。</dd>
+
+    <dt>Feynman trick / differentiation under integral sign</dt>
+    <dd>用对参数求导来计算多项式 × 指数的积分：\(\int x^{2n}e^{-\lambda x^2}dx=(-\partial_\lambda)^n I_0(\lambda)\)。</dd>
+
+    <dt>最可能速率 (most probable speed, \(v_0\))</dt>
+    <dd>\(g(v)\) 取最大值处的速率。\(v_0=\sqrt{2kT/m}\)。</dd>
+
+    <dt>平均速率 (\(\bar v\))</dt>
+    <dd>\(\bar v=\int_0^\infty v\,g(v)\,dv=\sqrt{8kT/(\pi m)}\)。</dd>
+
+    <dt>RMS 速率 (\(v_{\text{rms}}\))</dt>
+    <dd>\(v_{\text{rms}}=\sqrt{\langle v^2\rangle}=\sqrt{3kT/m}\)。</dd>
+
+    <dt>Boltzmann 因子</dt>
+    <dd>\(P(\text{能量 }E)\propto e^{-E/(kT)}\)；统计力学最普遍的关系。MB 是其在动能上的具体化。</dd>
+
+    <dt>Arrhenius 律</dt>
+    <dd>反应速率 \(k(T)=A e^{-E_a/kT}\)，源于 MB 高速尾。</dd>
+
+    <dt>Jeans 逃逸 (Jeans escape)</dt>
+    <dd>MB 高速尾中速率超 \(v_{\text{esc}}\) 的分子逃离行星引力；解释 He、H₂ 等轻气体在地球大气中稀少。</dd>
+
+    <dt>外热层 (exosphere)</dt>
+    <dd>大气最外层，分子稀疏到几乎不互相碰撞，逃逸主要发生于此。地球外热层 \(T\sim 1000\) K。</dd>
+
+    <dt>热 de Broglie 波长 (\(\lambda_T\))</dt>
+    <dd>\(\lambda_T=h/\sqrt{2\pi mkT}\)；分子量子波包的大致尺寸。</dd>
+
+    <dt>经典极限判据</dt>
+    <dd>\(n\lambda_T^3\ll 1\)（分子波包不重叠）。判据失效时 Bose-Einstein/Fermi-Dirac 统计接管。</dd>
+
+    <dt>右偏分布 (right-skewed distribution)</dt>
+    <dd>峰偏左、尾偏右；mode &lt; median &lt; mean。MB 速率分布是典型右偏。</dd>
+
+    <dt>Maxwell 1860 论证</dt>
+    <dd>从各向同性 + 分量独立这两条假设推出速度分布必为高斯；统计力学早期最优雅的对称性论证之一。</dd>
+
+    <dt>Knudsen / 通量积分</dt>
+    <dd>单位时间穿单位面积的分子通量 \(\sim n\bar v/4\)；effusion、surface 反应速率核心量。</dd>
+  </dl>
+</div>
+
+<!-- ======================================================== -->
+
+<nav class="page-nav">
+  <a class="nav-prev" href="09_kinetic_theory.html">动理论</a>
+  <a class="nav-next" href="01_shm.html">SHM</a>
+</nav>
+
+</main>
+
+<script src="interactive.js"></script>
+<script>
+  markCurrentReviewing('10_maxwell_boltzmann.html');
+
+  // -------- Interactive: Maxwell-Boltzmann distribution explorer --------
+  (function() {
+    const setup = setupCanvas('mb-canvas', 600, 320);
+    if (!setup) return;
+    const { ctx, w, h } = setup;
+
+    const k = 1.38e-23;     // Boltzmann constant J/K
+    const amu = 1.66e-27;   // atomic mass unit kg
+
+    // Plot box (canvas pixels)
+    const padL = 55, padR = 20, padT = 20, padB = 40;
+    const plotW = w - padL - padR;
+    const plotH = h - padT - padB;
+
+    function gOfV(v, T, m) {
+      // Maxwell-Boltzmann speed PDF in SI
+      const alpha = m / (2 * k * T);
+      const norm = 4 * Math.PI * Math.pow(m / (2 * Math.PI * k * T), 1.5);
+      return norm * v * v * Math.exp(-alpha * v * v);
+    }
+
+    function characteristicSpeeds(T, m) {
+      return {
+        v0:   Math.sqrt(2 * k * T / m),
+        vbar: Math.sqrt(8 * k * T / (Math.PI * m)),
+        vrms: Math.sqrt(3 * k * T / m),
+      };
+    }
+
+    // Numerical tail fraction P(v > v_esc) by Simpson-ish trapezoidal rule
+    function tailFraction(T, m, vEsc, vMax) {
+      const N = 400;
+      const dv = (vMax - vEsc) / N;
+      if (dv <= 0) return 0;
+      let sum = 0.5 * (gOfV(vEsc, T, m) + gOfV(vMax, T, m));
+      for (let i = 1; i < N; i++) sum += gOfV(vEsc + i * dv, T, m);
+      return sum * dv;
+    }
+
+    let curT = 300, curM_amu = 28, curVesc = 2000;
+
+    function draw() {
+      ctx.clearRect(0, 0, w, h);
+
+      const T = curT;
+      const m = curM_amu * amu;
+      const { v0, vbar, vrms } = characteristicSpeeds(T, m);
+
+      // Choose x range: go to ~3 * vrms
+      const vMax = 3.2 * vrms;
+      const gMax = gOfV(v0, T, m) * 1.05;
+
+      const vToPx = v => padL + (v / vMax) * plotW;
+      const gToPy = g => h - padB - (g / gMax) * plotH;
+
+      // Axes
+      ctx.strokeStyle = '#9ca3af';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(padL, padT);
+      ctx.lineTo(padL, h - padB);
+      ctx.lineTo(w - padR, h - padB);
+      ctx.stroke();
+      ctx.fillStyle = '#374151';
+      ctx.font = "11px -apple-system, sans-serif";
+      ctx.textAlign = 'center';
+      ctx.fillText('v (m/s)', (padL + w - padR) / 2, h - 8);
+      ctx.save();
+      ctx.translate(15, (padT + h - padB) / 2);
+      ctx.rotate(-Math.PI / 2);
+      ctx.fillText('g(v)', 0, 0);
+      ctx.restore();
+
+      // X ticks every 500 m/s, but adaptive
+      let tickStep = 500;
+      if (vMax > 4000) tickStep = 1000;
+      if (vMax > 10000) tickStep = 2000;
+      ctx.fillStyle = '#6b7280';
+      ctx.textAlign = 'center';
+      for (let v = 0; v <= vMax; v += tickStep) {
+        const px = vToPx(v);
+        ctx.beginPath();
+        ctx.moveTo(px, h - padB);
+        ctx.lineTo(px, h - padB + 4);
+        ctx.stroke();
+        ctx.fillText(v.toFixed(0), px, h - padB + 16);
+      }
+
+      // Shaded tail above v_esc
+      if (curVesc > 0 && curVesc < vMax) {
+        ctx.fillStyle = 'rgba(234, 88, 12, 0.25)';
+        ctx.beginPath();
+        ctx.moveTo(vToPx(curVesc), h - padB);
+        const N = 60;
+        for (let i = 0; i <= N; i++) {
+          const v = curVesc + (vMax - curVesc) * i / N;
+          ctx.lineTo(vToPx(v), gToPy(gOfV(v, T, m)));
+        }
+        ctx.lineTo(vToPx(vMax), h - padB);
+        ctx.closePath();
+        ctx.fill();
+      }
+
+      // g(v) curve
+      ctx.strokeStyle = '#0f766e';
+      ctx.lineWidth = 2.5;
+      ctx.beginPath();
+      const N = 250;
+      for (let i = 0; i <= N; i++) {
+        const v = vMax * i / N;
+        const py = gToPy(gOfV(v, T, m));
+        if (i === 0) ctx.moveTo(vToPx(v), py);
+        else ctx.lineTo(vToPx(v), py);
+      }
+      ctx.stroke();
+
+      // Three speed markers
+      function marker(v, label, color) {
+        const px = vToPx(v);
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 1.5;
+        ctx.setLineDash([4, 4]);
+        ctx.beginPath();
+        ctx.moveTo(px, h - padB);
+        ctx.lineTo(px, gToPy(gOfV(v, T, m)));
+        ctx.stroke();
+        ctx.setLineDash([]);
+        ctx.fillStyle = color;
+        ctx.font = "11px -apple-system, sans-serif";
+        ctx.textAlign = 'center';
+        ctx.fillText(label, px, gToPy(gOfV(v, T, m)) - 6);
+      }
+      marker(v0,   'v₀',   '#1e40af');
+      marker(vbar, 'v̄',    '#9333ea');
+      marker(vrms, 'v_rms','#dc2626');
+
+      // v_esc line
+      if (curVesc > 0 && curVesc < vMax) {
+        const px = vToPx(curVesc);
+        ctx.strokeStyle = '#ea580c';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(px, padT);
+        ctx.lineTo(px, h - padB);
+        ctx.stroke();
+        ctx.fillStyle = '#ea580c';
+        ctx.font = "11px -apple-system, sans-serif";
+        ctx.textAlign = 'left';
+        ctx.fillText('v_esc', px + 4, padT + 12);
+      }
+
+      // Readouts
+      document.getElementById('mb-v0').textContent   = v0.toFixed(1)   + ' m/s';
+      document.getElementById('mb-vbar').textContent = vbar.toFixed(1) + ' m/s';
+      document.getElementById('mb-vrms').textContent = vrms.toFixed(1) + ' m/s';
+
+      const tail = (curVesc < vMax) ? tailFraction(T, m, curVesc, vMax) : 0;
+      let tailStr;
+      if (tail === 0) tailStr = '0';
+      else if (tail > 1e-3) tailStr = (tail * 100).toFixed(2) + '%';
+      else tailStr = tail.toExponential(2);
+      document.getElementById('mb-tail').textContent = tailStr;
+    }
+
+    // Controls
+    bindSlider('mb-T', 'mb-T-readout',
+      v => { curT = v; draw(); },
+      v => v.toFixed(0) + ' K'
+    );
+    bindSlider('mb-M', 'mb-M-readout',
+      v => { curM_amu = v; draw(); },
+      v => v.toFixed(0) + ' amu'
+    );
+    bindSlider('mb-vesc', 'mb-vesc-readout',
+      v => { curVesc = v; draw(); },
+      v => v.toFixed(0) + ' m/s'
+    );
+
+    draw();
+  })();
+</script>
+
+</body>
+</html>

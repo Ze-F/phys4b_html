@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>08 · 真实流体 + 热学入门 — PHYS 4B 复习</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="theme.js"></script>
+  <script>
+    MathJax = {
+      tex: { inlineMath: [['\\(', '\\)']], displayMath: [['$$', '$$']] },
+      svg: { fontCache: 'global' }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" async></script>
+</head>
+<body>
+
+<header class="site-header">
+  <a class="home-link" href="index.html">← PHYS 4B 复习</a>
+  <nav>
+    <a href="07_fluid_dynamics.html">← Bernoulli</a>
+    <a href="01_shm.html">SHM →</a>
+  </nav>
+</header>
+
+<main class="container">
+
+<div class="topic-header">
+  <h1>08 · 真实流体 + 热学入门</h1>
+  <p class="meta">Lec 5.3 后段 + Lec 6.1 后段 + Lec 6.2 · Shankar §20.5 + §21.1–21.6 + §22.1–22.2</p>
+  <p class="blurb">前两章假设流体是无黏、不可压缩的"理想流体"——已经能解释很多现象。这一章添回两件事：(1) 黏度、湍流、表面张力等<strong>真实流体效应</strong>；(2) 热学入门——温度、热平衡、Kelvin 标度、比热、潜热、相变，再到 <strong>Fourier 导热定律</strong>与<strong>两体冷却动力学</strong>，最后用<strong>理想气体定律</strong>把宏观温度和微观分子动能挂起来。这些一起构成 Quiz 3 的最后一块拼图。</p>
+</div>
+
+<!-- ======================================================== -->
+
+<div class="box key-result">
+  <p class="box-title">一页速览</p>
+  <ul>
+    <li><strong>黏度</strong>（Newton 流体，双板剪切）：\(F/A=\eta\,du/dy\)。\(\eta_{\text{water}}\approx 10^{-3}\) Pa·s。</li>
+    <li><strong>Poiseuille 圆管流</strong>：\(u(r)=\dfrac{\Delta P}{4\eta L}(a^2-r^2)\)，\(Q=\dfrac{\pi a^4 \Delta P}{8\eta L}\)（注意 \(a^4\) 律）。</li>
+    <li><strong>Reynolds 数</strong>：\(\text{Re}=\rho v L/\eta\)；管流 \(\text{Re}\sim 2000\) 是层流→湍流的转折。</li>
+    <li><strong>表面张力</strong>：能量/面积 = 力/长度，\(\sigma_{\text{water}}\approx 0.072\) N/m；液滴 Laplace 压差 \(\Delta P=2\sigma/R\)。</li>
+    <li><strong>热平衡 + 零定律</strong>：温度是控制热流的标量；\(T_A=T_B\) 且 \(T_B=T_C\) ⇒ \(T_A=T_C\)。</li>
+    <li><strong>热膨胀</strong>：\(\Delta L=\alpha L\Delta T\)，\(\Delta V=\beta V\Delta T\)；各向同性固体 \(\beta=3\alpha\)。</li>
+    <li><strong>三种传热</strong>：辐射（无介质）、对流（介质动）、传导（介质静）。</li>
+    <li><strong>Fourier 导热定律</strong>：\(\dot Q=-kA\Delta T/L\)；\(k_{\text{水/玻璃/铜}}=0.6/0.8/400\) W/(m·K)。</li>
+    <li><strong>两体冷却</strong>：\(\dot{(\Delta T)}=-\alpha\Delta T\)，\(\alpha=\!\left(\tfrac{1}{m_1c_1}+\tfrac{1}{m_2c_2}\right)\!kA/L\)；指数趋近 \(\Delta T(t)=\Delta T(0)e^{-\alpha t}\)。</li>
+    <li><strong>Kelvin 标度 + 理想气体</strong>：\(PV=NkT=nRT\)；\(k=1.38\times 10^{-23}\) J/K；\(T(\text{K})=T(^\circ\text{C})+273.15\)。</li>
+    <li><strong>比热</strong>：\(\Delta Q=mc\Delta T\)；\(c_{\text{water}}=1\) cal/(g·°C) \(=4184\) J/(kg·K)；\(1\) cal \(=4.184\) J。</li>
+    <li><strong>潜热</strong>：\(Q=mL\)；水 \(L_f\approx 80\) kcal/kg，\(L_v\approx 540\) kcal/kg。</li>
+    <li><strong>相变 vs 玻璃态转变</strong>：前者尖锐（潜热、平台）；后者光滑（无潜热）。</li>
+  </ul>
+</div>
+
+<!-- ======================================================== -->
+
+<h2>§1 故事线：把"理想"两个字拿掉</h2>
+
+<p>Bernoulli 章节默默假设了两件事：(1) <strong>无黏</strong>（inviscid，\(\eta=0\)），(2) <strong>不可压缩</strong>（\(B\to\infty\)）。这两个假设在水管不太长、空气不太快、压差不太大时都不错。但只要满足下列任一情景，就需要更细致的描述：</p>
+
+<ul>
+  <li>水管里"沿程压降"——不是宽变窄，而是一直窄、却照样压强一路下降；</li>
+  <li>动脉变窄一点点，血流量几乎砍半（\(a^4\) 律）；</li>
+  <li>水龙头开大一点，水柱由清澈变成湍流哗啦啦响；</li>
+  <li>水黾能在水面上行走，缝衣针能漂浮；</li>
+  <li>滚烫的水"明明"达到 100°C 沸点了，温度却卡在那儿不再升高（潜热）。</li>
+</ul>
+
+<p>本章把这些现象一网打尽。前半（§2–§5）讲真实流体（黏度、湍流、表面张力），后半（§6–§10）讲热学入门。</p>
+
+<!-- ======================================================== -->
+
+<h2>§2 黏度</h2>
+
+<h3>2.1 双板剪切实验</h3>
+
+<p>把一薄层流体夹在两块平行板之间，下板固定，上板以速度 \(v\) 水平拉动，间距 \(d\)。稳态下流体内速度沿厚度方向<strong>线性</strong>分布，从下板的 0 增到上板的 \(v\)。维持上板运动需要的水平拉力满足</p>
+
+<p>$$ \boxed{\;\frac{F}{A}=\eta\,\frac{du}{dy}=\eta\,\frac{v}{d}\;.\;}\tag{2.1}$$</p>
+
+<p>\(\eta\) 是<strong>动力黏度</strong>（dynamic viscosity，单位 Pa·s）。这是 <strong>Newton 流体</strong>的定义——剪切应力正比于速度梯度。常见数值：</p>
+
+<table class="data-table">
+  <thead>
+    <tr><th>流体</th><th>\(\eta\) (Pa·s) at 20°C</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>空气</td><td>\(1.8\times 10^{-5}\)</td></tr>
+    <tr><td>水</td><td>\(1.0\times 10^{-3}\)</td></tr>
+    <tr><td>蜂蜜</td><td>\(\sim 10\)</td></tr>
+    <tr><td>糖浆</td><td>\(\sim 10^2\)</td></tr>
+    <tr><td>沥青</td><td>\(\sim 10^8\)</td></tr>
+  </tbody>
+</table>
+
+<div class="box insight">
+  <p class="box-title">黏度 = 内摩擦</p>
+  <p>分子层面上，相邻流层有不同平均速度时，分子在层间随机扩散会带来动量交换：高速层向低速层"传"动量，低速层向高速层"传"惰性。宏观上看就是层间剪切力。气体的 \(\eta\) 反而<strong>随温度升高</strong>（分子热运动越快，扩散越快）；液体的 \(\eta\) 随温度升高而<em>降低</em>（热运动帮分子摆脱邻居的吸引，像加热的蜂蜜变稀）。这两种相反趋势是气体和液体黏性微观机制不同的体现。</p>
+</div>
+
+<h3>2.2 inviscid vs incompressible 的两个理想化</h3>
+
+<p>这两个限制经常成对出现，但物理意义截然不同：</p>
+
+<table class="formula-table">
+  <tbody>
+    <tr><th>inviscid（无黏）</th>
+        <td>\(\eta=0\)；意味着没有内摩擦、没有耗散；Bernoulli 沿流线严格守恒。</td></tr>
+    <tr><th>incompressible（不可压缩）</th>
+        <td>\(B\to\infty\)；体积不可改变，连续性给 \(\nabla\cdot \vec v=0\)。</td></tr>
+  </tbody>
+</table>
+
+<p>Bernoulli 同时<em>需要</em>这两个假设。真实流体 (\(\eta>0\)) 的修正是 Navier–Stokes 方程；可压缩流的修正在气动力学（飞机、激波）里很关键。</p>
+
+<!-- ======================================================== -->
+
+<h2>§3 圆管层流：Poiseuille 流与 \(a^4\) 律</h2>
+
+<p>把一段长度 \(L\)、半径 \(a\) 的圆管两端施加压差 \(\Delta P\)，让黏性流体（\(\eta\)）稳定流过。求速度剖面与流量。</p>
+
+<h3>3.1 边界条件</h3>
+
+<p>"无滑移" (no-slip) 边界条件：流体在管壁上速度为 0（流体黏在壁上）。这是黏性流体最反直觉的实验事实之一——多薄的水管壁面，水流到那儿都贴着壁。</p>
+
+<h3>3.2 速度剖面（抛物形）</h3>
+
+<p>解 Navier–Stokes 方程（圆柱对称、稳态、轴向流）给出：</p>
+
+<p>$$ \boxed{\;u(r)=\frac{\Delta P}{4\eta L}\,(a^2-r^2)\;.\;}\tag{3.1}$$</p>
+
+<p>抛物形剖面，中心最快、壁面零速。和 Lec 5.3 的旋转水桶自由面"\(y\propto r^2\)"虽然形式相似，但物理来源不同：旋转水桶是离心势能给出的等势面；Poiseuille 是黏性力与压差的平衡解。</p>
+
+<details class="more-detail">
+  <summary>展开：(3.1) 怎么解出来</summary>
+  <p>稳态、轴对称、轴向流。在管内取半径 \(r\) 的同轴薄圆柱（半径 \(r\)、长度 \(L\)）做受力分析：</p>
+  <ul>
+    <li>两端压差推力：\(\Delta P\cdot \pi r^2\)（指向流向）</li>
+    <li>侧壁黏性阻力（来自外层流体）：\(\eta\cdot 2\pi r L\cdot du/dr\)（注意 \(du/dr<0\)）</li>
+  </ul>
+  <p>稳态合力为零：\(\pi r^2\Delta P = -2\pi r L\eta\,du/dr\)。整理：</p>
+  <p>$$ \frac{du}{dr} = -\frac{\Delta P}{2\eta L}\,r. $$</p>
+  <p>积分，配 \(u(a)=0\)：得 (3.1)。</p>
+</details>
+
+<h3>3.3 流量与 \(a^4\) 律</h3>
+
+<p>对剖面积分得体积流率：</p>
+
+<p>$$ Q = \int_0^a u(r)\,2\pi r\,dr
+   = \frac{\pi\Delta P}{2\eta L}\int_0^a (a^2 r - r^3)\,dr
+   = \boxed{\;\frac{\pi a^4 \Delta P}{8\eta L}\;.\;}\tag{3.2}$$</p>
+
+<p><strong>流量正比于半径的四次方</strong>。半径变小一半，流量减为 \(1/16\)；半径减少 10%，流量减少 \(1-0.9^4\approx 35\%\)。这就是动脉硬化为什么如此致命，也是哮喘患者轻微气道收缩就喘不过气的原因。</p>
+
+<div class="box remark">
+  <p class="box-title">对比 Bernoulli/Torricelli</p>
+  <p>无黏 Bernoulli 给的是<strong>沿流线能量守恒</strong>：管子如果一直保持等截面、水平、稳态、无黏，沿管压强应该恒定。而 Poiseuille 描述了<em>因黏性</em>所必须的沿程压降——管子等截面、水平、稳态，但因为黏度，压强一路下降。两者在不同假设下都自洽，但描述的物理不同。</p>
+</div>
+
+<!-- ======================================================== -->
+
+<h2>§4 湍流与 Reynolds 数</h2>
+
+<p>当流速大、管径粗、流体稀（\(\eta\) 小）时，Poiseuille 的优雅层流崩溃，流场变成混沌、时变的<strong>湍流</strong>（turbulence）：到处是涡旋，速度场快速波动，流线无法稳定。</p>
+
+<p>层流→湍流的转折由一个无量纲数控制：</p>
+
+<p>$$ \boxed{\;\text{Re}=\frac{\rho v L}{\eta}\;.\;}\tag{4.1}$$</p>
+
+<p>它是<strong>惯性力 ($\rho v^2$)</strong> 与<strong>黏性力 ($\eta v/L$)</strong> 之比。意义如下：</p>
+
+<ul>
+  <li>\(\text{Re}\ll 1\)：黏性主导。微生物在水里游、油在窄管里渗。完全的 Stokes 流。</li>
+  <li>\(\text{Re}\sim 1\)：过渡。</li>
+  <li>\(\text{Re}\sim 10^3\)：层流仍可能稳定，但临近转折。</li>
+  <li>\(\text{Re}\gtrsim 2000\)（圆管）：层流不稳定，湍流出现。</li>
+  <li>\(\text{Re}\sim 10^6\)：完全湍流（飞机绕流、海洋洋流）。</li>
+</ul>
+
+<div class="box warning">
+  <p class="box-title">湍流区 Bernoulli 不再适用</p>
+  <p>Bernoulli 推导用了"稳态、流线分明"。湍流既不稳态也无清晰流线，所以那条"\(P+\tfrac12\rho v^2+\rho gh=\)const"在湍流区里失效。但<em>时间平均</em>意义下，可以用修正的 Bernoulli + head loss 项做工程分析（Darcy–Weisbach）。</p>
+</div>
+
+<div class="box insight">
+  <p class="box-title">Reynolds 相似律</p>
+  <p>无量纲化的妙处：两个完全不同尺度的实验只要 \(\text{Re}\) 相同，流动模式就相同。这是为什么风洞测小型飞机模型可以预测真飞机性能——只要把模型放大到对应的真实速度时 \(\text{Re}\) 一致。湍流的"普适性"使流体力学有了类似量纲分析的强力工具。</p>
+</div>
+
+<!-- ======================================================== -->
+
+<h2>§5 表面张力</h2>
+
+<p>液体表面像绷紧的弹性膜：要在表面增加一小块面积 \(dA\) 需要做功 \(\sigma\,dA\)，等价于沿表面任一截面方向单位长度上的拉力 \(\sigma\)。</p>
+
+<p>$$ \sigma=\text{能量/面积}=\text{力/长度}, \qquad \sigma_{\text{water}}\approx 0.072 \text{ N/m at 20°C}. $$</p>
+
+<h3>5.1 为什么液滴是球形？</h3>
+
+<p>表面张力使液体倾向<strong>最小表面积</strong>。固定体积下，球面是面积最小的几何形状。所以小水滴、肥皂泡都接近球形。在重力可忽略时（毛细管里、太空中），是严格球形；在地球上小尺度时仍接近球形。</p>
+
+<h3>5.2 浮在水面的硬币：表面张力当"床垫"</h3>
+
+<p>密度比水大的小物体（缝衣针、水黾、小硬币），如果<strong>不破坏水面</strong>地缓缓放上去，可以稳稳浮于水面。表面张力沿水面切线方向作用在物体接触线上；当接触线被向下压成与水平方向夹角 \(\phi\) 时，竖直分量正好支撑重力：</p>
+
+<p>$$ mg = \sigma\cdot p\cdot \sin\phi. $$</p>
+
+<p>其中 \(p\) 是接触线总长度。最大可支撑重量出现在 \(\phi\to 90°\)（水面在接触线处近乎垂直下沉）：</p>
+
+<p>$$ W_{\max} \approx \sigma\cdot p. $$</p>
+
+<p>对一根 25 mm 长的缝衣针：周长 \(\sim 50\) mm（两侧），\(W_{\max}\approx 0.072\cdot 0.05=3.6\) mN \(\approx 0.37\) g 重——刚好够撑住一根普通缝衣针（\(\sim 0.3\) g）。这跟 Archimedes 浮力无关——物体本身比水重，但水面"绷"住了它。</p>
+
+<h3>5.3 Laplace 压差</h3>
+
+<p>球形液滴半径 \(R\)，内部压强比外部高，多出</p>
+
+<p>$$ \boxed{\;\Delta P_{\text{drop}}=\frac{2\sigma}{R}\;.\;}\tag{5.1}$$</p>
+
+<p>对肥皂泡（两个表面）：\(\Delta P_{\text{bubble}}=4\sigma/R\)。</p>
+
+<details class="more-detail">
+  <summary>展开：用力平衡推 (5.1)</summary>
+  <p>把球形液滴沿赤道切一半。上半球受到内部压强向上推力 \(P_{\text{in}}\cdot \pi R^2\)，外部压强向下推力 \(P_{\text{out}}\cdot \pi R^2\)，赤道圆周长 \(2\pi R\) 上的表面张力把上半球向下拉，合力大小 \(\sigma\cdot 2\pi R\)。</p>
+  <p>力平衡：\((P_{\text{in}}-P_{\text{out}})\pi R^2 = 2\pi R\sigma\)。整理得 (5.1)。</p>
+  <p>\(\Delta P\) 与 \(R\) 成反比：<strong>越小的液滴内部压强越高</strong>。这就是为什么用细喷嘴雾化液体需要更大的能量。</p>
+</details>
+
+<div class="box insight">
+  <p class="box-title">为什么云能在天上"飘"？</p>
+  <p>云是大量微米尺度水滴的集合。一个 10 μm 水滴在静止空气中下沉速度仅 \(\sim 1\) cm/s（极小 Reynolds 数下的 Stokes 阻力极强），加上空气湍流的随机抛动，重力沉降被完全压住。表面张力维持小水滴形态稳定，否则它们会立刻合并、变大、然后落下来——那就是雨滴形成的过程。</p>
+</div>
+
+<!-- ======================================================== -->
+
+<h2>§6 温度与热平衡</h2>
+
+<h3>6.1 实验观察</h3>
+
+<p>把两个不同温度的物体（A、B）<strong>用导热壁</strong>挨在一起，等很久——它们的温度都变成同一个值 \(T_{\text{eq}}\)。这是<strong>热平衡</strong>（thermal equilibrium）。</p>
+
+<h3>6.2 热是能量在传递</h3>
+
+<p>等到达平衡的过程中，能量从高温的 A 流向低温的 B。这种因温差驱动的能量流动叫<strong>热</strong>（heat），用符号 \(Q\) 表示，单位是 J（焦耳）或 cal（卡路里）。</p>
+
+<div class="box warning">
+  <p class="box-title">"热" 不是物体里储存的东西</p>
+  <p>这是热学最重要的一个混淆点：<strong>"物体含有多少热"是无意义的说法</strong>。物体含的是<em>内能</em>（internal energy）。"热"这个词专门指<em>过程</em>——能量因温差流动。两个物体到达热平衡后，它们的内能可能不同（取决于质量和比热），但温度相等、之间没有"热"流动。</p>
+</div>
+
+<h3>6.3 两种壁</h3>
+
+<table class="formula-table">
+  <tbody>
+    <tr><th>透热壁 (diathermic)</th>
+        <td>允许热流过；置于其间的两个物体最终达到 \(T_A=T_B\)。理想极限：薄铜板。</td></tr>
+    <tr><th>绝热壁 (adiabatic)</th>
+        <td>完全隔绝热流；两侧温度永远独立。理想极限：理想保温瓶。</td></tr>
+  </tbody>
+</table>
+
+<!-- ======================================================== -->
+
+<h2>§7 零定律：温度作为标签的合法性</h2>
+
+<p><strong>热力学零定律</strong>：若 \(A\) 与 \(B\) 处于热平衡，\(B\) 与 \(C\) 处于热平衡，则 \(A\) 与 \(C\) 也处于热平衡。</p>
+
+<p>$$ T_A=T_B\text{ and }T_B=T_C \;\Longrightarrow\; T_A=T_C. $$</p>
+
+<p>看似 trivial，实际上是定义"温度"这个标量函数所必需的。"传递性"保证了我们可以给每个处于平衡的物体贴一个标签 \(T\)，使两物体平衡当且仅当它们标签相同——温度才能成为一个真正的<strong>状态函数</strong>。</p>
+
+<div class="box insight">
+  <p class="box-title">为什么温度计可以工作</p>
+  <p>正是零定律允许我们用<em>温度计</em>测量温度，而不是直接拿被测物体接触另一个被测物体。让温度计 (B) 先与被测物 (A) 平衡，读 \(T_B\)；再与另一物 (C) 平衡，读 \(T_B'\)。如果两次读数相同，零定律告诉我们 \(T_A=T_C\)，<em>不需要让 A、C 直接接触</em>。这就是温度计的物理基础。</p>
+</div>
+
+<!-- ======================================================== -->
+
+<h2>§8 热膨胀</h2>
+
+<p>大多数物质受热膨胀。线膨胀（一维）和体膨胀（三维）的定义：</p>
+
+<p>$$ \boxed{\;\Delta L = \alpha L\,\Delta T\;,\quad \alpha=\frac{1}{L}\frac{\partial L}{\partial T}\;}\quad\text{(线膨胀系数)} \tag{8.1}$$</p>
+
+<p>$$ \boxed{\;\Delta V = \beta V\,\Delta T\;,\quad \beta=\frac{1}{V}\frac{\partial V}{\partial T}\;}\quad\text{(体膨胀系数)} \tag{8.2}$$</p>
+
+<p>各向同性固体满足 \(\beta\approx 3\alpha\)（对 \(V=L^3\) 求导即得，在 \(\alpha\Delta T\ll 1\) 下成立）。常见数值：金属 \(\alpha\sim 10^{-5}\)/K，水 \(\beta\sim 2\times 10^{-4}\)/K。</p>
+
+<div class="box remark">
+  <p class="box-title">水的反常：4°C 以下 β &lt; 0</p>
+  <p>水从 0°C 加热到 4°C 时<strong>收缩</strong>（\(\beta<0\)），4°C 以上才正常膨胀（\(\beta>0\)）。这是氢键导致的<em>反常</em>。后果：水底层最致密的水温度恰好是 4°C，所以冬天湖面结冰但底部仍有 4°C 液态水，鱼能存活。冰还比液态水密度更小（这也反常，多数物质固态比液态密），所以冰浮于水面、保护下方水体不至于全部冻死。</p>
+</div>
+
+<h3>8.1 水银温度计的工作原理</h3>
+
+<p>把水银装入大底+细管的玻璃容器里（管顶抽真空）。温度升高时大底里的水银体积小幅膨胀（\(\Delta V=\beta V_0 \Delta T\)），细管里水银柱变长得很显著（窄截面积放大体积变化 → 长度变化）。这是把不可见的微小体积变化转化为<strong>可读的</strong>柱长变化的一种巧妙的<em>放大装置</em>。</p>
+
+<!-- ======================================================== -->
+
+<h2>§9 Kelvin 标度与理想气体定律</h2>
+
+<h3>9.1 稀薄气体经验</h3>
+
+<p>取一固定质量的稀薄气体，在不同温度下测 \(PV\)。把 \(PV\) 对 \(T\)（°C）作图，得到一条直线。换不同气体，斜率不同，但所有直线的延长线都<strong>过同一个点</strong>：\(T\approx -273.15\)°C 处 \(PV\to 0\)。</p>
+
+<p>这个共同的"绝对零度"提示我们建立一个<strong>新</strong>温标，从该点开始计数。这就是 Kelvin 标度：</p>
+
+<p>$$ \boxed{\;T(\text{K})=T(^\circ\text{C})+273.15\;.\;}\tag{9.1}$$</p>
+
+<p>0°C ≈ 273.15 K（水冰点），100°C ≈ 373.15 K（水沸点），相差正好 100 K——这是 Celsius 与 Kelvin 同步度的设计。</p>
+
+<h3>9.2 理想气体定律：两种等价写法</h3>
+
+<p>用 Kelvin 写所有稀薄气体共同行为的方程，可以按"摩尔数"或"分子数"两种方式来计：</p>
+
+<p>$$ \boxed{\;PV=nRT\;,\quad R=8.314\text{ J/(mol·K)}\;}\tag{9.2}$$</p>
+
+<p>$$ \boxed{\;PV=NkT\;,\quad k=1.38\times 10^{-23}\text{ J/K}\;}\tag{9.3}$$</p>
+
+<p>这里 \(n\) 是物质的量（mol 数），\(N\) 是<em>分子</em>数（\(N=n N_A\)，\(N_A=6.022\times 10^{23}\) mol\(^{-1}\) 是 Avogadro 数）；\(R\) 与 \(k\) 是同一个普适常量的两种说法：</p>
+
+<p>$$ R = N_A\,k. $$</p>
+
+<p>\(k\)（Boltzmann 常数）和 \(R\) 都是<strong>普适</strong>气体常数——所有稀薄气体共用，与气体种类无关！这就是为什么"绝对零度"对所有气体都是同一个值的深层原因。在统计力学里 \(k\) 比 \(R\) 更基础（它把<em>每个分子</em>的能量与温度联系起来），所以 (9.3) 是物理学家偏爱的形式，(9.2) 是化学家偏爱的形式。</p>
+
+<div class="box insight">
+  <p class="box-title">微观图像：压强从何而来？（下一章预告）</p>
+  <p>稀薄气体里分子相互作用极少，分子之间的<em>种类细节</em>（极性、形状、电子结构）几乎不影响压强——压强本质上来自<strong>分子撞击容器壁的动量传递</strong>。一个分子以速度 \(v_x\) 撞击垂直于 \(x\) 的壁，弹性反弹后给壁的动量为 \(\Delta p=2 m v_x\)；对所有分子和时间求和后给出
+  $$ P = \frac{N}{V}\,m\langle v_x^2\rangle = \frac{1}{3}\frac{N}{V}\,m\langle v^2\rangle. $$
+  对照 (9.3) \(PV=NkT\) 立刻得到
+  $$ \boxed{\;\tfrac{1}{2}m\langle v^2\rangle \;=\; \tfrac{3}{2}\,kT\;,\;} $$
+  把宏观温度和微观平均动能直接联系起来——这正是 \(k\) 的"温度－能量"换算因子身份，是 Ch.22 动理论的入口。</p>
+</div>
+
+<!-- ======================================================== -->
+
+<h2>§10 比热与潜热</h2>
+
+<h3>10.1 比热（specific heat）</h3>
+
+<p>给一个质量 \(m\) 的物体加热 \(\Delta Q\)，温度升高 \(\Delta T\)，三者关系为</p>
+
+<p>$$ \boxed{\;\Delta Q = m c\,\Delta T\;.\;}\tag{10.1}$$</p>
+
+<p>系数 \(c\) 是<strong>比热</strong>（specific heat），单位 J/(kg·K) 或 cal/(g·°C)。水：</p>
+
+<p>$$ c_{\text{water}}=1\,\text{cal/(g·°C)}=4184\,\text{J/(kg·K)}. $$</p>
+
+<p>这是 cal 这个单位的历史定义：1 cal 是把 1 g 水升高 1°C 所需的热。Joule 后来精确测出："1 cal = 4.184 J"，建立了机械功与热的等价关系（mechanical equivalent of heat）。</p>
+
+<h3>10.2 潜热（latent heat）</h3>
+
+<p>把一块冰放在炉子上以恒定功率加热。温度变化的曲线<strong>不</strong>是单调线性的，而是分段的：</p>
+
+<ol>
+  <li>冰升温：从初温到 0°C，斜率由冰的比热决定。</li>
+  <li>冰→水<strong>平台</strong>：温度卡在 0°C，但热仍在持续输入，全部用于<em>断开冰晶氢键</em>。</li>
+  <li>水升温：从 0°C 到 100°C，斜率由水的比热决定。</li>
+  <li>水→蒸气<strong>平台</strong>：温度卡在 100°C，全部热用于<em>把分子从液体里"扯"出来</em>。</li>
+  <li>蒸气升温。</li>
+</ol>
+
+<p>每个相变平台需要的热量：</p>
+
+<p>$$ \boxed{\;Q = m\,L\;.\;}\tag{10.2}$$</p>
+
+<p>水的潜热值（标准大气压）：</p>
+
+<table class="formula-table">
+  <tbody>
+    <tr><th>融化潜热 (latent heat of fusion)</th>
+        <td>\(L_f\approx 80\) kcal/kg \(=334\) kJ/kg（0°C，冰→水）</td></tr>
+    <tr><th>汽化潜热 (latent heat of vaporization)</th>
+        <td>\(L_v\approx 540\) kcal/kg \(=2260\) kJ/kg（100°C，水→蒸气）</td></tr>
+  </tbody>
+</table>
+
+<div class="box insight">
+  <p class="box-title">为什么 \(L_v\gg L_f\)？</p>
+  <p>融化只是松动晶格里的氢键网络，分子还在液体里彼此挤着。汽化则是把分子<em>完全分离</em>到稀薄气体中，每个分子要克服全部氢键的吸引——所需能量大约是融化的 7 倍。日常表现：</p>
+  <ul>
+    <li>蒸发降温极强（汗水蒸发吸 2.4 MJ/kg，远超过同质量水从体温降到冰点能放出的 250 kJ）；</li>
+    <li>水蒸气烫伤比开水烫伤严重（蒸气凝结时把 \(L_v\) 全释放到皮肤上）；</li>
+    <li>压力锅、蒸汽机能量极强（同样原理）。</li>
+  </ul>
+</div>
+
+<h3>10.3 玻璃态转变（glass transition）</h3>
+
+<p>不是所有"凝固"都有平台。<strong>玻璃</strong>（silica、糖浆冷却、塑料、巧克力）在冷却时不结晶：黏度连续地变大、变大，到了某个温度 \(T_g\) 以下黏度高到流动时间尺度比宇宙年龄还长，外观成了"固体"，但<strong>结构上仍是非晶态液体</strong>。\(T\)–时间曲线在 \(T_g\) 处只是<em>斜率轻微变化</em>，没有平台、没有潜热。</p>
+
+<table class="formula-table">
+  <tbody>
+    <tr><th>真相变（first-order）</th>
+        <td>有 \(L\)、有平台、温度卡在 \(T_{\text{trans}}\)；典例：水/冰、水/蒸气</td></tr>
+    <tr><th>玻璃态转变</th>
+        <td>无 \(L\)、无平台，斜率渐变；典例 \(T_g\)：纯石英 \(\sim 1450\) K，普通钠钙窗玻璃 \(\sim 800\) K，PMMA 聚合物 \(\sim 380\) K</td></tr>
+  </tbody>
+</table>
+
+<div class="box warning">
+  <p class="box-title">教堂玻璃下方变厚是流动？错。</p>
+  <p>常见传说："古教堂的彩色玻璃下方比上方厚，是因为玻璃几个世纪以来缓慢流动。" 错。常温下玻璃黏度高达 \(\sim 10^{40}\) Pa·s，几个世纪可流的距离远远小于原子尺寸，根本测不到。下厚上薄是当年制造工艺（crown glass 中心厚边缘薄、装框时把厚的一头朝下放）的结果。<strong>玻璃在常温下确实是固体</strong>，"非晶液体"是结构描述、不是动力学描述。</p>
+</div>
+
+<!-- ======================================================== -->
+
+<h2>§11 热的传递与冷却动力学</h2>
+
+<p>到目前为止我们只说"温差驱动热流"，但没量化"流多快"。Lec 6.2 引入<strong>Fourier 导热定律</strong>，把热流率写成温差和材料/几何参数的显式函数；再把它代回比热公式，可以解析地求出两个物体相互导热时<em>温度如何随时间演化</em>。</p>
+
+<h3>11.1 三种传热机制</h3>
+
+<p>热从高温体到低温体可以走三条<em>物理上完全不同</em>的路径：</p>
+
+<table class="formula-table">
+  <tbody>
+    <tr><th>辐射 (radiation)</th>
+        <td>不需要介质——靠热电磁波（红外）传播；可以穿越真空（太阳能、暖炉的热感）。功率 \(\propto T^4\)（Stefan–Boltzmann）。</td></tr>
+    <tr><th>对流 (convection)</th>
+        <td>需要介质，且<strong>介质本身整体运动</strong>。热的流体上升、冷的下沉（自然对流），或被泵推动（强制对流）。本质是<em>带温度的物质</em>在搬运能量。</td></tr>
+    <tr><th>传导 (conduction)</th>
+        <td>需要介质，但<strong>介质静止</strong>。能量通过分子碰撞、晶格振动（声子）或自由电子在静止介质里"扩散"。本节的主题。</td></tr>
+  </tbody>
+</table>
+
+<h3>11.2 Fourier 定律（slab 几何）</h3>
+
+<p>把两个温度恒定的大热库（\(T_1>T_2\)）用一段长度 \(L\)、横截面积 \(A\) 的均匀棒/板连接，定义 \(\Delta T=T_1-T_2>0\)。稳态下从热库 1（热端）经棒流向热库 2（冷端）的热流率是</p>
+
+<p>$$ \boxed{\;\frac{dQ}{dt}=-\,\frac{kA}{L}\,\Delta T\;}\tag{11.1}$$</p>
+
+<p>这里 \(dQ/dt\) 指<em>热库 1 每单位时间损失的热</em>（热从热端"出去"）。常数 \(k\) 叫<strong>热导率</strong>（thermal conductivity，单位 W/(m·K)），是材料的本构性质。</p>
+
+<details class="more-detail">
+  <summary>为什么是负号？以及与微分形式 \(\vec j_Q=-k\vec\nabla T\) 的关系</summary>
+  <p>(11.1) 实际上是一维稳态下、对截面积分 \(\int_A \vec j_Q\cdot \hat n\,dA\) 的结果。Fourier 定律的本地形式 \(\vec j_Q=-k\,\vec\nabla T\) 说"热流密度沿温度梯度的反方向"——从高温区流向低温区。在 slab 里 \(\vec\nabla T = (T_2-T_1)/L\,\hat x\)（沿 \(\hat x\) 从热端到冷端为负），所以 \(\vec j_Q=+k\Delta T/L\,\hat x\)，乘以面积得到流过截面的总功率为 \(+kA\Delta T/L\)。这是<em>流入冷端</em>的功率，等价于 \(-dQ_1/dt\)（热端损失），所以 \(dQ_1/dt=-kA\Delta T/L\)，即 (11.1)。</p>
+</details>
+
+<h3>11.3 材料的 \(k\) 值</h3>
+
+<table class="data-table">
+  <thead>
+    <tr><th>材料</th><th>\(k\) [W/(m·K)]</th><th>注</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>水</td><td>0.6</td><td>差导体——靠对流而非传导加热</td></tr>
+    <tr><td>玻璃</td><td>0.8</td><td>与水接近；优良绝热体</td></tr>
+    <tr><td>铜</td><td>400</td><td>~700 倍水；电子导热极快</td></tr>
+  </tbody>
+</table>
+
+<div class="box insight">
+  <p class="box-title">为什么金属导热远超非金属？</p>
+  <p>差距三个数量级，源头是<em>能量载流子</em>不同。金属里有简并的<strong>导带电子</strong>（Fermi 气体），既载电、又载热——它们运动快、散射弱，所以电导和热导都极高（这就是著名的 Wiedemann–Franz 定律 \(k/(\sigma T)=\)常数）。水、玻璃这种非金属里没有自由电子，只能靠<strong>声子</strong>（分子振动模式）搬热，声子散射强，所以 \(k\) 小得多。日常体验：同温度下金属把手"摸起来比木头冷"——它在<em>飞速</em>从你手心抽热。</p>
+</div>
+
+<h3>11.4 两体冷却：耦合 ODE</h3>
+
+<p>把 (11.1) 与比热公式 \(Q=mc\Delta T\) 联立，可以求两个物体相互导热时温度<em>随时间</em>的演化。设两物体质量、比热分别为 \(m_1,c_1\) 和 \(m_2,c_2\)，初温 \(T_1(0)\ne T_2(0)\)，仅通过一段导热棒（参数 \(k,A,L\)）连接，外界绝热。</p>
+
+<p>瞬时热流率（从 1 到 2）由 Fourier 定律给出：</p>
+
+<p>$$ \dot Q = \frac{kA}{L}\bigl(T_1-T_2\bigr). \tag{11.2}$$</p>
+
+<p>对每个物体应用第一定律 \(\Delta Q=mc\Delta T\)：</p>
+
+<p>$$ m_1c_1\frac{dT_1}{dt}=-\dot Q,\qquad m_2c_2\frac{dT_2}{dt}=+\dot Q. \tag{11.3}$$</p>
+
+<p>定义 \(\Delta T(t)=T_1(t)-T_2(t)\)。把 (11.3) 两式相减、再代入 (11.2)：</p>
+
+<p>$$ \boxed{\;\frac{d(\Delta T)}{dt}=-\!\left(\frac{1}{m_1c_1}+\frac{1}{m_2c_2}\right)\!\frac{kA}{L}\,\Delta T \;\equiv\; -\alpha\,\Delta T\;,\;}\tag{11.4}$$</p>
+
+<p>其中</p>
+
+<p>$$ \alpha\;\equiv\;\left(\frac{1}{m_1c_1}+\frac{1}{m_2c_2}\right)\!\frac{kA}{L},\qquad [\alpha]=\text{s}^{-1}. \tag{11.5}$$</p>
+
+<div class="box warning">
+  <p class="box-title">\(\alpha\) 不是"热容"</p>
+  <p>课堂手写笔记把 \(\alpha\) 标作"heat capacity"，这是用语上的不严谨。<strong>热容</strong>本身是 \(C_i=m_ic_i\)（单位 J/K），描述"加多少热升 1 K"。\(\alpha\) 是<em>逆弛豫时间</em>（s\(^{-1}\)），由两个热容<strong>和</strong>导热几何因子 \(kA/L\) 共同决定。\(1/(m_1c_1)+1/(m_2c_2)\) 是两个热容的"调和并联"：<em>较小的那个热库主导响应</em>——把 1 g 冰扔进 1 kg 水里，冰升温/融化几乎瞬间，水温变化几乎察觉不到。</p>
+</div>
+
+<h3>11.5 指数趋近平衡 + 终态温度</h3>
+
+<p>方程 (11.4) 是常系数一阶线性 ODE，解为</p>
+
+<p>$$ \boxed{\;\Delta T(t)=\bigl(T_1(0)-T_2(0)\bigr)\,e^{-\alpha t}\;.\;}\tag{11.6}$$</p>
+
+<p>温度<em>差</em>以时间常数 \(\tau=1/\alpha\) 指数衰减。两物体最终趋于共同温度 \(T_\infty\)，由总能量守恒（\(m_1c_1\dot T_1+m_2c_2\dot T_2=0\)）确定：</p>
+
+<p>$$ \boxed{\;T_\infty=\frac{m_1c_1\,T_1(0)+m_2c_2\,T_2(0)}{m_1c_1+m_2c_2}\;.\;}\tag{11.7}$$</p>
+
+<div class="box insight">
+  <p class="box-title">热的 RC 类比</p>
+  <p>(11.6) 与 RC 电路放电方程 \(V(t)=V(0)e^{-t/RC}\) 完全同构：</p>
+  <table class="formula-table">
+    <tbody>
+      <tr><th>电学</th><th>热学</th></tr>
+      <tr><td>电压差 \(V\)</td><td>温度差 \(\Delta T\)</td></tr>
+      <tr><td>电导 \(1/R\)</td><td>热导 \(kA/L\)（"热阻" \(R_{\text{th}}\equiv L/(kA)\)）</td></tr>
+      <tr><td>电容 \(C\)</td><td>热容 \(m_i c_i\)</td></tr>
+      <tr><td>串联电容 \(C_1,C_2\)</td><td>调和并联 \(1/(m_1c_1)+1/(m_2c_2)\)</td></tr>
+    </tbody>
+  </table>
+  <p>这种类比让电子工程师用同一套 RC 网络求解器算散热片动力学；房屋保温设计也用"热阻 R-value"的概念。</p>
+</div>
+
+<div class="box remark">
+  <p class="box-title">"集中参数"假设的边界</p>
+  <p>(11.6) 假设：(1) 棒本身的热容可忽略；(2) 两个物体内部温度<strong>均匀</strong>（瞬间内部平衡）。如果物体本身有非平凡的内部温度梯度，就需要解全本的<strong>热扩散方程</strong>
+  $$ \frac{\partial T}{\partial t}=D\,\nabla^2 T,\qquad D=\frac{k}{\rho c}, $$
+  其趋平衡是<em>扩散性</em>的（弛豫时间正比于 \(L^2\)），不再是简单的指数。Lec 6.2 的两体模型对应于"集中参数"极限。</p>
+</div>
+
+<!-- ======================================================== -->
+
+<h2>§12 Worked Examples</h2>
+
+<div class="example">
+  <h4>Example：把 100 g 冰加热到水蒸气需要多少热？</h4>
+  <p class="source">改编自 Shankar Ch.21 problem set</p>
+  <p>从 \(T_0=-10\)°C 的冰开始，加热到 100°C 的水蒸气全部完成相变。\(c_{\text{ice}}=2.10\) kJ/(kg·K)，\(c_{\text{water}}=4.18\) kJ/(kg·K)，\(L_f=334\) kJ/kg，\(L_v=2260\) kJ/kg。</p>
+
+  <div class="solution-step"><strong>分四个阶段</strong>：</div>
+
+  <div class="solution-step">(1) 冰升温 \(-10\to 0\)°C：
+    $$ Q_1 = m c_{\text{ice}}\Delta T = 0.10\times 2.10\times 10 = 2.10\text{ kJ}. $$
+  </div>
+
+  <div class="solution-step">(2) 冰融化（潜热 \(L_f\)）：
+    $$ Q_2 = m L_f = 0.10\times 334 = 33.4\text{ kJ}. $$
+  </div>
+
+  <div class="solution-step">(3) 水升温 \(0\to 100\)°C：
+    $$ Q_3 = m c_{\text{water}}\Delta T = 0.10\times 4.18\times 100 = 41.8\text{ kJ}. $$
+  </div>
+
+  <div class="solution-step">(4) 水汽化（潜热 \(L_v\)）：
+    $$ Q_4 = m L_v = 0.10\times 2260 = 226\text{ kJ}. $$
+  </div>
+
+  <div class="solution-step"><strong>总热</strong>：
+    $$ Q_{\text{total}} = 2.10+33.4+41.8+226 \approx 303\text{ kJ}. $$
+    其中汽化阶段一项就占 75% 左右——这是为什么把水"烧干"特别费时间，"烧开"反而很快。
+  </div>
+</div>
+
+<div class="example">
+  <h4>Problem：温水冲冰块的最终温度</h4>
+  <p class="source">改编自 OpenStax 14 / Shankar Ch.21</p>
+  <p>把一块 \(m_{\text{ice}}=50\) g、温度 \(-5\)°C 的冰放进 \(m_w=200\) g、温度 \(20\)°C 的水里，绝热容器。求最终温度 \(T_f\)。</p>
+
+  <div class="solution-step"><strong>判断终态</strong>。先估算：要把冰升温到 0°C 再融化，需要多少能量？水降到 0°C 又能释放多少？比较两者。</div>
+
+  <div class="solution-step"><strong>冰侧吸热（升温到 0°C 再融化）</strong>：
+    $$ Q_{\text{ice→0+水}} = m_{\text{ice}}c_{\text{ice}}\cdot 5 + m_{\text{ice}}L_f
+    = 0.05\cdot 2100\cdot 5 + 0.05\cdot 334000
+    = 525 + 16700 = 17225\text{ J}. $$
+  </div>
+
+  <div class="solution-step"><strong>水侧最大可放热（降到 0°C）</strong>：
+    $$ Q_{\text{water→0}} = m_w c_w \cdot 20 = 0.20\cdot 4184\cdot 20 = 16736\text{ J}. $$
+    比冰需要的 17225 J <em>小</em>——所以冰<strong>没全部融化</strong>，最终温度 = 0°C，部分冰仍然存在。
+  </div>
+
+  <div class="solution-step"><strong>算融化的冰的质量</strong>。设 \(m'\) 克冰融化。能量守恒：水放 \(16736\) J 全部用于(1) 把冰升温到 0°C 再(2) 融化 \(m'\) 克：
+    $$ 16736 = 525 + m' L_f
+    \;\Longrightarrow\;
+    m' = \frac{16211}{334000}\approx 0.0485\text{ kg} = 48.5\text{ g}. $$
+    冰融化了 48.5 g，剩下 1.5 g。</div>
+
+  <div class="solution-step"><strong>最终态</strong>：\(T_f=0\)°C，水量 \(200+48.5=248.5\) g，剩 1.5 g 冰共存。</div>
+</div>
+
+<div class="example">
+  <h4>Problem (★ harder)：毛细管上升</h4>
+  <p class="source">改编自 OpenStax 14.7 / Shankar Ch.20</p>
+  <p>一根内半径 \(r=0.10\) mm 的玻璃毛细管竖直插入水中。水会自动在管内上升一段高度 \(h\)。求 \(h\)。已知 \(\sigma_{\text{water}}=0.072\) N/m，水完全润湿玻璃（接触角 \(\theta=0\)）。</p>
+
+  <div class="solution-step"><strong>受力分析</strong>：管内水柱受 (1) 表面张力沿水面边缘把水向上拉、(2) 重力把水柱向下拉。平衡时上升停止。</div>
+
+  <div class="solution-step"><strong>表面张力的合力（向上）</strong>。水面与管壁接触线总长 = 周长 \(2\pi r\)。每单位长度的张力 \(\sigma\)，方向沿水面切线，与玻璃壁夹接触角 \(\theta\)。竖直分量：
+    $$ F_\sigma=2\pi r\,\sigma\,\cos\theta. $$
+  </div>
+
+  <div class="solution-step"><strong>重力（向下）</strong>。水柱体积 \(\pi r^2 h\)，质量 \(\rho\pi r^2 h\)：
+    $$ F_g=\pi r^2 h\,\rho g. $$
+  </div>
+
+  <div class="solution-step"><strong>平衡 \(F_\sigma=F_g\)</strong>：
+    $$ 2\pi r\sigma\cos\theta=\pi r^2 h\rho g
+       \;\Longrightarrow\;
+       \boxed{\;h=\frac{2\sigma\cos\theta}{\rho g r}\;.\;} $$
+    代入 \(r=10^{-4}\) m, \(\theta=0\)：
+    $$ h=\frac{2\cdot 0.072}{10^3\cdot 9.8\cdot 10^{-4}}\approx 0.147\text{ m}=14.7\text{ cm}. $$
+  </div>
+
+  <div class="solution-step"><strong>极限分析</strong>：
+    <ul>
+      <li>\(h\propto 1/r\)：管越细，水越高。\(r=1\) μm 给 \(h\sim 14\) m。</li>
+      <li>\(\theta\to 90°\)：\(\cos\theta\to 0\)，水不上升（玻璃-水变成中性接触）。</li>
+      <li>\(\theta>90°\)（如水银-玻璃 \(\theta\approx 140°\)）：\(\cos\theta<0\)，水银在毛细管里反而<em>下降</em>。这是为什么水银温度计、水银气压计能正常读数的原因。</li>
+    </ul>
+  </div>
+
+  <div class="solution-step"><strong>能否解释红杉的水分输送？</strong>红杉高 \(\sim 115\) m。完全靠毛细要求 \(r\approx 0.13\) μm — 比真实树木导管（\(r\sim 10\) μm）小两个量级。所以毛细只贡献了一小部分。真正的机理是<strong>蒸腾拉力</strong> (transpiration pull)：叶片蒸发使水柱处于<em>负压</em>状态（张力），整柱水被"绷"上去；只要不发生 cavitation 就能稳定工作。这是植物生理学最美的物理之一。</div>
+</div>
+
+<div class="example">
+  <h4>Problem (★★ challenge)：蒸气 + 水 + 冰 三体混合</h4>
+  <p class="source">改编自 Shankar Ch.21 problem set / OpenStax 14.5</p>
+  <p>绝热容器里同时装入 50 g 水蒸气（100°C）、200 g 水（20°C）、100 g 冰（−10°C）。三者立即接触并达到热平衡。求最终的温度与各相质量。
+    \(c_{\text{water}}=1\) cal/(g·°C)，\(c_{\text{ice}}\approx 0.5\) cal/(g·°C)，\(L_f=80\) kcal/kg，\(L_v=540\) kcal/kg。</p>
+
+  <div class="solution-step"><strong>策略</strong>：用<strong>能量预算法</strong>。先估算"放热侧最多放多少"和"吸热侧最少需要多少"，判断终态形态；再列能量守恒方程定量求解。</div>
+
+  <div class="solution-step"><strong>放热侧最大值</strong>：
+    <ul>
+      <li>蒸气：先凝结放 \(m_s L_v=50\cdot 540=27000\) cal；再降温 100→0°C 放 \(50\cdot 1\cdot 100=5000\) cal。合计 \(Q_{\text{steam,max}}=32000\) cal。</li>
+      <li>水：降温 20→0°C 放 \(Q_{\text{water,max}}=200\cdot 1\cdot 20=4000\) cal。</li>
+      <li>合计可放：\(36000\) cal。</li>
+    </ul>
+  </div>
+
+  <div class="solution-step"><strong>吸热侧最小值（冰升温到 0°C 再融化）</strong>：
+    $$ Q_{\text{ice,need}}=100\cdot 0.5\cdot 10+100\cdot 80=500+8000=8500\text{ cal}. $$
+    36000 ≫ 8500 — 冰<strong>必然全部融化</strong>，且仍剩大量能量把水温推到 0°C 之上。
+  </div>
+
+  <div class="solution-step"><strong>假设终态全为水，温度 \(T_f\)</strong>。以"水 at 0°C"为能量参考点：
+    <ul>
+      <li>蒸气初态：\(50\cdot(540+1\cdot 100)=32000\) cal</li>
+      <li>水初态：\(200\cdot 20=4000\) cal</li>
+      <li>冰初态：\(-(100\cdot 80+100\cdot 0.5\cdot 10)=-8500\) cal</li>
+    </ul>
+    总初能 \(=27500\) cal（高于参考点）。
+  </div>
+
+  <div class="solution-step"><strong>终态：350 g 水 at \(T_f\)</strong>，能量 \(=350\cdot T_f\) cal。能量守恒：
+    $$ 350\,T_f=27500\;\Longrightarrow\;T_f\approx 78.6\text{ °C}. $$
+    \(0<T_f<100\)°C ✓ 自洽（如果算出 \(T_f<0\) 或 \(>100\)，说明终态包含冰或蒸气，需要另列方程）。
+  </div>
+
+  <div class="solution-step"><strong>最终态</strong>：\(\boxed{\;\)350 g 水 at \(\approx 78.6\) °C，无冰、无蒸气\(\;}\)。</div>
+
+  <div class="solution-step"><strong>核查与变体</strong>：
+    <ul>
+      <li>蒸气贡献了大头（32000 cal 中的 27000 来自 \(L_v\)），凸显汽化潜热的巨大能量。</li>
+      <li>如果冰量加倍（200 g），需要 17000 cal，仍小于 36000，但终态会更接近 0°C。</li>
+      <li>如果冰量再加大，可能终态停在 0°C 平台（冰、水共存）——这时 \(T_f=0\)，未知量改为"剩余冰质量"。</li>
+      <li>这种"估算-假设-求解-验证"的流程是热学多相题的标准套路。</li>
+    </ul>
+  </div>
+</div>
+
+<div class="example">
+  <h4>Problem (★ harder)：两杯水通过铜棒连接的弛豫时间</h4>
+  <p class="source">Lec 6.2 应用 / 改编自经典电导-热导类比题</p>
+  <p>两个绝热容器各装 \(m_1=m_2=200\) g 水，初温分别 \(T_1(0)=80\)°C 和 \(T_2(0)=20\)°C，仅由一根铜棒（\(k=400\) W/(m·K)，长度 \(L=20\) cm，截面积 \(A=1\) cm\(^2\)）连接。
+  (a) 求温差衰减的时间常数 \(\tau=1/\alpha\)。 (b) 经过多久温差降到初值的 \(1/e\)？降到 1°C？ (c) 终态温度是多少？\(c_w=4184\) J/(kg·K)。</p>
+
+  <div class="solution-step"><strong>(a) 计算 \(\alpha\)</strong>。代入 (11.5)：
+    $$ \alpha=\left(\frac{1}{m_1 c_1}+\frac{1}{m_2 c_2}\right)\frac{kA}{L}
+    =2\cdot\frac{1}{0.2\cdot 4184}\cdot\frac{400\cdot 10^{-4}}{0.20}
+    \approx 1.20\times 10^{-3}\text{ s}^{-1}. $$
+    所以 \(\tau=1/\alpha\approx 836\) s \(\approx 14\) 分钟。
+  </div>
+
+  <div class="solution-step"><strong>(b) 衰减到 \(1/e\) 与 1°C</strong>。由 (11.6) \(\Delta T(t)=60\,e^{-\alpha t}\)：
+    <ul>
+      <li>降到 \(1/e\)：\(t=\tau\approx 14\) 分钟，此时 \(\Delta T\approx 22\)°C。</li>
+      <li>降到 1°C：\(60\,e^{-\alpha t}=1 \Rightarrow t=\ln(60)/\alpha\approx 4.1\tau\approx 57\) 分钟。</li>
+    </ul>
+  </div>
+
+  <div class="solution-step"><strong>(c) 终态</strong>。由 (11.7) 且 \(m_1 c_1=m_2 c_2\)：
+    $$ T_\infty=\tfrac{1}{2}(T_1(0)+T_2(0))=50\text{ °C}. $$
+  </div>
+
+  <div class="solution-step"><strong>核查与极限</strong>：
+    <ul>
+      <li><em>把铜换成玻璃</em>（\(k\) 缩 500 倍）：\(\tau\) 变 \(\sim 7\times 10^5\) s \(\approx 8\) 天——同一容器组配玻璃棒几乎不会平衡。</li>
+      <li><em>把水量加倍</em>（\(m\) 翻倍）：\(\tau\) 也加倍——更大的"热容电容"放电更慢。</li>
+      <li><em>把铜棒拉长一倍</em>（\(L\) 翻倍）：\(\tau\) 加倍。把铜棒加粗一倍（\(A\) 翻倍）：\(\tau\) 减半。这些都是 \(R_{\text{th}}=L/(kA)\) 的直接预言。</li>
+      <li>实验中真实热弛豫还会附带<em>对流</em>（容器内的水会自然对流加快传热）和<em>外部漏热</em>，所以这种纯传导模型给出的 \(\tau\) 通常是上限。</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ======================================================== -->
+
+<h2>§13 Self-check</h2>
+
+<div class="self-check">
+  <p class="question">Q1. 同样的水管、同样的水、同样的压差，如果把水替换成黏度 100 倍的甘油，流量降多少？</p>
+  <details>
+    <summary>查看答案</summary>
+    <p>由 (3.2)：\(Q\propto 1/\eta\)（其他都一样）。所以流量降为 \(1/100\)。这是为什么糖浆从瓶里倒出比水慢得多——半径 \(a\)、压差 \(\rho g H\)、长度 \(L\) 都一样，只是 \(\eta\) 大了几个量级。</p>
+  </details>
+</div>
+
+<div class="self-check">
+  <p class="question">Q2. 一种血管半径减少了 20%（动脉硬化），其他不变，血流量变成原来的多少？</p>
+  <details>
+    <summary>查看答案</summary>
+    <p>\(Q\propto a^4\)。新流量 \((0.8)^4=0.41\)。<strong>流量只剩 41%</strong>——半径减少 20% 听起来不算多，但流量损失近 60%。这是为什么医生对动脉狭窄如此敏感。</p>
+  </details>
+</div>
+
+<div class="self-check">
+  <p class="question">Q3. 一锅水加热到正好 100°C 后继续加热——温度还会升高吗？为什么？</p>
+  <details>
+    <summary>查看答案</summary>
+    <p>不会（在 1 atm 下）。继续加的热全部用于把水变成水蒸气（潜热 \(L_v\)），温度卡在 100°C 直到水<strong>全部</strong>沸腾完毕。等水都变蒸气了，再加热才能让蒸气温度继续升高。这正是相变平台的物理意义：能量"藏"进了相变内能里，没用来提温。</p>
+  </details>
+</div>
+
+<div class="self-check">
+  <p class="question">Q4. 给铜锅装满水加热，金属把手反而比锅身先烫手。为什么？</p>
+  <details>
+    <summary>查看答案</summary>
+    <p>因为金属比热远小于水（铜 \(c\sim 0.39\) kJ/(kg·K) vs 水 4.18 kJ/(kg·K)）。锅身底部接受到的热被分成两份：传给金属壁、传给水。同样的能量加到金属上 \(\Delta T\) 大得多（\(\Delta T=Q/(mc)\)，\(c\) 小则 \(\Delta T\) 大）。把手与水隔绝、且铜导热极好，所以从锅底传到把手很快，温度很快爬高；而锅里的水有大热容量，温度上升慢。</p>
+  </details>
+</div>
+
+<div class="self-check">
+  <p class="question">Q5. 海洋为什么能"调节"沿海城市的气候，让冬天不像内陆那么冷、夏天不像内陆那么热？</p>
+  <details>
+    <summary>查看答案</summary>
+    <p>水的比热极大（4184 J/(kg·K)）——同样太阳辐射，海面温度变化远小于陆面。冬天海水降温慢，把热释放给沿海空气；夏天海水升温慢，吸收沿海空气热量。这就是<strong>海洋热惯性</strong>。再加上海水的<em>潜热缓冲</em>：海水蒸发带走大量热（每蒸发 1 kg 吸 \(L_v\sim 2260\) kJ），凝结回来又释放——构成了地球气候系统最重要的稳定剂之一。同样的逻辑：暖流（如墨西哥湾流）能把热从赤道送到欧洲，让伦敦比同纬度的加拿大暖好几度。</p>
+  </details>
+</div>
+
+<div class="self-check">
+  <p class="question">Q6. 你把一颗钢针小心翼翼放到水面上，针居然漂浮。再用洗洁精滴几滴到水里，针沉了。为什么？</p>
+  <details>
+    <summary>查看答案</summary>
+    <p>钢的密度（7.8 × 10³ kg/m³）远大于水，<em>不是浮力</em>支撑它，而是<strong>表面张力</strong>。针的重量被针下方水面"绷"出的弯曲张力垂直分量平衡（缝衣针周长大、重量分散，恰能撑住）。洗洁精是表面活性剂（surfactant）——它的分子聚集在水面上，<em>大幅</em>降低 \(\sigma\)（从 0.072 N/m 降到 0.030 N/m 左右）。一旦 \(\sigma\) 不够，表面张力撑不住针的重量，针就沉了。</p>
+  </details>
+</div>
+
+<div class="self-check">
+  <p class="question">Q7. 双层玻璃窗（中间夹一层薄空气）比同样厚度的单层玻璃保温好得多。为什么？空气的 \(k\) 仅是玻璃的 1/30 左右——但这个比例似乎不足以解释"好得多"。还有什么物理在发挥作用？</p>
+  <details>
+    <summary>查看答案</summary>
+    <p>两点。(1) Fourier 定律 \(\dot Q\propto k/L\)：把空气夹层算成"等效导热"已经能给出几倍改进。但更关键的 (2) 是<strong>压制了对流</strong>：单层玻璃外侧贴着室外空气是开放空间，自然对流极强（\(h\sim 10\) W/(m²·K)）；夹层窗内的空气被锁在 1–2 cm 的窄缝里、Rayleigh 数低于对流阈值，只能纯导热——这才是"等效热阻"暴涨的主因。还有 (3) 抑制了<strong>红外辐射</strong>：高级 Low-E 玻璃在内表面镀红外反射膜，把第三种传热方式也压住。所以好的双层窗同时砍掉了 conduction (低 \(k\) 空气)、convection (薄夹层) 与 radiation (Low-E 涂层) 三条通道。</p>
+  </details>
+</div>
+
+<div class="self-check">
+  <p class="question">Q8. 一杯热咖啡和一杯凉牛奶通过咖啡杯壁慢慢平衡。如果牛奶量是咖啡的 10 倍但比热相同，平衡温度更接近热的还是凉的？时间常数 \(\tau\) 由谁决定？</p>
+  <details>
+    <summary>查看答案</summary>
+    <p>由 (11.7)：\(T_\infty=(m_1 c\, T_1+10 m_1 c\, T_2)/(11 m_1 c)\)，明显<em>偏向牛奶</em>（凉端）——大热容方主导终态。<br>
+    时间常数：\(\alpha\propto 1/(m_1 c)+1/(10 m_1 c)=(1.1)/(m_1 c)\)。第一项 \(1/(m_1 c)\) 占绝对主导（贡献 \(\approx 91\%\)）——所以 \(\tau\) 几乎完全由<strong>较小</strong>的咖啡热容决定。物理直觉：小热容这边温度变化快，是它"赶上"对面的大热容；大热容那边几乎不动。这是"调和并联"中较小项主导的标志。</p>
+  </details>
+</div>
+
+<div class="self-check">
+  <p class="question">Q9. 同温下，0.1 mol 的氦气和 0.1 mol 的氮气放进体积相同的容器里，压强相等吗？分子的平均速率呢？平均动能呢？</p>
+  <details>
+    <summary>查看答案</summary>
+    <p>由 (9.2) \(PV=nRT\)：相同的 \(n\)、\(V\)、\(T\) 给出相同的 \(P\)。<strong>压强相等</strong>，与气体种类无关。<br>
+    平均动能：由 \(\tfrac12 m\langle v^2\rangle=\tfrac32 kT\)，仅取决于 \(T\)——<strong>两种气体平均动能相同</strong>。<br>
+    平均速率：因 He（\(m\approx 4\) u）比 N\(_2\)（\(m\approx 28\) u）轻 7 倍，由 \(\langle v^2\rangle=3kT/m\) 得 \(\langle v^2\rangle_{\text{He}}=7\langle v^2\rangle_{\text{N}_2}\)，速率比 \(\sqrt{7}\approx 2.6\)：<strong>氦气分子跑得快得多</strong>。这就是为什么氦比空气更容易扩散逃出气球，也是为什么吸氦气说话音调升高（\(v_{\text{sound}}\propto\sqrt{T/m}\)，与平均分子速率同 scaling）。</p>
+  </details>
+</div>
+
+<!-- ======================================================== -->
+
+<h2>§14 公式速查表</h2>
+
+<table class="formula-table">
+  <tbody>
+    <tr><th>Newton 黏度定义</th>
+        <td>\(F/A=\eta\,du/dy\)；\(\eta_{\text{water}}\approx 10^{-3}\) Pa·s</td></tr>
+    <tr><th>无黏 vs 不可压缩</th>
+        <td>\(\eta=0\) (inviscid) vs \(B\to\infty\) (incompressible) — Bernoulli 同时需要</td></tr>
+    <tr><th>Poiseuille 速度剖面</th>
+        <td>\(u(r)=\dfrac{\Delta P}{4\eta L}(a^2-r^2)\)，抛物形</td></tr>
+    <tr><th>Poiseuille 流量（\(a^4\) 律）</th>
+        <td>\(Q=\dfrac{\pi a^4\Delta P}{8\eta L}\)</td></tr>
+    <tr><th>Reynolds 数</th>
+        <td>\(\text{Re}=\rho v L/\eta\)；管流转折 \(\sim 2000\)</td></tr>
+    <tr><th>表面张力</th>
+        <td>\(\sigma=\)能量/面积 = 力/长度；\(\sigma_{\text{water}}\approx 0.072\) N/m</td></tr>
+    <tr><th>Laplace 压差</th>
+        <td>液滴：\(2\sigma/R\)；肥皂泡：\(4\sigma/R\)</td></tr>
+    <tr><th>热平衡</th>
+        <td>导热壁两侧最终 \(T\) 相同；绝热壁两侧温度独立</td></tr>
+    <tr><th>零定律</th>
+        <td>\(T_A=T_B\) and \(T_B=T_C\Rightarrow T_A=T_C\)（温度作为状态函数）</td></tr>
+    <tr><th>线膨胀 / 体膨胀</th>
+        <td>\(\Delta L=\alpha L\Delta T\)；\(\Delta V=\beta V\Delta T\)；各向同性 \(\beta=3\alpha\)</td></tr>
+    <tr><th>水的反常</th>
+        <td>0–4°C 时 \(\beta<0\)（收缩）；冰浮于水</td></tr>
+    <tr><th>Kelvin 标度</th>
+        <td>\(T(\text{K})=T(^\circ\text{C})+273.15\)；\(0\) K 是绝对零度</td></tr>
+    <tr><th>理想气体定律（摩尔）</th>
+        <td>\(PV=nRT\)；\(R=8.314\) J/(mol·K)</td></tr>
+    <tr><th>理想气体定律（分子）</th>
+        <td>\(PV=NkT\)；\(k=1.38\times 10^{-23}\) J/K（Boltzmann 常数）</td></tr>
+    <tr><th>动理论（预告）</th>
+        <td>\(\tfrac12 m\langle v^2\rangle=\tfrac32 kT\)（每分子平均动能 \(\propto T\)）</td></tr>
+    <tr><th>三种传热</th>
+        <td>辐射（无介质）、对流（介质动）、传导（介质静）</td></tr>
+    <tr><th>Fourier 定律（slab）</th>
+        <td>\(\dot Q=-kA\Delta T/L\)；\(k_{\text{水/玻璃/铜}}=0.6/0.8/400\) W/(m·K)</td></tr>
+    <tr><th>两体冷却 ODE</th>
+        <td>\(\dot{(\Delta T)}=-\alpha\Delta T\)，\(\alpha=\!\left(\tfrac{1}{m_1c_1}+\tfrac{1}{m_2c_2}\right)\!\dfrac{kA}{L}\)</td></tr>
+    <tr><th>两体冷却解</th>
+        <td>\(\Delta T(t)=\Delta T(0)\,e^{-\alpha t}\)；\(T_\infty=\dfrac{m_1c_1T_1(0)+m_2c_2T_2(0)}{m_1c_1+m_2c_2}\)</td></tr>
+    <tr><th>热 RC 类比</th>
+        <td>\(R_{\text{th}}\equiv L/(kA)\)（热阻），\(C_{\text{th}}=m_ic_i\)（热容）</td></tr>
+    <tr><th>比热</th>
+        <td>\(\Delta Q=mc\Delta T\)；\(c_{\text{water}}=4184\) J/(kg·K)</td></tr>
+    <tr><th>cal–J 关系</th>
+        <td>\(1\) cal \(=4.184\) J（机械等价）</td></tr>
+    <tr><th>融化潜热</th>
+        <td>\(L_f\approx 80\) kcal/kg \(=334\) kJ/kg（水，0°C）</td></tr>
+    <tr><th>汽化潜热</th>
+        <td>\(L_v\approx 540\) kcal/kg \(=2260\) kJ/kg（水，100°C）</td></tr>
+    <tr><th>相变 vs 玻璃态</th>
+        <td>相变：尖锐平台 + 潜热；玻璃：平滑过渡，无潜热</td></tr>
+  </tbody>
+</table>
+
+<!-- ======================================================== -->
+
+<div class="glossary">
+  <h2>术语表</h2>
+  <dl>
+    <dt>黏度 (viscosity, η)</dt>
+    <dd>流体内摩擦的强度；Newton 流体定义 \(F/A=\eta\,du/dy\)。</dd>
+
+    <dt>无滑移条件 (no-slip BC)</dt>
+    <dd>流体在固体壁面上速度为零（黏性流体的实验事实）。</dd>
+
+    <dt>Newton 流体 (Newtonian fluid)</dt>
+    <dd>剪切应力线性正比于速度梯度的流体；水、空气、轻油都是。</dd>
+
+    <dt>Poiseuille 流</dt>
+    <dd>稳态、轴对称、黏性圆管层流；速度抛物形，流量 \(\propto a^4\)。</dd>
+
+    <dt>Reynolds 数</dt>
+    <dd>\(\text{Re}=\rho v L/\eta\)；惯性 vs 黏性力之比，控制层流→湍流。</dd>
+
+    <dt>湍流 (turbulence)</dt>
+    <dd>混沌、时变、多尺度涡旋的流动状态；高 \(\text{Re}\) 时出现。</dd>
+
+    <dt>表面张力 (surface tension, σ)</dt>
+    <dd>液体表面单位长度的拉力，等价于单位面积的能量。</dd>
+
+    <dt>Laplace 压差 (Laplace pressure)</dt>
+    <dd>弯曲液面两侧因表面张力造成的压强差；液滴 \(2\sigma/R\)。</dd>
+
+    <dt>热 (heat, Q)</dt>
+    <dd>因温差驱动的能量转移；不是物体里"含"的东西。</dd>
+
+    <dt>内能 (internal energy)</dt>
+    <dd>物体储存的能量；可由热或功改变。</dd>
+
+    <dt>热平衡 (thermal equilibrium)</dt>
+    <dd>两个物体经透热壁连接后温度趋于相同的状态。</dd>
+
+    <dt>透热壁 / 绝热壁 (diathermic / adiabatic)</dt>
+    <dd>分别允许 / 阻止热流通过的边界。</dd>
+
+    <dt>零定律 (Zeroth law)</dt>
+    <dd>热平衡的传递性；定义"温度"为状态函数的合法性基础。</dd>
+
+    <dt>线 / 体膨胀系数 (α, β)</dt>
+    <dd>\(\alpha=(1/L)\partial L/\partial T\)，\(\beta=(1/V)\partial V/\partial T\)。</dd>
+
+    <dt>Kelvin 标度</dt>
+    <dd>从绝对零度起算的温标；\(T(\text{K})=T(^\circ\text{C})+273.15\)。</dd>
+
+    <dt>理想气体 (ideal gas)</dt>
+    <dd>稀薄、分子间无相互作用极限；\(PV=nRT=NkT\)。</dd>
+
+    <dt>Boltzmann 常数 (k)</dt>
+    <dd>\(k=R/N_A=1.38\times 10^{-23}\) J/K；联系微观分子能量与宏观温度。</dd>
+
+    <dt>Avogadro 数 (\(N_A\))</dt>
+    <dd>\(6.022\times 10^{23}\) mol\(^{-1}\)；1 mol 物质所含的基本粒子数。</dd>
+
+    <dt>三种传热 (heat-transfer modes)</dt>
+    <dd>辐射（无需介质）、对流（介质流动）、传导（介质静止）。</dd>
+
+    <dt>Fourier 定律 (Fourier's law)</dt>
+    <dd>\(\dot Q=-kA\Delta T/L\)（slab）或本地形式 \(\vec j_Q=-k\vec\nabla T\)；线性本构关系。</dd>
+
+    <dt>热导率 (thermal conductivity, k)</dt>
+    <dd>材料导热能力的度量，单位 W/(m·K)；金属>>非金属。</dd>
+
+    <dt>热阻 (thermal resistance)</dt>
+    <dd>\(R_{\text{th}}\equiv L/(kA)\)；与电阻同构、可串并联。</dd>
+
+    <dt>逆弛豫时间 (\(\alpha\))</dt>
+    <dd>两体冷却中 \(\Delta T\) 指数衰减的速率常数；\(\alpha=[1/(m_1c_1)+1/(m_2c_2)]\,kA/L\)。</dd>
+
+    <dt>比热 (specific heat, c)</dt>
+    <dd>单位质量物质升温 1 K 所需的热；水 \(c=4184\) J/(kg·K)。</dd>
+
+    <dt>潜热 (latent heat, L)</dt>
+    <dd>相变所需的"隐藏"热（不引起温度变化）；\(Q=mL\)。</dd>
+
+    <dt>融化潜热 / 汽化潜热 (\(L_f\) / \(L_v\))</dt>
+    <dd>固→液 / 液→气的潜热；水分别为 80 与 540 kcal/kg。</dd>
+
+    <dt>玻璃态转变 (glass transition)</dt>
+    <dd>非晶物质在 \(T_g\) 附近的连续黏度爬升；非真相变。</dd>
+
+    <dt>相变 (phase transition)</dt>
+    <dd>物质在不同热力学相之间的转变；首阶相变伴随潜热。</dd>
+  </dl>
+</div>
+
+<!-- ======================================================== -->
+
+<nav class="page-nav">
+  <a class="nav-prev" href="07_fluid_dynamics.html">Bernoulli 与流体动力学</a>
+  <a class="nav-next" href="01_shm.html">SHM</a>
+</nav>
+
+</main>
+
+<script src="interactive.js"></script>
+<script>
+  markCurrentReviewing('08_real_fluids_heat.html');
+</script>
+
+</body>
+</html>

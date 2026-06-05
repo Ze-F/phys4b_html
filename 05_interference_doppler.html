@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>05 · 干涉、衍射、Doppler — PHYS 4B 复习</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="theme.js"></script>
+  <script>
+    MathJax = {
+      tex: { inlineMath: [['\\(', '\\)']], displayMath: [['$$', '$$']] },
+      svg: { fontCache: 'global' }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" async></script>
+</head>
+<body>
+
+<header class="site-header">
+  <a class="home-link" href="index.html">← PHYS 4B 复习</a>
+  <nav>
+    <a href="04_sound_microscopic.html">← 声波微观</a>
+    <a href="06_fluid_statics.html">流体静力学 →</a>
+  </nav>
+</header>
+
+<main class="container">
+
+<div class="topic-header">
+  <h1>05 · 干涉、衍射、Doppler 与波包</h1>
+  <p class="meta">Lec 2.2 尾 + 2.3 + 3.1 前段 · Shankar §19.4–19.6</p>
+  <p class="blurb">一旦多个波同时存在或波源/接收者运动起来，就会出现一系列丰富现象：双缝条纹（Young 1801）、衍射极小、拍频、警笛 Doppler、超音速激波、波包传播。本节把这些表面五花八门的效应统一在<strong>叠加原理</strong>与<strong>路径差</strong>这两条主线下。</p>
+</div>
+
+<!-- ======================================================== -->
+
+<div class="box key-result">
+  <p class="box-title">一页速览</p>
+  <ul>
+    <li><strong>叠加</strong>：线性波振幅相加（不是强度）；相干叠加可生干涉条纹。</li>
+    <li><strong>建设/相消</strong>：路径差 \(\Delta L=n\lambda\) / \(\Delta L=(n+\tfrac12)\lambda\)。</li>
+    <li><strong>双缝</strong>：\(d\sin\theta=n\lambda\)；屏上条纹位置 \(y_n=n\lambda D/d\)（小角）。</li>
+    <li><strong>N 缝</strong>：主峰间距同双缝，主峰宽 \(\propto 1/N\)，副峰高度 \(\propto 1/N^2\)。</li>
+    <li><strong>单缝衍射</strong>：第一极小 \(a\sin\theta=\lambda\)。</li>
+    <li><strong>拍频</strong>：\(f_{\text{beat}}=|f_1-f_2|\)；包络以 \(\Delta\omega/2\) 进展。</li>
+    <li><strong>波包</strong>：相速度 \(v_\phi=\omega/k\)；群速度 \(v_g=d\omega/dk\)；非色散下二者相等。</li>
+    <li><strong>Doppler 五式</strong>：源动 \(f'=f_0/(1-u/v)\)；观动 \(f'=f_0(1+u/v)\)；同动 \(f'=f_0(v+u_o)/(v-u_s)\)；有风 \(v\to v+w\)；激波 \(u=v\)。</li>
+  </ul>
+</div>
+
+<!-- ======================================================== -->
+
+<h2>§1 故事线：从 1 个波到 N 个波到运动源</h2>
+
+<p>到目前为止我们处理的都是<em>单</em>波。一旦：</p>
+<ul>
+  <li>把<strong>两个</strong>波叠加 → 干涉，构成所有"相干光学"的基础；</li>
+  <li>把 <strong>N 个</strong>等间距相干波叠加 → 多缝干涉与衍射光栅；</li>
+  <li>让一个<strong>单缝</strong>变成无穷多个相干次源 → 单缝衍射；</li>
+  <li>让<strong>源</strong>或<strong>观察者</strong>运动 → Doppler 效应；</li>
+  <li>把<strong>不同频率</strong>的波叠加在一起 → 拍频与波包。</li>
+</ul>
+<p>所有这些表面五花八门的现象，都是<strong>叠加原理</strong>（线性波相加）与<strong>路径差产生相位差</strong>的不同应用。本节按这个思路把它们串起来。</p>
+
+<!-- ======================================================== -->
+
+<h2>§2 双源干涉</h2>
+
+<h3>2.1 路径差 → 相位差</h3>
+
+<p>两个相干同频源 \(S_1, S_2\)，发同样振幅 \(A\)。在远处某点 \(P\)，到两源的距离 \(r_1, r_2\)。两个波在 \(P\) 处的相位差：</p>
+
+<p>$$ \Delta\phi=k(r_1-r_2)=k\,\Delta L. $$</p>
+
+<p>相干叠加（用复指数 / 相量）：</p>
+
+<p>$$ \psi=A e^{i(kr_1-\omega t)}+A e^{i(kr_2-\omega t)}=A e^{i(kr_2-\omega t)}\!\left(e^{ik\Delta L}+1\right). $$</p>
+
+<p>取模平方得强度：</p>
+
+<p>$$ \boxed{\;I=4A^2\cos^2\!\left(\frac{k\,\Delta L}{2}\right)\;.\;}\tag{2.1}$$</p>
+
+<h3>2.2 极大与极小</h3>
+
+<table class="formula-table">
+  <tbody>
+    <tr><th>建设性叠加</th><td>\(\Delta L=n\lambda\)（\(n=0,\pm 1,\ldots\)）⇒ \(I=4A^2\)</td></tr>
+    <tr><th>相消叠加</th><td>\(\Delta L=(n+\tfrac12)\lambda\) ⇒ \(I=0\)</td></tr>
+  </tbody>
+</table>
+
+<p><strong>注意</strong>：单源强度是 \(A^2\)。两源建设叠加给 \(4A^2\) — <em>不是</em> \(2A^2\)。能量没违反守恒，相消处的能量被搬到了建设处。</p>
+
+<div class="box warning">
+  <p class="box-title">叠加要相干</p>
+  <p>(2.1) 假设两源<strong>相干</strong>（同频、相位差恒定）。如果两源不相干（比如两根独立的蜡烛），相位差 \(\Delta\phi\) 在时间上随机变化，\(\cos^2\) 项时间平均为 \(1/2\)，\(I_{\text{tot}}=2 A^2=I_1+I_2\) — 强度直接相加，没有干涉条纹。这就是为什么 Young 1801 年的双缝实验需要"用<em>同一束</em>阳光打在两条狭缝上"——不能用两支独立的蜡烛。激光出现以前，干涉实验都得用这种"分光后再叠加"的技巧。</p>
+</div>
+
+<h3>2.3 双缝几何：屏上条纹</h3>
+
+<p>缝间距 \(d\)（\(d\ll D\)，\(D\) 是缝-屏距），观察角 \(\theta\)。路径差 \(\Delta L=d\sin\theta\)。建设条件：</p>
+
+<p>$$ \boxed{\;d\sin\theta=n\lambda\;.\;}\tag{2.2}$$</p>
+
+<p>在屏上 \(y=D\tan\theta\approx D\sin\theta\)（小角）：</p>
+
+<p>$$ \boxed{\;y_n=\frac{n\lambda D}{d}\;.\;}\tag{2.3}$$</p>
+
+<p>条纹间距 \(\Delta y=\lambda D/d\)。<strong>条纹越细，缝越远</strong>。</p>
+
+<!-- ======================================================== -->
+
+<h2>§3 N 缝干涉与衍射光栅</h2>
+
+<p>N 个等间距、等振幅、相干源。每对相邻缝相位差 \(\delta=kd\sin\theta\)。N 个相量首尾相接，几何级数求和：</p>
+
+<p>$$ \psi=\sum_{j=0}^{N-1} A e^{ij\delta}=A\,\frac{1-e^{iN\delta}}{1-e^{i\delta}}, $$</p>
+
+<p>取模平方：</p>
+
+<p>$$ \boxed{\;I(\theta)=I_0\!\left[\frac{\sin(N\delta/2)}{\sin(\delta/2)}\right]^{\!2}\;.\;}\tag{3.1}$$</p>
+
+<h3>3.1 主峰位置（与双缝相同）</h3>
+
+<p>\(\delta=2\pi n\) ⇒ \(d\sin\theta=n\lambda\)。所有缝相干叠加，\(I_{\max}=N^2 I_0\)。</p>
+
+<h3>3.2 N 缝细节</h3>
+
+<ul>
+  <li><strong>主峰宽度</strong> \(\propto 1/N\)：N 越大，主峰越尖锐——这是衍射光栅高分辨率的来源。</li>
+  <li><strong>主峰之间有 \(N-2\) 个小副峰</strong>，最高副峰高约 \(I_{\max}/22\)（远小于主峰）。</li>
+  <li><strong>极小</strong>位置：\(N\delta/2=m\pi\) (\(m\) 不是 \(N\) 整数倍)。</li>
+</ul>
+
+<details class="more-detail">
+  <summary>展开：N=4 时第一极小的相量图</summary>
+  <p>当 \(\delta=\pi/2\) 时，4 个相量从相位 0, π/2, π, 3π/2 出发，正好在复平面闭合成一个正方形——首尾衔接，<strong>合矢量为零</strong>。这就是 N 缝间的"暗带"位置：\(\delta=2\pi m/N\)（\(m\not\equiv 0 \mod N\)），即 \(d\sin\theta=m\lambda/N\)。这种几何相消是相控阵雷达、天线阵列设计的核心物理。</p>
+</details>
+
+<!-- ======================================================== -->
+
+<h2>§4 单缝衍射</h2>
+
+<p>把<em>一</em>个宽度 \(a\) 的缝看成无穷多个相干次源（Huygens 原理）。沿缝积分（连续版的相量求和）：</p>
+
+<p>$$ I(\theta)=I_0\!\left[\frac{\sin(\pi a\sin\theta/\lambda)}{\pi a\sin\theta/\lambda}\right]^{\!2}=I_0\,\text{sinc}^2(\beta), $$</p>
+
+<p>其中 \(\beta=\pi a\sin\theta/\lambda\)。</p>
+
+<h3>4.1 第一极小（衍射边界）</h3>
+
+<p>\(\sin\beta=0\) (\(\beta\neq 0\))：\(\beta=\pi\) 给</p>
+
+<p>$$ \boxed{\;a\sin\theta=\lambda\;.\;}\tag{4.1}$$</p>
+
+<p>这是<strong>单缝衍射的第一极小</strong>，定义了衍射主波瓣（central diffraction lobe）的"宽度"。</p>
+
+<div class="box insight">
+  <p class="box-title">"双缝 = 干涉 + 衍射"</p>
+  <p>真实双缝实验里每个缝都有有限宽度 \(a\)，所以条纹整体被一个 \(\text{sinc}^2(\beta)\) 包络调制。光强 = (双缝干涉) × (单缝衍射包络)。这是为什么实际 Young 双缝看到中央亮纹最亮，向外条纹逐渐减弱、最后被衍射零点 \(a\sin\theta=\lambda\) 切断的原因。</p>
+</div>
+
+<h3>4.2 衍射极限</h3>
+
+<p>(4.1) 给出仪器分辨率的物理上限——对一个口径 \(D\) 的望远镜（圆孔，第一极小 \(\sin\theta=1.22\lambda/D\)），不能分辨张角小于 \(1.22\lambda/D\) 的双星；这是<strong>瑞利衍射极限</strong>。Hubble 主镜 2.4 m 在可见光（550 nm）下衍射极限约 0.058"。James Webb 6.5 m 在 5 μm 红外波段衍射极限约 0.19"（在 2 μm 时约 0.08"）。</p>
+
+<!-- ======================================================== -->
+
+<h2>§5 拍频与波包</h2>
+
+<h3>5.1 两个频率叠加 → 拍</h3>
+
+<p>两个相近频率 \(f_1, f_2\)（差 \(\Delta f=f_1-f_2\) 小）的同振幅波叠加：</p>
+
+<p>$$ \psi=\cos(\omega_1 t)+\cos(\omega_2 t)
+   =2\cos\!\left(\frac{\omega_1-\omega_2}{2}t\right)\cos\!\left(\frac{\omega_1+\omega_2}{2}t\right). $$</p>
+
+<p>第一个因子是<strong>慢变包络</strong>（频率 \(\Delta f/2\)），第二个是<strong>快速振动</strong>（中心频率 \((f_1+f_2)/2\)）。听到的"响度"由包络决定，每个包络周期内出现两个声响（包络两次过零之间），所以</p>
+
+<p>$$ \boxed{\;f_{\text{beat}}=|f_1-f_2|\;.\;}\tag{5.1}$$</p>
+
+<p>调音师用这个原理对琴：把待调弦和音叉同时奏，听到拍频，调到拍频消失即为同音。</p>
+
+<h3>5.2 波包：群速度 vs 相速度</h3>
+
+<p>把许多频率（一组 \(\omega(k)\)）相干叠加，得到一个空间局域化的"波包"。包络以<strong>群速度</strong>传播：</p>
+
+<p>$$ \boxed{\;v_g=\frac{d\omega}{dk}\;,\;}\quad v_\phi=\frac{\omega}{k}. \tag{5.2}$$</p>
+
+<p>两者关系：</p>
+
+<table class="formula-table">
+  <tbody>
+    <tr><th>非色散媒质</th><td>\(\omega=vk\)（\(v\) 是常数）⇒ \(v_\phi=v_g=v\)。脉冲不变形。</td></tr>
+    <tr><th>色散媒质</th><td>\(\omega(k)\) 非线性 ⇒ \(v_g\neq v_\phi\)。脉冲扩散变形。</td></tr>
+  </tbody>
+</table>
+
+<p>典例：</p>
+<ul>
+  <li>张紧弦、空气声波（在可闻频段）、真空中电磁波 — 非色散。</li>
+  <li>玻璃里光（产生彩虹）、海洋深水波（短波快、长波慢）、量子波包（\(\omega\propto k^2\)，\(v_g=2 v_\phi\)）— 色散。</li>
+</ul>
+
+<div class="box insight">
+  <p class="box-title">能量、信号、信息靠 v_g 传播</p>
+  <p>\(v_\phi\) 是波"<strong>相位</strong>"传播速度，是个数学量；\(v_g\) 是波包整体（含能量、信号）传播速度，才是物理上有意义的速度。某些奇异媒质里 \(v_\phi\) 可以超光速（不违反狭义相对论），但 \(v_g\) 始终 \(\le c\)——这是相对论与电磁学一致的体现。</p>
+</div>
+
+<!-- ======================================================== -->
+
+<h2>§6 Doppler 效应</h2>
+
+<p>声源或观察者相对媒质运动时，观察到的频率与源频率不同——这就是 Doppler 效应。本节给出 5 个公式 + 1 个低速极限。</p>
+
+<h3>6.1 源动观静</h3>
+
+<p>源以速度 \(u_s\)（朝向观察者）运动，每秒发出 \(f_0\) 个波峰。下一个波峰发出时，源已经向前走了 \(u_s/f_0\)，波峰间距（波长）变成</p>
+
+<p>$$ \lambda'=\lambda_0-u_s/f_0=v/f_0-u_s/f_0=(v-u_s)/f_0. $$</p>
+
+<p>观察到的频率：</p>
+
+<p>$$ \boxed{\;f'=\frac{v}{\lambda'}=\frac{f_0}{1-u_s/v}\;.\;}\tag{6.1}$$</p>
+
+<p>源远离观察者时，\(u_s\to -u_s\) 给 \(f'=f_0/(1+u_s/v)\)。</p>
+
+<h3>6.2 源静观动</h3>
+
+<p>观察者以速度 \(u_o\)（朝向源）运动。波长 \(\lambda_0\) 不变（源静止，波长由源决定），但<em>相对</em>波速变成 \(v+u_o\)：</p>
+
+<p>$$ \boxed{\;f'=\frac{v+u_o}{\lambda_0}=f_0(1+u_o/v)\;.\;}\tag{6.2}$$</p>
+
+<h3>6.3 双方都动</h3>
+
+<p>$$ \boxed{\;f'=f_0\,\frac{v+u_o}{v-u_s}\;.\;}\tag{6.3}$$</p>
+
+<p>（约定：\(u_o, u_s\) 都"朝彼此"为正。把 \(u_o\) 设为 0 恢复 (6.1)；\(u_s\) 设为 0 恢复 (6.2)。）</p>
+
+<h3>6.4 有风时</h3>
+
+<p>风让媒质本身在动。如果<strong>风速 \(w\)</strong>朝从源到观察者方向，把声速替换 \(v\to v+w\)（顺风时声波传得更快，逆风传得慢）：</p>
+
+<p>$$ \boxed{\;f'=f_0\,\frac{(v+w)+u_o}{(v+w)-u_s}\;.\;}\tag{6.4}$$</p>
+
+<h3>6.5 激波 (sonic boom)：u_s = v</h3>
+
+<p>由 (6.1)，\(u_s\to v\) 时 \(f'\to\infty\)。物理图像：源走得跟它发出的声波一样快，前方堆积的所有波峰挤到一起——形成激波（shock wave）。\(u_s>v\) 时，源走得比声还快，前方根本没声音传到，所有声能聚集在<strong>Mach 锥</strong>面上：</p>
+
+<p>$$ \sin\theta_{\text{Mach}}=v/u_s=1/M, $$</p>
+
+<p>其中 Mach 数 \(M=u_s/v\)。当超音速飞机 (M>1) 飞过头顶，你不会持续听到飞机声，而是听到一声<strong>巨大的"咣"</strong>——Mach 锥经过你的瞬间。</p>
+
+<h3>6.6 低速近似</h3>
+
+<p>当 \(u\ll v\)：</p>
+
+<p>$$ \frac{\Delta f}{f}\approx \pm\frac{u}{v}. \tag{6.5}$$</p>
+
+<p>"+"号指相互接近（频率升高），"-"号指相互远离（频率降低）。这是天文学测红移、雷达测速、医院多普勒超声测血流速度的基础。</p>
+
+<div class="box insight">
+  <p class="box-title">Doppler 应用众多</p>
+  <ul>
+    <li><strong>警笛</strong>（救护车驶来时尖、远去时低沉）：源动观静</li>
+    <li><strong>多普勒雷达</strong>（测车速）：发射 + 反射回来双重 Doppler</li>
+    <li><strong>红移与宇宙膨胀</strong>（Hubble 1929）：远星系的光波长被拉长，全部红移</li>
+    <li><strong>多普勒超声血流</strong>（医用）：从声波频移读出血液流速</li>
+    <li><strong>系外行星探测</strong>（径向速度法）：恒星因行星拖动产生周期性 Doppler 摆</li>
+    <li><strong>Mach 锥</strong>（超音速飞机的"轰"）：源速超过当地声速</li>
+  </ul>
+</div>
+
+<!-- ======================================================== -->
+
+<h2>§7 交互组件</h2>
+
+<div class="box interactive">
+  <p class="box-title">交互 1：Doppler 五式</p>
+  <p>调节源/观察者速度，看观察频率怎么变。低于 \(M=1\) 是常规 Doppler；\(M=1\) 临界（激波边界）；\(M>1\) 物理失效（应该用 Mach 锥处理）。</p>
+
+  <div class="widget">
+    <div class="controls">
+      <div class="control-row">
+        <label>源速 u_s（朝观）</label>
+        <input type="range" id="dop-us" min="-340" max="340" step="5" value="50" />
+        <span class="readout" id="dop-us-readout"></span>
+      </div>
+      <div class="control-row">
+        <label>观速 u_o（朝源）</label>
+        <input type="range" id="dop-uo" min="-340" max="340" step="5" value="0" />
+        <span class="readout" id="dop-uo-readout"></span>
+      </div>
+      <div class="control-row">
+        <label>源频率 f₀</label>
+        <input type="range" id="dop-f0" min="100" max="2000" step="10" value="500" />
+        <span class="readout" id="dop-f0-readout"></span>
+      </div>
+      <div class="control-row" style="background:#faf5ff;padding:.65rem;border-radius:4px">
+        <label></label>
+        <span style="font-size:.95rem">
+          观察频率 f' =
+          <span id="dop-fprime" style="font-family:Menlo,monospace;color:#0f766e;font-size:1.1rem"></span>，
+          <br>相对偏移 Δf/f₀ =
+          <span id="dop-rel" style="font-family:Menlo,monospace;color:#0f766e"></span>
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="box interactive">
+  <p class="box-title">交互 2：双缝条纹</p>
+  <p>调缝间距 \(d\) 与波长 \(\lambda\)，看屏上条纹位置变化。\(d\) 增大或 \(\lambda\) 减小都让条纹变密。固定 \(D=1\) m。</p>
+
+  <div class="widget">
+    <canvas id="ds-canvas" width="600" height="220"></canvas>
+    <div class="controls">
+      <div class="control-row">
+        <label>缝距 d (μm)</label>
+        <input type="range" id="ds-d" min="20" max="500" step="5" value="100" />
+        <span class="readout" id="ds-d-readout"></span>
+      </div>
+      <div class="control-row">
+        <label>波长 λ (nm)</label>
+        <input type="range" id="ds-lam" min="380" max="780" step="5" value="550" />
+        <span class="readout" id="ds-lam-readout"></span>
+      </div>
+      <div class="control-row">
+        <label></label>
+        <span style="font-size:.85rem;color:#6b7280">
+          条纹间距 Δy = <span id="ds-dy" style="font-family:Menlo,monospace;color:#0f766e"></span>
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ======================================================== -->
+
+<h2>§8 Worked Examples</h2>
+
+<div class="example">
+  <h4>Example：红光 vs 蓝光的双缝条纹</h4>
+  <p class="source">改编自 Shankar §19.5 例</p>
+  <p>双缝实验，缝距 \(d=0.20\) mm，缝-屏距 \(D=2.0\) m。用红光（\(\lambda=650\) nm）和蓝光（\(\lambda=450\) nm）做。求各自条纹间距 \(\Delta y\)。</p>
+
+  <div class="solution-step"><strong>条纹间距</strong> \(\Delta y=\lambda D/d\)：
+    $$ \Delta y_{\text{red}}=\frac{650\times 10^{-9}\cdot 2}{0.2\times 10^{-3}}=6.5\text{ mm}. $$
+    $$ \Delta y_{\text{blue}}=\frac{450\times 10^{-9}\cdot 2}{0.2\times 10^{-3}}=4.5\text{ mm}. $$
+  </div>
+
+  <div class="solution-step"><strong>白光呢？</strong>白光各波长成分都按其 \(\lambda\) 各自形成条纹。中央 0 阶条纹所有波长重合，所以是<em>白色</em>（不分色）；高阶条纹按 \(\lambda\) 分散开，从内到外蓝→红——这就是衍射光栅彩虹的雏形。</div>
+</div>
+
+<div class="example">
+  <h4>Example：警笛驶来与远去</h4>
+  <p class="source">改编自 Shankar §19.6 例</p>
+  <p>救护车以 30 m/s 朝你驶来，警笛源频 \(f_0=700\) Hz。声速 \(v=343\) m/s。求 (a) 驶来时听到频率；(b) 经过你身边后远去时听到频率；(c) 频率跳变量。</p>
+
+  <div class="solution-step"><strong>(a) 驶来</strong>（源动观静，朝向）：
+    $$ f'=\frac{f_0}{1-u_s/v}=\frac{700}{1-30/343}\approx 767\text{ Hz}. $$
+  </div>
+
+  <div class="solution-step"><strong>(b) 远去</strong>：\(u_s\to -u_s\)：
+    $$ f''=\frac{f_0}{1+30/343}=\frac{700}{1.087}\approx 644\text{ Hz}. $$
+  </div>
+
+  <div class="solution-step"><strong>(c) 跳变</strong>：从 767 Hz 突变到 644 Hz，差 \(\sim 123\) Hz——听感上是约一个全音（"do-do-do" 变成"si-si-si"）。这是人人都熟悉的"救护车驶过"的声音。</div>
+
+  <div class="solution-step"><strong>趣事</strong>：F1 赛车（80 m/s ≈ 290 km/h）驶过观赛者时，发动机基频 \(\sim 500\) Hz 从约 \(652\) Hz（驶来）跳到 \(405\) Hz（远去）——跳变约一个大六度（\(652/405\approx 1.61\)），这就是赛车经过摄像机的标志性"嗡—咣—嗡"声。</div>
+</div>
+
+<div class="example">
+  <h4>Problem (★ harder)：双源 + 风</h4>
+  <p class="source">改编自 Shankar §19 problem set</p>
+  <p>两架飞机迎面飞行：A 以 \(u_A=80\) m/s 朝东，B 以 \(u_B=60\) m/s 朝西，同时空中有 \(w=20\) m/s 朝东风。声速 \(v=343\) m/s。A 飞机以 \(f_0=500\) Hz 鸣笛。问 B 飞机收到的频率？</p>
+
+  <div class="solution-step"><strong>设定坐标</strong>：东为正向。声波从 A 传到 B（向西）。源动方向（朝向 B）：因 A 朝东、B 朝西，"A 朝向 B"是向<em>西</em>。所以 \(u_s\)（朝观察者方向）= \(-80\) m/s（A 实际朝东远离 B）。</div>
+
+  <div class="solution-step"><strong>等等</strong>，重新想：A、B 朝相反方向。A 朝东走，B 朝西走，所以 A 与 B 是<em>相互接近</em>的（如果它们一开始很近、A 在西、B 在东）。但题目没说初始位置。
+    重新规约：取 A 在西、B 在东。A 向东走（朝向 B）⇒ \(u_s=+80\) m/s（朝观）。B 向西走（朝向 A）⇒ \(u_o=+60\) m/s（朝源）。</div>
+
+  <div class="solution-step"><strong>风</strong>朝东（从 A 向 B），等价于"声从源到观顺风"，所以 \(v\to v+w=363\) m/s。</div>
+
+  <div class="solution-step"><strong>代入 (6.4)</strong>：
+    $$ f'=f_0\,\frac{(v+w)+u_o}{(v+w)-u_s}
+         = 500\cdot\frac{363+60}{363-80}
+         = 500\cdot\frac{423}{283}\approx 747\text{ Hz}. $$
+  </div>
+
+  <div class="solution-step"><strong>核查</strong>：去风 \(w=0\) 给 \(f'=500\cdot 403/263\approx 766\) Hz；加东风后 B 接收频率<em>降低</em>到 747 Hz。物理：顺风让波传得更快，但同时拉远了"等效相对速度"——综合下来频率略下降。Doppler 在有风环境下的非平庸结合是航空导航 / 气象雷达的常见复杂度。</div>
+</div>
+
+<div class="example">
+  <h4>Problem (★★ challenge)：超音速 Mach 锥角</h4>
+  <p class="source">改编自 Shankar §19 problem set</p>
+  <p>(a) F-16 战斗机巡航 \(M=1.2\)（声速取 343 m/s）。地面观察者听到激波"咣"声时，飞机已经飞过了头顶多远？设飞机巡航高度 1 km。
+  <br>(b) 协和飞机巡航 \(M=2\)。Mach 锥角是多少？穿越声障需要克服什么物理？
+  <br>(c) 太空船以远低于 c 但 Mach 几百飞越大气层（再入），地面收到的"激波音爆"形态有什么不同？</p>
+
+  <div class="solution-step"><strong>(a)</strong> Mach 锥角 \(\sin\theta=1/M=1/1.2\Rightarrow \theta\approx 56.4°\)。从飞机所在垂直高度 \(h\) 看，激波在地面"扫过"的位置距地面正下方 \(h/\tan\theta=1000/\tan 56.4°\approx 663\) m。所以你听到"咣"时，飞机已经飞过你头顶 663 m。</div>
+
+  <div class="solution-step"><strong>(b)</strong> M=2：\(\sin\theta=1/2\Rightarrow \theta=30°\)。Mach 锥更尖锐。"穿越声障"指 \(u_s=v\)（M=1）的临界——在 M<1 时压力波能传到飞机前方，飞机受空气压缩阻力增大；M=1 时所有压力波堆积在飞机鼻锥前形成激波墙；M>1 后压力波堆积模式变为 Mach 锥，阻力反而下降。著名的 Yeager 1947 年首次稳定突破声障，正是这个临界点物理。</div>
+
+  <div class="solution-step"><strong>(c)</strong> 大气再入飞行器（如航天飞机、SpaceX 龙飞船）以 M\(\sim 25\) 进入大气，但因为大气稀薄（高空空气密度极低），激波温度极高（数千 K，会电离空气、产生等离子鞘）。地面听到的"音爆"沿轨迹一路传播，呈数十秒持续轰鸣（一个长 Mach 锥从 100 km 高度一路扫过）。</div>
+
+  <div class="solution-step"><strong>音爆与噪声管控</strong>：协和飞机因海岸激波过响、被禁止超音速飞越大陆。新一代超音速客机（NASA X-59）的核心设计目标就是降低音爆响度——通过精心设计机身曲率，让激波在空气里"软化"，降到 75 dB 左右（日常洗碗机声响），相当于减 30 dB（强度减 1/1000）。这是 70 年来超音速航空的最大瓶颈之一。</div>
+</div>
+
+<!-- ======================================================== -->
+
+<h2>§9 Self-check</h2>
+
+<div class="self-check">
+  <p class="question">Q1. 双缝条纹间距 \(\Delta y=\lambda D/d\)。如果把整个装置浸入水中（\(n_{\text{water}}=1.33\)），条纹会变密还是变疏？</p>
+  <details>
+    <summary>查看答案</summary>
+    <p><strong>变密</strong>。光在水中波长缩短：\(\lambda_{\text{water}}=\lambda_0/n=\lambda_0/1.33\)。其他参数不变 ⇒ \(\Delta y\) 变 \(1/1.33\approx 0.75\) 倍。这是为什么"浸没式光刻"（半导体工艺）能突破干法的衍射极限——把光程从空气换成水（甚至更高 \(n\) 的材料），有效缩短波长。</p>
+  </details>
+</div>
+
+<div class="self-check">
+  <p class="question">Q2. 双源完全相消位置（\(\Delta L=\lambda/2\)）的能量去哪了？</p>
+  <details>
+    <summary>查看答案</summary>
+    <p>不在那里——能量被搬到了建设性叠加位置。整个屏幕上对所有 \(y\) 的能量积分仍等于两个源各自的能量之和（不相干就是"散开均匀"，相干就是"聚到亮纹"）。能量没消失也没产生，只是重分布。这是"线性叠加 + 线性能量正比 \(I\propto |\psi|^2\)"的必然结果。</p>
+  </details>
+</div>
+
+<div class="self-check">
+  <p class="question">Q3. 拍频 \(f_{\text{beat}}=|f_1-f_2|\) 与 (5.1) 中的"包络周期 \(\Delta\omega/2\)"为什么差一倍？</p>
+  <details>
+    <summary>查看答案</summary>
+    <p>包络的<em>振幅</em> \(\propto |\cos((\omega_1-\omega_2)t/2)|\) 的周期是 \(2\pi/((\omega_1-\omega_2)/2)=4\pi/\Delta\omega\)；但包络<strong>响度</strong>正比于 \(\cos^2\)（强度），\(\cos^2\) 的周期是 \(\cos\) 的<em>一半</em>。所以听到的拍频对应 \(\cos^2\) 的周期 \(2\pi/\Delta\omega\)，即 \(f_{\text{beat}}=\Delta\omega/(2\pi)=|f_1-f_2|\)（不是 \(|f_1-f_2|/2\)）。这是常见混淆。</p>
+  </details>
+</div>
+
+<div class="self-check">
+  <p class="question">Q4. 如果救护车<em>从你身后</em>同向行驶，你和救护车都在以 80 km/h 朝东走（同速），声波你听到什么？</p>
+  <details>
+    <summary>查看答案</summary>
+    <p>同源频。源和观察者相对媒质<em>相同</em>速度，没有相对相位变化。Doppler 公式 (6.3) 给 \(f'=f_0(v+u)/(v+u)\)？等等——\(u_s\) 与 \(u_o\) 朝向定义不同。重新规约：源动朝你为正（这里源在后追你，你前面，源以 +80 朝东 = 朝你方向，\(u_s=+80\)）。观察者朝源为正（你朝东走，源在后面，所以你"<em>背向</em>"源 ⇒ \(u_o=-80\)）。代入 (6.3)：
+    $$ f'=f_0\,\frac{v-80}{v-80}=f_0. $$ 同源频。这与"两人同步前进时彼此看不见相对运动"是同一个物理。
+    </p>
+  </details>
+</div>
+
+<div class="self-check">
+  <p class="question">Q5. 一个等间距间隔 \(d\) 的衍射光栅，N 个缝。如果你把缝数加倍到 \(2N\)（保持 \(d\) 不变），主峰会怎样？</p>
+  <details>
+    <summary>查看答案</summary>
+    <p>主峰<strong>位置</strong>不变（仍由 \(d\sin\theta=n\lambda\) 决定），但主峰<strong>变窄</strong>（\(\propto 1/N\) 变 1/2）、<strong>变高</strong>（\(I_{\max}\propto N^2\) 变 4 倍）。光栅分辨率随 N 提升——这就是为什么科学级光谱仪用刻线数 \(N\sim 10^4\) 以上的精密光栅来分辨细微的谱线差异。</p>
+  </details>
+</div>
+
+<div class="self-check">
+  <p class="question">Q6. 系外行星"径向速度法"探测：一颗 Jupiter 质量行星绕一颗类太阳恒星，会让恒星的光以 \(\sim 12.5\) m/s 的振幅周期性 Doppler 摆动。问相应的相对频率偏移 Δf/f 是多少？</p>
+  <details>
+    <summary>查看答案</summary>
+    <p>用低速近似 \(\Delta f/f=u/c\)：\(12.5/3\times 10^8\approx 4\times 10^{-8}\)。需要光谱仪能<em>稳定</em>分辨 \(\sim 10^{-8}\) 的频率偏移——相对论量级精度！这是为什么这类探测在过去 30 年才成为可能（HARPS, ESPRESSO 等高分辨率谱仪），代表了精密光谱学的现代极限。</p>
+  </details>
+</div>
+
+<!-- ======================================================== -->
+
+<h2>§10 公式速查表</h2>
+
+<table class="formula-table">
+  <tbody>
+    <tr><th>叠加（相干）</th><td>振幅相加；强度 \(I=|\sum A_j e^{i\phi_j}|^2\)</td></tr>
+    <tr><th>叠加（不相干）</th><td>强度直接相加 \(I=\sum I_j\)</td></tr>
+    <tr><th>建设/相消</th><td>\(\Delta L=n\lambda\) / \(\Delta L=(n+\tfrac12)\lambda\)</td></tr>
+    <tr><th>双源强度</th><td>\(I=4A^2\cos^2[k\Delta L/2]\)</td></tr>
+    <tr><th>双缝主峰</th><td>\(d\sin\theta=n\lambda\)；屏上 \(y_n=n\lambda D/d\)</td></tr>
+    <tr><th>双缝条纹间距</th><td>\(\Delta y=\lambda D/d\)</td></tr>
+    <tr><th>N 缝强度</th><td>\(I=I_0[\sin(N\delta/2)/\sin(\delta/2)]^2\)，\(\delta=kd\sin\theta\)</td></tr>
+    <tr><th>N 缝主峰</th><td>\(I_{\max}=N^2 I_0\)，主峰宽 \(\propto 1/N\)</td></tr>
+    <tr><th>单缝第一极小</th><td>\(a\sin\theta=\lambda\)</td></tr>
+    <tr><th>瑞利圆孔极限</th><td>\(\sin\theta_{\min}=1.22\lambda/D\)</td></tr>
+    <tr><th>拍频</th><td>\(f_{\text{beat}}=|f_1-f_2|\)</td></tr>
+    <tr><th>相速度</th><td>\(v_\phi=\omega/k\)</td></tr>
+    <tr><th>群速度</th><td>\(v_g=d\omega/dk\)</td></tr>
+    <tr><th>非色散</th><td>\(v_g=v_\phi=v\)（如声波）</td></tr>
+    <tr><th>Doppler 源动</th><td>\(f'=f_0/(1-u_s/v)\) (朝向 \(u_s>0\))</td></tr>
+    <tr><th>Doppler 观动</th><td>\(f'=f_0(1+u_o/v)\) (朝源 \(u_o>0\))</td></tr>
+    <tr><th>Doppler 同动</th><td>\(f'=f_0(v+u_o)/(v-u_s)\)</td></tr>
+    <tr><th>Doppler 有风</th><td>\(v\to v+w\)（风从源到观）</td></tr>
+    <tr><th>Doppler 低速</th><td>\(\Delta f/f\approx u/v\)</td></tr>
+    <tr><th>Mach 锥角</th><td>\(\sin\theta=1/M\)，\(M=u_s/v\)</td></tr>
+  </tbody>
+</table>
+
+<!-- ======================================================== -->
+
+<div class="glossary">
+  <h2>术语表</h2>
+  <dl>
+    <dt>叠加原理 (superposition principle)</dt>
+    <dd>线性波相加：\(\psi=\psi_1+\psi_2\)；强度不直接相加（除非不相干）。</dd>
+
+    <dt>相干 (coherent)</dt>
+    <dd>多源相位差恒定；可干涉成稳定条纹。</dd>
+
+    <dt>路径差 (path difference, ΔL)</dt>
+    <dd>两条波传到同一点的几何距离差；产生相位差 \(k\Delta L\)。</dd>
+
+    <dt>建设/相消叠加 (constructive / destructive)</dt>
+    <dd>路径差 \(=n\lambda\) / \(=(n+\tfrac12)\lambda\) 时强度极大 / 极小。</dd>
+
+    <dt>双缝实验 (Young's double slit)</dt>
+    <dd>1801 年 Young 首次用相干光证明光是波动；现代量子力学的"思想图标"。</dd>
+
+    <dt>衍射光栅 (diffraction grating)</dt>
+    <dd>大量等距缝形成的高分辨率分光元件；基于 N 缝主峰位置 \(d\sin\theta=n\lambda\)。</dd>
+
+    <dt>单缝衍射 (single-slit diffraction)</dt>
+    <dd>有限宽度缝产生的 \(\text{sinc}^2\) 强度分布；第一极小 \(a\sin\theta=\lambda\)。</dd>
+
+    <dt>瑞利极限 (Rayleigh criterion)</dt>
+    <dd>圆孔成像最小可分辨张角 \(1.22\lambda/D\)；望远镜与显微镜的衍射极限。</dd>
+
+    <dt>拍频 (beat frequency)</dt>
+    <dd>两个相近频率叠加产生的慢变包络频率 \(|f_1-f_2|\)。</dd>
+
+    <dt>波包 (wave packet)</dt>
+    <dd>多频率成分相干叠加形成的局域化扰动；以群速度传播。</dd>
+
+    <dt>相速度 / 群速度 (phase / group velocity)</dt>
+    <dd>\(v_\phi=\omega/k\) / \(v_g=d\omega/dk\)；物理上后者携带能量与信息。</dd>
+
+    <dt>色散 (dispersion)</dt>
+    <dd>\(\omega(k)\) 非线性；不同频率以不同速度传播，使脉冲变形。</dd>
+
+    <dt>Doppler 效应 (Doppler effect)</dt>
+    <dd>源或观察者运动时观察频率变化；天文红移、雷达测速、超声血流的物理基础。</dd>
+
+    <dt>Mach 数 (Mach number, M)</dt>
+    <dd>\(M=u/v\)；\(M>1\) 为超音速。</dd>
+
+    <dt>Mach 锥 (Mach cone)</dt>
+    <dd>超音速源后方激波的圆锥面；半角满足 \(\sin\theta=1/M\)。</dd>
+
+    <dt>音爆 (sonic boom)</dt>
+    <dd>Mach 锥扫过观察者时听到的剧烈声响。</dd>
+
+    <dt>红移 (redshift)</dt>
+    <dd>远离光源对应的 Doppler 频率下降 / 波长拉长；宇宙学证据。</dd>
+  </dl>
+</div>
+
+<!-- ======================================================== -->
+
+<nav class="page-nav">
+  <a class="nav-prev" href="04_sound_microscopic.html">声波微观推导</a>
+  <a class="nav-next" href="06_fluid_statics.html">流体静力学</a>
+</nav>
+
+</main>
+
+<script src="interactive.js"></script>
+<script>
+  markCurrentReviewing('05_interference_doppler.html');
+
+  // -------- Doppler calculator --------
+  (function() {
+    const v = 343;
+    function compute(values) {
+      const us = values['dop-us'], uo = values['dop-uo'], f0 = values['dop-f0'];
+      const denom = v - us;
+      const fp = (denom !== 0) ? f0 * (v + uo) / denom : Infinity;
+      const rel = (fp - f0) / f0;
+      const fpEl = document.getElementById('dop-fprime');
+      const relEl = document.getElementById('dop-rel');
+      if (!isFinite(fp) || Math.abs(us) >= v) {
+        fpEl.textContent = '— 激波 / 物理失效 —';
+        relEl.textContent = '—';
+        fpEl.style.color = '#dc2626';
+      } else {
+        fpEl.textContent = fp.toFixed(1) + ' Hz';
+        relEl.textContent = (rel * 100).toFixed(2) + '%';
+        fpEl.style.color = '#0f766e';
+      }
+    }
+    bindSliders([
+      { id: 'dop-us', readoutId: 'dop-us-readout', format: v => v.toFixed(0) + ' m/s' },
+      { id: 'dop-uo', readoutId: 'dop-uo-readout', format: v => v.toFixed(0) + ' m/s' },
+      { id: 'dop-f0', readoutId: 'dop-f0-readout', format: v => v.toFixed(0) + ' Hz' },
+    ], compute);
+  })();
+
+  // -------- Double-slit fringes --------
+  (function() {
+    const setup = setupCanvas('ds-canvas', 600, 220);
+    if (!setup) return;
+    const { ctx, w, h } = setup;
+    const D = 1.0; // m
+
+    function compute(values) {
+      const d_um = values['ds-d'];
+      const lam_nm = values['ds-lam'];
+      const d = d_um * 1e-6, lam = lam_nm * 1e-9;
+      const dy = lam * D / d;  // m
+
+      ctx.clearRect(0, 0, w, h);
+      // draw screen as horizontal strip
+      const cy = h / 2;
+      const screenL = 30, screenR = w - 30;
+      const screenW = screenR - screenL;
+      ctx.strokeStyle = '#9ca3af';
+      ctx.beginPath();
+      ctx.moveTo(screenL, cy - 30); ctx.lineTo(screenR, cy - 30); ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(screenL, cy + 30); ctx.lineTo(screenR, cy + 30); ctx.stroke();
+
+      // intensity profile: I ∝ cos^2(πy/(Δy))
+      // map y in cm to pixel: cy = center, scale to fit say ±5 cm into ±screenW/2
+      const yRange_cm = 5; // ±5 cm
+      const pxPerCm = screenW / (2 * yRange_cm);
+      // wavelength color
+      function wl2color(nm) {
+        // simple gradient
+        if (nm < 440) return '#7e22ce';
+        if (nm < 490) return '#1e40af';
+        if (nm < 510) return '#0891b2';
+        if (nm < 580) return '#16a34a';
+        if (nm < 645) return '#eab308';
+        return '#dc2626';
+      }
+      const color = wl2color(lam_nm);
+
+      // Draw intensity bar pixel by pixel
+      for (let i = 0; i < screenW; i++) {
+        const yc = (i - screenW / 2) / pxPerCm; // cm
+        const yMeters = yc * 0.01;
+        const phase = Math.PI * yMeters / dy;
+        const intensity = Math.cos(phase) ** 2;
+        const alpha = intensity;
+        ctx.fillStyle = `rgba(${parseInt(color.slice(1,3),16)},${parseInt(color.slice(3,5),16)},${parseInt(color.slice(5,7),16)},${alpha})`;
+        ctx.fillRect(screenL + i, cy - 30, 1, 60);
+      }
+
+      // ticks at -5, 0, +5 cm
+      ctx.fillStyle = '#374151';
+      ctx.font = "10px -apple-system, sans-serif";
+      ctx.textAlign = 'center';
+      [-5, -2.5, 0, 2.5, 5].forEach(yc => {
+        const px = screenL + screenW / 2 + yc * pxPerCm;
+        ctx.fillText(yc + ' cm', px, cy + 50);
+      });
+
+      // mark first orders
+      ctx.strokeStyle = '#dc2626';
+      ctx.lineWidth = 1;
+      ctx.setLineDash([3,3]);
+      [-1, 1].forEach(n => {
+        const yc = n * dy * 100; // cm
+        if (Math.abs(yc) <= yRange_cm) {
+          const px = screenL + screenW / 2 + yc * pxPerCm;
+          ctx.beginPath();
+          ctx.moveTo(px, cy - 35); ctx.lineTo(px, cy + 35); ctx.stroke();
+        }
+      });
+      ctx.setLineDash([]);
+
+      ctx.fillStyle = '#374151';
+      ctx.textAlign = 'left';
+      ctx.font = "11px -apple-system, sans-serif";
+      ctx.fillText('屏上条纹（D=1 m）', 10, 18);
+
+      document.getElementById('ds-dy').textContent =
+        (dy * 1000).toFixed(2) + ' mm';
+    }
+    bindSliders([
+      { id: 'ds-d', readoutId: 'ds-d-readout', format: v => v.toFixed(0) + ' μm' },
+      { id: 'ds-lam', readoutId: 'ds-lam-readout', format: v => v.toFixed(0) + ' nm' },
+    ], compute);
+  })();
+</script>
+
+</body>
+</html>

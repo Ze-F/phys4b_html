@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>02 · 一维波传播 — PHYS 4B 复习</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="theme.js"></script>
+  <script>
+    MathJax = {
+      tex: { inlineMath: [['\\(', '\\)']], displayMath: [['$$', '$$']] },
+      svg: { fontCache: 'global' }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" async></script>
+</head>
+<body>
+
+<header class="site-header">
+  <a class="home-link" href="index.html">← PHYS 4B 复习</a>
+  <nav>
+    <a href="01_shm.html">← SHM</a>
+    <a href="03_3d_waves_sound.html">3D 波 + 声强 →</a>
+  </nav>
+</header>
+
+<main class="container">
+
+<div class="topic-header">
+  <h1>02 · 一维波传播</h1>
+  <p class="meta">Lec 1.2 + 1.3 · Shankar §18.1–18.4</p>
+  <p class="blurb">SHM 是<em>同一</em>处来回振动；波是这种振动<em>传播</em>到空间各处。一维波最直观的例子是张紧的弦（吉他、小提琴）。本节从弦上一段元素的 \(F=ma\) 推出波动方程 \(\partial_t^2\psi=v^2\partial_x^2\psi\)，看清传播波、驻波、能量的来龙去脉。</p>
+</div>
+
+<!-- ======================================================== -->
+
+<div class="box key-result">
+  <p class="box-title">一页速览</p>
+  <ul>
+    <li><strong>波动方程</strong>（一维）：\(\dfrac{\partial^2\psi}{\partial t^2}=v^2\dfrac{\partial^2\psi}{\partial x^2}\)。</li>
+    <li><strong>张紧弦</strong>：从 F=ma 推出 \(v=\sqrt{T/\mu}\)（\(T\) 张力，\(\mu\) 线密度）。</li>
+    <li><strong>传播波解</strong>：\(\psi(x,t)=A\cos(kx-\omega t)\)，色散关系 \(\omega=vk\)。</li>
+    <li><strong>普适解</strong>：\(\psi(x,t)=f(x-vt)+g(x+vt)\) — 任何<em>形状</em> \(f, g\) 都是合法解（d'Alembert 1747）。</li>
+    <li><strong>驻波</strong>：两端固定 \(f_n=nv/(2L)\)；一端开 \(f_n=(2n+1)v/(4L)\)。</li>
+    <li><strong>能量</strong>：传播波瞬时 KE = PE，平均能量密度 \(\bar\varepsilon=\tfrac12\mu\omega^2 A^2\)，功率 \(P=\bar\varepsilon v\)。</li>
+  </ul>
+</div>
+
+<!-- ======================================================== -->
+
+<h2>§1 故事线：什么是"波"？</h2>
+
+<p>波不是物质流动，而是<strong>扰动</strong>在媒质里的传播。把一根绳子的左端上下抖一下，扰动会沿着绳子一路传到右端——但绳子上每一点本身只在原地上下振动，并没有从左端"飞"到右端。能量、动量、相位<em>传播了</em>；物质<em>没有</em>。</p>
+
+<p>这意味着波动方程不仅是 SHM 的"加强版"，而是一种新的物理：</p>
+
+<ul>
+  <li>SHM 描述<em>一个</em>自由度的时间演化；</li>
+  <li>波描述<em>无穷多个耦合自由度</em>（弦上每一点）的时-空演化。</li>
+</ul>
+
+<p>本节集中处理一维线性波动方程，它在弦、声柱、电磁场、量子场论里都同样出现，只是参数不同。</p>
+
+<!-- ======================================================== -->
+
+<h2>§2 张紧弦：从 F=ma 推波动方程</h2>
+
+<h3>2.1 模型</h3>
+
+<p>水平张紧弦，张力 \(T\)，单位长度质量 \(\mu\)。允许竖直小位移 \(\psi(x,t)\)（"小"指坡度 \(|\partial\psi/\partial x|\ll 1\)）。取 \(x\) 与 \(x+dx\) 之间的一小段做受力分析。</p>
+
+<h3>2.2 受力</h3>
+
+<p>张力沿弦切线方向，大小近似为 \(T\)（小角下张力大小变化是高阶量）。两端切线对水平的夹角分别 \(\theta(x)\) 与 \(\theta(x+dx)\)，竖直分量 \(T\sin\theta\approx T\tan\theta=T\,\partial_x\psi\)。竖直合力：</p>
+
+<p>$$ F_y = T\bigl[\,\partial_x\psi(x+dx,t)-\partial_x\psi(x,t)\,\bigr]
+       \approx T\cdot\frac{\partial^2\psi}{\partial x^2}\,dx. $$</p>
+
+<h3>2.3 加速度</h3>
+
+<p>这一段质量 \(\mu\,dx\)，竖直加速度 \(\partial^2\psi/\partial t^2\)。Newton：</p>
+
+<p>$$ \mu\,dx\,\frac{\partial^2\psi}{\partial t^2} = T\,\frac{\partial^2\psi}{\partial x^2}\,dx. $$</p>
+
+<p>两边消 \(dx\)：</p>
+
+<p>$$ \boxed{\;\frac{\partial^2\psi}{\partial t^2}=v^2\,\frac{\partial^2\psi}{\partial x^2}\,,\quad v=\sqrt{T/\mu}\;.\;}\tag{2.1}$$</p>
+
+<div class="box insight">
+  <p class="box-title">为什么是 ∂²ψ/∂t² 与 ∂²ψ/∂x²？两者的物理区别</p>
+
+  <p>波动方程里两边都是 ψ 的二阶导，但<strong>对不同变量求导，物理含义截然不同</strong>。ψ 是两个变量的函数 \(\psi(x,t)\)，"偏导"就是对其中一个变量求导，另一个当常数。</p>
+
+  <table class="formula-table">
+    <tbody>
+      <tr><th>\(\partial\psi/\partial t\)</th>
+          <td>固定 \(x\)，看 ψ 随时间变化 — <strong>那一点上下振动的速度</strong></td></tr>
+      <tr><th>\(\partial\psi/\partial x\)</th>
+          <td>固定 \(t\)，看 ψ 随位置变化 — <strong>那一时刻波形的斜率（坡度）</strong></td></tr>
+      <tr><th>\(\partial^2\psi/\partial t^2\)</th>
+          <td>该点上下振动的<strong>加速度</strong>（速度对时间的变化率）</td></tr>
+      <tr><th>\(\partial^2\psi/\partial x^2\)</th>
+          <td>该时刻波形的<strong>曲率</strong>（弯曲程度，凹凸）</td></tr>
+    </tbody>
+  </table>
+
+  <p><strong>所以波动方程 (2.1) 在说什么？</strong>左边是"该点加速多快"（\(\partial_t^2\)），右边是"该点弯多少"（\(\partial_x^2\)），方程把两者绑起来：<em>弦弯得越厉害，回弹的加速度就越大</em>。这正是 F=ma 写在一段绳元素上——曲率给恢复力，恢复力给加速度。</p>
+
+  <p><strong>用具体波 \(\psi=A\cos(kx-\omega t)\) 检验</strong>：</p>
+  <p>$$ \frac{\partial^2\psi}{\partial t^2} = -A\omega^2\cos(kx-\omega t),\qquad \frac{\partial^2\psi}{\partial x^2} = -Ak^2\cos(kx-\omega t). $$</p>
+  <p>代入 (2.1)：\(-A\omega^2 = v^2(-Ak^2)\) ⟹ \(\boxed{\omega=vk}\) — 这就是色散关系（详见 §3.3）。</p>
+
+  <p><strong>一句话直觉</strong>：把 ψ 想象成一根弯曲弦的形状。"曲率"是看一张照片测<em>空间上</em>多弯（\(\partial_x^2\)），"加速度"是看一段视频测<em>时间上</em>多快变（\(\partial_t^2\)）。波动方程把这两件事绑起来：弯得越厉害，回弹得越急。</p>
+</div>
+
+<details class="more-detail">
+  <summary>展开：为什么张力大小不变？</summary>
+  <p>张紧弦上张力<em>沿弧长</em>方向。弧元素长度 \(ds=\sqrt{1+(\partial_x\psi)^2}\,dx\approx dx[1+\tfrac12(\partial_x\psi)^2]\)。如果弦不可伸（不可压），那么 \(ds\) 保持原值——这就需要 \(T\) 略微变化。但变化是 \((\partial_x\psi)^2\) 的 二阶<em>小</em>量；F=ma 里我们只保留一阶项，因此可以把 \(T\) 当常数。这是"小振幅近似"的精确含义。</p>
+</details>
+
+<h3>2.4 波速 v=√(T/μ) 的直觉</h3>
+
+<div class="box insight">
+  <p class="box-title">为什么张力大或线密度小，波速就快？</p>
+  <p>
+    <strong>张力大</strong>：恢复力强（弦更"绷"），扰动被快速拉回，传播得快。
+    <br><strong>线密度小</strong>：每一段惯性小（更轻），同样恢复力下加速度更大。
+    <br>这两件事叠加 ↔ \(v\propto \sqrt{T/\mu}\)。
+    <br>类比：弹簧 \(\omega_0=\sqrt{k/m}\) 的角频率，越硬（k 大）或越轻（m 小）则振得越快。波动相当于把这个分立的 SHM 沿空间无限串联起来。
+  </p>
+</div>
+
+<!-- ======================================================== -->
+
+<h2>§3 解的两种写法</h2>
+
+<h3>3.1 d'Alembert 普适解</h3>
+
+<p>令 \(u\equiv x-vt\)，\(s\equiv x+vt\)。任何 \(f(u)\) 与 \(g(s)\) 满足 (2.1)。直接验证：\(\partial_t f(x-vt)=-v f'\)，\(\partial_t^2 f=v^2 f''\)；\(\partial_x^2 f=f''\)。✓ 所以最一般的解是</p>
+
+<p>$$ \boxed{\;\psi(x,t)=f(x-vt)+g(x+vt)\;.\;}\tag{3.1}$$</p>
+
+<p>含义：任意波形 \(f\) 以速度 \(+v\) 不变形地向右传播；任意波形 \(g\) 以速度 \(-v\) 向左传播。它们是<strong>独立</strong>的（线性叠加）。</p>
+
+<h3>3.2 简谐传播波</h3>
+
+<p>取 \(f\) 为余弦：</p>
+
+<p>$$ \boxed{\;\psi(x,t)=A\cos(kx-\omega t)\;,\;}\tag{3.2}$$</p>
+
+<p>各参数物理含义：</p>
+
+<table class="formula-table">
+  <tbody>
+    <tr><th>波数 \(k\)</th><td>每米几个相位 (\(2\pi\)) — 单位 rad/m。\(\lambda=2\pi/k\)（波长）。</td></tr>
+    <tr><th>角频率 \(\omega\)</th><td>每秒几个相位 — 单位 rad/s。\(T=2\pi/\omega\)，\(f=1/T=\omega/(2\pi)\)。</td></tr>
+    <tr><th>波速 \(v\)</th><td>从相位的等位线 \(kx-\omega t=\)const 求 \(v=\omega/k=\lambda f\)。</td></tr>
+    <tr><th>振幅 \(A\)</th><td>位移最大值。</td></tr>
+  </tbody>
+</table>
+
+<h3>3.3 色散关系</h3>
+
+<p>把 (3.2) 代回波动方程 (2.1)：</p>
+
+<p>$$ -\omega^2 A\cos(\cdot)=v^2(-k^2)A\cos(\cdot)
+   \;\Longrightarrow\;\boxed{\;\omega^2=v^2 k^2\;,\;}\tag{3.3}$$</p>
+
+<p>即 \(\omega=vk\) — 这是 \(\omega\) 与 \(k\) 之间的关系，叫<strong>色散关系</strong>（dispersion relation）。波动方程线性，所以不同 \(k\) 不同 \(\omega\) 的波互不耦合，但它们必须满足这条约束。</p>
+
+<p>对张紧弦 \(\omega=vk\) 是<strong>线性色散</strong>，意味着所有频率以同一速度传播——叫"非色散"媒质（non-dispersive）。其他例子（深水波、玻璃中的光）是 \(\omega(k)\) 非线性，叫"色散"媒质，会让脉冲扩散变形（详见 05 节波包）。</p>
+
+<!-- ======================================================== -->
+
+<h2>§4 驻波</h2>
+
+<p>固定两端的弦不能传播波到无穷远——左行波在端点反射成右行波，右行波也反射成左行波。两者叠加，形成<strong>驻波</strong>（standing wave）。</p>
+
+<h3>4.1 推导</h3>
+
+<p>左右行简谐波叠加：</p>
+
+<p>$$ \psi=A\cos(kx-\omega t)+A\cos(kx+\omega t)=2A\cos(kx)\cos(\omega t). $$</p>
+
+<p>形态：空间因子 \(\cos(kx)\) 与时间因子 \(\cos(\omega t)\) <strong>分开</strong>——任意时刻波形都是同一个 \(\cos(kx)\) 形状，振幅按 \(\cos(\omega t)\) 周期变化。<em>波形不传播</em>——所以叫"驻"波。</p>
+
+<h3>4.2 边界条件 → 量子化频率</h3>
+
+<p><strong>两端固定</strong>（吉他弦）：要 \(\psi(0,t)=\psi(L,t)=0\) 永远成立。<br>
+\(\psi(0)=2A\cos(0)\cos(\omega t)=2A\cos(\omega t)\) ≠ 0 — 不行！需要换 \(\sin(kx)\) 而非 \(\cos(kx)\)：取另一个相位的叠加（左右行波相位差 \(\pi\)），得</p>
+
+<p>$$ \psi=2A\sin(kx)\cos(\omega t). $$</p>
+
+<p>这个自动 \(\psi(0)=0\) ✓。再要 \(\psi(L)=0\)：\(\sin(kL)=0\Rightarrow kL=n\pi\)，\(n=1,2,3,\ldots\)。结合 \(\omega=vk\)：</p>
+
+<p>$$ \boxed{\;f_n=\frac{nv}{2L}\;,\quad n=1,2,3,\ldots\;}\quad(\text{两端固定}). \tag{4.1}$$</p>
+
+<p>\(n=1\) 是基频（fundamental），\(n=2,3,\ldots\) 是泛音/谐波（harmonics）。</p>
+
+<p><strong>一端固定一端自由</strong>（管乐器、管口开口）：\(\psi(0)=0\)，\(\partial_x\psi(L)=0\)（自由端坡度为零）。需要 \(\sin(kL)\) 在边界自由端取极值，即 \(\cos(kL)=0\Rightarrow kL=(2n+1)\pi/2\)：</p>
+
+<p>$$ \boxed{\;f_n=\frac{(2n+1)v}{4L}\;,\quad n=0,1,2,\ldots\;}\quad(\text{一端开}). \tag{4.2}$$</p>
+
+<p>相邻泛音间隔是基频的 2 倍，所以只听到奇次谐波——这是单簧管"暖"音色的来源（小提琴/吉他两端固定，则有全部谐波，音色更"亮"）。</p>
+
+<details class="more-detail">
+  <summary>展开：节点 (node) 和波腹 (antinode)</summary>
+  <p>驻波 \(\psi=2A\sin(kx)\cos(\omega t)\) 中：</p>
+  <ul>
+    <li><strong>节点</strong>：\(\sin(kx)=0\) 处，\(\psi\equiv 0\) 永远不动。位置 \(x=0,\lambda/2,\lambda,\ldots\)。</li>
+    <li><strong>波腹</strong>：\(|\sin(kx)|=1\) 处，振幅最大。位置 \(x=\lambda/4, 3\lambda/4,\ldots\)。</li>
+  </ul>
+  <p>第 \(n\) 个谐波在弦上有 \(n+1\) 个节点（含两端）和 \(n\) 个波腹。这是为什么吉他第二谐波（八度）演奏时把指尖放在弦正中——那里是新增的节点。</p>
+</details>
+
+<!-- ======================================================== -->
+
+<h2>§5 波的能量与功率</h2>
+
+<h3>5.1 能量密度</h3>
+
+<p>弦上 \(dx\) 段，质量 \(\mu\,dx\)，竖直速度 \(\partial_t\psi\)：</p>
+
+<p>$$ d K = \tfrac12\mu(\partial_t\psi)^2\,dx. $$</p>
+
+<p>这一段的拉伸量 \(ds-dx\approx\tfrac12 (\partial_x\psi)^2\,dx\)，对应的弹性势能：</p>
+
+<p>$$ d U = \tfrac12 T(\partial_x\psi)^2\,dx. $$</p>
+
+<p>能量<strong>线密度</strong>（per unit length）：</p>
+
+<p>$$ \varepsilon(x,t)=\tfrac12\mu(\partial_t\psi)^2+\tfrac12 T(\partial_x\psi)^2. \tag{5.1}$$</p>
+
+<h3>5.2 传播波 KE = PE 瞬时相等</h3>
+
+<p>对 \(\psi=A\cos(kx-\omega t)\)：</p>
+<ul>
+  <li>\(\partial_t\psi=A\omega\sin(kx-\omega t)\) → KE 密度 \(\tfrac12\mu A^2\omega^2\sin^2\)；</li>
+  <li>\(\partial_x\psi=-A k\sin(kx-\omega t)\) → PE 密度 \(\tfrac12 T A^2 k^2\sin^2\)。</li>
+</ul>
+<p>由 \(\omega=vk\) 与 \(v^2=T/\mu\)，\(T k^2=\mu\omega^2\)。所以 KE 与 PE 在<strong>每一个时刻、每一处</strong>瞬时相等！</p>
+
+<p>$$ \varepsilon = \mu A^2\omega^2 \sin^2(kx-\omega t). $$</p>
+
+<p>时间或空间平均：</p>
+
+<p>$$ \boxed{\;\bar\varepsilon=\tfrac12\mu A^2\omega^2\;.\;}\tag{5.2}$$</p>
+
+<div class="box remark">
+  <p class="box-title">传播波 vs 驻波：能量分布完全不同</p>
+  <p>对驻波 \(\psi=2A\sin(kx)\cos(\omega t)\)：</p>
+  <ul>
+    <li>KE 密度 \(\propto \sin^2(kx)\sin^2(\omega t)\) — 在<em>波腹</em>处最大、在<em>节点</em>处恒为零。</li>
+    <li>PE 密度 \(\propto \cos^2(kx)\sin^2(\omega t)\) — 反过来，在<em>节点</em>处最大、在<em>波腹</em>处恒为零。</li>
+  </ul>
+  <p>所以驻波里 KE 和 PE 在<strong>空间</strong>上反相关，能量在节点附近的 PE 与波腹附近的 KE 之间周期性来回。这跟传播波"\(\varepsilon\) 集中在零位移处然后整个分布以 \(v\) 平移"的图景截然不同。</p>
+</div>
+
+<h3>5.3 功率传输</h3>
+
+<p>传播波能量以速度 \(v\) 沿弦移动，功率（每秒通过某点的能量）：</p>
+
+<p>$$ \boxed{\;P=\bar\varepsilon\,v=\tfrac12\mu A^2\omega^2 v\;.\;}\tag{5.3}$$</p>
+
+<details class="more-detail">
+  <summary>展开：从张力做的功直接验证</summary>
+  <p>左侧弦对右侧弦的纵向力是 \(T\) 沿切线方向；竖直分量 \(T\sin\theta\approx T\partial_x\psi\)。这个力作用在右段端点上，那里的速度是 \(\partial_t\psi\)。功率（左对右做功）：</p>
+  <p>$$ P=-T(\partial_x\psi)(\partial_t\psi). $$</p>
+  <p>（负号是因为正坡度时左侧把右侧往下推、若右侧往上动则做负功；抑或是符号约定问题。）代入 \(\psi=A\cos(kx-\omega t)\)，对时间平均：</p>
+  <p>$$ \bar P=\tfrac12 T A^2 k\omega = \tfrac12\mu A^2 v\omega^2. $$</p>
+  <p>与 (5.3) 一致。✓ 注意 \(P\propto A^2\omega^2 v\) — 振幅<em>翻倍</em>会使功率<em>四倍</em>，这就是为什么扬声器喇叭（大振幅）需要远更大的电功率。</p>
+</details>
+
+<!-- ======================================================== -->
+
+<h2>§6 交互：驻波模式</h2>
+
+<div class="box interactive">
+  <p class="box-title">两端固定的弦：基频与谐波</p>
+  <p>拖动 \(n\) 看不同模式的形态、节点位置、相邻模式间频率间隔。</p>
+
+  <div class="widget">
+    <canvas id="standing-canvas" width="600" height="280"></canvas>
+    <div class="controls">
+      <div class="control-row">
+        <label>谐波次数 n</label>
+        <input type="range" id="standing-n" min="1" max="6" step="1" value="1" />
+        <span class="readout" id="standing-n-readout"></span>
+      </div>
+      <div class="control-row">
+        <label></label>
+        <span style="font-size:.85rem;color:#6b7280">
+          \(f_n/f_1\) = <span id="standing-fratio" style="font-family:Menlo,monospace;color:#0f766e"></span>
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ======================================================== -->
+
+<h2>§7 Worked Examples</h2>
+
+<div class="example">
+  <h4>Example：吉他弦的张力</h4>
+  <p class="source">改编自 Shankar §18.1 例</p>
+  <p>吉他高音 E 弦：长度 \(L=0.65\) m，质量 \(M=0.35\) g，调音到基频 \(f_1=330\) Hz。求张力 \(T\)。</p>
+
+  <div class="solution-step"><strong>线密度</strong>：\(\mu=M/L=3.5\times 10^{-4}/0.65\approx 5.4\times 10^{-4}\) kg/m。</div>
+
+  <div class="solution-step"><strong>波速</strong>：基频 \(f_1=v/(2L)\)：
+    $$ v = 2 L f_1 = 2\cdot 0.65\cdot 330 = 429\text{ m/s}. $$
+  </div>
+
+  <div class="solution-step"><strong>张力</strong>：\(v=\sqrt{T/\mu}\Rightarrow T=\mu v^2\)：
+    $$ T = 5.4\times 10^{-4}\cdot 429^2\approx 99\text{ N}. $$
+    约 10 公斤——所以紧弦时琴桥要承受相当大的力（六根弦合计 \(\sim 60\) 公斤），这正是为什么吉他面板需要内置加强结构。
+  </div>
+</div>
+
+<div class="example">
+  <h4>Example：传输给弦的功率</h4>
+  <p class="source">改编自 Shankar §18.4</p>
+  <p>同一根 E 弦：振幅 \(A=2\) mm，频率 \(f=330\) Hz。问每秒沿弦传输的能量是多少？</p>
+
+  <div class="solution-step"><strong>角频率</strong>：\(\omega=2\pi f\approx 2073\) rad/s。</div>
+
+  <div class="solution-step"><strong>功率</strong>：\(P=\tfrac12\mu A^2\omega^2 v\)：
+    $$ P = \tfrac12\cdot 5.4\times 10^{-4}\cdot (2\times 10^{-3})^2\cdot 2073^2\cdot 429 \approx 2.0\text{ W}. $$
+  </div>
+
+  <div class="solution-step"><strong>解读</strong>：2 W 是个相当大的功率——但<em>这是机械功率</em>，不是声学功率。弦本身是大部分时候<em>不是</em>在向空气辐射，能量大部分储存在驻波模式里慢慢由内阻和声辐射耗散。声辐射效率非常低（小直径线源对大波长空气波辐射不匹配），所以听到的声功率只是几毫瓦。这就是为什么吉他需要琴体共振箱（resonance body）——通过更大面积的木板把弦的振动转换为高效的空气波辐射。</div>
+</div>
+
+<div class="example">
+  <h4>Problem (★ harder)：弹性绳的两端反射拼图</h4>
+  <p class="source">改编自 Shankar §18 problem set</p>
+  <p>一根长 \(L\) 的弹性绳右端被牢牢钉死，左端自由。某时刻在绳子中部 \(x_0=L/2\) 处生成一个尖峰脉冲，向右传播。脉冲到达右端反射，再传到左端再反射。问 (a) 脉冲第二次回到 \(x_0\) 需要多长时间？(b) 第二次回到时脉冲的极性（正/负）是怎样的？</p>
+
+  <div class="solution-step"><strong>(a) 行程时间</strong>：脉冲先向右走 \(L/2\)、反射、向左走 \(L\)、反射、向右走 \(L/2\) — 共走 \(2L\)：
+    $$ t = \frac{2L}{v}. $$
+  </div>
+
+  <div class="solution-step"><strong>(b) 极性反转规则</strong>：
+    <ul>
+      <li><strong>固定端</strong>（右端）：反射波相位反转 \(\pi\)（"硬反射"），脉冲翻转极性。物理原因：固定端 \(\psi=0\)，入射 + 反射在那点必须互消。</li>
+      <li><strong>自由端</strong>（左端）：反射波同相位（"软反射"），脉冲不变极性。物理原因：自由端 \(\partial_x\psi=0\)（坡度零），入射 + 反射在那点的坡度互消。</li>
+    </ul>
+  </div>
+
+  <div class="box insight">
+    <p class="box-title">为什么固定端翻转、自由端不翻转？三种理解</p>
+
+    <p><strong>(i) 边界条件 → 反射波形的数学推导。</strong>设入射 \(\psi_{\text{in}}(x-vt)\) 自左向右传，反射 \(\psi_{\text{r}}(x+vt)\) 自右向左传，叠加 \(\psi=\psi_{\text{in}}+\psi_{\text{r}}\)。</p>
+
+    <ul>
+      <li><strong>固定端 \(x=L\)</strong>：要求 \(\psi(L,t)=0\) 对一切 \(t\) 成立。
+        $$ \psi_{\text{in}}(L-vt) + \psi_{\text{r}}(L+vt) = 0
+           \;\Longrightarrow\;
+           \psi_{\text{r}}(s) = -\psi_{\text{in}}(2L-s). $$
+        反射波形 = 入射波形 <strong>×(−1)</strong>（极性翻转）+ 空间镜像（关于 \(x=L\)）。所以是"硬反射"。</li>
+      <li><strong>自由端 \(x=L\)</strong>：要求 \(\partial_x\psi(L,t)=0\)。
+        $$ \psi_{\text{in}}'(L-vt) + \psi_{\text{r}}'(L+vt) = 0
+           \;\Longrightarrow\;
+           \psi_{\text{r}}'(s) = -\psi_{\text{in}}'(2L-s). $$
+        积分（取常数 = 0）：
+        $$ \psi_{\text{r}}(s) = +\psi_{\text{in}}(2L-s). $$
+        反射波形 = 入射波形（<strong>同极性</strong>）+ 空间镜像。所以是"软反射"。</li>
+    </ul>
+
+    <p><strong>(ii) 力学直觉：墙 vs 滑环。</strong></p>
+    <ul>
+      <li><strong>固定端</strong>：绳子绑在墙上。脉冲到达瞬间，端点本应被绳子向上拉，但墙不让它动；由 Newton 第三定律，墙给绳一个相等的<em>向下</em>反作用力——这道"反作用脉冲"就是反射波，它必然<em>朝下</em>，故极性翻转。</li>
+      <li><strong>自由端</strong>：绳尾穿过一个无摩擦的滑环（套在杆上，可自由上下滑）。脉冲到达时，端点不受任何<em>横向</em>约束，于是被拉得<em>过冲</em>到比脉冲峰值更高的位置（因为整个端点没有"惯性"对抗瞬时力？这描述其实更像：端点作为"自由"边界没有反力的情况下，恰能跟随入射波形而自然返回，反射波与入射同相位）。结果反射脉冲方向不变，极性不翻。</li>
+    </ul>
+
+    <p><strong>(iii) 能量与"硬度"。</strong>两种端点都<em>反射 100% 能量</em>（理想极限）——区别只在相位。一般边界（如绳接到另一段不同密度的绳上）会部分透射、部分反射，反射系数 \(R=(Z_2-Z_1)/(Z_2+Z_1)\)（其中 \(Z=\sqrt{T\mu}\) 是机械阻抗）：</p>
+    <ul>
+      <li>\(Z_2\to\infty\)（接到极重 / 极硬媒质 = 固定端）：\(R=+1\)（注意符号约定下 = 翻转）；</li>
+      <li>\(Z_2\to 0\)（接到极轻 / 极软媒质 = 自由端）：\(R=-1\)（不翻转）；</li>
+      <li>\(Z_2=Z_1\)：\(R=0\)（全透射，无反射，"阻抗匹配"）。</li>
+    </ul>
+    <p>所以"固定 vs 自由"是一般阻抗失配的两个极端。</p>
+
+    <p><strong>(iv) 跨学科同源现象。</strong>同样的"硬反射 / 软反射"规则在所有线性波里出现：</p>
+    <ul>
+      <li><strong>光</strong>：从光疏（小 \(n\)）入射到光密（大 \(n\)）反射有 \(\pi\) 相变（牛顿环、薄膜干涉里那个"额外半波损"）；反过来则无。</li>
+      <li><strong>声波</strong>：开管端 \(=\) 自由端（压强节点 = 位移波腹）；闭管端 \(=\) 固定端（压强波腹 = 位移节点）。这就是为什么单簧管（一开一闭）的谐波只是奇数倍。</li>
+      <li><strong>量子力学</strong>：薛定谔波函数在无穷深势阱壁上 \(\psi=0\) 是固定端边界，给出离散能级。</li>
+      <li><strong>地震学</strong>：S 波从地幔反射到自由地表（自由端），反射波同相；这个相位关系帮助地震学家区分地质界面。</li>
+    </ul>
+  </div>
+
+  <div class="solution-step"><strong>合计</strong>：从 \(x_0\) 出发，向右、固定端反（极性翻），向左、自由端反（极性不变），回到 \(x_0\)。<strong>极性翻转一次</strong>——脉冲回来时极性<em>反</em>了。</div>
+
+  <div class="solution-step"><strong>物理意义</strong>：若两端都固定，每次往返脉冲翻转两次（= 不翻转）；只有一端固定一端自由时，每次往返翻转一次（如本题）。这与一端固定一端自由系统只允许奇次谐波（\(n=1,3,5\ldots\) 倍频，间隔等于 2 倍基频）的现象一致——但严格的"为什么是奇次"还是要靠边界条件分析（\(\psi(0)=0\)、\(\partial_x\psi(L)=0\) 给 \(kL=(2n+1)\pi/2\)）。</div>
+</div>
+
+<div class="example">
+  <h4>Problem (★★ challenge)：从振幅衰减估计阻尼</h4>
+  <p class="source">改编自 Shankar §18 problem set</p>
+  <p>同一吉他 E 弦（\(\mu=5.4\times 10^{-4}\) kg/m, \(v=429\) m/s, \(\omega=2073\) rad/s, \(A=2\) mm）。拨响后约 4 秒振幅衰减到 \(1/e\)。估算 (a) 弦每周期损失多少能量比例？(b) 若这是<em>仅</em>由声辐射造成的，估算辐射声功率与 §7-Example 里"机械"功率 2 W 的对比。</p>
+
+  <div class="solution-step"><strong>(a) Q 因子与能量损失</strong>：振幅按 \(e^{-\gamma t/2m}\) 衰减，能量按 \(e^{-\gamma t/m}\)（能量 \(\propto A^2\)）。\(1/e\) 振幅时间 \(\tau_A=4\) s，对应能量时间常数 \(\tau_E=\tau_A/2=2\) s。每周期 \(T=1/f=3.03\) ms 内损失能量比例：
+    $$ \Delta E/E \approx T/\tau_E = 0.00303/2\approx 1.5\times 10^{-3}\;(0.15\%). $$
+    \(Q=\omega\tau_E\approx 2073\cdot 2\approx 4150\)（与 01 节的吉他弦 Q 估算一致）。
+  </div>
+
+  <div class="solution-step"><strong>(b) 储存能量</strong>。驻波总能量 \(E\sim\tfrac12\mu \omega^2 A^2 L\sim\)
+    $$ E \sim 0.5\cdot 5.4\times 10^{-4}\cdot 2073^2\cdot (2\times 10^{-3})^2\cdot 0.65
+       \approx 3.0\times 10^{-3}\text{ J}. $$
+    （这是个粗估，准确值含驻波形态因子。）
+  </div>
+
+  <div class="solution-step"><strong>(c) 平均辐射功率</strong>：能量按时间常数 \(\tau_E=2\) s 耗散：
+    $$ P_{\text{rad}}\sim E/\tau_E\sim 3\times 10^{-3}/2 = 1.5\text{ mW}. $$
+    远远小于 §7-Example 里"沿弦传输的机械功率" 2 W！说明：弦上的"机械功率"是<em>能量在弦各部分之间</em>的传递（驻波站不动，但每个截面上仍有 \(P\) 的瞬时能量流过），而辐射出去的声功率是<em>非常小</em>的一部分。这是为什么实心弦本身几乎听不见声音，必须借助共鸣箱才能放大。</div>
+</div>
+
+<!-- ======================================================== -->
+
+<h2>§8 Self-check</h2>
+
+<div class="self-check">
+  <p class="question">Q1. 把一根弦的张力加 4 倍，基频变成原来的多少？</p>
+  <details>
+    <summary>查看答案</summary>
+    <p>\(v=\sqrt{T/\mu}\Rightarrow v\to 2v\)。基频 \(f_1=v/(2L)\Rightarrow f_1\to 2f_1\)。基频翻倍，相当于升一个八度。这是吉他调音的物理：拧紧弦轴增加张力来升音高。</p>
+  </details>
+</div>
+
+<div class="self-check">
+  <p class="question">Q2. 吉他高音 E 弦（\(\mu_1\)) 与低音 E 弦（\(\mu_2\)) 长度相同、张力相近。低音 E 比高音 E 低两个八度（频率 1/4），那 \(\mu_2/\mu_1\) 是多少？</p>
+  <details>
+    <summary>查看答案</summary>
+    <p>\(f\propto\sqrt{T/\mu}/L\)，固定 \(T, L\)：\(f\propto 1/\sqrt\mu\)。频率变 1/4 ⇒ \(\sqrt\mu\) 变 4 倍 ⇒ \(\mu\) 变 16 倍。低音弦的线密度大约是高音弦的 16 倍——所以低音弦"粗"得多。实际吉他低音弦还做成"绕线"结构（钢芯+铜线缠绕）来增加 \(\mu\) 而不让弦太硬影响柔顺度。</p>
+  </details>
+</div>
+
+<div class="self-check">
+  <p class="question">Q3. 把吉他从空调间（20°C）带到舞台（30°C）。木质琴体热膨胀让 \(L\) 微增 0.1%。基频会变还是不变？</p>
+  <details>
+    <summary>查看答案</summary>
+    <p>会<em>降低</em> 0.1%。\(f_1=v/(2L)\)，\(L\) 增 ⇒ \(f_1\) 减。0.1% 频率变化 \(\sim 1\) cent，对训练有素的耳朵已经可闻。这是为什么音乐家在演出前要在台上重新调音——温度从空调间到舞台、灯光照射的局部加热，都会改变弦长与琴体几何，从而改变音高。</p>
+  </details>
+</div>
+
+<div class="self-check">
+  <p class="question">Q4. 一管的两端皆开放（如长笛），允许的频率是什么样？</p>
+  <details>
+    <summary>查看答案</summary>
+    <p>两端皆开口对应两端皆为<strong>压力节点</strong>（位移波腹）的边界条件。这跟两端固定的弦数学相同：\(f_n=nv/(2L)\)，全套谐波 \(n=1,2,3,\ldots\)。所以长笛与吉他都有"丰满"的全谐波谱；而两端开 vs 两端固定的差别只是节点 / 波腹位置互换（弦端点 \(\psi=0\) 是位移节点；管开口端是<em>压力</em>节点 \(p=0\) 即位移波腹）。一端开一端闭的情况（单簧管）才会缺奇/偶频。</p>
+  </details>
+</div>
+
+<div class="self-check">
+  <p class="question">Q5. 张紧弦上的波传得比声音快还是慢？</p>
+  <details>
+    <summary>查看答案</summary>
+    <p><strong>看具体值</strong>。空气声速 \(\sim 343\) m/s。吉他高音 E 弦上波速我们刚算过 \(\sim 429\) m/s——比声音快。低音 E 弦（频率 82.4 Hz，长 0.65 m）波速 \(v=2Lf\approx 107\) m/s——比声音慢。一般规律：固体里<em>横波</em>（弦、剪切弹性波）速度受张力或剪切模量限制；<em>纵波</em>（声波）由 bulk modulus 与密度决定，金属里轻易就到 5000 m/s 以上。</p>
+  </details>
+</div>
+
+<!-- ======================================================== -->
+
+<h2>§9 公式速查表</h2>
+
+<table class="formula-table">
+  <tbody>
+    <tr><th>1D 波动方程</th><td>\(\partial_t^2\psi=v^2\partial_x^2\psi\)</td></tr>
+    <tr><th>张紧弦波速</th><td>\(v=\sqrt{T/\mu}\)</td></tr>
+    <tr><th>简谐传播波</th><td>\(\psi=A\cos(kx-\omega t)\)</td></tr>
+    <tr><th>k, ω, λ, T, v 关系</th><td>\(\lambda=2\pi/k\)，\(T=2\pi/\omega\)，\(v=\omega/k=\lambda f\)</td></tr>
+    <tr><th>色散关系（弦）</th><td>\(\omega=vk\)（线性、非色散）</td></tr>
+    <tr><th>普适解（d'Alembert）</th><td>\(\psi=f(x-vt)+g(x+vt)\)</td></tr>
+    <tr><th>驻波（叠加）</th><td>\(\psi=2A\sin(kx)\cos(\omega t)\)（左行+右行同振幅、相位差 π）</td></tr>
+    <tr><th>两端固定频率</th><td>\(f_n=nv/(2L)\)，\(n=1,2,\ldots\)（全套谐波）</td></tr>
+    <tr><th>一端开放频率</th><td>\(f_n=(2n+1)v/(4L)\)，\(n=0,1,\ldots\)（仅奇次）</td></tr>
+    <tr><th>能量线密度</th><td>\(\varepsilon=\tfrac12\mu(\partial_t\psi)^2+\tfrac12 T(\partial_x\psi)^2\)</td></tr>
+    <tr><th>传播波平均能量密度</th><td>\(\bar\varepsilon=\tfrac12\mu A^2\omega^2\)</td></tr>
+    <tr><th>传播波功率</th><td>\(P=\bar\varepsilon\,v=\tfrac12\mu A^2\omega^2 v\)</td></tr>
+    <tr><th>反射极性规则</th><td>固定端 \(\pi\) 翻转（硬反射）；自由端不变（软反射）</td></tr>
+  </tbody>
+</table>
+
+<!-- ======================================================== -->
+
+<div class="glossary">
+  <h2>术语表</h2>
+  <dl>
+    <dt>波 (wave)</dt>
+    <dd>扰动在媒质中的传播；传播能量、动量、相位，但不传播物质。</dd>
+
+    <dt>波动方程 (wave equation)</dt>
+    <dd>\(\partial_t^2\psi=v^2\partial_x^2\psi\)；线性、二阶、色散关系 \(\omega=vk\)。</dd>
+
+    <dt>波长 (wavelength, λ)</dt>
+    <dd>空间周期；\(\lambda=2\pi/k=v/f\)。</dd>
+
+    <dt>波数 (wave number, k)</dt>
+    <dd>每单位长度的相位（rad/m）；\(k=2\pi/\lambda\)。</dd>
+
+    <dt>角频率 / 频率 (ω / f)</dt>
+    <dd>每单位时间的相位 / 振动次数；\(\omega=2\pi f\)。</dd>
+
+    <dt>波速 (wave speed, v)</dt>
+    <dd>波形传播速度；\(v=\omega/k=\lambda f\)；张紧弦 \(\sqrt{T/\mu}\)。</dd>
+
+    <dt>色散关系 (dispersion relation)</dt>
+    <dd>\(\omega(k)\) 函数；线性 \(\omega=vk\) 为非色散。</dd>
+
+    <dt>非色散媒质 (non-dispersive medium)</dt>
+    <dd>所有频率以同一速度传播；脉冲不变形（如张紧弦、真空电磁波）。</dd>
+
+    <dt>d'Alembert 解</dt>
+    <dd>\(\psi=f(x-vt)+g(x+vt)\) — 任意波形传播的普适表示。</dd>
+
+    <dt>驻波 (standing wave)</dt>
+    <dd>左右行波叠加形成、波形不传播的振动；空间-时间分离 \(\psi=X(x)T(t)\)。</dd>
+
+    <dt>节点 / 波腹 (node / antinode)</dt>
+    <dd>驻波中振幅恒为零 / 极大的位置。</dd>
+
+    <dt>基频 / 谐波 (fundamental / harmonic)</dt>
+    <dd>边界条件允许的最低 / 整数倍频率。</dd>
+
+    <dt>能量密度 (energy density)</dt>
+    <dd>单位长度（或单位体积）的总机械能；KE 项 + PE 项。</dd>
+
+    <dt>反射极性 (reflection polarity)</dt>
+    <dd>固定端反射相位翻转 π；自由端反射相位不变。</dd>
+  </dl>
+</div>
+
+<!-- ======================================================== -->
+
+<nav class="page-nav">
+  <a class="nav-prev" href="01_shm.html">SHM</a>
+  <a class="nav-next" href="03_3d_waves_sound.html">3D 波 + 声强</a>
+</nav>
+
+</main>
+
+<script src="interactive.js"></script>
+<script>
+  markCurrentReviewing('02_wave_propagation.html');
+
+  // -------- Standing wave modes --------
+  (function() {
+    const setup = setupCanvas('standing-canvas', 600, 280);
+    if (!setup) return;
+    const { ctx, w, h } = setup;
+    const padL = 40, padR = 40, padT = 40, padB = 50;
+    const stringY = (h - padB - padT) / 2 + padT;
+
+    function draw(n) {
+      ctx.clearRect(0, 0, w, h);
+
+      const x0 = padL, x1 = w - padR;
+      const Lpx = x1 - x0;
+
+      // string baseline
+      ctx.strokeStyle = '#9ca3af';
+      ctx.setLineDash([3, 3]);
+      ctx.beginPath();
+      ctx.moveTo(x0, stringY); ctx.lineTo(x1, stringY); ctx.stroke();
+      ctx.setLineDash([]);
+
+      // fixed-end markers
+      ctx.fillStyle = '#374151';
+      ctx.beginPath(); ctx.arc(x0, stringY, 5, 0, 2*Math.PI); ctx.fill();
+      ctx.beginPath(); ctx.arc(x1, stringY, 5, 0, 2*Math.PI); ctx.fill();
+
+      // multiple time snapshots (envelope + at t=0)
+      const A = (h - padT - padB) / 2 - 10;
+      // envelope (light)
+      ctx.strokeStyle = '#fed7aa';
+      ctx.lineWidth = 1;
+      [+1, -1].forEach(sign => {
+        ctx.beginPath();
+        for (let i = 0; i <= 200; i++) {
+          const x = x0 + Lpx * (i / 200);
+          const xi = (i / 200);
+          const y = stringY - sign * A * Math.sin(n * Math.PI * xi);
+          if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+        }
+        ctx.stroke();
+      });
+
+      // current waveform (cos(omega t)=1, so just the spatial sine)
+      ctx.strokeStyle = '#0f766e';
+      ctx.lineWidth = 2.5;
+      ctx.beginPath();
+      for (let i = 0; i <= 200; i++) {
+        const x = x0 + Lpx * (i / 200);
+        const xi = (i / 200);
+        const y = stringY - A * Math.sin(n * Math.PI * xi);
+        if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+      }
+      ctx.stroke();
+
+      // mark nodes
+      ctx.fillStyle = '#dc2626';
+      for (let k = 0; k <= n; k++) {
+        const xn = x0 + Lpx * (k / n);
+        ctx.beginPath();
+        ctx.arc(xn, stringY, 4, 0, 2*Math.PI);
+        ctx.fill();
+      }
+
+      // labels
+      ctx.fillStyle = '#374151';
+      ctx.font = "13px -apple-system, sans-serif";
+      ctx.textAlign = 'center';
+      ctx.fillText(`n = ${n}    f_n = ${n} f₁`, w / 2, 25);
+      ctx.fillText('0', x0, h - 15);
+      ctx.fillText('L', x1, h - 15);
+
+      // node count label
+      ctx.font = "11px -apple-system, sans-serif";
+      ctx.fillStyle = '#dc2626';
+      ctx.fillText(`节点数：${n + 1}`, w / 2, h - 15);
+
+      document.getElementById('standing-fratio').textContent = n;
+    }
+
+    bindSlider('standing-n', 'standing-n-readout',
+      v => draw(Math.round(v)),
+      v => Math.round(v).toString()
+    );
+  })();
+</script>
+
+</body>
+</html>

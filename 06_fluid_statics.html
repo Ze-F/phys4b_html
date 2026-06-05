@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>06 · 流体静力学 — PHYS 4B 复习</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="theme.js"></script>
+  <script>
+    MathJax = {
+      tex: { inlineMath: [['\\(', '\\)']], displayMath: [['$$', '$$']] },
+      svg: { fontCache: 'global' }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" async></script>
+</head>
+<body>
+
+<header class="site-header">
+  <a class="home-link" href="index.html">← PHYS 4B 复习</a>
+  <nav>
+    <a href="07_fluid_dynamics.html">下一篇：流体动力学 →</a>
+  </nav>
+</header>
+
+<main class="container">
+
+<div class="topic-header">
+  <h1>06 · 流体静力学</h1>
+  <p class="meta">Lec 4.2 + 5.1 前段 + 5.2 尾段 · Shankar §20.1–20.2 · OpenStax Vol.1 Ch.14</p>
+  <p class="blurb">静止流体里的压强如何分布？为什么深海压力高？为什么液压机能放大力？为什么冰山只露出一角？为什么大气密度随高度指数衰减？这一节把这些"看似不同"的问题统一在 <em>一个</em> 平衡方程 <code>dP/dh = −ρg</code> 之下。</p>
+</div>
+
+<!-- ======================================================== -->
+
+<div class="box key-result">
+  <p class="box-title">一页速览</p>
+  <ul>
+    <li>压强是<strong>标量</strong>：\(P=F_{\perp}/A\)，且在静止流体中各方向同值。</li>
+    <li>静力学方程：\(\dfrac{dP}{dh}=-\rho g\)。不可压缩 ⇒ \(P=P_0+\rho g d\)。</li>
+    <li>Pascal 原理 / 液压机：\(F_1/A_1=F_2/A_2\)，配合体积守恒 \(A_1 x_1=A_2 x_2\) 给出力放大但功不变。</li>
+    <li>Archimedes：\(F_{\text{buoy}}=\rho_{\text{fluid}}\,g\,V_{\text{disp}}\)。</li>
+    <li>可压缩气体的等温大气：\(\rho(h)=\rho_0\,e^{-h/H}\)，\(H=P_0/(\rho_0 g)\approx 8.58\) km。</li>
+  </ul>
+</div>
+
+<!-- ======================================================== -->
+
+<h2>§1 故事线：三个看似无关的问题</h2>
+
+<p>下面这三个问题表面上风马牛不相及，但都指向同一个数学结构：</p>
+
+<ol>
+  <li>潜水员潜到 30 米深处，胸腔承受多大压强？</li>
+  <li>修车工踩一个踏板，怎么就能撬起整辆车？</li>
+  <li>从海平面爬到珠峰顶（~ 8.85 km），气压降为多少？</li>
+</ol>
+
+<p>三个问题的共同骨架：流体处于<strong>力平衡</strong>。任意取一小块流体作受力分析，重力被来自周围流体的压强差顶住——这就是<em>静力学方程</em>。把这条方程在不同情境下（液体 vs. 气体、固定容器 vs. 开放大气）展开，就得到三个不同的解析式。所以掌握一个方程，就掌握了整章。</p>
+
+<div class="box insight">
+  <p class="box-title">物理直觉：为什么是"压强差"而不是"压强本身"？</p>
+  <p>一块流体上下表面压强分别是 \(P_{\text{下}}\) 与 \(P_{\text{上}}\)。如果两者相等（均匀压强），则上下推它的合力为零，重力没人扛——它会加速下沉，不可能静止。所以必须 \(P_{\text{下}}>P_{\text{上}}\)，差值正好等于这块流体的重量。换句话说，<strong>是<em>压强梯度</em>，而非压强本身，托住了流体</strong>。</p>
+</div>
+
+<!-- ======================================================== -->
+
+<h2>§2 核心推导</h2>
+
+<h3>2.1 压强是标量（Pascal 第一观察）</h3>
+
+<p>静止流体不能承受切应力（一旦受切就会流动），所以力只能沿表面法向。在流体内部任取一微元，<em>不管法向指向哪个方向</em>，单位面积上的法向力都相同——这是 Pascal 在 1640–1650 年代一系列流体实验中确立的观察（《Traité de l'équilibre des liqueurs》写于约 1653 年，1663 年身后出版），也是把"压强"作为标量定义的物理基础。</p>
+
+<p>$$ P \;=\; \frac{F_\perp}{A}, \qquad [P]=\text{Pa}=\text{N/m}^2. $$</p>
+
+<p>常用单位：</p>
+<ul>
+  <li>1 atm = 1.01325 × 10⁵ Pa = 1.01325 bar</li>
+  <li>1 atm = 760 torr (= 760 mmHg)</li>
+  <li>1 bar = 10⁵ Pa</li>
+</ul>
+
+<div class="box insight">
+  <p class="box-title">"压强是标量"≠"力没有方向"——常见混淆</p>
+  <p>Pascal 实验告诉我们：在静止流体里某一点处，<strong>压强 \(P\) 是一个数</strong>，跟测试面朝哪个方向无关。但这一点经常被误读成"压强没有方向 ⇒ 它产生的力也没有方向"——错。</p>
+
+  <p>区分两个量：</p>
+  <ul>
+    <li><strong>压强 \(P\)</strong>（标量场）：每一点一个数，水深 \(h\) 处 \(P=P_{\text{atm}}+\rho gh\)，朝任意方向探测都相同。</li>
+    <li><strong>力 \(\vec F\)</strong>（矢量）：作用在<em>具体表面</em>上的量。表面元 \(dA\) 上的力
+      $$ d\vec F = P\,\hat n\,dA, $$
+      其中 \(\hat n\) 是<strong>那个表面</strong>的法向单位矢量。</li>
+  </ul>
+
+  <p><strong>方向是<em>表面</em>给的，不是压强给的。</strong>同一点的压强 \(P=\rho gh\) 是同一个数，但你把哪个方向上的表面贴近这一点，水就把那个方向上的表面推一下——池底（\(\hat n\) 朝下）、侧墙（\(\hat n\) 水平）、倾斜面（\(\hat n\) 倾斜），力的方向跟着 \(\hat n\) 走。</p>
+
+  <p><strong>泳池侧墙问题（10.10）的图像</strong>：墙是竖直的，所以每一点 \(\hat n\) 都<em>水平</em>指向墙外。深度 \(h\) 的窄带 \(L\,dh\) 上的力 = \((\rho gh)\cdot(L\,dh)\)，方向水平。所有窄带的力都同向，所以可以直接把<em>大小</em>累加，得 \(F=\int_0^D \rho g h L\,dh=\tfrac12\rho g L D^2\)。如果是弯的墙（不同高度 \(\hat n\) 不同方向），就要做矢量积分了。</p>
+
+  <p><strong>更严谨的表述（小知识）</strong>：流体里有应力张量 \(\sigma_{ij}=-P\,\delta_{ij}\)（各向同性）；表面元上的力 \(dF_i=\sigma_{ij}n_j\,dA=-Pn_i\,dA\)。"张量各向同性"即"压强是标量"，"表面法向 \(n_j\)" 给力赋方向——两者一同发生、不矛盾。</p>
+</div>
+
+<h3>2.2 静力学方程 <code>dP/dh = −ρg</code></h3>
+
+<p>取一段竖直流体柱，截面 \(A\)，下端高度 \(h\)，上端高度 \(h+dh\)，重力指向 \(-\hat y\)。对这段流体做受力分析：</p>
+
+<ul>
+  <li>下表面压力（向上）：\(P(h)\,A\)</li>
+  <li>上表面压力（向下）：\(P(h+dh)\,A\)</li>
+  <li>重力（向下）：\(\rho \,A\,dh\,g\)</li>
+</ul>
+
+<p>静止 ⇒ 合力为零：</p>
+
+<p>$$ P(h)\,A - P(h+dh)\,A - \rho\, A\,dh\,g \;=\; 0. $$</p>
+
+<p>除以 \(A\,dh\) 并取极限：</p>
+
+<p>$$ \boxed{\;\frac{dP}{dh} \;=\; -\rho g\;} \tag{2.1} $$</p>
+
+<details class="more-detail">
+  <summary>展开：从微分方程到 \(P=P_0+\rho g d\)</summary>
+  <p>对不可压缩流体，\(\rho\) 是常数。把 (2.1) 直接积分，从自由液面（高度 \(h_0\)，压强 \(P_0\)）到深度 \(d=h_0-h\) 处：</p>
+  <p>$$ P(h) = P_0 + \rho g (h_0 - h) = P_0 + \rho g d. $$</p>
+  <p>注意符号约定：往<strong>下</strong>走（深度 \(d\) 增加），压强<strong>增加</strong>；这是为什么 \(dP/dh<0\) 但 \(P=P_0+\rho g d\) 是 +。</p>
+</details>
+
+<div class="box remark">
+  <p class="box-title">10 米水深 ≈ 1 个大气压</p>
+  <p>水的密度 \(\rho=10^3\) kg/m³，\(g\approx 9.8\) m/s²，所以 \(\rho g\approx 10^4\) Pa/m。换算下来，每下潜 10 米压强增加 \(\sim 10^5\) Pa = 1 atm。这就是潜水员的经验法则。</p>
+</div>
+
+<h3>2.3 Torricelli 气压计（Barometer）</h3>
+
+<p>把一根上端封闭、下端开口的长管装满水银，倒立浸入一槽水银中。管内水银会下落，直到管内液柱顶部的水银对槽面施加的压强加上柱重等于槽面水银受到的大气压：</p>
+
+<p>$$ P_{\text{atm}} \;=\; \rho_{\text{Hg}}\,g\,h. $$</p>
+
+<p>测得 \(h\approx 760\) mm，于是 \(P_{\text{atm}}\approx 1.01\times 10^5\) Pa。这就是"760 mmHg"和"1 torr"这两个单位的由来。</p>
+
+<div class="box remark">
+  <p class="box-title">为什么用水银而不用水？</p>
+  <p>水银密度是水的 13.6 倍，所以同样大气压下水柱要 \(13.6\times 760\) mm \(\approx\) 10.3 m。一根 10 米长的管子既不便携、又会因水的蒸气压而显著漂移。水银管 760 mm 长度恰到好处，且水银在室温下的蒸气压只有 \(\sim 10^{-3}\) torr，对读数几乎无影响（"Torricelli 真空"非常接近真正的真空）。</p>
+</div>
+
+<h3>2.4 Pascal 原理与液压机</h3>
+
+<p>Pascal 第二观察：在不可压缩流体中，<em>外加</em>压强会无衰减地传递到流体每一处。把这个事实应用到液压机：</p>
+
+<p>左侧细活塞面积 \(A_1\)，外力 \(F_1\)；右侧粗活塞面积 \(A_2\)，承重 \(F_2\)。两活塞处压强相等：</p>
+
+<p>$$ \frac{F_1}{A_1} \;=\; \frac{F_2}{A_2}
+   \;\Longrightarrow\;
+   F_2 \;=\; \frac{A_2}{A_1}\,F_1. \tag{2.2}$$</p>
+
+<p>力被放大了 \(A_2/A_1\) 倍。但液体不可压缩，所以两边推过的体积相等：</p>
+
+<p>$$ A_1\,x_1 \;=\; A_2\,x_2 \;\Longrightarrow\; x_2 = \frac{A_1}{A_2}\,x_1. \tag{2.3}$$</p>
+
+<p>位移被等比缩小。把 (2.2) 与 (2.3) 相乘：</p>
+
+<p>$$ W_1 = F_1 x_1 = F_2 x_2 = W_2. $$</p>
+
+<p>功完全相等——液压机是<strong>力放大器</strong>，不是<strong>能量放大器</strong>。它和杠杆/滑轮组本质相同（mechanical advantage device），只是用流体而非刚体来传递力。</p>
+
+<h3>2.5 Archimedes 浮力原理</h3>
+
+<p>把一个体积为 \(V\) 的物体浸入密度 \(\rho_f\) 的流体里。物体周围的压强分布与<em>该物体不存在时</em>原本流体填充时一样（Pascal 原理保证压强场不变），所以物体表面所受的合压力等于<strong>同体积流体所受的合压力</strong>，即同体积流体本来要承担的重量：</p>
+
+<p>$$ \boxed{\;F_{\text{buoy}} \;=\; \rho_f\,g\,V_{\text{disp}}\;,\quad \text{方向向上.}\;} \tag{2.4}$$</p>
+
+<details class="more-detail">
+  <summary>展开：用散度定理的硬核证明</summary>
+  <p>物体表面 \(\partial V\) 的合压力是 \(\displaystyle \vec F = -\oint_{\partial V} P\,\hat n\,dA\)。利用散度定理（标量版）：</p>
+  <p>$$ \oint_{\partial V} P\,\hat n\,dA = \int_V \nabla P\,dV. $$</p>
+  <p>静止流体里 \(\nabla P = -\rho_f g\,\hat y\)（向下），代入：</p>
+  <p>$$ \vec F = -\int_V (-\rho_f g\,\hat y)\,dV = \rho_f g V\,\hat y. $$</p>
+  <p>即向上、大小 \(\rho_f g V\)。✓</p>
+</details>
+
+<div class="box remark">
+  <p class="box-title">Archimedes 不需要物体规则</p>
+  <p>(2.4) 只用到流体里的压强场，跟物体形状无关——一个不规则的雕像和一个等体积的球受到的浮力是相等的。这是为什么 Archimedes 能用排水量来测皇冠纯度（Eureka 故事）。</p>
+</div>
+
+<!-- ======================================================== -->
+
+<h2>§3 越过不可压缩极限：可压缩流体</h2>
+
+<p>到目前为止我们都假定 \(\rho\) 与 \(P\) 无关——这对水、油等液体在常压下是非常好的近似（液体几乎不可压缩，bulk modulus \(B\) 巨大），但对气体不成立。气体明显被压缩：海平面密度 \(\sim 1.2\) kg/m³，珠峰顶（高约 8.85 km）密度只剩约 \(1.2/e\)。</p>
+
+<h3>3.1 一般关系 ∂ρ/∂P = ρ/B</h3>
+
+<p>从 bulk modulus 的定义出发：</p>
+
+<p>$$ B \;=\; -V\,\frac{\partial P}{\partial V}. $$</p>
+
+<p>固定质量 \(m\)，则 \(\rho=m/V\)，所以 \(d\rho=-\rho\,dV/V\)。代入：</p>
+
+<p>$$ \frac{\partial \rho}{\partial P} \;=\; \frac{\rho}{B(\rho)}. \tag{3.1}$$</p>
+
+<p>液体：\(B\) 几乎是常数（水的 \(B\approx 2.2\times 10^9\) Pa），所以 \(\partial \rho/\partial P\approx 0\)，相当于"不可压缩"。气体则不然，下面看一个具体例子。</p>
+
+<h3>3.2 等温理想气体：\(B=P\)</h3>
+
+<p>固定 \(T\)，理想气体 \(PV=nRT\) ⇒ \(P=\rho RT/M\)（\(M\) 为摩尔质量）。计算 bulk modulus：</p>
+
+<p>$$ B = -V\frac{\partial P}{\partial V}\bigg|_T = P. $$</p>
+
+<p>把它代回 (3.1)：</p>
+
+<p>$$ \frac{\partial \rho}{\partial P} \;=\; \frac{\rho}{P}. $$</p>
+
+<p>由于 \(P=\alpha\rho\)（其中 \(\alpha=RT/M=P_0/\rho_0\) 是与海平面参数有关的常数），实际上是 \(\partial\rho/\partial P=1/\alpha=\) 常数。这就告诉我们：等温理想气体的密度与压强成正比。</p>
+
+<h3>3.3 等温大气：\(\rho(h)=\rho_0 e^{-h/H}\)</h3>
+
+<p>把可压缩关系代入静力学方程 (2.1)：</p>
+
+<p>$$ \frac{dP}{dh} = -\rho(h)\,g, \qquad P=\alpha\rho. $$</p>
+
+<p>消 \(P\)：</p>
+
+<p>$$ \alpha\,\frac{d\rho}{dh} = -\rho g
+   \;\Longrightarrow\;
+   \frac{d\rho}{\rho} = -\frac{g}{\alpha}\,dh
+   \;\Longrightarrow\;
+   \boxed{\;\rho(h)=\rho_0\,e^{-h/H},\quad H=\frac{\alpha}{g}=\frac{P_0}{\rho_0 g}\,.\;} \tag{3.2}$$</p>
+
+<p>同理 \(P(h)=P_0\,e^{-h/H}\)。代入海平面数据 \(P_0=1.013\times 10^5\) Pa, \(\rho_0=1.225\) kg/m³, \(g=9.81\) m/s²：</p>
+
+<p>$$ H \approx \frac{1.013\times 10^5}{1.225\cdot 9.81} \approx 8.58 \text{ km}. $$</p>
+
+<div class="box insight">
+  <p class="box-title">为什么 H ≈ 珠峰高度？这是巧合吗？</p>
+  <p>不全是。\(H = P_0/(\rho_0 g)\) 等价于"如果大气是均匀密度 \(\rho_0\)，要叠多高才能造出 1 atm 压强"——也就是<strong>整个大气的等效厚度</strong>。这个长度只取决于海平面 \(P_0\)、\(\rho_0\) 与 \(g\)，是大气最自然的尺度。指数大气把均匀模型的"陡截止"换成了平滑的指数尾，但同总质量、同尺度。珠峰高度恰好接近 1 个 \(H\) 是个数值巧合，但它带来一个实用结论：<strong>站在珠峰顶上，气压只剩海平面的 \(1/e \approx 37\%\)</strong>，这就是为什么不带氧气登顶极其困难。</p>
+</div>
+
+<details class="more-detail">
+  <summary>展开：为什么实际大气不严格等温？</summary>
+  <p>对流层（troposphere，海平面到 ~10 km）里，温度其实随高度近似线性下降，每千米降约 6.5 K（lapse rate）。这是因为上升气团绝热膨胀做功降温——更精确的"绝热大气"模型给出的是幂律剖面而非纯指数。等温模型保留了"密度随高度迅速衰减"这个关键定性特征，且数值上对中低空预测仍合理。</p>
+</details>
+
+<!-- ======================================================== -->
+
+<h2>§4 交互：等温大气</h2>
+
+<div class="box interactive">
+  <p class="box-title">拖动滑块感受指数衰减</p>
+  <p>下图同时画出 \(\rho(h)/\rho_0\) 与 \(P(h)/P_0\)（两者重合，因为等温下 \(P\propto\rho\)）。改变高度滑块，看珠峰、ISS、CRH 高速列车等参考线在大气里的相对位置。</p>
+
+  <div class="widget">
+    <canvas id="atm-canvas" width="600" height="320"></canvas>
+    <div class="controls">
+      <div class="control-row">
+        <label>高度 h</label>
+        <input type="range" id="atm-h" min="0" max="40" step="0.5" value="0" />
+        <span class="readout" id="atm-h-readout"></span>
+      </div>
+      <div class="control-row">
+        <label></label>
+        <span style="font-size:.85rem;color:#6b7280">
+          ρ/ρ₀ = <span id="atm-rho-ratio" style="font-family:Menlo,monospace;color:#0f766e"></span>
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ======================================================== -->
+
+<h2>§5 Worked Examples</h2>
+
+<div class="example">
+  <h4>Example: 液压机的力放大与位移代价</h4>
+  <p class="source">改编自 Shankar §20.2 / OpenStax 14.3</p>
+  <p>修车工要把一辆 \(m=1500\) kg 的汽车顶起 \(\Delta y=10\) cm。液压顶的踏板（活塞）面积 \(A_1=5\) cm²，承重活塞面积 \(A_2=250\) cm²。</p>
+  <p>(a) 踏板上至少要施加多大的力？(b) 踏板要走多远？(c) 工人做了多少功？跟车上抬功比较。</p>
+
+  <div class="solution-step"><strong>(a)</strong> 平衡时压强相等：\(F_1/A_1 = F_2/A_2\)。
+    需要顶起的重量 \(F_2 = mg = 1500\times 9.8 = 1.47\times 10^4\) N。
+    $$F_1 = \frac{A_1}{A_2}F_2 = \frac{5}{250}\times 1.47\times 10^4 \approx 294 \text{ N}.$$
+    一个 30 kg 重的小孩坐上去都能压动。
+  </div>
+
+  <div class="solution-step"><strong>(b)</strong> 流体不可压缩，体积守恒：\(A_1\,x_1 = A_2\,x_2\)。
+    $$ x_1 = \frac{A_2}{A_1}x_2 = \frac{250}{5}\times 0.10 = 5 \text{ m}.$$
+    踏板要走 5 米——所以实际液压千斤顶都用循环冲程（每次踩一下走 1 cm，重复 500 次）。
+  </div>
+
+  <div class="solution-step"><strong>(c)</strong> 工人做的功 \(W_1=F_1 x_1 = 294\times 5 = 1470\) J。
+    车上升能量 \(W_2=F_2 x_2 = 1.47\times 10^4\times 0.10 = 1470\) J。
+    <strong>完全相等</strong>。液压机放大力，但功不变——这是能量守恒的必然要求。
+  </div>
+</div>
+
+<div class="example">
+  <h4>Problem: 冰山露出多少？</h4>
+  <p class="source">Shankar Ch.20 problem set / OpenStax 14.4</p>
+  <p>淡水冰密度 \(\rho_{\text{ice}}=917\) kg/m³，海水密度 \(\rho_{\text{sea}}=1025\) kg/m³。冰山静浮于海面。求其体积有多少比例位于水面之下。</p>
+
+  <div class="solution-step"><strong>设</strong> 冰山总体积 \(V\)，水下体积 \(V_{\text{sub}}\)。两个力作用于冰山：</p>
+    <ul>
+      <li>重力 \(F_g = \rho_{\text{ice}}\,V\,g\)，向下；</li>
+      <li>浮力 \(F_b = \rho_{\text{sea}}\,V_{\text{sub}}\,g\)，向上。</li>
+    </ul>
+  </div>
+
+  <div class="solution-step"><strong>平衡</strong> \(F_g=F_b\)：
+    $$ \rho_{\text{ice}}\,V \,=\, \rho_{\text{sea}}\,V_{\text{sub}}
+    \;\Longrightarrow\;
+    \frac{V_{\text{sub}}}{V} = \frac{\rho_{\text{ice}}}{\rho_{\text{sea}}}
+    = \frac{917}{1025} \approx 0.895.$$
+  </div>
+
+  <div class="solution-step"><strong>结论</strong> 约 89.5% 在水下，仅 10.5% 露出水面。这就是"tip of the iceberg"。</div>
+
+  <div class="solution-step"><strong>极限检验</strong> 若 \(\rho_{\text{ice}}\to\rho_{\text{sea}}\)（冰快要和海水同密度），\(V_{\text{sub}}/V\to 1\)，整体几乎全淹没，符合直觉；若 \(\rho_{\text{ice}}\ll\rho_{\text{sea}}\)（极轻物体），比例趋于 0，几乎全露出。</div>
+</div>
+
+<div class="example">
+  <h4>Problem (★ harder)：U 形管压力计的多流体压强问题</h4>
+  <p class="source">Shankar Ch.20 problem set</p>
+  <p>一根 U 形管底部装有水银 (\(\rho_{\text{Hg}}=13.6\times 10^3\) kg/m³)。左管开口与大气相通；右管的水银面之上先有 5 cm 的水 (\(\rho_w=10^3\) kg/m³)，再上是密封的未知气体。观察到右管水银面比左管<strong>高 8 cm</strong>。求气体压强 \(P_{\text{gas}}\)。</p>
+
+  <div class="solution-step"><strong>关键原理</strong>：在连通的<em>同种</em>流体里，处于同一水平面的两点压强相等。这里水银是连通的同种流体，选<strong>左管水银面（较低的那个）</strong>所在的水平面作参考。</div>
+
+  <div class="solution-step"><strong>左侧</strong>：参考线就是左管水银表面，正上方是大气：
+    $$ P_{\text{ref, left}} = P_{\text{atm}}. $$
+  </div>
+
+  <div class="solution-step"><strong>右侧</strong>：参考线在右管水银柱内部（深度 8 cm 处）。从此点向上依次穿过 8 cm 水银、5 cm 水、然后是气体。每段往上压强减少 \(\rho_i g h_i\)，于是右管参考点处压强：
+    $$ P_{\text{ref, right}} = P_{\text{gas}} + \rho_w g\cdot 0.05 + \rho_{\text{Hg}} g\cdot 0.08. $$
+  </div>
+
+  <div class="solution-step"><strong>等压条件</strong>：
+    $$ P_{\text{atm}} = P_{\text{gas}} + \rho_w g(0.05) + \rho_{\text{Hg}} g(0.08). $$
+    代入：\(\rho_w g(0.05)=1000\cdot 9.8\cdot 0.05=490\) Pa；\(\rho_{\text{Hg}} g(0.08)=13600\cdot 9.8\cdot 0.08=10662\) Pa。
+    $$ P_{\text{gas}} = 1.013\times 10^5 - 490 - 10662 \approx 9.01\times 10^4 \text{ Pa}\approx 0.89\text{ atm}. $$
+  </div>
+
+  <div class="solution-step"><strong>合理性核查</strong>：气体比大气压低约 0.11 atm。物理上：低压气体"压不住"自己一侧的水银，大气从左管把水银向下推、推到右管，于是右管水银面更高（高 8 cm，正是题目给定）。✓ 题目里"右管高"这个细节自动告诉我们 \(P_{\text{gas}}<P_{\text{atm}}\)。</div>
+</div>
+
+<div class="example">
+  <h4>Problem (★ harder)：用气压计当海拔表</h4>
+  <p class="source">改编自 OpenStax 14.4</p>
+  <p>登山者在海平面校准气压计读数 \(P_0=1013\) mbar。爬到高山某处读数为 \(P=580\) mbar。等温大气模型 \(H=8.58\) km。问：(a) 此处海拔 \(h\)？(b) 空气密度是海平面的多少？(c) 一口同体积的空气含氧分子数与海平面相比？</p>
+
+  <div class="solution-step"><strong>(a) 用 \(P(h)=P_0 e^{-h/H}\) 反解</strong>：
+    $$ \frac{P}{P_0}=\frac{580}{1013}\approx 0.572,\quad
+       h=-H\ln\frac{P}{P_0}=-8580\ln(0.572)\approx 4790\text{ m}. $$
+    约 4.8 km — 接近珠峰大本营 (\(\sim\)5300 m) 的海拔。
+  </div>
+
+  <div class="solution-step"><strong>(b) 空气密度比</strong>：等温大气下 \(\rho/\rho_0=P/P_0\approx 0.572\)，密度只剩 57%。</div>
+
+  <div class="solution-step"><strong>(c) 每口呼吸的氧分子数</strong>：肺容量基本不变，每口空气体积 \(V\) 相同；分子数密度 \(n\propto\rho\)。所以一口空气只含海平面 57% 的氧分子。这就是高海拔缺氧的物理来源——氧浓度并未变低（仍约 21%），但空气整体被"稀释"。</div>
+
+  <div class="solution-step"><strong>(d) 等温近似的精度</strong>：实际对流层温度随高度下降（lapse rate \(\sim 6.5\) K/km），所以同样压强对应的高度比等温模型给的更<em>低</em>（实际高山空气更密一点）。但作为一阶估计，气压表测高度对登山足够；专业仪器会做温度修正。</div>
+</div>
+
+<!-- ======================================================== -->
+
+<h2>§6 Self-check</h2>
+
+<div class="self-check">
+  <p class="question">Q1. 一个圆柱形水缸装满水，底面承受压强 \(P_b\)。现在把水缸换成一个上宽下窄的喇叭形容器，使总水量保持不变（但水柱高度相同）。底面承受的压强是变大、变小、还是不变？</p>
+  <details>
+    <summary>查看答案</summary>
+    <p><strong>不变</strong>。底面压强只取决于<em>水柱高度</em> \(h\) 和 \(\rho g\)（来自 \(P=P_0+\rho g h\)），与容器形状或总水量无关。这就是 <strong>hydrostatic paradox</strong>（流体静力学悖论）：底面所受总力 \(F=PA\) 取决于底面积 \(A\)，但单位面积的压强只看高度。容器壁的形状变化由壁本身的力来"补偿"。</p>
+  </details>
+</div>
+
+<div class="self-check">
+  <p class="question">Q2. 把一艘装满水的小船放到一个更大的水缸里漂浮。如果你舀光船里的水，再把它倒进大缸里（水仍漂浮船身），缸里的总水位会上升、下降、还是不变？</p>
+  <details>
+    <summary>查看答案</summary>
+    <p><strong>不变</strong>（和经典的"冰融化"问题同源）。</p>
+    <p>设船里有质量 \(m\) 的水，缸里水的密度 \(\rho\)。<strong>初始态</strong>：船连同里面的水一起漂浮，由 Archimedes，整个系统排开的水量 = 系统总重 / \(\rho g\)。船里那 \(m\) 公斤水贡献了 \(m/\rho\) 立方米的<em>额外排水体积</em>。</p>
+    <p><strong>末态</strong>：把那 \(m\) 公斤水从船里倒入缸。船变轻，少排 \(m/\rho\) 立方米；倒进缸的水又多占 \(m/\rho\) 立方米——两者恰好抵消，<strong>水位丝毫不变</strong>。</p>
+    <p>这跟"船里的冰融化后水位不变"是同一个物理：浮在水中的物体（船+水 / 冰）排开的水量恰好等于它<em>融化/倒出后</em>所占的体积，因为两者重量相同、密度也相同。</p>
+  </details>
+</div>
+
+<div class="self-check">
+  <p class="question">Q3. 为什么从陆地海拔 0 上升到 5 km，体感会"喘不过气"，但从 5 km 上升到 10 km，感觉再没那么"质变"？</p>
+  <details>
+    <summary>查看答案</summary>
+    <p>因为大气是<strong>指数衰减</strong>，不是线性。从 0 到 1 个 \(H\)（约 8.58 km）压强降到 \(1/e\approx 37\%\)；再走 1 个 \(H\) 又降到 \(1/e^2\approx 14\%\)；越往上每千米带来的"绝对密度变化"越小。但生理上，登山者在 5 km 一带感受最剧烈的是<em>从富氧到缺氧</em>的过渡（此时已损失约 45% 的气压），此后身体已经适应较低基线，所以再往上的边际不适感反而趋缓——在到达 8 km 以上的"死亡区"前。</p>
+  </details>
+</div>
+
+<div class="self-check">
+  <p class="question">Q4. 如果地球的大气换成密度大 10 倍的气体（其他不变），scale height \(H\) 变为多少？站在原珠峰高度气压是原来的多少？</p>
+  <details>
+    <summary>查看答案</summary>
+    <p>\(H=P_0/(\rho_0 g)\)。题中 \(P_0\) 不变（这是地面观测量），\(\rho_0\) 变 10 倍，所以 \(H\) 变为 \(1/10\)，约 0.86 km。原珠峰高度（8.85 km）相对于新 \(H\) 是约 10 个 scale height，气压只剩 \(e^{-10}\approx 4.5\times 10^{-5}\)——已经跟低轨真空差不多。换言之，越重的气体大气越"薄"地贴在地表，高山顶上几乎没有空气。</p>
+  </details>
+</div>
+
+<div class="self-check">
+  <p class="question">Q5. 一个充满气的气球（含氦或热空气，比周围空气轻），内部气压跟外部气压相比，是更高、更低还是相等？</p>
+  <details>
+    <summary>查看答案</summary>
+    <p><strong>几乎相等</strong>（弹性气球与大气压差仅取决于膜张力，差值很小）。气球能上升不是因为内部压强高，而是因为内部<em>密度低</em>——浮力 \(\rho_{\text{air}} V g\) 大于自重 \(\rho_{\text{inside}} V g + m_{\text{rubber}}g\)。这正是 Archimedes 在气体中的应用：浮力来自周围流体的压强差，与气球本身内部压强无关。</p>
+  </details>
+</div>
+
+<!-- ======================================================== -->
+
+<h2>§7 公式速查表</h2>
+
+<table class="formula-table">
+  <tbody>
+    <tr><th>压强定义</th><td>\(P = F_\perp / A\)，标量</td></tr>
+    <tr><th>静力学方程</th><td>\(\dfrac{dP}{dh}=-\rho g\)</td></tr>
+    <tr><th>不可压缩液体</th><td>\(P = P_0 + \rho g d\) （\(d\) 自液面向下）</td></tr>
+    <tr><th>10 m 水深 ≈ 1 atm</th><td>\(\rho_{\text{water}} g \approx 10^4\) Pa/m</td></tr>
+    <tr><th>1 大气压</th><td>\(1\) atm \(=1.013\times 10^5\) Pa \(=760\) torr \(= 1.013\) bar</td></tr>
+    <tr><th>水银气压计</th><td>\(P_{\text{atm}}=\rho_{\text{Hg}} g h\)，\(h\approx 760\) mm</td></tr>
+    <tr><th>Pascal / 液压机</th><td>\(F_1/A_1 = F_2/A_2\)；\(A_1 x_1 = A_2 x_2\)；\(W_1=W_2\)</td></tr>
+    <tr><th>Archimedes 浮力</th><td>\(F_\text{buoy} = \rho_f g V_{\text{disp}}\)，向上</td></tr>
+    <tr><th>漂浮平衡</th><td>\(V_\text{sub}/V = \rho_\text{obj}/\rho_f\)</td></tr>
+    <tr><th>可压缩流体一般</th><td>\(\partial \rho/\partial P = \rho/B(\rho)\)</td></tr>
+    <tr><th>等温理想气体</th><td>\(B=P\)；\(P=\alpha\rho\)，\(\alpha=RT/M=P_0/\rho_0\)</td></tr>
+    <tr><th>等温大气剖面</th><td>\(\rho(h)=\rho_0 e^{-h/H}\)，\(P(h)=P_0 e^{-h/H}\)</td></tr>
+    <tr><th>大气 scale height</th><td>\(H=\alpha/g=P_0/(\rho_0 g)\approx 8.58\) km</td></tr>
+  </tbody>
+</table>
+
+<!-- ======================================================== -->
+
+<div class="glossary">
+  <h2>术语表</h2>
+  <dl>
+    <dt>压强 (pressure)</dt>
+    <dd>单位面积上的法向力 \(F_\perp/A\)，是标量，单位 Pa = N/m²。</dd>
+
+    <dt>静力学方程 (hydrostatic equation)</dt>
+    <dd>\(dP/dh=-\rho g\)，描述静止流体内压强随高度变化。</dd>
+
+    <dt>Pascal 原理 (Pascal's principle)</dt>
+    <dd>不可压缩流体内任一处的压强变化无衰减地传到流体每一处。</dd>
+
+    <dt>Archimedes 原理 (Archimedes' principle)</dt>
+    <dd>物体在流体中受到的浮力等于它排开的流体重量。</dd>
+
+    <dt>气压计 (barometer)</dt>
+    <dd>测量大气压的仪器；Torricelli 用倒立水银管发明。</dd>
+
+    <dt>液压机 (hydraulic press)</dt>
+    <dd>利用 Pascal 原理放大力的机械，力放大倍数 = 活塞面积比。</dd>
+
+    <dt>体积模量 (bulk modulus, B)</dt>
+    <dd>\(B=-V\,\partial P/\partial V\)，刻画流体或固体抗压缩性。</dd>
+
+    <dt>不可压缩 (incompressible)</dt>
+    <dd>\(B\to\infty\) 极限；液体常作此近似。</dd>
+
+    <dt>大气标高 (scale height, H)</dt>
+    <dd>等温大气 \(\rho\) 衰减到 \(1/e\) 所走的高度，\(H=P_0/(\rho_0 g)\)。</dd>
+
+    <dt>等温大气 (isothermal atmosphere)</dt>
+    <dd>假设温度处处相等的简化大气模型，给出指数密度剖面。</dd>
+
+    <dt>对流层 (troposphere)</dt>
+    <dd>大气最底层（~10 km），对流活跃，温度随高度近线性下降。</dd>
+  </dl>
+</div>
+
+<!-- ======================================================== -->
+
+<nav class="page-nav">
+  <a class="nav-prev" href="index.html">总目录</a>
+  <a class="nav-next" href="07_fluid_dynamics.html">流体动力学</a>
+</nav>
+
+</main>
+
+<script src="interactive.js"></script>
+<script>
+  // mark this file as 'reviewing' on load
+  markCurrentReviewing('06_fluid_statics.html');
+
+  // -------- Interactive: Isothermal atmosphere --------
+  (function() {
+    const setup = setupCanvas('atm-canvas', 600, 320);
+    if (!setup) return;
+    const { ctx, w, h } = setup;
+    const H = 8.58; // km
+
+    // reference altitudes (km, label)
+    const refs = [
+      { y: 8.85,  label: '珠峰 8.85' },
+      { y: 12.0,  label: '巡航 12' },
+      { y: 30.0,  label: '臭氧层 30' },
+      { y: 100.0, label: 'Kármán 100', skip: true }, // off-scale; we won't draw, just info
+    ];
+
+    function draw(hKm) {
+      ctx.clearRect(0, 0, w, h);
+
+      // background grid
+      drawAxes(ctx, w, h, {
+        padL: 55, padR: 60, padT: 20, padB: 35,
+        xLabel: '高度 h (km)',
+        yLabel: 'ρ/ρ₀ = P/P₀',
+      });
+
+      const map = makeMap({
+        padL: 55, padR: 60, padT: 20, padB: 35,
+        w, h, xMin: 0, xMax: 40, yMin: 0, yMax: 1,
+      });
+
+      // y-axis ticks
+      ctx.save();
+      ctx.fillStyle = '#374151';
+      ctx.font = "11px -apple-system, sans-serif";
+      ctx.textAlign = 'right';
+      [0, 0.25, 0.5, 0.75, 1].forEach(yv => {
+        const py = map.yToPx(yv);
+        ctx.fillText(yv.toFixed(2), 50, py + 3);
+        ctx.strokeStyle = '#e7e5e4';
+        ctx.beginPath(); ctx.moveTo(55, py); ctx.lineTo(w - 60, py); ctx.stroke();
+      });
+      // x-axis ticks
+      ctx.textAlign = 'center';
+      [0, 10, 20, 30, 40].forEach(xv => {
+        const px = map.xToPx(xv);
+        ctx.fillText(xv, px, h - 20);
+      });
+      ctx.restore();
+
+      // exponential curve
+      ctx.save();
+      ctx.strokeStyle = '#0f766e';
+      ctx.lineWidth = 2.5;
+      ctx.beginPath();
+      for (let x = 0; x <= 40; x += 0.25) {
+        const y = Math.exp(-x / H);
+        const px = map.xToPx(x), py = map.yToPx(y);
+        if (x === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+      }
+      ctx.stroke();
+      ctx.restore();
+
+      // reference vertical lines
+      ctx.save();
+      ctx.font = "10px -apple-system, sans-serif";
+      ctx.fillStyle = '#9ca3af';
+      ctx.strokeStyle = '#d6d3d1';
+      ctx.setLineDash([3, 3]);
+      refs.forEach(r => {
+        if (r.skip) return;
+        if (r.y > 40) return;
+        const px = map.xToPx(r.y);
+        ctx.beginPath();
+        ctx.moveTo(px, map.yToPx(0));
+        ctx.lineTo(px, map.yToPx(1));
+        ctx.stroke();
+        ctx.save();
+        ctx.translate(px - 3, map.yToPx(0.95));
+        ctx.rotate(-Math.PI / 2);
+        ctx.textAlign = 'right';
+        ctx.fillText(r.label, 0, 0);
+        ctx.restore();
+      });
+      ctx.setLineDash([]);
+      ctx.restore();
+
+      // current marker
+      const yh = Math.exp(-hKm / H);
+      const px = map.xToPx(hKm), py = map.yToPx(yh);
+      ctx.save();
+      ctx.strokeStyle = '#ea580c';
+      ctx.fillStyle = '#ea580c';
+      ctx.lineWidth = 1.5;
+      // vertical drop
+      ctx.setLineDash([4, 4]);
+      ctx.beginPath();
+      ctx.moveTo(px, map.yToPx(0));
+      ctx.lineTo(px, py);
+      ctx.lineTo(map.xToPx(0), py);
+      ctx.stroke();
+      ctx.setLineDash([]);
+      // dot
+      ctx.beginPath();
+      ctx.arc(px, py, 5, 0, 2 * Math.PI);
+      ctx.fill();
+      ctx.restore();
+
+      // update text readout
+      const ratio = yh;
+      document.getElementById('atm-rho-ratio').textContent =
+        ratio < 0.01 ? ratio.toExponential(2) : ratio.toFixed(3);
+    }
+
+    bindSlider('atm-h', 'atm-h-readout',
+      (v) => draw(v),
+      (v) => v.toFixed(1) + ' km'
+    );
+  })();
+</script>
+
+</body>
+</html>

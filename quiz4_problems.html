@@ -1,0 +1,1175 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quiz 4 题集 — PHYS 4B 复习</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="theme.js"></script>
+  <style>
+    .problem-toc {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+      gap: .35rem;
+      margin: 1rem 0 2rem;
+      font-family: -apple-system, 'PingFang SC', sans-serif;
+      font-size: .82rem;
+    }
+    .problem-toc a {
+      display: block;
+      padding: .35rem .55rem;
+      background: white;
+      border: 1px solid #d6d3d1;
+      border-radius: 4px;
+      color: #134e4a;
+      text-decoration: none;
+      text-align: center;
+      transition: all .12s;
+    }
+    .problem-toc a:hover {
+      background: #0f766e;
+      color: white;
+      border-color: #0f766e;
+    }
+    .answer-box {
+      background: #eff6ff;
+      border-left: 3px solid #2563eb;
+      padding: .55rem .8rem;
+      margin: .65rem 0 .25rem;
+      font-weight: 500;
+      color: #1e3a8a;
+      font-family: -apple-system, 'PingFang SC', 'Helvetica Neue', sans-serif;
+    }
+    .answer-box::before {
+      content: '✓ 答案：';
+      color: #2563eb;
+      font-weight: 700;
+    }
+    .problem-statement {
+      background: #fafaf9;
+      border-left: 3px solid #a8a29e;
+      padding: .6rem .8rem;
+      margin: .35rem 0 .75rem;
+      font-style: italic;
+      color: #44403c;
+    }
+    .scope-tag {
+      display: inline-block;
+      font-size: .7rem;
+      padding: .1rem .4rem;
+      border-radius: 8px;
+      margin-left: .5rem;
+      font-family: -apple-system, sans-serif;
+      vertical-align: middle;
+      font-style: normal;
+      font-weight: 500;
+    }
+    .scope-w6 { background: #fee2e2; color: #991b1b; }
+    .scope-w7 { background: #ddd6fe; color: #5b21b6; }
+    .scope-os { background: #dbeafe; color: #1e40af; }
+    .scope-kt { background: #fef3c7; color: #78350f; }
+    .scope-ta { background: #d1fae5; color: #065f46; }
+    .legend {
+      font-size: .85rem;
+      color: #6b7280;
+      margin: 1rem 0;
+      font-family: -apple-system, 'PingFang SC', sans-serif;
+    }
+    .legend .scope-tag { margin: 0 .35rem 0 0; }
+    .pv-diagram {
+      display: block;
+      margin: .5rem auto;
+      max-width: 320px;
+    }
+  </style>
+  <script>
+    MathJax = {
+      tex: { inlineMath: [['\\(', '\\)']], displayMath: [['$$', '$$']] },
+      svg: { fontCache: 'global' }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" async></script>
+</head>
+<body>
+
+<header class="site-header">
+  <a class="home-link" href="index.html">← PHYS 4B 复习</a>
+  <nav>
+    <a href="08_real_fluids_heat.html">08 真实+热</a>
+    <a href="09_kinetic_theory.html">09 动理论</a>
+    <a href="10_maxwell_boltzmann.html">10 MB 分布</a>
+    <a href="11_first_law.html">11 第一定律</a>
+    <a href="12_processes_cycles.html">12 过程+循环</a>
+  </nav>
+</header>
+
+<main class="container">
+
+<div class="topic-header">
+  <h1>Quiz 4 题集</h1>
+  <p class="meta">Shankar Problem Set 11 (Ch.21–24) Q4 部分 · OpenStax UP2 §3.3 第一定律 · Instructor 8 道动理论加题 · Week 8 Discussion TA 出题 · 共 33 道完整解答</p>
+  <p class="blurb">本页把 Quiz 4 范围内的所有指定习题（Shankar 11.9–11.28 中第 6、7 周覆盖的 16 题 + OpenStax University Physics Volume 2 §3.3 First Law 中的 5 题 + 教师在 Week 7 上传的 8 道"动理论加题" + Week 8 两份 Discussion worksheet 中 TA 新出的 4 道）配以中文解答整理在一处。每题给出题目、策略、关键步骤、答案核查；与课程概念对接的地方会回链到对应主题 HTML（08/09/10/11/12）。<strong>OpenStax #43 题目本身定义不清，已按授课说明跳过</strong>。动理论加题中 #3, #5, #7, #8 配有教师官方解答，其余 4 道为基础计算题，本页给出自洽核验。</p>
+
+  <div class="box warning" style="font-size:.92rem">
+    <p class="box-title" style="font-size:.85rem">Quiz 4 范围确认（来自学生消息）</p>
+    <p>Quiz 4 <strong>不</strong>含 heat cycle（循环 / 热机效率 / Carnot 等）问题。本页内现有的 Shankar 11.27、OS #45 等纯循环题保留作复习参考但不在测验范围；<strong>真正押题的</strong>是 Week 8 TA 出的 4 道（§5 TA 节）+ 单段过程类的 Shankar 11.17/11.21/11.22/11.23 + 动理论 / MB 分布全部。</p>
+  </div>
+</div>
+
+<div class="legend">
+  <span class="scope-tag scope-w6">W6</span> 第 6 周（5/4）讲授覆盖（热传导、理想气体、动理论）
+  <span class="scope-tag scope-w7">W7</span> 第 7 周（5/11）讲授覆盖（MB 分布、第一定律、过程）
+  <span class="scope-tag scope-os">OS</span> OpenStax University Physics Volume 2 §3.3
+  <span class="scope-tag scope-kt">KT</span> Instructor Week 7 动理论加题
+  <span class="scope-tag scope-ta">TA</span> Week 8 Discussion TA 复习题（5/20）
+</div>
+
+<div class="box insight">
+  <p class="box-title">通用常数（Shankar p.501 + 物性参数）</p>
+  <p>\(g=9.81\) m/s²；\(k=1.38\times 10^{-23}\) J/K（Boltzmann）；\(R=8.31\) J/(mol·K)；\(N_A=6.02\times 10^{23}\) mol⁻¹；\(P_{\text{atm}}=1.013\times 10^{5}\) Pa；\(1\) L = \(10^{-3}\) m³；\(M_{O_2}=32\) g/mol，\(M_{H_2}=2\) g/mol，\(M_{N_2}=28\) g/mol，\(M_{He}=4\) g/mol。空气中声速 \(v_s=340\) m/s。单原子 \(c_v=\tfrac32 R\)、双原子（室温）\(c_v=\tfrac52 R\)。理想气体内能 \(U=(f/2)nRT\) 仅与 \(T\) 有关。</p>
+</div>
+
+<div class="box remark">
+  <p class="box-title">符号约定（Shankar / OpenStax 一致）</p>
+  <p>第一定律 \(\Delta U = Q - W\)，其中 \(W\) 是<strong>气体对外做功</strong>（正功表示气体膨胀输出能量）；\(Q\) 是<strong>气体吸热</strong>（正表示吸热）。准静态功 \(\delta W = P\,dV\)。等容 \(W=0\)；等压 \(W=P\Delta V\)；等温 \(W=nRT\ln(V_f/V_i)\)；绝热 \(Q=0\)，\(W=-\Delta U=nc_v(T_i-T_f)\)；循环 \(\oint dU=0\Rightarrow Q_{\text{cycle}}=W_{\text{cycle}}=\) P-V 图围成的面积。</p>
+</div>
+
+<!-- ======================================================== -->
+
+<h2 id="week6">第 6 周（5/4）覆盖 — Shankar 11.9–11.17, 11.24, 11.26</h2>
+
+<div class="problem-toc">
+  <a href="#p11-9">11.9</a>
+  <a href="#p11-10">11.10</a>
+  <a href="#p11-11">11.11</a>
+  <a href="#p11-13">11.13</a>
+  <a href="#p11-14">11.14</a>
+  <a href="#p11-15">11.15</a>
+  <a href="#p11-16">11.16</a>
+  <a href="#p11-17">11.17</a>
+  <a href="#p11-24">11.24</a>
+  <a href="#p11-26">11.26</a>
+</div>
+
+<!-- ============== 11.9 ============== -->
+<div class="example" id="p11-9">
+  <h4>11.9 — 墙的一天导热量 <span class="scope-tag scope-w6">W6</span></h4>
+  <p class="problem-statement">墙 8 m × 20 m，厚 15 cm，\(\kappa=0.8\) W/(m·K)，\(\Delta T=15\)°C。求一天通过它的能量。</p>
+
+  <div class="solution-step"><strong>策略</strong>：Fourier 定律 \(\dot Q = \kappa A\,\Delta T/L\)。详见 <a href="08_real_fluids_heat.html">08 §11</a>。</div>
+
+  <div class="solution-step"><strong>计算</strong>：\(A=160\) m²；\(L=0.15\) m；\(\Delta T=15\) K。
+    $$ \dot Q = \frac{0.8\cdot 160\cdot 15}{0.15} = \frac{1920}{0.15}=12{,}800\text{ W}. $$
+    一天 \(=86{,}400\) s，故
+    $$ Q = 12{,}800\cdot 86{,}400\approx 1.106\times 10^9\text{ J}\approx 1.1\times 10^{9}\text{ J}. $$
+  </div>
+
+  <div class="solution-step"><strong>解读</strong>：约 307 kWh/天。粗糙估计：典型住宅一天总能耗 \(\sim 30\) kWh，单墙 300 kWh 显示<em>没保温</em>的代价之大。换成 \(\kappa\sim 0.04\) (玻璃棉) 厚 10 cm 的保温层可降低 20 倍以上。</div>
+
+  <div class="answer-box">\(Q\approx 1.1\times 10^{9}\) J</div>
+</div>
+
+<!-- ============== 11.10 ============== -->
+<div class="example" id="p11-10">
+  <h4>11.10 — 铜棒一端冰水一端沸水 <span class="scope-tag scope-w6">W6</span></h4>
+  <p class="problem-statement">铜棒（\(\kappa=401\) W/(m·K)）长 50 cm，半径 2 cm，一端浸冰水，另一端浸沸水。求 \(dQ/dt\)。</p>
+
+  <div class="solution-step"><strong>策略</strong>：Fourier 定律 \(\dot Q=-\kappa A\,dT/dx\)。稳态线性温度分布 \(\Rightarrow dT/dx=(T_{\text{热}}-T_{\text{冷}})/L\)。题中 \(\Delta T=100-0=100\) K，沿 \(x\) 方向从沸水 (100°C) 到冰水 (0°C) 温度下降，所以 \(dT/dx=-100/0.5=-200\) K/m（正号约定：\(x\) 从沸水指向冰水时温度负梯度）。</div>
+
+  <div class="solution-step"><strong>截面积</strong>：\(A=\pi r^2=\pi(0.02)^2=1.257\times 10^{-3}\) m²。
+    $$ \frac{dQ}{dt}= -\kappa A\,\frac{dT}{dx}=-401\cdot 1.257\times 10^{-3}\cdot (-200)\approx +101\text{ W}. $$
+    Shankar 答案写作 \(-101\) W 是因为他取了"\(x\) 指向沸水"的约定（\(dT/dx>0\)，\(\dot Q<0\) 表示热流向负 \(x\) 方向、即流向冰水）。<strong>大小相同，方向不变：热流 101 W 从沸水端进入棒、从冰水端流出，融化冰</strong>。</div>
+
+  <div class="solution-step"><strong>核查</strong>：与 \(\dot Q=\kappa A\Delta T/L\)（取绝对值）：\(0.401\text{ kW/(m·K)}\cdot 1.257\times 10^{-3}\text{ m}^2\cdot 100\text{ K}/0.5\text{ m} = 100.8\) W ≈ 101 W ✓</div>
+
+  <div class="answer-box">\(\dot Q\approx 101\) W（方向：从沸水端流向冰水端）</div>
+</div>
+
+<!-- ============== 11.11 ============== -->
+<div class="example" id="p11-11">
+  <h4>11.11 — 混凝土屋顶的散热功率 <span class="scope-tag scope-w6">W6</span></h4>
+  <p class="problem-statement">混凝土（\(\kappa=1\) W/(m·K)）屋顶 100 m²，厚 20 cm，外 0°C，内 17°C。求散热功率。</p>
+
+  <div class="solution-step"><strong>计算</strong>：
+    $$ \dot Q=\frac{\kappa A\,\Delta T}{L}=\frac{1\cdot 100\cdot 17}{0.20}=8500\text{ W}. $$
+  </div>
+
+  <div class="solution-step"><strong>解读</strong>：8.5 kW 持续散热——约等于 5 个家用电热水壶的功率。这是为什么北方冬天没有保温的混凝土屋顶能耗惊人——单屋顶一晚（10 h）就是 85 kWh。现代屋面通常加 10 cm XPS（\(\kappa\sim 0.03\)）可降低 ~10 倍。</div>
+
+  <div class="answer-box">\(\dot Q\approx 8500\) W</div>
+</div>
+
+<!-- ============== 11.13 ============== -->
+<div class="example" id="p11-13">
+  <h4>11.13 — 房间内气体摩尔数 <span class="scope-tag scope-w6">W6</span></h4>
+  <p class="problem-statement">体积 50 m³，大气压，300 K 的房间含多少摩尔理想气体？</p>
+
+  <div class="solution-step"><strong>策略</strong>：\(PV=nRT\) 直接代入。详见 <a href="08_real_fluids_heat.html#sec:idealgas">08 §9</a>。</div>
+
+  <div class="solution-step"><strong>计算</strong>：
+    $$ n=\frac{PV}{RT}=\frac{1.013\times 10^5\cdot 50}{8.31\cdot 300}=\frac{5.065\times 10^6}{2493}\approx 2031\text{ mol}\approx 2030\text{ mol}. $$
+  </div>
+
+  <div class="solution-step"><strong>分子数核查</strong>：\(N=nN_A\approx 2030\cdot 6.02\times 10^{23}\approx 1.22\times 10^{27}\) 分子。空气大约 80% N₂ + 20% O₂，平均摩尔质量 ≈ 29 g/mol，所以房间空气总质量 ≈ \(2030\cdot 29\text{ g}\approx 59\) kg——大约半个人的体重，与 \(\rho_{\text{air}}\cdot V=1.2\cdot 50=60\) kg 一致。✓</div>
+
+  <div class="answer-box">\(n\approx 2030\) mol</div>
+</div>
+
+<!-- ============== 11.14 ============== -->
+<div class="example" id="p11-14">
+  <h4>11.14 — 池底气泡升到水面 <span class="scope-tag scope-w6">W6</span></h4>
+  <p class="problem-statement">球形气泡 \(r=2\) cm，在水下 30 m、280 K 处释放。水面 300 K。气泡始终与水热平衡。求气泡到达水面时的体积（忽略气泡尺寸相对 30 m 的修正）。</p>
+
+  <div class="solution-step"><strong>策略</strong>：理想气体两个状态比较 \(P_1V_1/T_1=P_2V_2/T_2\)。详见 <a href="08_real_fluids_heat.html#sec:idealgas">08 §9</a>。</div>
+
+  <div class="solution-step"><strong>初末压强</strong>：
+    <ul>
+      <li>水下 30 m：\(P_1=P_{\text{atm}}+\rho_w g h=1.013\times 10^5+1000\cdot 9.81\cdot 30=1.013\times 10^5+2.943\times 10^5=3.956\times 10^5\) Pa</li>
+      <li>水面：\(P_2=P_{\text{atm}}=1.013\times 10^5\) Pa</li>
+    </ul>
+  </div>
+
+  <div class="solution-step"><strong>初体积</strong>：\(V_1=\tfrac{4}{3}\pi r^3=\tfrac{4}{3}\pi(0.02)^3=3.351\times 10^{-5}\) m³。</div>
+
+  <div class="solution-step"><strong>末体积</strong>：
+    $$ V_2=V_1\cdot\frac{P_1}{P_2}\cdot\frac{T_2}{T_1}=3.351\times 10^{-5}\cdot\frac{3.956}{1.013}\cdot\frac{300}{280}. $$
+    \(=3.351\times 10^{-5}\cdot 3.905\cdot 1.0714\approx 1.40\times 10^{-4}\) m³。✓
+  </div>
+
+  <div class="solution-step"><strong>解读</strong>：气泡体积膨胀约 4.2 倍，半径增大 \(\sqrt[3]{4.2}\approx 1.62\) 倍，从 2 cm 变到约 3.2 cm。压强效应（\(\times 3.9\)）远大于温度效应（\(\times 1.07\)）——这是潜水员上浮时不得不"屏气慢升、肺会大幅膨胀"的物理根源，处理不好会导致气体栓塞 (air embolism)。</div>
+
+  <div class="answer-box">\(V_f\approx 1.4\times 10^{-4}\) m³（半径增约 60%）</div>
+</div>
+
+<!-- ============== 11.15 ============== -->
+<div class="example" id="p11-15">
+  <h4>11.15 — 1 摩尔气体在 STP 的体积 <span class="scope-tag scope-w6">W6</span></h4>
+  <p class="problem-statement">1 mole 理想气体在 STP（标准温度压强：\(T=273\) K，\(P=1\) atm）的体积是多少？</p>
+
+  <div class="solution-step"><strong>计算</strong>：
+    $$ V=\frac{nRT}{P}=\frac{1\cdot 8.31\cdot 273}{1.013\times 10^5}\approx \frac{2269}{1.013\times 10^5}\approx 2.24\times 10^{-2}\text{ m}^3=22.4\text{ L}. $$
+  </div>
+
+  <div class="solution-step"><strong>记忆</strong>：<strong>STP 下任何理想气体 1 mol 占 22.4 L</strong>——这是化学常用的"摩尔体积"基准，独立于气体种类（理想气体的"非个性"）。</div>
+
+  <div class="answer-box">\(V\approx 0.0224\) m³ \(=22.4\) L</div>
+</div>
+
+<!-- ============== 11.16 ============== -->
+<div class="example" id="p11-16">
+  <h4>11.16 — 1 摩尔 N₂ 在 2 atm、10 m³：T、U、v <span class="scope-tag scope-w6">W6</span></h4>
+  <p class="problem-statement">1 mol 理想氮气 (\(m=4.65\times 10^{-26}\) kg) 在 2 atm，体积 10 m³。求 (i) \(T\)；(ii) 单分子的内能 \(U\)（假设仅动能）；(iii) 典型分子速率。</p>
+
+  <div class="solution-step"><strong>(i) 温度</strong>：\(P=2\cdot 1.013\times 10^5=2.026\times 10^5\) Pa。
+    $$ T=\frac{PV}{nR}=\frac{2.026\times 10^5\cdot 10}{1\cdot 8.31}=\frac{2.026\times 10^6}{8.31}\approx 2.44\times 10^5\text{ K}. $$
+    （注：这是 244{,}000 K——太阳表面的 40 倍以上！物理上 N₂ 早就解离了；本题纯粹是数值练习。）
+  </div>
+
+  <div class="solution-step"><strong>(ii) 单分子动能</strong>：等分定理（双原子室温 5 自由度，但这里"仅动能"= 3 平动自由度 \(\Rightarrow \tfrac32 kT\)）：
+    $$ \langle\varepsilon\rangle=\tfrac32 kT=\tfrac32\cdot 1.38\times 10^{-23}\cdot 2.44\times 10^5\approx 5.05\times 10^{-18}\text{ J}. $$
+    Shankar 答案 \(5.04\times 10^{-18}\) J ✓。
+  </div>
+
+  <div class="solution-step"><strong>(iii) 典型速率</strong>（这里指 \(v_{\text{rms}}\)）：
+    $$ v_{\text{rms}}=\sqrt{\frac{3kT}{m}}=\sqrt{\frac{3\cdot 1.38\times 10^{-23}\cdot 2.44\times 10^5}{4.65\times 10^{-26}}}=\sqrt{\frac{1.010\times 10^{-17}}{4.65\times 10^{-26}}}=\sqrt{2.173\times 10^8}\approx 1.47\times 10^4\text{ m/s}. $$
+    详见 <a href="09_kinetic_theory.html">09 §3</a>。
+  </div>
+
+  <div class="solution-step"><strong>核查（从 (ii) 倒推）</strong>：\(v_{\text{rms}}=\sqrt{2\langle\varepsilon\rangle/m}=\sqrt{2\cdot 5.04\times 10^{-18}/4.65\times 10^{-26}}=\sqrt{2.17\times 10^8}\approx 1.47\times 10^4\) m/s ✓</div>
+
+  <div class="answer-box">(i) \(T\approx 2.44\times 10^5\) K；(ii) \(\varepsilon\approx 5.04\times 10^{-18}\) J；(iii) \(v_{\text{typ}}\approx 1.47\times 10^4\) m/s</div>
+</div>
+
+<!-- ============== 11.17 ============== -->
+<div class="example" id="p11-17">
+  <h4>11.17 — 单原子气体三段 P-V 路径 ★ <span class="scope-tag scope-w6">W6</span></h4>
+  <p class="problem-statement">理想单原子气体在 A (\(P=2\cdot 10^5\) Pa, \(V=10^{-3}\) m³, \(U=450\) J)，等容冷却到 B，再等压扩张到 C (\(P=2\cdot 10^5\) Pa, \(V=3\cdot 10^{-3}\) m³)。（路径 CA 不必画。）求 (i) 路径 ABC 上做的功；(ii) \(U_C\)；(iii) 吸收的热量 \(\Delta Q\)；(iv) \(T_C/T_A\)；(v) \(U_A/U_C\)。</p>
+
+  <div class="box warning" style="font-size:.92rem">
+    <p class="box-title" style="font-size:.85rem">题目状态 A 的印刷小错</p>
+    <p>原题给 \(P_A=2\cdot 10^5\) Pa, \(V_A=10^{-3}\) m³, \(U_A=450\) J，但单原子 \(U=\tfrac32 PV=\tfrac32\cdot 2\cdot 10^5\cdot 10^{-3}=300\) J，与 450 J 不符。<strong>正确读法</strong>是 \(P_A=3\cdot 10^5\) Pa（这样 \(\tfrac32 PV=450\) J 才一致），等容冷却到 B \((P=2\cdot 10^5\) Pa, \(V=10^{-3}\) m³\()\)，等压扩张到 C \((P=2\cdot 10^5, V=3\cdot 10^{-3})\)。下面按修正版做。</p>
+  </div>
+
+  <div class="solution-step"><strong>(i) 功</strong>：等容 \(W_{AB}=0\)；等压 \(W_{BC}=P_B(V_C-V_B)=2\cdot 10^5\cdot(3-1)\cdot 10^{-3}=400\) J。共 \(W=400\) J。</div>
+
+  <div class="solution-step"><strong>(ii) \(U_C\)</strong>：单原子 \(U=\tfrac32 PV\)。
+    $$ U_C=\tfrac32\cdot 2\cdot 10^5\cdot 3\cdot 10^{-3}=900\text{ J}=2 U_A. $$
+  </div>
+
+  <div class="solution-step"><strong>(iii) 吸收的热</strong>：第一定律 \(Q=\Delta U+W=(900-450)+400=850\) J。</div>
+
+  <div class="solution-step"><strong>(iv) 温度比</strong>：\(PV=nRT\Rightarrow T\propto PV\)。\(P_A V_A=3\cdot 10^5\cdot 10^{-3}=300\)；\(P_C V_C=2\cdot 10^5\cdot 3\cdot 10^{-3}=600\)。
+    $$ T_C/T_A=600/300=2. $$
+  </div>
+
+  <div class="solution-step"><strong>(v) 内能比</strong>：\(U_A/U_C=450/900=1/2\)。</div>
+
+  <div class="answer-box">(i) \(W=400\) J；(ii) \(U_C=900\) J；(iii) \(Q=850\) J；(iv) \(T_C/T_A=2\)；(v) \(U_A/U_C=1:2\)</div>
+</div>
+
+<!-- ============== 11.24 ============== -->
+<div class="example" id="p11-24">
+  <h4>11.24 — O₂ 与 H₂ 的"平均速率"（实际是 \(v_{\text{rms}}\)） <span class="scope-tag scope-w6">W6</span></h4>
+  <p class="problem-statement">(i) O₂ 分子（32 g/mol）在 300 K 的平均速率？(ii) H₂（2 g/mol）的同一问题？(iii) 与声速 340 m/s 比较。提示：把 Eqn 22.8 (即 \(\tfrac12 m\langle v^2\rangle=\tfrac32 kT\)) 两端乘 \(N_A\)，把 \(k\) 换成 \(R\)，\(m\) 换成 \(M\)。</p>
+
+  <div class="box warning" style="font-size:.92rem">
+    <p class="box-title" style="font-size:.85rem">题目"平均"≠ 答案给的速率</p>
+    <p>题面说 average speed（\(\bar v=\sqrt{8kT/(\pi m)}\)），但答案给的是 <strong>rms 速率</strong> \(v_{\text{rms}}=\sqrt{3kT/m}=\sqrt{3RT/M}\)。两者比值 \(\bar v/v_{\text{rms}}=\sqrt{8/(3\pi)}\approx 0.921\)。下面按答案的 \(v_{\text{rms}}\) 做。详见 <a href="10_maxwell_boltzmann.html#sec:speeds">10 §6 三种特征速率</a>。</p>
+  </div>
+
+  <div class="solution-step"><strong>(i) O₂</strong>：\(M=0.032\) kg/mol。
+    $$ v_{\text{rms}}=\sqrt{\frac{3RT}{M}}=\sqrt{\frac{3\cdot 8.31\cdot 300}{0.032}}=\sqrt{\frac{7479}{0.032}}=\sqrt{2.34\times 10^5}\approx 483\text{ m/s}. $$
+  </div>
+
+  <div class="solution-step"><strong>(ii) H₂</strong>：\(M=0.002\) kg/mol，比 O₂ 轻 16 倍，速率快 \(\sqrt{16}=4\) 倍：
+    $$ v_{\text{rms}}^{H_2}=4\cdot 483\approx 1932\text{ m/s}. $$
+  </div>
+
+  <div class="solution-step"><strong>(iii) 与声速 340 m/s 比</strong>：O₂ 比声速快 \(483/340\approx 1.4\) 倍；H₂ 快 \(1932/340\approx 5.7\approx 6\) 倍。这与 Newton-Laplace 关系 \(v_s/v_{\text{rms}}=\sqrt{\gamma/3}\) 一致——双原子 \(\gamma=7/5\)，比值 \(\sqrt{7/15}\approx 0.68\)。详见 <a href="09_kinetic_theory.html">09 §5</a>。</div>
+
+  <div class="answer-box">(i) \(v_{\text{rms}}^{O_2}\approx 483\) m/s；(ii) \(v_{\text{rms}}^{H_2}\approx 1932\) m/s；(iii) H₂ 约比声速快 6 倍</div>
+</div>
+
+<!-- ============== 11.26 ============== -->
+<div class="example" id="p11-26">
+  <h4>11.26 — 20 g He 在 6 L、300 K 的压强 <span class="scope-tag scope-w6">W6</span></h4>
+  <p class="problem-statement">20 g He 在 \(V=6\times 10^{-3}\) m³，\(T=300\) K。求 \(P\)。</p>
+
+  <div class="solution-step"><strong>摩尔数</strong>：\(n=m/M=20\text{ g}/(4\text{ g/mol})=5\) mol。</div>
+
+  <div class="solution-step"><strong>压强</strong>：
+    $$ P=\frac{nRT}{V}=\frac{5\cdot 8.31\cdot 300}{6\times 10^{-3}}=\frac{12{,}465}{6\times 10^{-3}}\approx 2.08\times 10^6\text{ Pa}\approx 2.1\times 10^6\text{ Pa}. $$
+    约 20.5 atm——典型氦气罐里的压强水平。
+  </div>
+
+  <div class="answer-box">\(P\approx 2.1\times 10^6\) Pa</div>
+</div>
+
+<!-- ======================================================== -->
+
+<h2 id="week7">第 7 周（5/11）覆盖 — Shankar 11.21–11.23, 11.25, 11.27, 11.28</h2>
+
+<div class="problem-toc">
+  <a href="#p11-21">11.21</a>
+  <a href="#p11-22">11.22</a>
+  <a href="#p11-23">11.23</a>
+  <a href="#p11-25">11.25</a>
+  <a href="#p11-27">11.27</a>
+  <a href="#p11-28">11.28</a>
+</div>
+
+<!-- ============== 11.21 ============== -->
+<div class="example" id="p11-21">
+  <h4>11.21 — 等温膨胀的 W 与 Q <span class="scope-tag scope-w7">W7</span></h4>
+  <p class="problem-statement">理想气体在 \(P_1=200\) kPa，\(V_1=4\) L 处，等温膨胀到 \(P_2=100\) kPa。求 (i) 做的功 \(W\)；(ii) 吸收的热 \(Q\)。</p>
+
+  <div class="solution-step"><strong>策略</strong>：等温 \(PV=\text{const}\Rightarrow V_2=V_1\cdot P_1/P_2=4\cdot 2=8\) L。
+    $$ W=nRT\ln(V_2/V_1)=P_1 V_1\ln(V_2/V_1)\quad(\text{因 }nRT=P_1V_1). $$
+    详见 <a href="11_first_law.html">11 第一定律</a> 中等温过程。
+  </div>
+
+  <div class="solution-step"><strong>数值</strong>：
+    $$ W=200\times 10^3\cdot 4\times 10^{-3}\cdot\ln 2=800\cdot 0.693\approx 555\text{ J}. $$
+  </div>
+
+  <div class="solution-step"><strong>(ii) \(Q\)</strong>：等温 \(\Delta U=0\)（因 \(U=U(T)\)），故 \(Q=W=555\) J。</div>
+
+  <div class="answer-box">\(W=Q\approx 555\) J</div>
+</div>
+
+<!-- ============== 11.22 ============== -->
+<div class="example" id="p11-22">
+  <h4>11.22 — 绝热压缩到半体积的末温 <span class="scope-tag scope-w7">W7</span></h4>
+  <p class="problem-statement">理想气体初温 20°C = 293 K，绝热压缩到一半体积。\(c_v=\tfrac52 R\)（双原子）。求末温。</p>
+
+  <div class="solution-step"><strong>策略</strong>：绝热 \(TV^{\gamma-1}=\text{const}\)。\(\gamma=c_p/c_v=(\tfrac72 R)/(\tfrac52 R)=7/5=1.4\)，故 \(\gamma-1=0.4\)。详见 <a href="12_processes_cycles.html#sec5">12 §5 绝热完整推导</a>。</div>
+
+  <div class="solution-step"><strong>计算</strong>：
+    $$ T_2=T_1\left(\frac{V_1}{V_2}\right)^{\gamma-1}=293\cdot 2^{0.4}. $$
+    \(2^{0.4}=e^{0.4\ln 2}=e^{0.2773}=1.3195\)。
+    $$ T_2=293\cdot 1.3195\approx 386.6\text{ K}\approx 387\text{ K}. $$
+  </div>
+
+  <div class="solution-step"><strong>物理直觉</strong>：绝热压缩时，外功全部转入内能 \(\Rightarrow\) 温度上升。半体积升高 \(2^{0.4}-1\approx 32\%\)——这就是柴油机点火（压缩比 ~20，可达数倍温升）和打气筒发烫的原理。</div>
+
+  <div class="answer-box">\(T_2\approx 387\) K（约 114°C）</div>
+</div>
+
+<!-- ============== 11.23 ============== -->
+<div class="example" id="p11-23">
+  <h4>11.23 — 活塞加 10 kg：等温压、再等压加热 <span class="scope-tag scope-w7">W7</span></h4>
+  <p class="problem-statement">气缸截面 \(A=0.04\) m²，初始 \(T=273\) K、大气压。把 10 kg 质量轻轻放在活塞顶并慢慢下降（等温过程），气体体积变小。(i) 活塞高度下降的百分比？(ii) 现在加热使活塞回到原位（等压），\(T\) 增加多少？</p>
+
+  <div class="solution-step"><strong>(i) 新压强</strong>：活塞上方大气，下方气体，再加上 10 kg 重物：
+    $$ P_2=P_{\text{atm}}+\frac{mg}{A}=1.013\times 10^5+\frac{10\cdot 9.81}{0.04}=1.013\times 10^5+2452.5\approx 1.038\times 10^5\text{ Pa}. $$
+  </div>
+
+  <div class="solution-step"><strong>等温体积比</strong>：\(P_1V_1=P_2V_2\Rightarrow V_2/V_1=P_1/P_2=1.013/1.038=0.9764\)。
+    高度比等于体积比（\(V=Ah\)），所以下降 \(1-0.9764=0.0236\approx 2.4\%\)。
+  </div>
+
+  <div class="solution-step"><strong>(ii) 等压加热回到原高度</strong>：\(V_3=V_1\)，仍在压强 \(P_2\)。等压 \(V/T=\text{const}\)：
+    $$ T_3=T_2\cdot\frac{V_3}{V_2}=273\cdot\frac{V_1}{V_2}=273\cdot\frac{P_2}{P_1}=273\cdot 1.0243\approx 279.6\text{ K}. $$
+    \(\Delta T=T_3-T_2=279.6-273=6.6\) K\(\approx 6.7\)°C ✓。
+  </div>
+
+  <div class="solution-step"><strong>解读</strong>：10 kg 在 400 cm² 上只产生 2.4 kPa 的压差（\(\sim 2.4\%\) atm），所以体积/高度也只小 2.4%。要把它再"顶上去"，由 \(V/T\) 等压关系，温度同样升 2.4%（约 7 K）——压强 vs 温度的等比换算。</div>
+
+  <div class="answer-box">(i) 下降 \(\approx 2.4\%\)；(ii) \(\Delta T\approx 6.7\) °C</div>
+</div>
+
+<!-- ============== 11.25 ============== -->
+<div class="example" id="p11-25">
+  <h4>11.25 — MB 分布归一化 + 在 1000 m/s 附近的分子数 ★ <span class="scope-tag scope-w7">W7</span></h4>
+  <p class="problem-statement">考虑 Maxwell-Boltzmann 分布 Eqn 22.19。(i) 用 \(\displaystyle\int_0^\infty x^2 e^{-ax^2}dx=\frac{1}{4a}\sqrt{\pi/a}\) 归一化使 \(\int_0^\infty P(v)\,dv=1\)。(ii) 对 \(N\) 个分子用 \(dN\simeq N\cdot P(v)\,dv\)（\(dv\ll 1\)），求碳分子（\(m=1.99\times 10^{-26}\) kg）中 \(1000\lt v\lt 1002\) m/s 的分子数，已知 \(N=10^6\)、\(T=300\) K。</p>
+
+  <div class="solution-step"><strong>(i) 归一化</strong>：设 \(P(v)=C\cdot v^2 e^{-\alpha v^2}\)，其中 \(\alpha=m/(2kT)\)。
+    $$ \int_0^\infty P\,dv=C\cdot \frac{1}{4\alpha}\sqrt{\pi/\alpha}=1
+       \;\Longrightarrow\;C=4\alpha\sqrt{\alpha/\pi}=\frac{4}{\sqrt\pi}\,\alpha^{3/2}. $$
+    代入 \(\alpha=m/(2kT)\)，\(\alpha^{3/2}=(m/(2kT))^{3/2}\)：
+    $$ \boxed{P(v)=v^2\sqrt{\frac{2m^3}{\pi k^3 T^3}}\,e^{-mv^2/(2kT)}.} $$
+    与课程中的 \(g(v)=4\pi v^2(m/(2\pi kT))^{3/2}e^{-mv^2/(2kT)}\) 形式相同（恒等式 \(4\pi(m/(2\pi kT))^{3/2}=\sqrt{2m^3/(\pi k^3T^3)}\)）。详见 <a href="10_maxwell_boltzmann.html">10 MB 分布</a>。
+  </div>
+
+  <div class="solution-step"><strong>(ii) 在 \(v=1000\) m/s 处的概率密度</strong>：
+    <ol>
+      <li>\(\alpha=m/(2kT)=1.99\times 10^{-26}/(2\cdot 1.38\times 10^{-23}\cdot 300)=2.40\times 10^{-6}\) s²/m²</li>
+      <li>\(\alpha v^2=2.40\times 10^{-6}\cdot 10^6=2.40\)；\(e^{-2.40}=0.0907\)</li>
+      <li>\((m/(2\pi kT))^{3/2}=(1.99\times 10^{-26}/(2\pi\cdot 1.38\times 10^{-23}\cdot 300))^{3/2}=(7.65\times 10^{-7})^{1.5}\approx 6.69\times 10^{-10}\)</li>
+      <li>\(g(v)=4\pi v^2\cdot 6.69\times 10^{-10}\cdot 0.0907=4\pi\cdot 10^6\cdot 6.69\times 10^{-10}\cdot 0.0907=7.63\times 10^{-4}\) s/m</li>
+    </ol>
+  </div>
+
+  <div class="solution-step"><strong>分子数</strong>：\(dv=2\) m/s（区间 1000–1002）。
+    $$ dN=N\cdot g(v)\cdot dv=10^6\cdot 7.63\times 10^{-4}\cdot 2\approx 1526\approx 1520. $$
+  </div>
+
+  <div class="solution-step"><strong>核查"位置感"</strong>：碳原子在 300 K 的 \(v_{\text{rms}}=\sqrt{3kT/m}=\sqrt{3\cdot 1.38\times 10^{-23}\cdot 300/1.99\times 10^{-26}}\approx 791\) m/s。\(v=1000\) 在 \(v_{\text{rms}}\) 的略右——分布峰附近，密度合理。</div>
+
+  <div class="answer-box">(i) \(P(v)=v^2\sqrt{2m^3/(\pi k^3T^3)}\,e^{-mv^2/(2kT)}\)；(ii) \(\Delta N\approx 1520\)</div>
+</div>
+
+<!-- ============== 11.27 ============== -->
+<div class="example" id="p11-27">
+  <h4>11.27 — 循环 ABCA（直线 + 等容 + 等温） ★ <span class="scope-tag scope-w7">W7</span></h4>
+  <p class="problem-statement">气体走循环 ABCA，如图 E-6(a)。<strong>AB 是等压</strong>（题目原文写的 AC 实为 AB；按答案核对的几何）。已知 A 在 (25 L, 50 kPa)、B 在 (5 L, 50 kPa)、CA 是等温线。求 (i) C 的 (P, V)；(ii) 各段功；(iii) 整个循环的吸热。\(1\) L \(=10^{-3}\) m³。</p>
+
+  <svg class="pv-diagram" viewBox="0 0 280 210" xmlns="http://www.w3.org/2000/svg">
+    <line x1="40" y1="20" x2="40" y2="180" stroke="#475569" stroke-width="1.5"/>
+    <line x1="40" y1="180" x2="260" y2="180" stroke="#475569" stroke-width="1.5"/>
+    <text x="20" y="14" font-size="11" font-family="serif" fill="#475569">P</text>
+    <text x="266" y="184" font-size="11" font-family="serif" fill="#475569">V</text>
+    <!-- A at (25L, 50kPa) bottom-right -->
+    <circle cx="220" cy="160" r="3.5" fill="#0f766e"/>
+    <text x="228" y="164" font-size="11" font-weight="700" fill="#0f766e">A</text>
+    <!-- B at (5L, 50kPa) bottom-left -->
+    <circle cx="80" cy="160" r="3.5" fill="#0f766e"/>
+    <text x="62" y="164" font-size="11" font-weight="700" fill="#0f766e">B</text>
+    <!-- C at (5L, 250kPa) top-left -->
+    <circle cx="80" cy="40" r="3.5" fill="#0f766e"/>
+    <text x="62" y="36" font-size="11" font-weight="700" fill="#0f766e">C</text>
+    <!-- AB isobar at P=50kPa (horizontal, right to left) -->
+    <line x1="220" y1="160" x2="80" y2="160" stroke="#0369a1" stroke-width="2"/>
+    <!-- BC isochoric at V=5L (vertical, bottom to top) -->
+    <line x1="80" y1="160" x2="80" y2="40" stroke="#0369a1" stroke-width="2"/>
+    <!-- CA isotherm: hyperbola from (5L, 250kPa) to (25L, 50kPa) -->
+    <path d="M 80 40 Q 110 100 220 160" stroke="#0369a1" stroke-width="2" fill="none"/>
+    <text x="2" y="44" font-size="10" font-family="sans-serif" fill="#64748b">250 kPa</text>
+    <text x="2" y="164" font-size="10" font-family="sans-serif" fill="#64748b">50 kPa</text>
+    <text x="74" y="196" font-size="10" font-family="sans-serif" fill="#64748b">5 L</text>
+    <text x="210" y="196" font-size="10" font-family="sans-serif" fill="#64748b">25 L</text>
+    <!-- Direction labels -->
+    <text x="135" y="155" font-size="10" fill="#dc2626">AB (等压)</text>
+    <text x="88" y="105" font-size="10" fill="#dc2626">BC (等容)</text>
+    <text x="135" y="100" font-size="10" fill="#dc2626">CA (等温)</text>
+  </svg>
+
+  <div class="solution-step"><strong>(i) C 的位置</strong>：\(BC\) 等容 \(\Rightarrow V_C=V_B=5\) L。\(CA\) 等温 \(\Rightarrow P_C V_C=P_A V_A\Rightarrow P_C=P_A\cdot V_A/V_C=50\cdot 25/5=250\) kPa。所以 <strong>C 在 (5 L, 250 kPa)</strong>。</div>
+
+  <div class="solution-step"><strong>(ii) 各段功</strong>：
+    <ul>
+      <li>\(W_{AB}=P\Delta V=50\times 10^3\cdot(5-25)\times 10^{-3}=-1000\) J（等压压缩，气体被外力做功）</li>
+      <li>\(W_{BC}=0\)（等容）</li>
+      <li>\(W_{CA}=nRT_A\ln(V_A/V_C)=P_A V_A\ln(25/5)=50\times 10^3\cdot 0.025\cdot \ln 5=1250\cdot 1.6094\approx 2012\) J（等温膨胀）</li>
+    </ul>
+  </div>
+
+  <div class="solution-step"><strong>(iii) 循环净功 = 净吸热</strong>：循环 \(\Delta U=0\)，故
+    $$ Q_{\text{net}}=W_{\text{net}}=-1000+0+2012=1012\text{ J}. $$
+    P-V 图围出的逆时针面积——但因为路径是 \(A\to B\to C\to A\)（先向左、再上、再沿等温回到右下），实际是<em>顺时针</em>循环（热机方向）。<strong>正净功 = 顺时针 = 输出功 = 净吸热</strong>。
+  </div>
+
+  <div class="answer-box">(i) C = (5 L, 250 kPa)；(ii) \(W_{AB}=-1000\) J, \(W_{BC}=0\), \(W_{CA}\approx 2012\) J；(iii) \(\Delta Q=W_{\text{cycle}}=1012\) J</div>
+</div>
+
+<!-- ============== 11.28 ============== -->
+<div class="example" id="p11-28">
+  <h4>11.28 — 循环 ABCA（等温 + 等容 + 绝热），\(\gamma=4/3\) ★★ <span class="scope-tag scope-w7">W7</span></h4>
+  <p class="problem-statement">1 mol 气体，\(\gamma=4/3\)，走循环 ABCA（图 E-6(b)）。AB 或 AC 中一段是等温、另一段是绝热（自己判断）。已知 A 在 (50 kPa, 25 L) 等。(i) 写出 A、B、C 的 \((P, V, T)\)；(ii) 各段功；(iii) 整个循环的吸/放热。</p>
+
+  <div class="solution-step"><strong>判断哪段是绝热</strong>：绝热曲线 \(PV^\gamma=\text{const}\) 比等温 \(PV=\text{const}\) 在 P-V 图上<strong>更陡</strong>（同 \(V_f\)，\(P_f^{\text{绝热}}\lt P_f^{\text{等温}}\) 时——其实是在 \(V\) 减小时绝热的 \(P\) 升得更快）。图中 AC 更陡 \(\Rightarrow\) <strong>AC 绝热</strong>，<strong>AB 等温</strong>。详见 <a href="12_processes_cycles.html">12 §5.3 斜率对比</a>。</div>
+
+  <div class="solution-step"><strong>(i) 三点坐标</strong>：
+    <ul>
+      <li><strong>A</strong>：\(P_A=50\) kPa，\(V_A=25\) L \(=0.025\) m³。\(T_A=P_AV_A/(nR)=50\times 10^3\cdot 0.025/(1\cdot 8.31)=1250/8.31\approx 150\) K。</li>
+      <li><strong>B</strong>：AB 等温到 \(V_B=5\) L。\(P_B=P_A\cdot V_A/V_B=50\cdot 5=250\) kPa。\(T_B=T_A=150\) K。</li>
+      <li><strong>C</strong>：AC 绝热到 \(V_C=5\) L（同 B 横坐标，故 BC 等容）。\(P_C=P_A(V_A/V_C)^\gamma=50\cdot 5^{4/3}\). \(5^{4/3}=e^{(4/3)\ln 5}=e^{2.145}=8.547\)，所以 \(P_C=50\cdot 8.547\approx 427.5\) kPa。\(T_C=P_C V_C/(nR)=427.5\times 10^3\cdot 0.005/8.31\approx 257\) K（或 \(T_A\cdot 5^{\gamma-1}=150\cdot 5^{1/3}=150\cdot 1.710\approx 257\) K ✓）。</li>
+    </ul>
+  </div>
+
+  <div class="solution-step"><strong>(ii) 各段功</strong>：
+    <ul>
+      <li>\(W_{AB}=nRT_A\ln(V_B/V_A)=1\cdot 8.31\cdot 150\cdot\ln(0.2)=1246.5\cdot(-1.609)\approx -2007\) J（等温压缩）</li>
+      <li>\(W_{BC}=0\)（等容加热）</li>
+      <li>\(W_{CA}=-\Delta U_{CA}=-nc_v(T_A-T_C)=nc_v(T_C-T_A)\)。对 \(\gamma=4/3\)：\(c_v=R/(\gamma-1)=R/(1/3)=3R\)。代入：\(W_{CA}=1\cdot 3\cdot 8.31\cdot(257-150)=24.94\cdot 107\approx 2667\) J（≈ Shankar 答案 2655 J，差异来自 \(T_C\) 取舍）。</li>
+    </ul>
+  </div>
+
+  <div class="solution-step"><strong>(iii) 循环净吸热 = 净功</strong>（\(\Delta U=0\)）：
+    $$ Q_{\text{net}}=W_{ABCA}=-2007+0+2655\approx 648\text{ J}. $$
+    <strong>顺时针循环</strong>（图 (b) 中绝热段更陡，AB 等温段在下方）：净吸热 = 输出功 = 648 J。
+  </div>
+
+  <div class="solution-step"><strong>物理直觉</strong>：单原子 \(\gamma=5/3\)，双原子 \(\gamma=7/5\)，\(\gamma=4/3\) 对应多原子（如线性 CO₂ 在高 T，或某些情形下 \(f=6\) 的情况，但 Shankar 这里只是一道纯算题）。<strong>关键技巧</strong>：BC 等容直接用 \(T_C-T_A\) 比从 \(\int P\,dV\) 沿绝热曲线积分简单得多——绝热段的功直接用 \(\Delta U\) 跳过积分。</div>
+
+  <div class="answer-box">(i) A=(50 kPa, 25 L, 150 K)；B=(250 kPa, 5 L, 150 K)；C=(427.5 kPa, 5 L, 257 K)。(ii) \(W_{AB}=-2007\) J，\(W_{BC}=0\)，\(W_{CA}\approx 2655\) J。(iii) \(Q_{\text{net}}=W_{\text{cycle}}\approx 648\) J（吸热）。</div>
+</div>
+
+<!-- ======================================================== -->
+
+<h2 id="openstax">OpenStax UP2 §3.3 第一定律 — #38, 39, 40, 42, 45</h2>
+
+<div class="problem-toc">
+  <a href="#os-38">#38</a>
+  <a href="#os-39">#39</a>
+  <a href="#os-40">#40</a>
+  <a href="#os-42">#42</a>
+  <a href="#os-45">#45</a>
+</div>
+
+<div class="box warning" style="font-size:.92rem">
+  <p class="box-title" style="font-size:.85rem">关于 #43</p>
+  <p>授课说明 "problem 43 is ill-defined, understand why and ignore it"。该题给 P-V 图上一个半圆 R→S 路径，但<strong>问内能改变</strong>——任何闭合循环 \(\Delta U_{\text{cycle}}=0\) 这是常识，不需要图；问"吸/放热多少"则等于循环面积；问"反向遍历吸放热"则反号。要么三问彼此重复，要么需要内能的初末态，单看路径形状无法回答——所以题目"病态"。</p>
+</div>
+
+<!-- ============== #38 ============== -->
+<div class="example" id="os-38">
+  <h4>#38 — 稀气体等温膨胀 <span class="scope-tag scope-os">OS</span></h4>
+  <p class="problem-statement">稀气体准静态从 0.50 L 膨胀到 4.0 L，做了 250 J 功。气体温度始终保持 300 K。求 (a) 内能改变；(b) 吸收的热。</p>
+
+  <div class="solution-step"><strong>(a)</strong> 等温 + 理想气体（"稀气体" 即可近似为理想气体）\(\Rightarrow U=U(T)\) 不变 \(\Rightarrow \Delta U=0\)。</div>
+
+  <div class="solution-step"><strong>(b)</strong> 第一定律：\(Q=\Delta U+W=0+250=250\) J。</div>
+
+  <div class="solution-step"><strong>核查（自洽性）</strong>：理想气体等温 \(W=nRT\ln(V_f/V_i)\)。从 \(W=250\) J 反推 \(nRT=W/\ln 8=250/2.0794\approx 120.2\) J，于是 \(n=120.2/(8.31\cdot 300)\approx 0.0482\) mol（约 1 g 空气量级）——量级合理。</div>
+
+  <div class="answer-box">(a) \(\Delta U=0\)；(b) \(Q=250\) J</div>
+</div>
+
+<!-- ============== #39 ============== -->
+<div class="example" id="os-39">
+  <h4>#39 — 已知 W 与 ΔU，求 Q <span class="scope-tag scope-os">OS</span></h4>
+  <p class="problem-statement">气体膨胀过程中做功 500 J，内能增加 80 J。求气体吸收的热。</p>
+
+  <div class="solution-step"><strong>第一定律</strong>：\(Q=\Delta U+W=80+500=580\) J。</div>
+
+  <div class="solution-step"><strong>解读</strong>：吸收的 580 J 热中，500 J 变成对外做的功，剩 80 J 增加了内能（升温）。注意 \(\Delta U>0\) 即使气体在膨胀——这不是等温过程。</div>
+
+  <div class="answer-box">\(Q=580\) J</div>
+</div>
+
+<!-- ============== #40 ============== -->
+<div class="example" id="os-40">
+  <h4>#40 — 等温膨胀 V→4V 的吸热 <span class="scope-tag scope-os">OS</span></h4>
+  <p class="problem-statement">理想气体准静态等温从 \((p, V)\) 膨胀到 \((P_f, 4V)\)。问吸收多少热？</p>
+
+  <div class="solution-step"><strong>等温</strong>：\(\Delta U=0\Rightarrow Q=W\)。
+    $$ W=nRT\ln(V_f/V_i)=pV\ln 4. $$
+    （等温意味着 \(nRT\) 是常量，可用初始态 \(pV\) 代替。）
+  </div>
+
+  <div class="solution-step"><strong>数值</strong>：\(\ln 4=2\ln 2\approx 1.386\)，所以 \(Q=pV\cdot 2\ln 2\approx 1.386\,pV\)。</div>
+
+  <div class="answer-box">\(Q=pV\ln 4=2pV\ln 2\approx 1.386\,pV\)</div>
+</div>
+
+<!-- ============== #42 ============== -->
+<div class="example" id="os-42">
+  <h4>#42 — 等压膨胀，求 ΔU <span class="scope-tag scope-os">OS</span></h4>
+  <p class="problem-statement">等压膨胀 A→B：\(P=10^4\) N/m²，\(V_A=0.15\) m³，\(V_B=0.30\) m³，吸热 3100 J。求 \(\Delta U\)。</p>
+
+  <div class="solution-step"><strong>等压做功</strong>：
+    $$ W=P\Delta V=10^4\cdot (0.30-0.15)=10^4\cdot 0.15=1500\text{ J}. $$
+  </div>
+
+  <div class="solution-step"><strong>第一定律</strong>：\(\Delta U=Q-W=3100-1500=1600\) J。</div>
+
+  <div class="solution-step"><strong>核查比例</strong>：等压理想气体 \(Q/\Delta U=c_p/c_v=\gamma\)。这里 \(\gamma=Q/\Delta U=3100/1600\approx 1.94\)。<em>不</em>对应任何标准气体（\(\gamma\in[1, 5/3]\)）——所以本题中气体并非真正的理想气体，或者题目数值是"虚构教学"。但解法本身没问题，只用了第一定律。</div>
+
+  <div class="answer-box">\(\Delta U=1600\) J</div>
+</div>
+
+<!-- ============== #45 ============== -->
+<div class="example" id="os-45">
+  <h4>#45 — 矩形循环 ABCDA 上的热交换 ★ <span class="scope-tag scope-os">OS</span></h4>
+  <p class="problem-statement">气体沿 AB 膨胀：做 20 J 功，吸 30 J 热。沿 AC 膨胀：做 40 J 功，吸 70 J 热。(a) 沿 BC 气体交换多少热？(b) 从 C 经 D 回到 A 时，CD 段外界对气体做 60 J 功。沿 CDA 气体交换多少热？</p>
+
+  <svg class="pv-diagram" viewBox="0 0 280 200" xmlns="http://www.w3.org/2000/svg">
+    <line x1="40" y1="20" x2="40" y2="180" stroke="#475569" stroke-width="1.5"/>
+    <line x1="40" y1="180" x2="260" y2="180" stroke="#475569" stroke-width="1.5"/>
+    <text x="20" y="14" font-size="11" font-family="serif" fill="#475569">P</text>
+    <text x="266" y="184" font-size="11" font-family="serif" fill="#475569">V</text>
+    <!-- Rectangle ABCD with A bottom-left, B bottom-right, C top-right, D top-left -->
+    <circle cx="80" cy="160" r="3.5" fill="#0f766e"/>
+    <text x="62" y="164" font-size="11" font-weight="700" fill="#0f766e">A</text>
+    <circle cx="220" cy="160" r="3.5" fill="#0f766e"/>
+    <text x="228" y="164" font-size="11" font-weight="700" fill="#0f766e">B</text>
+    <circle cx="220" cy="60" r="3.5" fill="#0f766e"/>
+    <text x="228" y="64" font-size="11" font-weight="700" fill="#0f766e">C</text>
+    <circle cx="80" cy="60" r="3.5" fill="#0f766e"/>
+    <text x="62" y="64" font-size="11" font-weight="700" fill="#0f766e">D</text>
+    <!-- Rectangle edges -->
+    <line x1="80" y1="160" x2="220" y2="160" stroke="#0369a1" stroke-width="2"/>
+    <line x1="220" y1="160" x2="220" y2="60" stroke="#0369a1" stroke-width="2"/>
+    <line x1="220" y1="60" x2="80" y2="60" stroke="#0369a1" stroke-width="2"/>
+    <line x1="80" y1="60" x2="80" y2="160" stroke="#0369a1" stroke-width="2"/>
+    <!-- Diagonal AC -->
+    <line x1="80" y1="160" x2="220" y2="60" stroke="#dc2626" stroke-width="1.5" stroke-dasharray="4 3"/>
+    <text x="140" y="155" font-size="10" fill="#64748b">AB 等压</text>
+    <text x="225" y="115" font-size="10" fill="#64748b">BC↑</text>
+    <text x="145" y="55" font-size="10" fill="#64748b">CD 等压</text>
+    <text x="50" y="115" font-size="10" fill="#64748b">DA↓</text>
+    <text x="145" y="105" font-size="10" fill="#dc2626">AC 对角</text>
+  </svg>
+
+  <div class="solution-step"><strong>(a) 先求各点内能差</strong>（第一定律）：
+    $$ \Delta U_{AB}=Q_{AB}-W_{AB}=30-20=10\text{ J}. $$
+    $$ \Delta U_{AC}=Q_{AC}-W_{AC}=70-40=30\text{ J}. $$
+    所以 \(\Delta U_{BC}=\Delta U_{AC}-\Delta U_{AB}=30-10=20\) J（A、B、C 的内能差独立于路径）。
+  </div>
+
+  <div class="solution-step"><strong>BC 段的功</strong>：从图看 BC 是矩形右侧的<strong>竖直边</strong>（等容），所以 \(W_{BC}=0\)。
+    $$ Q_{BC}=\Delta U_{BC}+W_{BC}=20+0=20\text{ J}. $$
+  </div>
+
+  <div class="solution-step"><strong>(b) CDA 路径</strong>：先求 \(\Delta U_{CDA}\)：
+    $$ \Delta U_{CDA}=U_A-U_C=-\Delta U_{AC}=-30\text{ J}. $$
+  </div>
+
+  <div class="solution-step"><strong>CDA 的总功</strong>：CD 是矩形顶边（等压压缩），"外界对气体做 60 J 功" 意味着 \(W_{CD}^{\text{by gas}}=-60\) J。DA 是矩形左侧的竖直边（等容），\(W_{DA}=0\)。
+    $$ W_{CDA}=W_{CD}+W_{DA}=-60+0=-60\text{ J}. $$
+  </div>
+
+  <div class="solution-step"><strong>沿 CDA 的热</strong>：
+    $$ Q_{CDA}=\Delta U_{CDA}+W_{CDA}=-30+(-60)=-90\text{ J}. $$
+    负号 = 气体<strong>放出</strong> 90 J。
+  </div>
+
+  <div class="solution-step"><strong>循环自洽性核查</strong>：完整循环 ABCDA 的净功 = 矩形面积。\(\Delta U_{\text{cycle}}=0\)：
+    $$ W_{\text{cycle}}=W_{AB}+W_{BC}+W_{CD}+W_{DA}=20+0+(-60)+0=-40\text{ J}. $$
+    总吸热 \(Q_{\text{cycle}}=W_{\text{cycle}}=-40\) J（净放热）——意味着这是个<strong>逆时针循环</strong>（制冷机方向，外界对气体净做功，气体净放热到冷源）。也可以独立累加：\(Q_{\text{cycle}}=Q_{AB}+Q_{BC}+Q_{CDA}=30+20+(-90)=-40\) J ✓
+  </div>
+
+  <div class="answer-box">(a) \(Q_{BC}=20\) J（吸热）；(b) \(Q_{CDA}=-90\) J（放热）</div>
+</div>
+
+<!-- ======================================================== -->
+
+<h2 id="kintheory">动理论加题 — Instructor Week 7 8 道</h2>
+
+<div class="problem-toc">
+  <a href="#kt-1">KT.1</a>
+  <a href="#kt-2">KT.2</a>
+  <a href="#kt-3">KT.3</a>
+  <a href="#kt-4">KT.4</a>
+  <a href="#kt-5">KT.5</a>
+  <a href="#kt-6">KT.6</a>
+  <a href="#kt-7">KT.7</a>
+  <a href="#kt-8">KT.8</a>
+</div>
+
+<div class="box remark">
+  <p class="box-title">解答策略导览</p>
+  <p>这 8 道题不依赖 PV 循环，主要训练对 MB 分布与三种特征速率的<strong>熟练度</strong>。#1, #4, #6 是直接代公式；#2 是 MB 分布的求极值练习；#5 是两个不同温度下的特征速率联立；#3 是用 \(f(v_i)\) 在窄窗口里近似数分子；#7 是分量绝对值平均；#8 是<strong>"出射偏置"</strong>——出口处的分布与容器内部不同，这是后续会推广到 Knudsen 流、Jeans 逃逸的经典练习。建议先把三种特征速率的公式 \(v_0=\sqrt{2kT/m},\ \bar v=\sqrt{8kT/(\pi m)},\ v_{\text{rms}}=\sqrt{3kT/m}\) 全部默写一遍再开始。详见 <a href="10_maxwell_boltzmann.html">10 MB 分布</a>。</p>
+</div>
+
+<!-- ============== KT.1 ============== -->
+<div class="example" id="kt-1">
+  <h4>KT.1 — H₂ 与 He 混合气体的三种速率 <span class="scope-tag scope-kt">KT</span></h4>
+  <p class="problem-statement">气体由 H₂ 分子（\(M=2\) g/mol）与 He 原子（\(M=4\) g/mol）混合组成，\(T=300\) K。分别求两种粒子的 \(v_0,\ \bar v,\ v_{\text{rms}}\)。</p>
+
+  <div class="solution-step"><strong>策略</strong>：混合气体里每种分子<strong>独立</strong>满足自己的 MB 分布——只要分子之间足够接近热平衡（碰撞频繁）。三种速率公式 \(v_0=\sqrt{2RT/M},\ \bar v=\sqrt{8RT/(\pi M)},\ v_{\text{rms}}=\sqrt{3RT/M}\)，比值 \(\sqrt 2:\sqrt{8/\pi}:\sqrt 3\approx 1.414:1.596:1.732\)。详见 <a href="10_maxwell_boltzmann.html#sec:speeds">10 §6 三种特征速率</a>。</div>
+
+  <div class="solution-step"><strong>H₂</strong>（\(M=0.002\) kg/mol）：
+    $$ v_0=\sqrt{2\cdot 8.31\cdot 300/0.002}=\sqrt{2.493\times 10^6}\approx 1579\text{ m/s}. $$
+    $$ \bar v=v_0\sqrt{4/\pi}\approx 1579\cdot 1.1284\approx 1782\text{ m/s}. $$
+    $$ v_{\text{rms}}=v_0\sqrt{3/2}\approx 1579\cdot 1.2247\approx 1934\text{ m/s}. $$
+  </div>
+
+  <div class="solution-step"><strong>He</strong>（\(M=0.004\) kg/mol，比 H₂ 重 2 倍 \(\Rightarrow\) 速率慢 \(\sqrt 2\) 倍）：
+    $$ v_0\approx 1579/\sqrt 2\approx 1117\text{ m/s}. $$
+    $$ \bar v\approx 1782/\sqrt 2\approx 1260\text{ m/s}. $$
+    $$ v_{\text{rms}}\approx 1934/\sqrt 2\approx 1368\text{ m/s}. $$
+  </div>
+
+  <div class="solution-step"><strong>物理直觉</strong>：在同一温度下，<strong>较轻的分子运动较快</strong>——但<strong>平均动能 \(\tfrac32 kT\) 相等</strong>（与质量无关）。H₂ 的速率约是 He 的 \(\sqrt 2\) 倍，与 He 比 N₂ 快 \(\sqrt{28/4}\approx 2.65\) 倍是同样的逻辑。<strong>这就是为什么 Earth 留不住 H₂/He（逃逸速度 11.2 km/s，H₂ 的 \(v_{\text{rms}}\) 已达 1.9 km/s 但分布有长尾）</strong>。</div>
+
+  <div class="answer-box">H₂：\(v_0\approx 1579, \bar v\approx 1782, v_{\text{rms}}\approx 1934\) m/s；He：\(v_0\approx 1117, \bar v\approx 1260, v_{\text{rms}}\approx 1368\) m/s</div>
+</div>
+
+<!-- ============== KT.2 ============== -->
+<div class="example" id="kt-2">
+  <h4>KT.2 — 推导最概然速率 \(v_0\) <span class="scope-tag scope-kt">KT</span></h4>
+  <p class="problem-statement">推导 MB 分布中分子最概然速率 \(v_0\) 的公式。</p>
+
+  <div class="solution-step"><strong>策略</strong>：\(v_0\) 是速率分布 \(g(v)\) 取最大值的位置，对 \(v\) 求导置零。注意：<strong>不是</strong> \(F(\vec v)\)（向量分布在 \(\vec v=0\) 取峰），而是 \(g(v)\)（速率分布）。</div>
+
+  <div class="solution-step"><strong>从 \(g(v)\) 出发</strong>：
+    $$ g(v)=4\pi v^2\left(\frac{m}{2\pi kT}\right)^{3/2}e^{-\alpha v^2},\qquad \alpha=\frac{m}{2kT}. $$
+    常数前因子与 \(v\) 无关，所以求 \(v_0\) 等价于求 \(h(v)=v^2 e^{-\alpha v^2}\) 的极值。
+  </div>
+
+  <div class="solution-step"><strong>求导</strong>：
+    $$ \frac{dh}{dv}=2v\,e^{-\alpha v^2}+v^2\cdot(-2\alpha v)e^{-\alpha v^2}=2v\,e^{-\alpha v^2}(1-\alpha v^2). $$
+    令其为零：\(v=0\)（\(g(0)=0\) 极小值，平凡）或 \(\alpha v^2=1\Rightarrow v^2=1/\alpha\)。
+  </div>
+
+  <div class="solution-step"><strong>结果</strong>：
+    $$ \boxed{v_0=\sqrt{1/\alpha}=\sqrt{2kT/m}=\sqrt{2RT/M}.} $$
+  </div>
+
+  <div class="solution-step"><strong>物理直觉</strong>：\(g(v)\) 由两个相互<em>竞争</em>的因子组成——\(v^2\)（球壳面积，随 \(v\) 单调增）与 \(e^{-\alpha v^2}\)（Boltzmann 因子，随 \(v\) 单调减）。前者代表"高速时<em>方向选择</em>多"，后者代表"高速时<em>能量代价</em>大"。两者乘积的极值出现在它们的"斜率正好对消"处——这就是 \(v_0\) 的物理意义。</div>
+
+  <div class="answer-box">\(v_0=\sqrt{2kT/m}\)</div>
+</div>
+
+<!-- ============== KT.3 ============== -->
+<div class="example" id="kt-3">
+  <h4>KT.3 — 数 He 分子：\(v_x\in[-1,1]\) vs \(v_y\in[100,101]\) ★ <span class="scope-tag scope-kt">KT</span></h4>
+  <p class="problem-statement">He 气（\(m_{\text{He}}=6.646\times 10^{-27}\) kg）在 300 K。已知有 10,000 个原子 \(v_x\in[-1, 1]\) m/s。约有多少原子 \(v_y\in[100, 101]\) m/s？</p>
+
+  <div class="solution-step"><strong>策略</strong>：两个窗口都用<strong>分量分布</strong> \(f(v_x)\)（或 \(f(v_y)\)，两者形式一样）：
+    $$ f(v_i)=\sqrt{\frac{m}{2\pi kT}}\,e^{-mv_i^2/(2kT)}. $$
+    取分量分布而<em>不</em>是 \(g(v)\)——题目问的是某<strong>一个分量</strong>落在某区间，不是<strong>总速率</strong>落在某区间。</div>
+
+  <div class="solution-step"><strong>窄窗口近似</strong>：每个窗口足够窄使得 \(f\) 在窗口内近似常数 \(\approx f(\bar v_i)\)：
+    $$ N_{x\in[-1,1]}\approx N\cdot 2\Delta v\cdot f(0)=N\cdot 2\cdot \sqrt{\frac{m}{2\pi kT}}, $$
+    其中 \(2\Delta v=2\) m/s 因为窗口长 2 m/s。
+    $$ N_{y\in[100,101]}\approx N\cdot 1\cdot f(100)=N\cdot 1\cdot \sqrt{\frac{m}{2\pi kT}}\,e^{-m\cdot 10^4/(2kT)}. $$
+  </div>
+
+  <div class="solution-step"><strong>计算 Boltzmann 因子</strong>：
+    $$ \alpha=\frac{m}{2kT}=\frac{6.646\times 10^{-27}}{2\cdot 1.38\times 10^{-23}\cdot 300}=8.026\times 10^{-7}\text{ s}^2/\text{m}^2. $$
+    $$ \alpha\cdot 10^4=8.026\times 10^{-3}\approx 0.00803. $$
+    $$ e^{-0.00803}\approx 0.9920. $$
+  </div>
+
+  <div class="solution-step"><strong>取比值</strong>（\(N\) 和归一化系数 \(\sqrt{m/(2\pi kT)}\) 全部消掉）：
+    $$ \frac{N_{y\in[100,101]}}{N_{x\in[-1,1]}}=\frac{1\cdot 0.9920}{2\cdot 1}\approx 0.496. $$
+    $$ N_{y\in[100,101]}\approx 10000\cdot 0.496\approx 4960\approx 5000. $$
+  </div>
+
+  <div class="solution-step"><strong>物理直觉</strong>：He 在 300 K 的 \(\bar v_x\) 量级是 \(\sqrt{kT/m}\approx 790\) m/s（每个方向）。\(v_y=100\) 远<strong>小于</strong>这个尺度，所以 Boltzmann 因子 \(e^{-mv_y^2/(2kT)}\) 几乎等于 1（不到 1% 偏差）——分布在 \(v=0\) 与 \(v=100\) 处<strong>没有显著差别</strong>。结果几乎只由窗口宽度比决定：\(\Delta v_y/\Delta v_x=1/2\)，所以 \(N_y/N_x\approx 1/2\)。这种"窄窗口 + 中心附近" 的近似在 11.25 也用过。</div>
+
+  <div class="answer-box">\(\approx 5000\) 个 He 原子</div>
+</div>
+
+<!-- ============== KT.4 ============== -->
+<div class="example" id="kt-4">
+  <h4>KT.4 — N₂ 的 \(\bar v=600\) m/s 对应温度 <span class="scope-tag scope-kt">KT</span></h4>
+  <p class="problem-statement">N₂（\(M=28\) g/mol）的平均速率 \(\bar v=600\) m/s 时的温度是多少？</p>
+
+  <div class="solution-step"><strong>反解 \(\bar v=\sqrt{8RT/(\pi M)}\)</strong>：
+    $$ T=\frac{\pi M\,\bar v^2}{8R}=\frac{\pi\cdot 0.028\cdot 600^2}{8\cdot 8.31}=\frac{\pi\cdot 0.028\cdot 3.6\times 10^5}{66.48}. $$
+    $$ T=\frac{31{,}667}{66.48}\approx 476\text{ K}. $$
+  </div>
+
+  <div class="solution-step"><strong>核查</strong>：常温 300 K 时 N₂ 的 \(\bar v\approx 476\) m/s。要让 \(\bar v\) 升到 600 m/s，需要 \((600/476)^2=1.587\) 倍温度，即 \(300\cdot 1.587\approx 476\) K ✓（自洽）。</div>
+
+  <div class="answer-box">\(T\approx 476\) K（约 203°C）</div>
+</div>
+
+<!-- ============== KT.5 ============== -->
+<div class="example" id="kt-5">
+  <h4>KT.5 — \(\bar v(T')=v_0(T)\) 时 \(T'/T=?\) <span class="scope-tag scope-kt">KT</span></h4>
+  <p class="problem-statement">温度 \(T\) 下气体的最概然速率为 \(v_0\)。在什么温度 \(T'\) 下，气体的平均速率<em>就</em>等于 \(v_0\)？</p>
+
+  <div class="solution-step"><strong>联立</strong>：
+    $$ \bar v(T')=v_0(T)\;\Longrightarrow\;\sqrt{\frac{8kT'}{\pi m}}=\sqrt{\frac{2kT}{m}}. $$
+    平方：
+    $$ \frac{8T'}{\pi}=2T\;\Longrightarrow\;\boxed{T'=\frac{\pi T}{4}\approx 0.785\,T}. $$
+  </div>
+
+  <div class="solution-step"><strong>物理直觉</strong>：\(\bar v\) 比 \(v_0\) 在<em>同一温度</em>下大 \(\sqrt{8/(\pi\cdot 2)}=\sqrt{4/\pi}\approx 1.128\) 倍。要让 \(\bar v\) "降下来"等于 \(v_0\)，温度须降到 \(1/1.128^2=\pi/4\) 倍。<strong>这道题的本质</strong>是：三种特征速率分别是温度的 \(\sqrt T\) 函数，比值 \(\sqrt 2:\sqrt{8/\pi}:\sqrt 3\) 与温度无关——所以把 \(\bar v\) 降到 \(v_0\) 的相对值需要按温度的二次方调整。</div>
+
+  <div class="answer-box">\(T'=\pi T/4\approx 0.785\,T\)</div>
+</div>
+
+<!-- ============== KT.6 ============== -->
+<div class="example" id="kt-6">
+  <h4>KT.6 — O₂ 在什么温度下 \(v_{\text{rms}}\) 等于 He 在 300 K？ <span class="scope-tag scope-kt">KT</span></h4>
+  <p class="problem-statement">在什么温度下，O₂（\(M=32\) g/mol）分子的 \(v_{\text{rms}}\) 等于 He（\(M=4\) g/mol）原子在 300 K 时的 \(v_{\text{rms}}\)？</p>
+
+  <div class="solution-step"><strong>策略</strong>：\(v_{\text{rms}}=\sqrt{3RT/M}\)。要相等：
+    $$ \frac{T_{O_2}}{M_{O_2}}=\frac{T_{He}}{M_{He}}\;\Longrightarrow\;T_{O_2}=T_{He}\cdot\frac{M_{O_2}}{M_{He}}=300\cdot\frac{32}{4}=300\cdot 8=2400\text{ K}. $$
+  </div>
+
+  <div class="solution-step"><strong>核查</strong>：\(v_{\text{rms}}(\text{He}, 300\text{ K})=\sqrt{3\cdot 8.31\cdot 300/0.004}\approx 1368\) m/s（与 KT.1 一致）；\(v_{\text{rms}}(\text{O}_2, 2400\text{ K})=\sqrt{3\cdot 8.31\cdot 2400/0.032}=\sqrt{1.870\times 10^6}\approx 1367\) m/s ✓。</div>
+
+  <div class="solution-step"><strong>物理直觉</strong>：O₂ 比 He 重 8 倍，要等速率需<strong>升温 8 倍</strong>——速率乘积关系 \(v^2\sim T/M\)。这就是为什么大气里 He 比 O₂ 容易逃逸：同温下 He 速率快 2.83 倍，距逃逸速度更近。</div>
+
+  <div class="answer-box">\(T_{O_2}=2400\) K</div>
+</div>
+
+<!-- ============== KT.7 ============== -->
+<div class="example" id="kt-7">
+  <h4>KT.7 — 平均 \(\langle|v_x|\rangle\) 与 \(\bar v\) 之比 ★ <span class="scope-tag scope-kt">KT</span></h4>
+  <p class="problem-statement">计算理想气体的 \(\langle|v_x|\rangle\)，并与 \(\bar v\) 比较。</p>
+
+  <div class="solution-step"><strong>策略</strong>：\(\langle v_x\rangle=0\)（分布对 \(v_x\) 对称），所以要用 \(|v_x|\)；积分时利用偶函数把双边积分变成单边的 2 倍。设 \(a=m/(2kT)\)。
+    $$ \langle|v_x|\rangle=\int_{-\infty}^{\infty}|v_x|f(v_x)\,dv_x=2\int_0^{\infty}v_x\,f(v_x)\,dv_x. $$
+    代入 \(f(v_x)=\sqrt{a/\pi}\,e^{-av_x^2}\)：
+    $$ \langle|v_x|\rangle=2\sqrt{a/\pi}\int_0^{\infty}v_x\,e^{-av_x^2}dv_x. $$
+  </div>
+
+  <div class="solution-step"><strong>奇幂积分 \(\int_0^\infty xe^{-ax^2}dx=1/(2a)\)</strong>（用 \(u=ax^2\) 代换）：
+    $$ \langle|v_x|\rangle=2\sqrt{a/\pi}\cdot\frac{1}{2a}=\sqrt{1/(\pi a)}=\sqrt{\frac{2kT}{\pi m}}. $$
+  </div>
+
+  <div class="solution-step"><strong>与 \(\bar v\) 比较</strong>：
+    $$ \bar v=\sqrt{\frac{8kT}{\pi m}}=2\sqrt{\frac{2kT}{\pi m}}=2\langle|v_x|\rangle. $$
+    所以
+    $$ \boxed{\langle|v_x|\rangle=\tfrac12\bar v.} $$
+  </div>
+
+  <div class="solution-step"><strong>物理直觉</strong>：\(\bar v\) 是 3D 速度模长的平均；\(\langle|v_x|\rangle\) 是它在<strong>某一个方向</strong>的投影绝对值的平均。三个方向独立各向同性 \(\Rightarrow \langle|v|\rangle\) 大约是 \(\langle|v_x|\rangle\) 的两倍而不是三倍——这是因为<strong>勾股关系</strong>不可加：\(|v|=\sqrt{v_x^2+v_y^2+v_z^2}\) 不是 \(|v_x|+|v_y|+|v_z|\)。<br>定量地：\(\langle v_x^2\rangle=kT/m\)，\(\langle v^2\rangle=3kT/m\)，所以 \(v_{\text{rms}}=\sqrt 3\,\sqrt{\langle v_x^2\rangle}\)——但 \(\bar v\) 比 \(\sqrt{\langle v^2\rangle}\) 略小，恰好让 \(\bar v=2\langle|v_x|\rangle\) 的"二倍关系"成立。</div>
+
+  <div class="answer-box">\(\langle|v_x|\rangle=\sqrt{2kT/(\pi m)}=\tfrac12\bar v\)</div>
+</div>
+
+<!-- ============== KT.8 ============== -->
+<div class="example" id="kt-8">
+  <h4>KT.8 — 出射分子的平均动能 ★★ <span class="scope-tag scope-kt">KT</span></h4>
+  <p class="problem-statement">容器壁上有一小孔。证明从孔中出射的分子平均动能 \(\overline{\text{KE}}_{\text{esc}}>\tfrac32 kT\)，并算出具体值。</p>
+
+  <div class="solution-step"><strong>关键洞察</strong>：出射的分子<strong>不是</strong>容器内部分子的<em>随机抽样</em>——速度向孔方向<em>大</em>的分子<strong>更容易</strong>撞到孔（单位时间内撞墙的概率与 \(v_\perp\) 成正比）。所以出射样本对孔的法向分量有"偏置"。</div>
+
+  <div class="solution-step"><strong>设孔在 \(z\) 方向</strong>，\(v_z>0\) 才能逃出。
+    <ul>
+      <li><strong>\(v_x, v_y\) 方向无偏置</strong>：分子的横向速度多少不影响它撞墙的概率，所以出射粒子的横向分量分布仍是 MB：
+      $$ \langle\tfrac12 m v_x^2\rangle_{\text{esc}}=\langle\tfrac12 m v_y^2\rangle_{\text{esc}}=\tfrac12 kT. $$</li>
+      <li><strong>\(v_z\) 方向有偏置</strong>：流量正比于 \(v_z\)，所以
+      $$ f_{\text{esc}}(v_z)\propto v_z\cdot e^{-\alpha v_z^2},\qquad v_z>0, $$
+      其中 \(\alpha=m/(2kT)\)。这把容器内的对称 Gaussian 加权成 <strong>Rayleigh 分布</strong>。</li>
+    </ul>
+  </div>
+
+  <div class="solution-step"><strong>计算 \(\langle v_z^2\rangle_{\text{esc}}\)</strong>：两个奇幂积分
+    $$ J_1=\int_0^{\infty}v_z\,e^{-\alpha v_z^2}dv_z=\frac{1}{2\alpha},\qquad
+       J_3=\int_0^{\infty}v_z^3\,e^{-\alpha v_z^2}dv_z=\frac{1}{2\alpha^2}. $$
+    （第二个由 Feynman trick：\(J_3=-\partial J_1/\partial\alpha=1/(2\alpha^2)\)。）
+    $$ \langle v_z^2\rangle_{\text{esc}}=\frac{J_3}{J_1}=\frac{1/(2\alpha^2)}{1/(2\alpha)}=\frac{1}{\alpha}=\frac{2kT}{m}. $$
+    比容器内的 \(\langle v_z^2\rangle_{\text{inside}}=kT/m\) 大<strong>两倍</strong>。
+    $$ \langle\tfrac12 m v_z^2\rangle_{\text{esc}}=\tfrac12 m\cdot\frac{2kT}{m}=kT. $$
+  </div>
+
+  <div class="solution-step"><strong>总动能</strong>：
+    $$ \overline{\text{KE}}_{\text{esc}}=\tfrac12 kT+\tfrac12 kT+kT=2kT. $$
+    比容器内的 \(\tfrac32 kT\) <strong>大 \(\tfrac12 kT\)</strong>（即多出 33%）。
+  </div>
+
+  <div class="solution-step"><strong>物理直觉与应用</strong>：
+    <ul>
+      <li><strong>从一个无限大热库中通过小孔放出的气体比里面的"<em>热</em>"</strong>——这是<strong>有效冷却</strong>原理。例如把氦气从液氦罐子顶部慢慢放出，剩下来的液体会越来越冷（因为快分子被优先带走）。</li>
+      <li><strong>大气逃逸（Jeans escape）</strong>：地球高空大气里少数有 \(v_z>v_{\text{esc}}\approx 11.2\) km/s 的分子会逃逸。这条思路是把这个"偏置"推到极致——只对 \(v_z\) 还要超出逃逸速度。</li>
+      <li><strong>分子束实验</strong>：实验室用喷嘴产生分子束时，束流的平均动能比源池温度对应的 \(\tfrac32 kT\) <em>高 33%</em>，定量来自本题的 \(2kT\) 结果。</li>
+    </ul>
+  </div>
+
+  <div class="answer-box">\(\overline{\text{KE}}_{\text{esc}}=2kT>\tfrac32 kT\)（多 33%）</div>
+</div>
+
+<!-- ======================================================== -->
+
+<h2 id="week8">Week 8 Discussion 复习课 — TA 出题 4 道</h2>
+
+<p style="font-size:.95rem;color:#475569">
+  来源：<code>HW/Pset/Week8_section.pdf</code>（TA 给的"Quiz 4 review"）+ <code>HW/Pset/week8.pdf</code>（TA Jiashu Han 的 Week 8 Discussion）。
+  两份都把第 1 题作为"绝热推导 / 绝热压缩"热身（已涵盖在 11.22 / 主题 12 §5.1），<strong>本节只收录两份 worksheet 中真正新出的 4 道</strong>：
+  TA.1 来自第一份 P2（快速绝热膨胀，<em>不可逆</em>绝热）；
+  TA.2 来自第一份 P3（MB 分布 + 线性温度梯度，三问，含 \(v_{\text{rms}}\) 美感伏笔）；
+  TA.3 来自第一份 P4（湿手套 Fourier 定律）；
+  TA.4 来自第二份 P3（活塞加重物等温压缩 + 等压加热回原高度，11.21+11.23 复合）。
+</p>
+
+<div class="problem-toc">
+  <a href="#ta-1">TA.1</a>
+  <a href="#ta-2">TA.2</a>
+  <a href="#ta-3">TA.3</a>
+  <a href="#ta-4">TA.4</a>
+</div>
+
+<!-- ============== TA.1 ============== -->
+<div class="example" id="ta-1">
+  <h4>TA.1 — 快速（不可逆）绝热膨胀顶起活塞 ★★ <span class="scope-tag scope-ta">TA</span></h4>
+  <p class="problem-statement">压缩空气罐通过阀门快速向<strong>竖直</strong>圆柱内放入 \(n=0.50\) mol 空气（双原子，\(c_v=\tfrac52 R\)）。圆柱顶端是<strong>无摩擦活塞</strong>，质量 \(M=1.0\) kg，截面积 \(A=0.01\) m²。圆柱外是 \(P_{\text{atm}}=101{,}300\) Pa 的大气。气体在快速膨胀过程中温度从 \(T_1=20\)°C 降到 \(T_2=10\)°C。求活塞被顶起的高度 \(\Delta h\)。</p>
+
+  <div class="box insight" style="font-size:.93rem">
+    <p class="box-title" style="font-size:.85rem">关键概念：<em>不可逆</em>绝热 ≠ 准静态绝热</p>
+    <p>"快速"意味着没有时间与外界换热（<strong>所以 \(Q=0\)</strong>），但<strong>不</strong>意味着气体内部时刻处于平衡——它是猛地推动活塞顶起来的。因此<strong>不能</strong>用准静态绝热公式 \(W=(P_iV_i-P_fV_f)/(\gamma-1)\) 或沿 \(PV^\gamma=\text{const}\) 曲线积分；外部做功是<strong>反抗常压</strong>的 \(W=P_{\text{ext}}\,\Delta V\)。但 \(\Delta U=nc_v\,\Delta T\) 仍成立（\(U\) 是态函数，与路径无关），First Law \(\Delta U=Q-W=-W\) 也仍然成立——这就是解题主轴。</p>
+  </div>
+
+  <div class="solution-step"><strong>(1) 外压</strong>（活塞自重 + 大气压共同压下来）：
+    $$ P_{\text{ext}}=P_{\text{atm}}+\frac{Mg}{A}=101{,}300+\frac{(1.0)(9.81)}{0.01}=101{,}300+981\approx 102{,}281\text{ Pa}. $$
+    （TA 答案用 \(g=9.8\) 给出 102,280 Pa，差异可忽略。）
+  </div>
+
+  <div class="solution-step"><strong>(2) 第一定律给出气体对外做功</strong>：\(Q=0\Rightarrow W=-\Delta U\)。理想气体 \(\Delta U=nc_v(T_2-T_1)\)：
+    $$ W=-nc_v(T_2-T_1)=nc_v(T_1-T_2)=(0.50)\cdot\tfrac52\cdot 8.314\cdot(10)\approx 103.9\text{ J}. $$
+    （\(T_1-T_2=+10\) K——降温意味着气体释放内能去做功。）
+  </div>
+
+  <div class="solution-step"><strong>(3) 外压做的功 = 顶起活塞反抗 \(P_{\text{ext}}\) 的功</strong>：
+    $$ W=P_{\text{ext}}\,\Delta V=P_{\text{ext}}\,A\,\Delta h. $$
+    解 \(\Delta h\)：
+    $$ \Delta h=\frac{nc_v(T_1-T_2)}{P_{\text{ext}}\,A}=\frac{103.9}{102{,}281\cdot 0.01}=\frac{103.9}{1022.8}\approx 0.102\text{ m}. $$
+  </div>
+
+  <div class="solution-step"><strong>核查 1：可逆绝热版本的反差</strong>。如果<strong>准静态</strong>绝热膨胀且 \(P_i=P_{\text{ext}}\)，则末压 \(P_f=P_i(T_f/T_i)^{\gamma/(\gamma-1)}=102{,}281\cdot(283.15/293.15)^{3.5}\approx 102{,}281\cdot 0.886\approx 90.6\) kPa——这<strong>低于</strong>外压，意味着活塞实际不能从静止平衡缓慢移动到这一末态。<strong>结论</strong>：题目要的本来就是不可逆路径；可逆和不可逆给出不同的末态压强，但末温只取决于"\(Q=0\) + 外压恒定 + \(\Delta U\) 由 \(\Delta T\) 决定"这一组约束，刚好是本题问的内容。</div>
+
+  <div class="solution-step"><strong>核查 2：典型尺度</strong>。10 cm 量级的活塞位移、\(\sim 100\) J 量级的功、\(\sim 10\) K 量级的降温——三者通过 \(nc_v\) 与 \(P_{\text{ext}}A\) 协调。把 \(n\) 增 10 倍 (= 5 mol) 或把 \(M\) 减小（\(P_{\text{ext}}\to P_{\text{atm}}\)），\(\Delta h\) 都会增大；这种依赖关系合常理。</div>
+
+  <div class="answer-box">\(\Delta h\approx 10.2\) cm（活塞上升约 10 cm）</div>
+</div>
+
+<!-- ============== TA.2 ============== -->
+<div class="example" id="ta-2">
+  <h4>TA.2 — MB 分布在线性 \(T(h)\) 梯度中 ★★★ <span class="scope-tag scope-ta">TA</span></h4>
+  <p class="problem-statement">高层玻璃大厦完全没有空调，温度沿高度呈线性梯度 \(T(h)=T_0+\alpha h\)，\(T_0=300\) K，\(\alpha=0.10\) K/m。一台声学传感器对 N\(_2\) 分子（\(m=4.65\times 10^{-26}\) kg）以 \(v_0=550\) m/s 的速率高度敏感。
+  <strong>(A)</strong> 把传感器放在多高，才能让 \(v_0=550\) m/s 正好是该处分子的<em>最概然速率</em> \(v_{\text{mp}}\)？
+  <strong>(B)</strong> 把传感器放在多高，能<em>最大化</em>速率取 \(v_0=550\) m/s 处的<strong>绝对概率密度</strong> \(g(v_0,T)\)？
+  <strong>(C)</strong> 为什么 (A) 与 (B) 答案不同？</p>
+
+  <div class="solution-step"><strong>(A) 找 \(T_A\) 使 \(v_{\text{mp}}=v_0\)</strong>。最概然速率公式
+    $$ v_{\text{mp}}=\sqrt{\frac{2k_B T}{m}}\quad\Longrightarrow\quad T_A=\frac{mv_0^2}{2k_B}. $$
+    数值：
+    $$ T_A=\frac{(4.65\times 10^{-26})(550)^2}{2\cdot 1.38\times 10^{-23}}=\frac{1.4066\times 10^{-20}}{2.76\times 10^{-23}}\approx 509.6\text{ K}. $$
+    对应高度：\(h_A=(T_A-T_0)/\alpha=(509.6-300)/0.10=\boxed{2096\text{ m}}\)（高层观光台）。
+  </div>
+
+  <div class="solution-step"><strong>(B) 找 \(T_B\) 使 \(\dfrac{\partial g}{\partial T}(v_0,T)=0\)</strong>。Maxwell-Boltzmann 速率分布是
+    $$ g(v,T)=4\pi v^2\!\left(\frac{m}{2\pi k_B T}\right)^{3/2}\!\exp\!\left(-\frac{mv^2}{2k_B T}\right). $$
+    把 \(v=v_0\) 固定，把所有不含 \(T\) 的因子记作 \(C\)：
+    $$ g(v_0,T)=C\cdot T^{-3/2}\,e^{-\alpha/T},\qquad \alpha\equiv\frac{mv_0^2}{2k_B}. $$
+    （这个 \(\alpha\) 与温度梯度的 \(\alpha\) 是不同变量，仅符号巧合。）求导
+    $$ \frac{dg}{dT}=C\,T^{-5/2}\,e^{-\alpha/T}\left[-\frac{3}{2}+\frac{\alpha}{T}\right]=0
+       \;\Longrightarrow\; T_B=\frac{2\alpha}{3}=\frac{mv_0^2}{3k_B}. $$
+    数值：
+    $$ T_B=\frac{(4.65\times 10^{-26})(550)^2}{3\cdot 1.38\times 10^{-23}}=\frac{1.4066\times 10^{-20}}{4.14\times 10^{-23}}\approx 339.8\text{ K}. $$
+    对应高度：\(h_B=(339.8-300)/0.10=\boxed{398\text{ m}}\)（中层楼层）。
+  </div>
+
+  <div class="solution-step"><strong>(C) 为什么 A ≠ B（两个层面）</strong>：
+    <ul>
+      <li><strong>几何层面</strong>：\(g(v,T)\) 是<em>两元函数</em>。Part A 取常数 \(T\) 切片，对 \(v\) 求峰位置 \(\Rightarrow v_{\text{mp}}\)；Part B 取常数 \(v=v_0\) 切片，对 \(T\) 求峰位置——这两个最优化在<em>不同方向</em>上。归一化 \(\int g\,dv=1\) 强制升温时分布<em>展宽变矮</em>，所以"对 \(v_0\) 的绝对密度"最大不一定发生在 \(v_0\) 落在分布峰位的温度。</li>
+      <li><strong>能量层面（这是漂亮的地方）</strong>：把 \(T_B\) 的方程 \(\dfrac{3}{2}=\dfrac{mv_0^2}{2k_B T_B}\) 同乘 \(k_B T_B\)：
+        $$ \tfrac32 k_B T_B=\tfrac12 m v_0^2. $$
+        左边是等分定理给出的 3D 平均平动动能 \(\langle KE\rangle\)；右边是<em>单个</em>速率为 \(v_0\) 的分子的动能。这相当于说<strong>"绝对密度在 \(v_0\) 处最大"等价于"\(v_0\) 正好是该温度的 \(v_{\text{rms}}\)"</strong>。验证：\(v_{\text{rms}}(T_B)=\sqrt{3k_BT_B/m}=\sqrt{2\alpha/m}=v_0\) ✓。</li>
+    </ul>
+    所以 A 给出"\(v_0=v_{\text{mp}}\) 的温度"（\(T_A=509.6\) K），B 给出"\(v_0=v_{\text{rms}}\) 的温度"（\(T_B=339.8\) K）。两者之比 \(T_A/T_B=v_{\text{rms}}^2/v_{\text{mp}}^2=(3kT/m)/(2kT/m)=3/2\)，与数值 509.6/339.8 = 1.500 ✓。
+  </div>
+
+  <div class="box insight" style="font-size:.93rem">
+    <p class="box-title" style="font-size:.85rem">概念地图</p>
+    <p>三种特征速率回顾（详见 <a href="10_maxwell_boltzmann.html#sec:speeds">10 §6</a>）：
+    $$ v_{\text{mp}}:\bar v:v_{\text{rms}}=\sqrt 2:\sqrt{8/\pi}:\sqrt 3\approx 1.414:1.596:1.732. $$
+    本题 (A) 用 \(v_{\text{mp}}\) 公式定 \(T\)；本题 (B) 的求导自然导出 \(v_{\text{rms}}\) 公式——美感来源是分布族的几何结构：升温让分布"右移变矮"，<strong>恰好</strong>当 \(v_0=v_{\text{rms}}\) 时这两种效应在那一点的密度平衡。</p>
+  </div>
+
+  <div class="answer-box">(A) \(T_A\approx 510\) K，\(h_A\approx 2096\) m；(B) \(T_B\approx 340\) K，\(h_B\approx 398\) m；(C) A 是"\(v_0\) 处于分布峰位"的温度，B 是"\(v_0\) 正好等于 \(v_{\text{rms}}\)"的温度——\(T_A/T_B=3/2\)，反映 \(v_{\text{rms}}^2/v_{\text{mp}}^2=3/2\)</div>
+</div>
+
+<!-- ============== TA.3 ============== -->
+<div class="example" id="ta-3">
+  <h4>TA.3 — 干 vs 湿手套：Fourier 定律比时间 ★ <span class="scope-tag scope-ta">TA</span></h4>
+  <p class="problem-statement">200°C 的烤盘和你手之间隔着手套（面积 \(A\)、厚度 \(d\)），温差 \(\Delta T\) 在两种场景里都相同。<strong>干手套</strong>纤维里塞的是空气，\(\kappa_{\text{dry}}=0.04\) W/(m·K)；干手套撑了 \(t_{\text{dry}}=15\) s 就达到皮肤能承受的<em>最大累计热量</em> \(Q_{\text{max}}\)。现在不小心把手套<strong>泡湿了</strong>，水替代了纤维间的空气，\(\kappa_{\text{wet}}=0.60\) W/(m·K)。再去抓 200°C 的烤盘，多长时间会累积到同样的 \(Q_{\text{max}}\)？</p>
+
+  <div class="solution-step"><strong>策略</strong>：Fourier 稳态定律给热流率 \(\dot Q=\kappa A\,\Delta T/d\)（常数）。积分到时间 \(t\)：\(Q=\kappa A(\Delta T/d)\,t\)。两种场景里 \(A, \Delta T, d, Q_{\text{max}}\) 都一样，所以
+    $$ \kappa_{\text{dry}}\,t_{\text{dry}}=\kappa_{\text{wet}}\,t_{\text{wet}}\quad\Longrightarrow\quad t_{\text{wet}}=t_{\text{dry}}\cdot\frac{\kappa_{\text{dry}}}{\kappa_{\text{wet}}}. $$
+  </div>
+
+  <div class="solution-step"><strong>数值</strong>：
+    $$ t_{\text{wet}}=15\cdot\frac{0.04}{0.60}=15\cdot\frac{1}{15}=\boxed{1.0\text{ s}}. $$
+  </div>
+
+  <div class="solution-step"><strong>物理直觉</strong>：水的热导率是空气的 ≈15 倍，所以"绝热缓冲"完全失效——湿手套用了 1/15 的时间就到达灼伤阈值，几乎是"瞬时"。这正是为什么<strong>湿厨布抓烫锅会立刻烫到</strong>、<strong>潜水员失温</strong>（水的热导率比空气大 25 倍）、以及<strong>羽绒服一旦湿透立刻失去保暖</strong>都源于同一物理。详见 <a href="08_real_fluids_heat.html">08 §11</a>。</div>
+
+  <div class="answer-box">\(t_{\text{wet}}=1.0\) s（15 倍速到达阈值）</div>
+</div>
+
+<!-- ============== TA.4 ============== -->
+<div class="example" id="ta-4">
+  <h4>TA.4 — 活塞 + 10 kg：等温压缩 → 等压加热回原高度 ★★ <span class="scope-tag scope-ta">TA</span></h4>
+  <p class="problem-statement">活塞圆柱（截面 \(A=0.040\) m²，可移动）盛理想气体，初态 \(P_1=P_{\text{atm}}=1.013\times 10^5\) Pa，\(T_1=273\) K，\(V_1=1\) m³。把 \(m=10\) kg 重物<strong>缓慢</strong>放在活塞上（与外界热平衡 ⇒ 等温过程）。
+  <strong>(i)</strong> 气柱高度的<em>百分比</em>下降是多少？
+  <strong>(ii)</strong> 求气体做的功 \(W\) 与吸收的热 \(\delta Q\)。
+  <strong>(iii)</strong> 然后在重物仍在活塞上的情况下<strong>等压</strong>加热气体，直到活塞回到原高度。求末温 \(T_3\)。</p>
+
+  <div class="solution-step"><strong>(i) 等温压缩比</strong>。重物附加的压强 \(\Delta P=mg/A=(10)(9.81)/0.040=2452\) Pa（TA 用 \(g=9.8\)：2450 Pa）。新压强
+    $$ P_2=P_1+\Delta P=1.013\times 10^5+2450=1.0375\times 10^5\text{ Pa}. $$
+    等温 \(P_1V_1=P_2V_2\)；截面 \(A\) 不变 \(\Rightarrow V\propto h\)：
+    $$ \frac{h_2}{h_1}=\frac{V_2}{V_1}=\frac{P_1}{P_2}=\frac{1.013}{1.0375}=0.9764. $$
+    高度下降 \(\boxed{2.36\%\approx 2.4\%}\)。
+  </div>
+
+  <div class="solution-step"><strong>(ii) 等温功与热</strong>。等温下 \(\Delta U=0\)，所以 \(\delta Q=W\)。
+    $$ W=\int_{V_1}^{V_2}\! P\,dV=nRT_1\ln\!\frac{V_2}{V_1}=P_1V_1\ln\!\frac{P_1}{P_2}. $$
+    数值：
+    $$ W=(1.013\times 10^5)(1)\,\ln(0.9764)=1.013\times 10^5\cdot(-0.02391)\approx -2421\text{ J}. $$
+    \(\delta Q=W\approx -2421\) J（气体<strong>放热</strong>给环境——压缩本会升温，等温意味着多出来的热被环境吸走）。
+  </div>
+
+  <div class="solution-step"><strong>(iii) 等压加热回原高度</strong>。\(P\) 维持 \(P_2\)（重物还在），要求 \(V_3=V_1\)（高度回到 \(h_1\)）。用<strong>每个状态</strong>的理想气体定律：
+    \(P_2 V_1=nRT_3\) 而 \(P_1 V_1=nRT_1\)。两式相除：
+    $$ T_3=T_1\cdot\frac{P_2}{P_1}=273\cdot\frac{1.0375}{1.013}=273\cdot 1.02418\approx 279.6\text{ K}\approx\boxed{280\text{ K}}. $$
+    升温 \(\Delta T_{2\to 3}=T_3-T_1\approx 7\) K（注意 \(T_2=T_1=273\)，所以 \(T_3-T_2\) 也是 7 K）。
+  </div>
+
+  <div class="solution-step"><strong>物理直觉与综合性</strong>：本题把 <strong>11.21（等温膨胀的 \(W,Q\)）</strong>与 <strong>11.23（活塞加重物 + 等压加热）</strong>串在一起：
+    <ul>
+      <li>等温压缩本身只让气柱"塌掉"2.4%，看似不显著；但累积的<strong>热外流</strong>已达 2.4 kJ。</li>
+      <li>要把气柱顶回原位，<strong>不能</strong>简单地"取下重物"——因为题目要求重物仍在。只能靠<strong>升温</strong>让气体在更高的 \(P\) 下还原原体积。</li>
+      <li>计算简洁的原因：\(V\) 走了一个闭环 \(V_1\to V_2\to V_1\)，第一段 \(\Delta U=0\) 由等温保证，第二段 \(\Delta U>0\) 由升温产生（\(c_v\) 视气体种类而定），但比例 \(T_3/T_1=P_2/P_1\) 只用气体定律就能写出来，不需要 \(c_v\)。</li>
+    </ul>
+    联系 <a href="11_first_law.html">11 §7</a>（第一定律 \(\Delta U=Q-W\)）与 <a href="12_processes_cycles.html#sec5">12 §4 等温</a>。
+  </div>
+
+  <div class="answer-box">(i) 高度下降 ≈ 2.4%；(ii) \(W\approx -2421\) J，\(\delta Q\approx -2421\) J；(iii) \(T_3\approx 280\) K（升温约 7 K）</div>
+</div>
+
+<!-- ======================================================== -->
+
+<h2 id="formulas">Quiz 4 公式速查（合并完整版）</h2>
+
+<table class="formula-table">
+  <thead><tr><th>主题</th><th>公式</th><th>用途</th></tr></thead>
+  <tbody>
+    <tr><td>Fourier 定律</td><td>\(\dot Q=\kappa A\,\Delta T/L\)</td><td>稳态导热（11.9, 11.10, 11.11）</td></tr>
+    <tr><td>理想气体状态</td><td>\(PV=nRT=NkT\)</td><td>所有理想气体问题（11.13–11.16, 11.26）</td></tr>
+    <tr><td>同 \(n\) 两态比较</td><td>\(\frac{P_1V_1}{T_1}=\frac{P_2V_2}{T_2}\)</td><td>11.14 气泡上浮</td></tr>
+    <tr><td>分子动能</td><td>\(\tfrac12 m\langle v^2\rangle=\tfrac32 kT\)</td><td>11.16, 11.24</td></tr>
+    <tr><td>三种特征速率</td><td>\(v_0=\sqrt{\tfrac{2kT}{m}}\), \(\bar v=\sqrt{\tfrac{8kT}{\pi m}}\), \(v_{\text{rms}}=\sqrt{\tfrac{3kT}{m}}=\sqrt{\tfrac{3RT}{M}}\)</td><td>11.24, 11.25</td></tr>
+    <tr><td>MB 分布（速率）</td><td>\(g(v)=4\pi v^2\left(\tfrac{m}{2\pi kT}\right)^{3/2}e^{-mv^2/(2kT)}\)</td><td>11.25 归一化与数分子</td></tr>
+    <tr><td>等分定理</td><td>每二次自由度 \(\tfrac12 kT\) 内能</td><td>单原子 \(c_v=\tfrac32 R\)、双原子室温 \(c_v=\tfrac52 R\)</td></tr>
+    <tr><td>第一定律</td><td>\(\Delta U=Q-W\)，\(dU=\delta Q-PdV\)</td><td>所有过程问题</td></tr>
+    <tr><td>理想气体内能</td><td>\(U=(f/2)nRT=(f/2)PV\)</td><td>仅与 \(T\) 有关（11.17）</td></tr>
+    <tr><td>等容</td><td>\(W=0\), \(Q=\Delta U=nc_v\Delta T\)</td><td>11.17 AB 段、11.27 BC、11.28 BC</td></tr>
+    <tr><td>等压</td><td>\(W=P\Delta V\), \(Q=nc_p\Delta T\)</td><td>11.17 BC 段、#42、#45 CD 段</td></tr>
+    <tr><td>等温</td><td>\(\Delta U=0\), \(W=Q=nRT\ln(V_f/V_i)=P_iV_i\ln(V_f/V_i)\)</td><td>11.21, 11.23(i), 11.27 CA, 11.28 AB, #38, #40</td></tr>
+    <tr><td>准静态绝热</td><td>\(Q=0\), \(PV^\gamma=\text{const}\), \(TV^{\gamma-1}=\text{const}\), \(W=-\Delta U=nc_v(T_i-T_f)\)</td><td>11.22, 11.28 CA</td></tr>
+    <tr><td><strong>不可逆绝热（恒外压）</strong></td><td>\(Q=0\), \(W=P_{\text{ext}}\,\Delta V\); 联立 \(\Delta U=nc_v\Delta T\) 解末态</td><td><strong>TA.1</strong>（快速放气顶活塞，\(PV^\gamma\) 不适用）</td></tr>
+    <tr><td>Mayer 关系</td><td>\(c_p-c_v=R\)，\(\gamma=c_p/c_v\)</td><td>所有 \(\gamma\)–\(c_v\) 转换</td></tr>
+    <tr><td>循环</td><td>\(\Delta U_{\text{cycle}}=0\Rightarrow Q_{\text{cycle}}=W_{\text{cycle}}=\) 面积</td><td>11.27, 11.28, #45（<strong>非 Quiz 4 范围</strong>）</td></tr>
+    <tr><td>静水压</td><td>\(P=P_{\text{atm}}+\rho g h\)</td><td>11.14 池底压强</td></tr>
+    <tr><td>活塞额外重物</td><td>\(P_{\text{gas}}=P_{\text{atm}}+mg/A\)</td><td>11.23, TA.1, TA.4</td></tr>
+    <tr><td><strong>MB 分布对 \(T\) 的最优</strong></td><td>\(\partial g(v_0,T)/\partial T=0\Rightarrow 3k_BT=mv_0^2\)（即 \(v_0=v_{\text{rms}}\)）</td><td><strong>TA.2 (B)</strong>（绝对密度峰反推温度）</td></tr>
+    <tr><td><strong>Fourier 时间反比</strong></td><td>固定 \(Q_{\text{max}}, A, d, \Delta T\)：\(\kappa\cdot t = \text{const}\)</td><td><strong>TA.3</strong>（干 vs 湿手套）</td></tr>
+  </tbody>
+</table>
+
+<!-- ======================================================== -->
+
+<h2 id="checklist">Quiz 4 自查清单</h2>
+
+<div class="self-check">
+  <p class="question">Q1. 等温和绝热过程在 P-V 图上谁更陡？为什么？</p>
+  <details>
+    <summary>查看答案</summary>
+    <p><strong>绝热更陡</strong>。等温：\(PV=\text{const}\)，\(dP/dV=-P/V\)。绝热：\(PV^\gamma=\text{const}\)，\(dP/dV=-\gamma P/V\)。由于 \(\gamma>1\)（任何 \(f\geq 3\) 自由度的气体），绝热曲线斜率绝对值更大。物理直觉：等温膨胀时温度恒定但还在吸热补偿外做功；绝热膨胀时没有外热补偿，温度下降，所以同 \(V\) 增量下 \(P\) 掉得更多。判 11.28 哪段是绝热就靠这一条。</p>
+  </details>
+</div>
+
+<div class="self-check">
+  <p class="question">Q2. 理想气体自由膨胀（进入真空）与等温膨胀，端点相同：W 和 Q 一样吗？为什么？</p>
+  <details>
+    <summary>查看答案</summary>
+    <p>都<strong>不一样</strong>。自由膨胀：\(W=0\)（无外阻力），\(Q=0\)（系统孤立），\(\Delta U=0\)（自动满足，因 \(U=U(T)\)，\(T\) 不变）。等温膨胀：\(\Delta U=0\) 同样，但 \(W=nRT\ln(V_f/V_i)>0\) 且 \(Q=W>0\)。同样的 \(\Delta U\) 但完全不同的 \(W\)、\(Q\)——这是 \(\Delta U\) 是态函数、\(W\) 与 \(Q\) 是路径函数最干净的例证。详见 <a href="11_first_law.html">11 第一定律</a>。</p>
+  </details>
+</div>
+
+<div class="self-check">
+  <p class="question">Q3. MB 分布 \(g(v)\) 的三个特征速率 \(v_0\lt \bar v\lt v_{\text{rms}}\) 严格的不等关系，原因是什么？</p>
+  <details>
+    <summary>查看答案</summary>
+    <p>三者依次是<strong>最大值位置</strong>、<strong>一次矩（均值）</strong>、<strong>二次矩平方根</strong>。\(g(v)\) 因 \(v^2\) 因子而<strong>右偏</strong>（向高速一侧拖长尾），每升一阶矩都把权重更多地推向高速段，故 \(v_0\lt \bar v\lt v_{\text{rms}}\) 严格成立。比值 \(\sqrt 2:\sqrt{8/\pi}:\sqrt 3\approx 1.414:1.596:1.732\)。详见 <a href="10_maxwell_boltzmann.html">10 §6</a>。</p>
+  </details>
+</div>
+
+<div class="self-check">
+  <p class="question">Q4. 11.17 的等容冷却 + 等压扩张组合，最后温度比初始高还是低？凭直觉判断。</p>
+  <details>
+    <summary>查看答案</summary>
+    <p>更<strong>高</strong>（\(T_C/T_A=2\)）。等容降压 A→B：\(T_B/T_A=P_B/P_A=2/3<1\)，气体冷却。等压扩张 B→C：\(T_C/T_B=V_C/V_B=3>1\)，气体加热。复合 \(T_C/T_A=(2/3)\cdot 3=2\)，温度翻倍。<strong>直觉</strong>：体积扩 3 倍但压强只降 1.5 倍（\(3\to 2\)），合起来 \(PV\) 即 \(T\) 增 2 倍。判循环类问题最有用的工具：\(T\propto PV\) 对 fixed \(n\)。</p>
+  </details>
+</div>
+
+<div class="self-check">
+  <p class="question">Q5. 在 #45 中我们怎么知道 BC 是等容（W=0）？</p>
+  <details>
+    <summary>查看答案</summary>
+    <p>从 P-V 图。题目暗示一个矩形 ABCD：A 在左下、B 在右下（同 P=低）、C 在右上（同 V=B 的 V）、D 在左上。BC 是矩形右侧的<strong>竖直边</strong>，所以 \(V_B=V_C\)，\(W_{BC}=0\)。其次"CDA 中 CD 做 60 J 功"提示 CD 是水平边（等压），与 BC 是竖直边相容。读"对角线 AC + 矩形外四角"这种几何线索是 PV 循环题的关键。</p>
+  </details>
+</div>
+
+<div class="self-check">
+  <p class="question">Q6. Fourier 定律 \(\dot Q=\kappa A\Delta T/L\) 中的 \(\kappa\) 比值告诉我们什么？例如混凝土 1 vs 铜 401。</p>
+  <details>
+    <summary>查看答案</summary>
+    <p>\(\kappa\) 量纲 W/(m·K)：穿透 1 m 厚、1 m² 横截、温差 1 K 时的瞬时功率。<strong>铜 \(\kappa\approx 401\)</strong>（导热<em>电子</em>载流，Wiedemann-Franz 与导电性同源）；<strong>混凝土 \(\kappa\approx 1\)</strong>；<strong>玻璃 \(\kappa\approx 0.8\)</strong>；<strong>水 \(\kappa\approx 0.6\)</strong>；<strong>空气 \(\kappa\approx 0.025\)</strong>（小，因分子稀疏 + 慢）；<strong>聚苯乙烯泡沫 \(\kappa\approx 0.033\)</strong>（接近静止空气，因结构把空气固定，抑制对流）。建筑保温就是用"凝固的空气"。详见 <a href="08_real_fluids_heat.html#sec:fourier">08 §11</a>。</p>
+  </details>
+</div>
+
+<div class="self-check">
+  <p class="question">Q7（瞄准 TA.1）. 为什么"快速绝热膨胀"的功不能直接用 \(W=(P_iV_i-P_fV_f)/(\gamma-1)\)？</p>
+  <details>
+    <summary>查看答案</summary>
+    <p>因为该公式来自<strong>准静态</strong>绝热路径 \(PV^\gamma=\text{const}\)，要求气体内部每一刻都处于平衡态。"快速"过程虽然 \(Q=0\)（无时间换热），但气体内部不平衡——压强场是非均匀的、瞬时的；外界活塞反抗的只是宏观<strong>外</strong>压 \(P_{\text{ext}}\)，所以 \(W=P_{\text{ext}}\,\Delta V\) 才对。
+    <strong>但</strong> \(\Delta U=nc_v\,\Delta T\) 仍然成立（\(U\) 是态函数，仅依赖初末态），First Law \(\Delta U=Q-W=-W\) 也成立。把这两条联立就解出末态。这是<strong>不可逆</strong>绝热与<strong>可逆</strong>绝热的根本区别——同样的 \(Q=0\) 给出<em>不同</em>的末压。</p>
+  </details>
+</div>
+
+<div class="self-check">
+  <p class="question">Q8（瞄准 TA.2）. 在求 \(g(v_0,T)\) 对 \(T\) 的最大时，为什么自然冒出来 \(v_0=v_{\text{rms}}\) 的关系？</p>
+  <details>
+    <summary>查看答案</summary>
+    <p>MB 速率分布的<strong>归一化条件</strong> \(\int g\,dv=1\) 让"升温"伴随两种相反效应：(1) 峰位 \(v_{\text{mp}}\) 右移、密度被分散到高速段；(2) 归一化前的<em>幅度</em>因子 \(T^{-3/2}\) 整体降低，分布"变矮"。两效应在 \(v=v_0\) 处的<em>平衡点</em>就是 \(g(v_0,T)\) 对 \(T\) 的极值点。
+    数学上，从 \(g\propto T^{-3/2}e^{-mv_0^2/(2kT)}\) 求导，得 \(\partial_T g=0\Leftrightarrow -\tfrac32+mv_0^2/(2kT)=0\Leftrightarrow\tfrac32 kT=\tfrac12 mv_0^2\)。<strong>左边正是等分定理给出的 3D 平均动能</strong>；<strong>右边是 \(v_0\) 单分子的动能</strong>——它们相等的条件正是 \(v_0=v_{\text{rms}}\)（因为 \(\tfrac12 mv_{\text{rms}}^2=\tfrac32 kT\) 是 \(v_{\text{rms}}\) 的定义）。
+    这是 MB 分布的一个隐藏对称性：<em>"哪一个温度让分布在某速率 \(v_0\) 处取最大密度"</em> ⟺ <em>"\(v_0\) 是该温度的 \(v_{\text{rms}}\)"</em>。</p>
+  </details>
+</div>
+
+<!-- ======================================================== -->
+
+<h2 id="glossary">术语速查</h2>
+
+<dl>
+  <dt>态函数 (state function)</dt><dd>只依赖系统当下状态的量：\(U, T, P, V, n, S, H, G\)。\(\oint dU=0\)。</dd>
+  <dt>路径函数 (path function)</dt><dd>过程相关的量：\(W, Q\)。微分写作 \(\delta W, \delta Q\)，<em>不</em>是某函数的全微分。</dd>
+  <dt>准静态 (quasi-static)</dt><dd>过程慢到每一刻气体都处在内部平衡态，\(P\) 才有意义，\(\delta W=PdV\) 才成立。</dd>
+  <dt>等容/等压/等温/绝热</dt><dd>四种基本理想气体过程，分别由 \(dV=0\) / \(dP=0\) / \(dT=0\) / \(\delta Q=0\) 定义。</dd>
+  <dt>可逆/不可逆 绝热</dt><dd>都满足 \(Q=0\)；<em>可逆</em>（准静态）走 \(PV^\gamma=\text{const}\) 曲线，功用 \((P_iV_i-P_fV_f)/(\gamma-1)\)；<em>不可逆</em>（如恒外压突释）功用 \(P_{\text{ext}}\Delta V\)，末压一般不在绝热曲线上。两种情况都靠 First Law + \(\Delta U=nc_v\Delta T\) 解末态。</dd>
+  <dt>循环 (cycle)</dt><dd>系统回到初态：\(\Delta U=0\)，吸热=做功=P-V 图围成的面积；顺时针为热机，逆时针为制冷/泵。</dd>
+  <dt>Mayer 关系</dt><dd>\(c_p-c_v=R\)，理想气体两种比热的恒定差。</dd>
+  <dt>绝热指数 (\(\gamma\))</dt><dd>\(\gamma=c_p/c_v=(f+2)/f\)。单原子 5/3，双原子室温 7/5，多原子 \(\to 1\)。</dd>
+  <dt>Maxwell-Boltzmann 分布</dt><dd>\(g(v)=4\pi v^2(m/2\pi kT)^{3/2}e^{-mv^2/2kT}\)：速率分布，从各向同性 + 各分量独立 + 等分定理三个公理推出。</dd>
+  <dt>三种特征速率</dt><dd>最概然 \(v_0=\sqrt{2kT/m}\)，平均 \(\bar v=\sqrt{8kT/(\pi m)}\)，rms \(v_{\text{rms}}=\sqrt{3kT/m}\)。</dd>
+  <dt>Fourier 热传导定律</dt><dd>\(\dot Q=-\kappa A\,dT/dx\)；稳态薄板 \(\dot Q=\kappa A\Delta T/L\)。</dd>
+  <dt>热导率 (\(\kappa\))</dt><dd>材料常数，W/(m·K)；金属高（电子）、非金属低（声子）、气体最低。</dd>
+</dl>
+
+<p class="back-link" style="margin-top:2rem"><a href="index.html">← 回到复习总目录</a></p>
+
+</main>
+
+</body>
+</html>

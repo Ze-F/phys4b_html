@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>11 · 等分定理、内能与热力学第一定律 — PHYS 4B 复习</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="theme.js"></script>
+  <script>
+    MathJax = {
+      tex: { inlineMath: [['\\(', '\\)']], displayMath: [['$$', '$$']] },
+      svg: { fontCache: 'global' }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" async></script>
+</head>
+<body>
+
+<header class="site-header">
+  <a class="home-link" href="index.html">← PHYS 4B 复习</a>
+  <nav>
+    <a href="10_maxwell_boltzmann.html">← Maxwell-Boltzmann</a>
+    <a href="12_processes_cycles.html">四种过程与循环 →</a>
+  </nav>
+</header>
+
+<main class="container">
+
+<div class="topic-header">
+  <h1>11 · 等分定理、内能与热力学第一定律</h1>
+  <p class="meta">Lec 7.2 · Shankar §22.4–22.7 · OpenStax Vol.2 §3.1–3.3</p>
+  <p class="blurb">从 Lec 6.3 的 \(\tfrac12 m\langle v^2\rangle=\tfrac32 kT\) 出发，本节把"每个二次自由度 \(\tfrac12 kT\)" 升级成<strong>等分定理</strong>，把分子动能求和成宏观<strong>内能</strong> \(U=(f/2)NkT\) 并指出它是一个<strong>态函数</strong>，最后写下<strong>热力学第一定律</strong> \(\Delta U=Q-W\)、\(dU=\delta Q-\delta W\)、\(\delta W=P\,dV\)。这一节是 Ch.22 后半部和整个 Ch.23 的入口——后面所有 process（isochoric/isobaric/isothermal/adiabatic/cycle）都是它的应用。本节同时把 Lec 7.1 板书没拍到的 \(\bar v\) 推导补完。</p>
+</div>
+
+<!-- ======================================================== -->
+
+<div class="box key-result">
+  <p class="box-title">一页速览</p>
+  <ul>
+    <li><strong>平均速率（补完板书）：</strong>\(\bar v=\int_0^\infty v\,g(v)dv=\sqrt{8kT/(\pi m)}\)，用奇幂半轴积分 \(\int_0^\infty x^3 e^{-\lambda x^2}dx=1/(2\lambda^2)\)。</li>
+    <li><strong>等分定理：</strong>平衡态每个<strong>二次</strong>自由度贡献 \(\tfrac12 kT\) 的平均能量。</li>
+    <li><strong>内能：</strong>\(U=(f/2)NkT=(f/2)nRT\)；monatomic \(f=3\)，diatomic（室温）\(f=5\)，Dulong–Petit 固体 \(f=6\)。</li>
+    <li><strong>态函数：</strong>\(U\) 只依赖系统状态（理想气体 \(U=U(T)\)）；\(Q,W\) 是 path function（依赖过程）。</li>
+    <li><strong>第一定律：</strong>\(\Delta U=Q-W\)；\(dU=\delta Q-\delta W\)（\(dU\) 是 exact，\(\delta Q,\delta W\) 是 inexact）。</li>
+    <li><strong>准静态功：</strong>\(\delta W=PdV\)（"压强×面积×位移" 的极慢极限）。</li>
+    <li><strong>工作形式：</strong>\(dU=\delta Q-PdV\) —— 下一节所有过程的母方程。</li>
+    <li><strong>几何：</strong>\(W=\int P\,dV\) 是 \(P\)-\(V\) 曲线下方的有符号面积。</li>
+  </ul>
+</div>
+
+<!-- ======================================================== -->
+
+<h2>§1 故事线：从分子动能到热力学</h2>
+
+<p>过去三节我们做了两件事：</p>
+<ul>
+  <li><strong>Lec 6.3</strong>：用动理论 \(P=\tfrac13(N/V)m\langle v^2\rangle\) 配合 \(PV=NkT\)，得到 \(\tfrac12 m\langle v^2\rangle=\tfrac32 kT\)——分子平均动能跟温度挂钩。</li>
+  <li><strong>Lec 7.1</strong>：从两条公理（各向同性 + 独立性）推出完整的 Maxwell-Boltzmann 分布 \(f(v_x), F(\vec v), g(v)\)，并给出三种特征速率。</li>
+</ul>
+
+<p>这两节都是<strong>微观</strong>视角的胜利，但它们没有告诉我们：当一团气体被加热、压缩、膨胀时，<strong>它的能量怎么变？</strong>这个问题的答案是<strong>热力学第一定律</strong>，本节就是要把它从微观图像里"提炼"出来。</p>
+
+<p>路线图：</p>
+<ol>
+  <li>先补完 Lec 7.1 板书没拍到的 \(\bar v\) 推导（§2）。</li>
+  <li>用 \(f, g\) 做一个具体的"数分子"算例（§3）——这是 \(f,g\) 作为概率密度的第一次实战。</li>
+  <li>把 \(\tfrac12 m\langle v_x^2\rangle=\tfrac12 kT\) 推广成<strong>等分定理</strong>（§4），并用它给 monatomic / diatomic / 固体的内能（§5）。</li>
+  <li>明确<strong>态函数 vs 路径函数</strong>的区别（§6）。</li>
+  <li>写下<strong>第一定律</strong>，并把功具体写成 \(PdV\)（§7-§8）。</li>
+  <li>看 \(P\)-\(V\) 图的几何意义（§9），预览下周要做的四种过程（§10）。</li>
+</ol>
+
+<!-- ======================================================== -->
+
+<h2>§2 补完平均速率 \(\bar v\) 的推导</h2>
+
+<p>Lec 7.1 板书给出了 \(v_0=\sqrt{2kT/m}\)（峰位）与 \(v_{\text{rms}}=\sqrt{3kT/m}\)（RMS），但<strong>平均速率</strong> \(\bar v=\sqrt{8kT/(\pi m)}\) 只是被写出来——这一节板书把它的<strong>积分过程</strong>补上了。</p>
+
+<h3>2.1 关键工具：奇幂半轴积分（Feynman trick）</h3>
+
+<p>从基础积分出发：</p>
+
+<p>$$ I(\lambda)\equiv\int_0^\infty x\,e^{-\lambda x^2}\,dx=\frac{1}{2\lambda}. \tag{2.1}$$</p>
+
+<p>（替换 \(u=\lambda x^2\)，\(du=2\lambda x\,dx\)；\(\int_0^\infty e^{-u}\,du/(2\lambda)=1/(2\lambda)\)。）</p>
+
+<p>对 \(\lambda\) 求导（Feynman trick）：</p>
+
+<p>$$ -\frac{dI}{d\lambda}=\int_0^\infty x\cdot x^2\,e^{-\lambda x^2}dx=\int_0^\infty x^3 e^{-\lambda x^2}dx=-\frac{d}{d\lambda}\!\left(\frac{1}{2\lambda}\right)=\frac{1}{2\lambda^2}. \tag{2.2}$$</p>
+
+<div class="box insight">
+  <p class="box-title">为什么这里要用<strong>奇幂半轴</strong>而不是 \(I_2,I_4\)？</p>
+  <p>RMS 速率 \(v_{\text{rms}}^2=\langle v^2\rangle\) 用的是 \(v^2 g(v)\propto v^4 e^{-\alpha v^2}\)（\(g(v)\) 自带 \(v^2\) 乘上一个 \(v^2\)）——这是<strong>偶幂</strong>，于是 \(I_4\) 救场。</p>
+  <p>但平均速率 \(\bar v=\langle v\rangle\) 用的是 \(v\,g(v)\propto v^3 e^{-\alpha v^2}\)——这是<strong>奇幂</strong>。奇幂函数在全 \(\mathbb R\) 上对称积分给 0，但 \(v\) 只能取正值（\(v=|\vec v|\)），所以积分在 \([0,\infty)\) 半轴上做。半轴奇幂积分有公式 (2.2)，结构干净——这就是为什么需要它。</p>
+</div>
+
+<h3>2.2 计算 \(\bar v\)</h3>
+
+<p>从 \(g(v)=4\pi v^2 (m/(2\pi kT))^{3/2}\,e^{-mv^2/(2kT)}\)：</p>
+
+<p>$$ \bar v=\int_0^\infty v\,g(v)\,dv=4\pi\!\left(\frac{m}{2\pi kT}\right)^{\!3/2}\!\int_0^\infty v^3 e^{-\alpha v^2}dv,\quad \alpha=\frac{m}{2kT}. $$</p>
+
+<p>用 (2.2)：\(\int_0^\infty v^3 e^{-\alpha v^2}dv=1/(2\alpha^2)=2(kT)^2/m^2\)。</p>
+
+<p>$$ \bar v=4\pi\!\left(\frac{m}{2\pi kT}\right)^{\!3/2}\!\cdot\frac{2(kT)^2}{m^2}. $$</p>
+
+<details class="more-detail" style="margin: .5rem 0 1rem">
+  <summary>展开代数化简</summary>
+  <p>$$ \bar v=\frac{4\pi\cdot 2(kT)^2}{m^2}\cdot\frac{m^{3/2}}{(2\pi kT)^{3/2}}=\frac{8\pi(kT)^{1/2}}{m^{1/2}(2\pi)^{3/2}}=\frac{8\pi}{2^{3/2}\pi^{3/2}}\sqrt{\frac{kT}{m}}=\frac{2^3}{2^{3/2}\sqrt\pi}\sqrt{\frac{kT}{m}}=2^{3/2}\sqrt{\frac{kT}{\pi m}}=\sqrt{\frac{8kT}{\pi m}}. $$</p>
+</details>
+
+<div class="box key-result">
+  <p>$$ \boxed{\;\bar v=\sqrt{\frac{8kT}{\pi m}}.\;}\tag{2.3}$$</p>
+</div>
+
+<h3>2.3 三速率最终汇总</h3>
+
+<table class="formula-table">
+  <thead><tr><th>速率</th><th>表达式</th><th>无量纲倍数 (\(\sqrt{kT/m}\))</th><th>N₂ @ 300 K</th></tr></thead>
+  <tbody>
+    <tr><td>最可能 \(v_0\)（\(g(v)\) 峰位）</td><td>\(\sqrt{2kT/m}\)</td><td>\(\sqrt 2\approx 1.414\)</td><td>~422 m/s</td></tr>
+    <tr><td>平均 \(\bar v\)</td><td>\(\sqrt{8kT/(\pi m)}\)</td><td>\(\sqrt{8/\pi}\approx 1.596\)</td><td>~476 m/s</td></tr>
+    <tr><td>RMS \(v_{\text{rms}}\)</td><td>\(\sqrt{3kT/m}\)</td><td>\(\sqrt 3\approx 1.732\)</td><td>~517 m/s</td></tr>
+  </tbody>
+</table>
+
+<p>严格大小顺序 \(v_0<\bar v<v_{\text{rms}}\) 反映 \(g(v)\) 右偏（长尾）——每个更高阶矩都被高速尾拉得更远。</p>
+
+<!-- ======================================================== -->
+
+<h2>§3 数分子算例：\(N=10^{23}\), \(T=300\) K, \(N_2\)</h2>
+
+<p>板书做的具体题：在 N=10²³ 个 \(N_2\) 分子（300 K）里：</p>
+<ol>
+  <li>多少个分子的 \(v_x\) 落在 \([10\text{ m/s},\,210\text{ m/s}]\)？</li>
+  <li>多少个分子的<strong>速率</strong> \(v=|\vec v|\) 落在 \([200\text{ m/s},\,2000\text{ m/s}]\)？</li>
+</ol>
+
+<p>这两个问题用<strong>不同的分布</strong>——分量窗口用 \(f(v_x)\)、速率窗口用 \(g(v)\)。看清这一点是这道题的核心。</p>
+
+<h3>3.1 分量窗口：用 \(f(v_x)\)</h3>
+
+<p>$$ \Delta N=N\int_{10}^{210}f(v_x)\,dv_x=\frac{N}{2}\!\left[\mathrm{erf}\!\left(\frac{210}{v_0}\right)-\mathrm{erf}\!\left(\frac{10}{v_0}\right)\right] $$</p>
+
+<p>其中 \(v_0=\sqrt{2kT/m}\approx 422\) m/s 是 1D 高斯宽度尺度（\(f(v_x)\) 的标准差 \(\sigma=\sqrt{kT/m}\approx 298\) m/s，与 \(v_0\) 差 \(\sqrt 2\) 倍）。窗口对 \(v_0\) 的归一化坐标为 \([0.024,\,0.50]\)；查表 \(\mathrm{erf}(0.5)\approx 0.520\)，\(\mathrm{erf}(0.024)\approx 0.027\)：</p>
+
+<p>$$ \Delta N\approx \frac{10^{23}}{2}\,(0.520-0.027)\approx 2.5\times 10^{22}\text{ 分子}. $$</p>
+
+<p>—— 约占总数的 25%。</p>
+
+<h3>3.2 速率窗口：用 \(g(v)\)</h3>
+
+<p>$$ \Delta N=N\int_{200}^{2000}g(v)\,dv. $$</p>
+
+<p>判断思路（不用查表）：\(g(v)\) 峰位在 \(v_0\approx 422\) m/s，宽度 \(\sim v_0\)。速率 200 m/s 在峰位的左侧上升段，2000 m/s 远大于 \(v_0\)（约为 \(4.7v_0\)）已经在<strong>高速尾的尽头</strong>，分子数极少。所以：</p>
+
+<ul>
+  <li>积分下限抹掉的"v<200 m/s"很小（峰位的左下侧）。</li>
+  <li>积分上限抹掉的"v>2000 m/s"几乎为 0。</li>
+</ul>
+
+<p>结论：这个窗口装下了<strong>绝大部分</strong>分子，\(\Delta N/N\approx 0.97\)，约 \(9.7\times 10^{22}\) 分子。</p>
+
+<div class="box insight">
+  <p class="box-title">两类"慢"分子不是一回事</p>
+  <p>"\(v_x\) 小" 不蕴含 "\(v\) 小"，因为速率是 \(\sqrt{v_x^2+v_y^2+v_z^2}\) ——一个分子可以 \(v_x=0\) 但 \(v_y,v_z\) 很大，速率仍然大。这就是为什么<strong>同样的 [10, 210] m/s 数值范围</strong>，作为 \(v_x\) 窗口能捕获约 25% 的分子，但若理解为速率窗口则只能捕获约 5%。</p>
+  <p>几何上：\(|v_x|<210\) 是 \(\mathbb R^3\) 中两个平行平面之间的<strong>板状</strong>区域；\(|\vec v|<210\) 是<strong>球状</strong>区域。同样"半径 210"的板状区域比球状区域大得多——这就是几何起源。</p>
+</div>
+
+<div class="box remark">
+  <p class="box-title">闭卷考点</p>
+  <p>Quiz/Final 上不会让你算 erf。要求的是：</p>
+  <ol>
+    <li>分辨窗口类型 → 选 \(f\) 还是 \(g\)；</li>
+    <li>窄窗口近似 \(\Delta N\approx N\cdot[\text{密度}]\cdot \Delta v\)；</li>
+    <li>把窗口跟 \(v_0,\bar v,v_{\text{rms}}\) 比较，估出"装了大部分"还是"在尾巴上"。</li>
+  </ol>
+</div>
+
+<!-- ======================================================== -->
+
+<h2>§4 等分定理（Equipartition）</h2>
+
+<p>Lec 6.3 已经写过这一句，本节把它升级到<strong>定理</strong>层次。</p>
+
+<div class="box key-result">
+  <p class="box-title">等分定理（经典平衡态）</p>
+  <p>平衡态温度 \(T\) 下，分子 Hamiltonian 里每一项<strong>二次型</strong>（\(\propto x_i^2\) 或 \(p_i^2\)）平均能量为：</p>
+  <p>$$ \boxed{\;\langle\text{二次自由度}\rangle=\tfrac12 kT.\;}\tag{4.1}$$</p>
+  <p>这里 \(k=R/N_A\approx 1.381\times 10^{-23}\) J/K 是 Boltzmann 常数。</p>
+</div>
+
+<h3>4.1 为什么是 \(\tfrac12 kT\)</h3>
+
+<p>从 \(f(v_x)\propto e^{-mv_x^2/(2kT)}\) 出发用 \(I_2\)：</p>
+
+<p>$$ \langle v_x^2\rangle=\frac{kT}{m}\Longrightarrow\langle \tfrac12 mv_x^2\rangle=\tfrac12 kT. $$</p>
+
+<p>这个结论<strong>不依赖 \(m\) 取什么值，也不依赖二次型是动能还是势能</strong>。对任何形如 \(E=\alpha q^2\)（\(\alpha>0\) 是常数）的能量项，Boltzmann 分布 \(\propto e^{-\alpha q^2/kT}\) 给出 \(\langle\alpha q^2\rangle=\tfrac12 kT\)。</p>
+
+<h3>4.2 数自由度 \(f\)</h3>
+
+<table class="formula-table">
+  <thead><tr><th>系统</th><th>二次自由度数 \(f\)</th><th>来源</th><th>每分子能量</th></tr></thead>
+  <tbody>
+    <tr><td>单原子理想气体（He, Ar, Ne）</td><td>3</td><td>3 个平动 \(\tfrac12 m\dot x_i^2\)</td><td>\(\tfrac32 kT\)</td></tr>
+    <tr><td>双原子理想气体，室温（\(N_2, O_2\)）</td><td>5</td><td>3 平动 + 2 转动</td><td>\(\tfrac52 kT\)</td></tr>
+    <tr><td>双原子，高温</td><td>7</td><td>3 + 2 + 2 振动（KE + PE）</td><td>\(\tfrac72 kT\)</td></tr>
+    <tr><td>三原子非线性（\(H_2O, CO_2\) 弯）</td><td>6</td><td>3 + 3 转动</td><td>\(3kT\)</td></tr>
+    <tr><td>经典固体（Einstein/Dulong–Petit）</td><td>6</td><td>3 KE + 3 弹性 PE</td><td>\(3kT\)</td></tr>
+  </tbody>
+</table>
+
+<div class="box warning">
+  <p class="box-title">最常见的两个陷阱</p>
+  <ul>
+    <li><strong>陷阱 1：动能 vs 自由度数。</strong> 一维谐振子 \(E=\tfrac12 m\dot x^2+\tfrac12 k_s x^2\) 有<strong>两个</strong>二次项，所以能量 \(kT\)（不是 \(\tfrac12 kT\)）。Dulong–Petit 的 \(3kT\)（不是 \(\tfrac32 kT\)）就是源于此——每个原子有 3 个动能 + 3 个势能 = 6 个二次项。</li>
+    <li><strong>陷阱 2：双原子室温为什么是 5 而不是 7。</strong> 振动模式要求温度足够高才能"激发"。N₂、O₂ 的振动能级间距 \(\hbar\omega\sim 0.3\) eV，远大于 \(kT|_{300\text{ K}}\sim 0.026\) eV，所以振动模式被<strong>量子冻结</strong>，不参与等分。这就是为什么经典等分公式只用 \(f=5\)（古典物理无法解释，量子力学才能解释）。</li>
+  </ul>
+</div>
+
+<div class="box insight">
+  <p class="box-title">为什么"沿键方向的转动"不计入？</p>
+  <p>双原子分子转动的两个轴：垂直于键的两个轴（贡献 \(I_\perp\) 较大，能级间距小，室温下激发）；沿键的轴（\(I_\parallel\sim m_e a^2\) 接近电子质量×半径²，能级间距 \(\sim\) eV，室温量子冻结）。所以经典上 \(f_{\text{rot}}=2\) 而不是 3。这种"自由度被量子冻结"的概念会在 Ch.22 末尾 partition function 的语境下重新出现。</p>
+</div>
+
+<!-- ======================================================== -->
+
+<h2>§5 内能 \(U\)：理想气体的<strong>态函数</strong></h2>
+
+<p>把每分子平均能量 \(\tfrac{f}{2}kT\) 乘上 \(N\) 个分子：</p>
+
+<div class="box key-result">
+  <p class="box-title">理想气体内能</p>
+  <p>$$ \boxed{\;U=N\cdot\left\langle\tfrac12 mv^2+\cdots\right\rangle=\frac{f}{2}NkT=\frac{f}{2}nRT.\;}\tag{5.1}$$</p>
+  <p>其中 \(N=nN_A\)，\(n\) 是 mol 数。具体：</p>
+  <ul>
+    <li>monatomic（\(f=3\)）：\(U=\tfrac32 NkT=\tfrac32 nRT\)。</li>
+    <li>diatomic 室温（\(f=5\)）：\(U=\tfrac52 NkT\)。</li>
+    <li>Dulong–Petit 固体（\(f=6\)）：\(U=3NkT\)。</li>
+  </ul>
+</div>
+
+<h3>5.1 \(U\) 只依赖 \(T\)：Joule 自由膨胀</h3>
+
+<p>对一个理想气体，由 (5.1)：\(U=U(T)\)——<strong>跟体积 \(V\) 或压强 \(P\) 没关系</strong>。物理验证：</p>
+
+<div class="box remark">
+  <p class="box-title">Joule 1845 自由膨胀实验</p>
+  <p>把气体关在一个绝热容器的一半，另一半抽空。<strong>突然</strong>打开中间隔板，气体冲进真空。</p>
+  <ul>
+    <li>过程绝热：\(Q=0\)。</li>
+    <li>气体没推任何东西（真空里没有 piston）：\(W=0\)。</li>
+    <li>由第一定律：\(\Delta U=Q-W=0\)。</li>
+  </ul>
+  <p>Joule 实测温度变化 \(\Delta T\approx 0\)（稀薄气体里）。结合 \(\Delta U=0\)：这意味着<strong>同温度但不同体积</strong>的两个状态<strong>内能相等</strong>——即 \(U\) 不依赖 \(V\)，只依赖 \(T\)。✓</p>
+  <p>对真实气体有微小 Joule–Thomson 效应（\(\Delta T\neq 0\)），来自分子间势能 ——但那是 Ch.22+ 的修正。理想气体里这个效应为零。</p>
+</div>
+
+<h3>5.2 微观图像</h3>
+
+<div class="box insight">
+  <p class="box-title">为什么 \(U\) 只跟 \(T\) 走</p>
+  <p>"内能"按定义就是所有分子的动能与（分子间）势能之和。理想气体的<strong>定义</strong>是分子间无相互作用势能，所以 \(U\) 全部来自动能，而平均动能 \(=\tfrac{f}{2}kT\) 由温度决定——所以 \(U\) 自然只跟 \(T\) 走。把"理想气体" 这个理想化撇开（比如范德华气体），\(U\) 就开始依赖 \(V\)（因为压缩气体改变了分子间距 = 改变了势能）。</p>
+</div>
+
+<!-- ======================================================== -->
+
+<h2>§6 态函数 vs 路径函数</h2>
+
+<p>这是热力学最容易绊倒新生的概念区分。</p>
+
+<table class="formula-table">
+  <thead><tr><th></th><th>态函数</th><th>路径函数</th></tr></thead>
+  <tbody>
+    <tr><th>例子</th><td>\(U, T, P, V, n, S, H, G,\ldots\)</td><td>\(Q, W\)</td></tr>
+    <tr><th>定义</th><td>由系统的<strong>当前状态</strong>决定</td><td>由<strong>过程的具体路径</strong>决定</td></tr>
+    <tr><th>微分</th><td>exact，\(dU\)；\(\oint dU=0\)</td><td>inexact，\(\delta Q,\delta W\)；\(\oint\delta Q\neq 0\)</td></tr>
+    <tr><th>说法</th><td>"气体的内能是 \(U\)"</td><td>"过程<em>转移</em>了多少热"（不是"气体含有多少热"）</td></tr>
+  </tbody>
+</table>
+
+<div class="box warning">
+  <p class="box-title">"\(\delta\)" 与 "\(d\)" 不是装饰</p>
+  <p>\(\delta Q\) 不是某个函数 \(Q(\text{state})\) 的微分（因为不存在这样的 \(Q\) 函数）。它表示"过程<strong>微元</strong>过程里转移的小量热"，本身不是任何函数的差。所以你<strong>不能</strong>写 \(Q_f-Q_i\)——这样的式子没有意义。但你<strong>可以</strong>写 \(U_f-U_i=\Delta U\)，因为 \(U\) 是个真函数。这就是为什么国际课本约定用斜杠 \(d\)（\(\dbar\) 或 \(\delta\) 或 \(\bar d\)）来标 inexact 微分，提醒不要把它们当成全微分。</p>
+</div>
+
+<div class="box insight">
+  <p class="box-title">从能量收支的角度看</p>
+  <p>气体能量储存在 \(U\) 里。\(Q\) 和 \(W\) 是<strong>能量穿过系统边界的两种方式</strong>：\(Q\) 通过温度差驱动的微观传输，\(W\) 通过宏观体积变化做的机械功。能量本身是"东西"（state function），传输是"行为"（process）——你不能问"气体里装了多少行为"，但你可以问"这次行为里转移了多少能量"。</p>
+</div>
+
+<!-- ======================================================== -->
+
+<h2>§7 第一定律</h2>
+
+<h3>7.1 符号约定（Shankar/OpenStax）</h3>
+
+<ul>
+  <li>\(Q>0\) ⇔ 系统<strong>吸收</strong>热（加热气体）。</li>
+  <li>\(W>0\) ⇔ 系统<strong>对外做正功</strong>（气体推动 piston 出去）。</li>
+</ul>
+
+<p>注意：化学课本常用<strong>反号</strong>约定（"\(W>0\) = 对系统做功"），导致一些教材里第一定律写成 \(\Delta U=Q+W\)。<strong>本课用 Shankar 约定 \(\Delta U=Q-W\)</strong>，遵照之即可。</p>
+
+<h3>7.2 第一定律的两种表述</h3>
+
+<div class="box key-result">
+  <p class="box-title">第一定律</p>
+  <p>有限过程：</p>
+  <p>$$ \boxed{\;\Delta U=U_f-U_i=Q-W.\;}\tag{7.1}$$</p>
+  <p>微分（准静态）形式：</p>
+  <p>$$ \boxed{\;dU=\delta Q-\delta W.\;}\tag{7.2}$$</p>
+  <p>\(dU\) 是 exact 微分（\(U\) 是态函数）；\(\delta Q,\delta W\) 是 inexact（路径函数）。</p>
+</div>
+
+<h3>7.3 物理内容</h3>
+
+<p>第一定律是<strong>能量守恒定律对热力学系统的具体写法</strong>。气体可以通过两种途径改变内能：</p>
+<ul>
+  <li>跟环境交换<strong>热量</strong> \(Q\)（接触温度不同的物体、辐射、化学反应放出的热等）。</li>
+  <li>跟环境交换<strong>机械功</strong> \(W\)（推动 piston、磁化、电极化等）。</li>
+</ul>
+
+<p>"\(-W\)"中的负号：当气体对外做正功时（\(W>0\)），<strong>气体自己</strong>损失了 \(W\) 那么多内能（推 piston 推到累），所以 \(U\) 减小，反映在 \(\Delta U\) 的 \(-W\) 项。</p>
+
+<!-- ======================================================== -->
+
+<h2>§8 准静态功 \(\delta W=PdV\)</h2>
+
+<p>下面把抽象的"功"具体写出来。考虑气体被困在一个截面 \(A\) 的圆柱里，piston 可以无摩擦地左右移动。</p>
+
+<svg viewBox="0 0 480 130" style="display:block;margin:1rem auto;max-width:100%;background:#fafafa;border-radius:6px">
+  <!-- cylinder -->
+  <rect x="20" y="30" width="380" height="70" fill="none" stroke="#374151" stroke-width="2"/>
+  <!-- gas region -->
+  <rect x="20" y="32" width="280" height="66" fill="#e0f2fe" opacity=".7"/>
+  <!-- piston -->
+  <rect x="300" y="28" width="14" height="74" fill="#1e40af"/>
+  <!-- dx arrow -->
+  <line x1="307" y1="20" x2="350" y2="20" stroke="#dc2626" stroke-width="2"/>
+  <polygon points="350,20 343,16 343,24" fill="#dc2626"/>
+  <text x="328" y="14" font-size="14" fill="#dc2626" font-family="Charter, serif">dx</text>
+  <!-- force F = PA -->
+  <line x1="298" y1="65" x2="278" y2="65" stroke="#ea580c" stroke-width="2"/>
+  <polygon points="278,65 285,61 285,69" fill="#ea580c"/>
+  <text x="225" y="60" font-size="13" fill="#ea580c" font-family="Charter, serif">F = PA</text>
+  <!-- gas label -->
+  <text x="100" y="70" font-size="13" font-family="Charter, serif">气体: P, V, T</text>
+  <!-- piston label -->
+  <text x="290" y="118" font-size="11" font-family="Charter, serif" fill="#6b7280">piston, 面积 A</text>
+</svg>
+
+<p>气体对 piston 的力 \(F=PA\)。piston 缓慢外移 \(dx\)，气体做的功：</p>
+
+<p>$$ \delta W=F\,dx=(PA)\,dx=P\,(A\,dx)=P\,dV, \tag{8.1}$$</p>
+
+<p>其中 \(dV=A\,dx\) 是气体体积的增量。</p>
+
+<div class="box key-result">
+  <p class="box-title">第一定律的工作形式</p>
+  <p>对仅含压强-体积功的准静态过程：</p>
+  <p>$$ \boxed{\;dU=\delta Q-P\,dV.\;}\tag{8.2}$$</p>
+  <p>这是接下来所有热力学过程（isothermal/adiabatic/isobaric/isochoric/Carnot cycle）的母方程。</p>
+</div>
+
+<h3>8.1 为什么需要"准静态"</h3>
+
+<p>(8.1) 里的 \(P\) 是<strong>平衡态压强</strong>。这要求过程慢到气体在<strong>每一瞬间</strong>都处于平衡态（"准"平衡）。</p>
+
+<p>如果 piston 突然抽走（比如自由膨胀），气体来不及响应：piston 附近压强骤降（局域真空），体相压强还来不及传过去。这时<strong>气体压强不是一个全局定义的数</strong>——\(P(x,t)\) 是空间-时间函数，需要详细的 NS 方程。<strong>这种情况下 \(\delta W=P\,dV\) 不再成立</strong>。</p>
+
+<div class="box insight">
+  <p class="box-title">准静态 = 反过程 = reversible</p>
+  <p>"准静态"是物理意义上的"足够慢"：慢到所有内部时间尺度都来得及响应。在准静态极限下，过程可以<strong>反过来走</strong>而不耗散——这正是 thermodynamic reversibility 的定义。所有真实过程都不是完美准静态的（会有热耗散、黏性损失），但我们把它当作理想极限来分析，再讨论偏离它的程度（这是 Ch.23-24 二三定律的精髓）。</p>
+</div>
+
+<h3>8.2 \(\delta W\) 的其他形式（参考）</h3>
+
+<table class="formula-table">
+  <thead><tr><th>外场</th><th>"位移"</th><th>"广义力"</th><th>功</th></tr></thead>
+  <tbody>
+    <tr><td>体积变化</td><td>\(dV\)</td><td>\(P\)</td><td>\(\delta W=P\,dV\)</td></tr>
+    <tr><td>磁化</td><td>\(dM\)</td><td>\(-B\)</td><td>\(\delta W=-B\,dM\)</td></tr>
+    <tr><td>电极化</td><td>\(dP_e\)</td><td>\(-E\)</td><td>\(\delta W=-E\,dP_e\)</td></tr>
+    <tr><td>表面张力</td><td>\(dA\)（面积）</td><td>\(-\sigma\)</td><td>\(\delta W=-\sigma\,dA\)</td></tr>
+    <tr><td>化学</td><td>\(dN_i\)</td><td>\(\mu_i\)（化学势）</td><td>\(\delta W=-\mu_i\,dN_i\)</td></tr>
+  </tbody>
+</table>
+
+<p>本课只讨论第一行（气体的 \(PV\)-功），但形式都一样：每个外场都对应一对 (extensive 变量 + 共轭的 intensive 变量)。</p>
+
+<!-- ======================================================== -->
+
+<h2>§9 几何：\(P\)-\(V\) 图与做功面积</h2>
+
+<p>把过程画在 \(P\)-\(V\) 平面上，准静态做功就是<strong>曲线下方有符号面积</strong>：</p>
+
+<p>$$ W_{i\to f}=\int_{V_i}^{V_f}P(V)\,dV. \tag{9.1}$$</p>
+
+<svg viewBox="0 0 400 280" style="display:block;margin:1rem auto;max-width:100%;background:#fafafa;border-radius:6px">
+  <!-- axes -->
+  <line x1="50" y1="240" x2="380" y2="240" stroke="#374151" stroke-width="1.5"/>
+  <line x1="50" y1="240" x2="50" y2="20" stroke="#374151" stroke-width="1.5"/>
+  <text x="385" y="245" font-size="13" font-family="Charter, serif">V</text>
+  <text x="40" y="15" font-size="13" font-family="Charter, serif">P</text>
+  <!-- isothermal curve P = c/V from V=100 to V=350 -->
+  <path d="M 100 50 Q 175 90 250 145 Q 325 200 350 215" fill="none" stroke="#1e40af" stroke-width="2.5"/>
+  <!-- shaded area under curve -->
+  <path d="M 100 50 Q 175 90 250 145 Q 325 200 350 215 L 350 240 L 100 240 Z" fill="#dbeafe" opacity=".6"/>
+  <!-- start point i -->
+  <circle cx="100" cy="50" r="4" fill="#1e40af"/>
+  <text x="86" y="44" font-size="14" font-family="Charter, serif" fill="#1e40af">i</text>
+  <line x1="100" y1="240" x2="100" y2="50" stroke="#9ca3af" stroke-dasharray="3,3"/>
+  <text x="92" y="258" font-size="12" font-family="Charter, serif">\(V_i\)</text>
+  <!-- end point f -->
+  <circle cx="350" cy="215" r="4" fill="#1e40af"/>
+  <text x="355" y="210" font-size="14" font-family="Charter, serif" fill="#1e40af">f</text>
+  <line x1="350" y1="240" x2="350" y2="215" stroke="#9ca3af" stroke-dasharray="3,3"/>
+  <text x="340" y="258" font-size="12" font-family="Charter, serif">\(V_f\)</text>
+  <!-- area label -->
+  <text x="170" y="200" font-size="14" font-family="Charter, serif" fill="#1e3a8a">\(W=\int P\,dV\)</text>
+</svg>
+
+<h3>9.1 路径依赖直接可视化</h3>
+
+<p>从 \((V_i,P_i)\) 到 \((V_f,P_f)\) 可以走<strong>无数条路径</strong>，每条路径下方的面积不同——所以 \(W\) 依赖路径。但 \(\Delta U=U_f-U_i\) 只看起点和终点，所以 \(\Delta U\) 跟路径无关，导致 \(Q=\Delta U+W\) 也依赖路径。这是路径函数 vs 态函数最直观的图像。</p>
+
+<h3>9.2 闭合循环</h3>
+
+<p>沿任何闭合 cycle \(i\to f\to i\) 走一圈：</p>
+
+<p>$$ \oint dU=0\;\;\Longrightarrow\;\;\oint\delta Q=\oint\delta W=\text{cycle 内部的有符号面积}. \tag{9.2}$$</p>
+
+<p>这就是热机分析的几何基础——cycle 在 \(P\)-\(V\) 图上围出的面积 = 一次循环的<strong>净输出功</strong>（顺时针循环时为正）。下周讲 Carnot 循环时直接拿来用。</p>
+
+<!-- ======================================================== -->
+
+<h2>§10 预告：四种基本过程</h2>
+
+<p>母方程 \(dU=\delta Q-PdV\) 配合理想气体 \(PV=nRT\)、\(U=(f/2)nRT\)，<strong>每控制一个量</strong>就给一种过程：</p>
+
+<table class="formula-table">
+  <thead><tr><th>过程</th><th>控制</th><th>第一定律给出</th><th>关键公式</th></tr></thead>
+  <tbody>
+    <tr><td>Isochoric（等容）</td><td>\(dV=0\)</td><td>\(\delta Q=dU\)</td><td>\(\delta Q=nC_v\,dT\)，\(C_v=(f/2)R\)</td></tr>
+    <tr><td>Isobaric（等压）</td><td>\(dP=0\)</td><td>\(\delta Q=dU+P\,dV\)</td><td>\(\delta Q=nC_p\,dT\)，\(C_p=C_v+R\)（Mayer 关系）</td></tr>
+    <tr><td>Isothermal（等温）</td><td>\(dT=0\Rightarrow dU=0\)</td><td>\(\delta Q=\delta W=P\,dV\)</td><td>\(W=nRT\ln(V_f/V_i)\)</td></tr>
+    <tr><td>Adiabatic（绝热）</td><td>\(\delta Q=0\)</td><td>\(dU=-P\,dV\)</td><td>\(PV^\gamma=\text{const}\)，\(\gamma=C_p/C_v=(f+2)/f\)</td></tr>
+  </tbody>
+</table>
+
+<p>每条都是 (8.2) 在不同约束下的结果。Lec 7.3 和 Week 8 会把每一条系统推导一遍。</p>
+
+<!-- ======================================================== -->
+
+<h2>§11 Worked Examples</h2>
+
+<div class="example">
+  <h4>Example A: 等压加热（Shankar §22.6 的延展）</h4>
+  <p class="source">改编自 OpenStax Vol.2 Example 3.5</p>
+  <p><strong>题：</strong>1 mol diatomic 理想气体在压强 \(P_0=1\) atm 下从 \(T_1=300\) K 等压加热到 \(T_2=400\) K。求过程中（a）气体吸收的热 \(Q\)，（b）内能变化 \(\Delta U\)，（c）气体对外做的功 \(W\)。</p>
+  <div class="solution-step"><strong>Step 1 - 选 \(f\)：</strong>diatomic 室温 \(f=5\)。</div>
+  <div class="solution-step"><strong>Step 2 - 内能变化（态函数，只看起终点）：</strong>
+    $$ \Delta U=\tfrac{f}{2}nR\Delta T=\tfrac52(1)(8.314)(100)=2079\text{ J}. $$
+  </div>
+  <div class="solution-step"><strong>Step 3 - 体积变化（理想气体 + 等压）：</strong>
+    $$ V_2/V_1=T_2/T_1\Rightarrow V_2-V_1=V_1(T_2/T_1-1)=nRT_1(T_2/T_1-1)/P_0. $$
+    数值：\(V_1=nRT_1/P_0=8.31\times 300/101325\approx 24.6\) L，\(\Delta V=V_1/3\approx 8.2\) L \(=8.2\times 10^{-3}\) m³。
+  </div>
+  <div class="solution-step"><strong>Step 4 - 功（等压下 \(W=P_0\Delta V\)）：</strong>
+    $$ W=P_0\Delta V=101325\times 8.2\times 10^{-3}\approx 831\text{ J}. $$
+    或者用通式 \(W=nR\Delta T=1\cdot 8.314\cdot 100=831\) J（等压时这两种方法等价）。
+  </div>
+  <div class="solution-step"><strong>Step 5 - 第一定律给热：</strong>
+    $$ Q=\Delta U+W=2079+831=2910\text{ J}. $$
+    或直接用 \(Q=nC_p\Delta T=n\cdot\tfrac72 R\cdot\Delta T=1\cdot 29.1\cdot 100=2910\) J ✓。
+  </div>
+  <div class="solution-step"><strong>核查：\(C_p/C_v=7/5=1.4\) ✓</strong>（diatomic 室温的标准 \(\gamma\)）。</div>
+</div>
+
+<div class="example">
+  <h4>Example B ★: 等温膨胀的功（Shankar §22.7）</h4>
+  <p class="source">Shankar 11.3 的典型题型</p>
+  <p><strong>题：</strong>1 mol 理想气体在 \(T=400\) K 下从 \(V_1=10\) L 等温膨胀到 \(V_2=30\) L。求气体做的功 \(W\)，吸收的热 \(Q\)，内能变化 \(\Delta U\)。</p>
+  <div class="solution-step"><strong>Step 1 - 等温 ⇒ \(\Delta U=0\)：</strong>因为理想气体 \(U=U(T)\)，\(T\) 不变就 \(U\) 不变。</div>
+  <div class="solution-step"><strong>Step 2 - 等温做功（用 \(P=nRT/V\)）：</strong>
+    $$ W=\int_{V_1}^{V_2}P\,dV=\int_{V_1}^{V_2}\frac{nRT}{V}\,dV=nRT\ln\!\frac{V_2}{V_1}. $$
+    数值：\(W=1\cdot 8.314\cdot 400\cdot\ln 3\approx 3325\cdot 1.099\approx 3654\) J。
+  </div>
+  <div class="solution-step"><strong>Step 3 - 第一定律给热：</strong>
+    $$ Q=\Delta U+W=0+3654=3654\text{ J}. $$
+    所有吸收的热都被气体用来对外做功。
+  </div>
+  <div class="solution-step"><strong>物理含义：</strong>气体膨胀时温度倾向下降（\(\Delta U\) 想变负），但为维持 \(T\) 不变，气体必须从外界<strong>吸热</strong> 来补偿对外做功的能量损失。所以 \(Q=W\)（等温过程）。</div>
+</div>
+
+<div class="example">
+  <h4>Example C ★★: 两段折线路径 \(1\to 3\to 2\)（Lec 7.3 板书）</h4>
+  <p class="source">Shankar §22.6–22.7 的路径比较型；与 Example B 端点完全相同。</p>
+  <p><strong>题：</strong>仍取 1 mol monatomic 理想气体（\(f=3\)），与 Example B 共享同一对端点：
+  \(1=(V_1,P_1)\) 与 \(2=(V_2,P_2)\) 落在同一条 \(T=400\) K 等温线上（\(V_1=10\) L，\(V_2=30\) L，所以 \(P_1=3P_2\)）。
+  这一次<strong>不</strong>走等温线，而是先沿 \(V=V_1\) 等容降压到中间点 \(3=(V_1,P_2)\)，再沿 \(P=P_2\) 等压扩张到 2。求每条腿与总路径的 \(W,Q,\Delta U\)，并和 Example B 对照。</p>
+
+  <svg viewBox="0 0 400 280" style="display:block;margin:1rem auto;max-width:100%;background:#fafafa;border-radius:6px">
+    <!-- axes -->
+    <line x1="50" y1="240" x2="380" y2="240" stroke="#374151" stroke-width="1.5"/>
+    <line x1="50" y1="240" x2="50" y2="20" stroke="#374151" stroke-width="1.5"/>
+    <text x="385" y="245" font-size="13" font-family="Charter, serif">V</text>
+    <text x="40" y="15" font-size="13" font-family="Charter, serif">P</text>
+    <!-- isotherm reference (dashed): P*V = const, 1 at (110, 60), 2 at (330, 200) -->
+    <path d="M 110 60 Q 175 110 220 145 Q 280 185 330 200" fill="none" stroke="#1e40af" stroke-width="1.8" stroke-dasharray="5,4"/>
+    <!-- isobaric leg 3->2 shaded (rectangle V1..V2 under P2) -->
+    <rect x="110" y="200" width="220" height="40" fill="#bbf7d0" opacity=".75"/>
+    <!-- isochoric leg 1 -> 3 (vertical) -->
+    <line x1="110" y1="60" x2="110" y2="200" stroke="#dc2626" stroke-width="2.5"/>
+    <polygon points="110,200 106,190 114,190" fill="#dc2626"/>
+    <!-- isobaric leg 3 -> 2 (horizontal) -->
+    <line x1="110" y1="200" x2="330" y2="200" stroke="#16a34a" stroke-width="2.5"/>
+    <polygon points="330,200 320,196 320,204" fill="#16a34a"/>
+    <!-- points 1, 2, 3 -->
+    <circle cx="110" cy="60"  r="4.5" fill="#1e40af"/>
+    <text x="118" y="58" font-size="14" font-family="Charter, serif" fill="#1e40af">1</text>
+    <circle cx="330" cy="200" r="4.5" fill="#1e40af"/>
+    <text x="338" y="196" font-size="14" font-family="Charter, serif" fill="#1e40af">2</text>
+    <circle cx="110" cy="200" r="4.5" fill="#1e40af"/>
+    <text x="92"  y="218" font-size="14" font-family="Charter, serif" fill="#1e40af">3</text>
+    <!-- axis labels -->
+    <line x1="110" y1="240" x2="110" y2="200" stroke="#9ca3af" stroke-dasharray="3,3"/>
+    <line x1="330" y1="240" x2="330" y2="200" stroke="#9ca3af" stroke-dasharray="3,3"/>
+    <text x="102" y="258" font-size="12" font-family="Charter, serif">\(V_1\)</text>
+    <text x="320" y="258" font-size="12" font-family="Charter, serif">\(V_2\)</text>
+    <line x1="50" y1="60"  x2="110" y2="60"  stroke="#9ca3af" stroke-dasharray="3,3"/>
+    <line x1="50" y1="200" x2="110" y2="200" stroke="#9ca3af" stroke-dasharray="3,3"/>
+    <text x="32" y="64"  font-size="12" font-family="Charter, serif">\(P_1\)</text>
+    <text x="32" y="204" font-size="12" font-family="Charter, serif">\(P_2\)</text>
+    <!-- leg labels -->
+    <text x="118" y="135" font-size="12" font-family="Charter, serif" fill="#b91c1c">等容 \(1\!\to\!3\)</text>
+    <text x="155" y="226" font-size="12" font-family="Charter, serif" fill="#166534">等压 \(W_{32}=P_2(V_2-V_1)\)</text>
+    <text x="235" y="135" font-size="12" font-family="Charter, serif" fill="#1e40af" font-style="italic">isotherm \(1\!\to\!2\) (Example B)</text>
+  </svg>
+
+  <div class="solution-step"><strong>Step 1 - 三点温度（\(PV=nRT\)）：</strong>
+    \(T_1=T_2=400\) K（同一等温线）。中间点 3 用 \(P_2 V_1=nRT_3\)：
+    $$ T_3=\frac{P_2}{P_1}\,T_1=\frac{V_1}{V_2}\,T_1=\frac{10}{30}\cdot 400=\tfrac{400}{3}\approx 133.3\ \text{K}. $$
+    所以 \(T_3<T_1\)：1→3 这条腿气体在冷却。
+  </div>
+
+  <div class="solution-step"><strong>Step 2 - 等容腿 \(1\to 3\)（\(dV=0\)）：</strong>
+    $$ W_{13}=\int_{V_1}^{V_1}P\,dV=0. $$
+    $$ \Delta U_{13}=\tfrac{3}{2}nR(T_3-T_1)=\tfrac32\cdot 1\cdot 8.314\cdot(133.3-400)\approx -3325\ \text{J}<0. $$
+    $$ Q_{13}=\Delta U_{13}+W_{13}=\Delta U_{13}\approx -3325\ \text{J}<0. $$
+    气体放热给冷库。（这里直接是 \(Q_{13}=nC_v\Delta T\)，\(C_v=\tfrac32 R\)。）
+  </div>
+
+  <div class="solution-step"><strong>Step 3 - 等压腿 \(3\to 2\)（\(P=P_2\) 不变）：</strong>
+    $$ W_{32}=\int_{V_1}^{V_2}P_2\,dV=P_2(V_2-V_1)=nR(T_2-T_3). $$
+    数值：\(W_{32}=1\cdot 8.314\cdot(400-133.3)\approx 2217\) J\(>0\)。
+    $$ \Delta U_{32}=\tfrac{3}{2}nR(T_2-T_3)\approx \tfrac32\cdot 2217\approx 3325\ \text{J}>0. $$
+    $$ Q_{32}=\Delta U_{32}+W_{32}=\tfrac52 nR(T_2-T_3)\approx 5542\ \text{J}>0. $$
+    最后这步刚好就是 \(nC_p\Delta T\)（Mayer 关系 \(C_p=C_v+R=\tfrac52 R\)）。气体从热库吸热。
+  </div>
+
+  <div class="solution-step"><strong>Step 4 - 整条路径 \(1\to 3\to 2\) 加总：</strong>
+    $$ \Delta U_{132}=\Delta U_{13}+\Delta U_{32}=\tfrac32 nR(T_2-T_1)=0\quad(\text{因为 }T_1=T_2)\ \checkmark $$
+    $$ W_{132}=0+P_2(V_2-V_1)\approx 2217\ \text{J}. $$
+    $$ Q_{132}=Q_{13}+Q_{32}\approx -3325+5542\approx 2217\ \text{J}. $$
+    第一定律 \(Q-W=2217-2217=0=\Delta U\) \(\checkmark\)。
+  </div>
+
+  <div class="solution-step"><strong>Step 5 - 与 Example B（等温直接 \(1\to 2\)）并排对照：</strong>
+    <table class="formula-table" style="margin-top:.4rem">
+      <thead><tr><th>路径</th><th>\(\Delta U\)</th><th>\(W\)</th><th>\(Q\)</th><th>是否可逆</th></tr></thead>
+      <tbody>
+        <tr><td>Isothermal \(1\to 2\)（Example B）</td><td>0</td><td>\(nRT\ln 3\approx 3654\) J</td><td>\(\approx 3654\) J</td><td>是</td></tr>
+        <tr><td>\(1\to 3\to 2\)（Example C）</td><td>0</td><td>\(P_2(V_2-V_1)\approx 2217\) J</td><td>\(\approx 2217\) J</td><td>是（但分两条腿热源不同）</td></tr>
+        <tr><td>自由膨胀 \(V_1\to V_2\)</td><td>0</td><td>0</td><td>0</td><td>否</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="solution-step"><strong>物理含义：</strong>三条路径终点完全相同（同一等温线上的 \((V_2,P_2)\) 点），所以 \(\Delta U\) 都是 0。但 \(W\) 与 \(Q\) 由路径决定——
+  几何上一目了然：等温线下方的面积 \(>\) 矩形 \(P_2(V_2-V_1)\) 的面积 \(>\) 零。
+  这就是<strong>路径函数与态函数</strong>区别最干净的实证：同样的 \(\Delta U=0\)，不同的 \(W,Q\)。
+  下一周 Carnot 循环把"等温腿 + 等压/绝热腿"组合成闭合 cycle，围出的面积就是热机一周的<strong>净输出功</strong>。
+  </div>
+</div>
+
+<!-- ======================================================== -->
+
+<h2>§12 Self-check</h2>
+
+<div class="self-check">
+  <p class="question">Q1. 为什么 monatomic 气体 \(U=\tfrac32 NkT\) 但单原子<strong>固体</strong> \(U=3NkT\)（差 2 倍）？</p>
+  <details>
+    <summary>查看答案</summary>
+    <p>monatomic 气体里原子是自由的，只有 3 个平动动能 \(\tfrac12 mv_i^2\)（\(i=x,y,z\))，\(f=3\)。</p>
+    <p>固体里每个原子被弹性势"绑"在格点附近振动，所以多了 3 个势能 \(\tfrac12 k_s x_i^2\)。动能 + 势能 = 6 个二次项，\(f=6\)。</p>
+    <p>所以差的就是<strong>势能</strong> ——固体里原子振动的势能跟动能一对一相等，加倍了能量。这就是 Dulong–Petit 定律 \(C_v=3R\) 的来源。</p>
+  </details>
+</div>
+
+<div class="self-check">
+  <p class="question">Q2. 等温膨胀里 \(\Delta U=0\)、\(Q>0\)、\(W>0\)；自由膨胀里 \(\Delta U=0\)、\(Q=0\)、\(W=0\)。两种"\(\Delta U=0\)"的过程到达的<strong>终态</strong>有何异同？</p>
+  <details>
+    <summary>查看答案</summary>
+    <p>对理想气体，\(U=U(T)\) 只依赖温度。两种过程都让 \(T\) 不变 ⇒ 都让 \(U\) 不变 ⇒ 终态在<strong>同一条等温线上</strong>。如果两者起点 \((P_1, V_1)\) 与终点 \(V_2\) 相同，那么 \(P_2,T\) 也相同——<strong>宏观终态完全一样</strong>。</p>
+    <p>但<strong>过程本身完全不同</strong>：等温膨胀是准静态的，气体一直在跟环境交换热，外界做了功 \(W=nRT\ln(V_2/V_1)\)，由外界提供的能量正好等于气体对外做的功；自由膨胀是非准静态的（气体冲进真空），没有热也没有功交换。</p>
+    <p>这就是说：<strong>态相同但路径不同</strong>，\(Q,W\) 都不同——典型的路径函数行为。但 \(\Delta U=0\) 对两条路径都成立，因为它只是终态减初态。Carnot 循环里"反过来走"的概念就建在这种对比上：等温过程<strong>可逆</strong>（能反向走），自由膨胀<strong>不可逆</strong>（气体不会自己回去）。</p>
+  </details>
+</div>
+
+<div class="self-check">
+  <p class="question">Q3. 第一定律 \(\Delta U=Q-W\) 里的"\(-\)"号是物理需要的还是约定？如果改成 "\(+W\)"，物理图像变了吗？</p>
+  <details>
+    <summary>查看答案</summary>
+    <p>纯<strong>约定</strong>问题，不影响物理。Shankar/OpenStax 用 "\(W\) = 系统对外做的功"，所以气体往外推 piston 时它<strong>损失</strong>内能，公式必须是 \(\Delta U=Q-W\)。</p>
+    <p>化学课本用 "\(W\) = 环境对系统做的功"，这时系统获得功就增加内能，公式是 \(\Delta U=Q+W\)。两种写法描述<strong>同一个能量守恒</strong>，只是 \(W\) 自带的符号约定相反。看到第一定律一定要确认对方的 \(W\) 是哪种意思——尤其在跨课/跨书时容易出错。</p>
+  </details>
+</div>
+
+<div class="self-check">
+  <p class="question">Q4. 把一杯 100 g 水从 25 °C 加热到 75 °C。把这个过程套到第一定律里——\(Q,W,\Delta U\) 各是多少（数量级即可）？水的工作介质适用气体形式吗？</p>
+  <details>
+    <summary>查看答案</summary>
+    <p>\(Q=mc\Delta T=0.1\cdot 4184\cdot 50\approx 2\times 10^4\) J（按水的 \(c\)）。</p>
+    <p>\(W\approx 0\)（液态水加热时体积变化极小，\(\Delta V\sim 10^{-6}\) m³，\(W=P\Delta V\sim 0.1\) J，相对 \(Q\) 可以忽略）。</p>
+    <p>\(\Delta U=Q-W\approx Q\approx 2\times 10^4\) J。</p>
+    <p>所以对几乎不可压缩的液体/固体，<strong>第一定律退化为 \(\Delta U\approx Q\)</strong>——这就是为什么 \(c\) 在液固上称为"比热"而<strong>不用区分 \(c_v,c_p\)</strong>（差异 \(R\) 来自 \(P\Delta V\)，在液固里被压成零）。气体形式 \(U=(f/2)nRT\) 对水不适用——液态水的 \(U\) 严重依赖分子间势能，是个 non-trivial 函数。这就是为什么单独的"水的内能/温度关系"要靠经验比热表。</p>
+  </details>
+</div>
+
+<div class="self-check">
+  <p class="question">Q5. \(P\)-\(V\) 图上两个状态 \((V_1, P_1)\) 与 \((V_2, P_2)\)，用两条不同路径（A:等压再等容；B:等容再等压）从前者到后者。两条路径下 \(\Delta U\)、\(Q\)、\(W\) 哪些相同、哪些不同？</p>
+  <details>
+    <summary>查看答案</summary>
+    <p>\(\Delta U\) <strong>相同</strong>：\(U\) 是态函数，只看起终点。具体 \(\Delta U=(f/2)nR(T_2-T_1)\)，其中 \(T_i=P_i V_i/(nR)\)。</p>
+    <p>\(W\) <strong>不同</strong>：两条路径在 \(P\)-\(V\) 图上是两个不同的 L 形折线，下面的面积不同。路径 A 先沿 \(P_1\) 走（横边在高位），后沿 \(V_2\) 走（垂直无功）——总功 \(W_A=P_1(V_2-V_1)\)。路径 B 先沿 \(V_1\) 走（垂直无功），后沿 \(P_2\) 走（横边在低位）——\(W_B=P_2(V_2-V_1)\)。如果 \(P_1>P_2\)（膨胀过程压强下降）则 \(W_A>W_B\)。</p>
+    <p>\(Q\) <strong>不同</strong>：\(Q=\Delta U+W\)，\(\Delta U\) 相同而 \(W\) 不同，所以 \(Q\) 也不同。</p>
+    <p>这就是 \(P\)-\(V\) 图上路径函数的直接展示。把两条路径首尾相连成闭合循环，围出的面积 = \(W_A-W_B\) = 一周净输出功。</p>
+  </details>
+</div>
+
+<!-- ======================================================== -->
+
+<h2>§13 公式速查表</h2>
+
+<table class="formula-table">
+  <thead><tr><th>概念</th><th>公式</th></tr></thead>
+  <tbody>
+    <tr><th>奇幂半轴基础</th><td>\(\int_0^\infty x e^{-\lambda x^2}dx=1/(2\lambda)\)</td></tr>
+    <tr><th>奇幂半轴 \(x^3\)</th><td>\(\int_0^\infty x^3 e^{-\lambda x^2}dx=1/(2\lambda^2)\)</td></tr>
+    <tr><th>平均速率（补完）</th><td>\(\bar v=\sqrt{8kT/(\pi m)}\)</td></tr>
+    <tr><th>三速率严格大小</th><td>\(v_0<\bar v<v_{\text{rms}}\)；比 \(\sqrt 2:\sqrt{8/\pi}:\sqrt 3\)</td></tr>
+    <tr><th>分量窗口</th><td>\(\Delta N\approx N\,f(v_x)\,\Delta v_x\)</td></tr>
+    <tr><th>速率窗口</th><td>\(\Delta N\approx N\,g(v)\,\Delta v\)</td></tr>
+    <tr><th>等分定理</th><td>每二次自由度 \(\tfrac12 kT\)</td></tr>
+    <tr><th>monatomic \(f\)</th><td>\(f=3\)，\(U=\tfrac32 NkT=\tfrac32 nRT\)</td></tr>
+    <tr><th>diatomic 室温 \(f\)</th><td>\(f=5\)，\(U=\tfrac52 NkT\)</td></tr>
+    <tr><th>Dulong–Petit 固体</th><td>\(f=6\)，\(U=3NkT\)</td></tr>
+    <tr><th>态函数（exact）</th><td>\(U, T, P, V, n, S, H, G\)；\(\oint dU=0\)</td></tr>
+    <tr><th>路径函数（inexact）</th><td>\(Q, W\)；\(\oint\delta Q\neq 0\)</td></tr>
+    <tr><th>第一定律有限式</th><td>\(\Delta U=U_f-U_i=Q-W\)</td></tr>
+    <tr><th>第一定律微分式</th><td>\(dU=\delta Q-\delta W\)</td></tr>
+    <tr><th>符号约定</th><td>\(Q>0\) 吸热；\(W>0\) 系统对外做功</td></tr>
+    <tr><th>准静态功</th><td>\(\delta W=P\,dV\)</td></tr>
+    <tr><th>工作形式</th><td>\(dU=\delta Q-P\,dV\)</td></tr>
+    <tr><th>\(P\)-\(V\) 图功</th><td>\(W=\int_{V_i}^{V_f}P(V)\,dV\)</td></tr>
+    <tr><th>闭合循环</th><td>\(\oint dU=0\Rightarrow\oint\delta Q=\oint\delta W=\text{cycle 面积}\)</td></tr>
+    <tr><th>Isochoric</th><td>\(\delta Q=dU=nC_v\,dT\)，\(C_v=(f/2)R\)</td></tr>
+    <tr><th>Isobaric</th><td>\(\delta Q=nC_p\,dT\)，\(C_p=C_v+R\)（Mayer）</td></tr>
+    <tr><th>Isothermal</th><td>\(\Delta U=0\)，\(Q=W=nRT\ln(V_f/V_i)\)</td></tr>
+    <tr><th>Adiabatic</th><td>\(\delta Q=0\)，\(PV^\gamma=\text{const}\)，\(\gamma=(f+2)/f\)</td></tr>
+    <tr><th>Joule 膨胀（理想气体）</th><td>\(\Delta U=0\Rightarrow U=U(T)\) 验证</td></tr>
+  </tbody>
+</table>
+
+<!-- ======================================================== -->
+
+<div class="glossary">
+  <h2>术语表</h2>
+  <dl>
+    <dt>等分定理 (equipartition theorem)</dt>
+    <dd>平衡态下每个二次自由度贡献 \(\tfrac12 kT\) 的平均能量。注意是<strong>二次型</strong>而不是"坐标数"。</dd>
+
+    <dt>自由度数 \(f\) (degrees of freedom)</dt>
+    <dd>分子 Hamiltonian 里二次项的数量。monatomic 气体 \(f=3\)，diatomic 室温 \(f=5\)（振动量子冻结），Dulong–Petit 固体 \(f=6\)。</dd>
+
+    <dt>内能 \(U\) (internal energy)</dt>
+    <dd>系统所有分子的动能与势能之和。是<strong>态函数</strong>，对理想气体 \(U=U(T)=(f/2)nRT\)。</dd>
+
+    <dt>态函数 (state function)</dt>
+    <dd>仅由系统当前状态决定的物理量（\(U,T,P,V,n,S,H,G,\ldots\)）。它们的微分是 exact 的（\(\oint dU=0\)）。</dd>
+
+    <dt>路径函数 (path function)</dt>
+    <dd>过程的具体路径决定的量（\(Q, W\)）。它们的"微分"是 inexact 的（写作 \(\delta Q, \delta W\)，提醒不要当作全微分）。</dd>
+
+    <dt>第一定律 (First Law of Thermodynamics)</dt>
+    <dd>能量守恒对热力学系统的具体写法：\(\Delta U=Q-W\)，或 \(dU=\delta Q-\delta W\)。准静态下 \(\delta W=PdV\)。</dd>
+
+    <dt>准静态过程 (quasi-static process)</dt>
+    <dd>过程慢到系统在每一瞬间都接近平衡。是 reversible 过程的近义词。让 \(P,T,\ldots\) 在过程中都有 well-defined 的数值，从而可以用 \(\delta W=PdV\)。</dd>
+
+    <dt>Joule 自由膨胀 (Joule free expansion)</dt>
+    <dd>气体冲进真空的绝热不可逆过程：\(Q=0, W=0\Rightarrow\Delta U=0\)。Joule 用它验证了"理想气体 \(U\) 只依赖 \(T\)" 这一结论。</dd>
+
+    <dt>四种基本过程 (four basic processes)</dt>
+    <dd>Isochoric（等容 \(dV=0\)）、Isobaric（等压 \(dP=0\)）、Isothermal（等温 \(dT=0\)）、Adiabatic（绝热 \(\delta Q=0\)）。每条都是第一定律 (8.2) 的特例。</dd>
+
+    <dt>Mayer 关系 (Mayer's relation)</dt>
+    <dd>理想气体的 \(C_p-C_v=R\)。差异来自等压过程中气体对外做功 \(P\,dV=R\,dT\)（per mole）。</dd>
+
+    <dt>\(\gamma\) (adiabatic index)</dt>
+    <dd>\(\gamma=C_p/C_v=(f+2)/f\)。绝热过程满足 \(PV^\gamma=\text{const}\)。声速 \(v_s=\sqrt{\gamma RT/M}\) 的修正因子也来自它（Newton–Laplace 修正）。</dd>
+  </dl>
+</div>
+
+</main>
+
+</body>
+</html>

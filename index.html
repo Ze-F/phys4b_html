@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PHYS 4B 复习 · 总目录</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="theme.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <span class="home-link">PHYS 4B 复习</span>
+    <nav>
+      <a href="https://canvas.ucsd.edu/courses/75074" target="_blank" rel="noopener">Canvas</a>
+      <a href="SPEC.md">设计规范</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <div class="topic-header">
+      <h1>PHYS 4B 复习总目录</h1>
+      <p class="meta">UCSD Spring 2026 · 涵盖 Lec 1.1 → 10.1 · Shankar Ch.16–24</p>
+      <p class="blurb">按物理主题（而非讲次）组织的复习材料。点击 tile 进入对应主题；点击右下角小标签切换状态（未开始 → 阅读中 → 已复习）。进度保存在浏览器 localStorage 里，关掉页面也不会丢。</p>
+    </div>
+
+    <div class="section-label">Quiz 5 题集 — Shankar Ch.23–24 + OpenStax 熵题</div>
+    <div class="tile-grid" id="quiz5-tiles"></div>
+
+    <div class="section-label">Quiz 4 题集 — Shankar Ch.22 + OpenStax 第一定律</div>
+    <div class="tile-grid" id="quiz4-tiles"></div>
+
+    <div class="section-label">Quiz 3 题集 — Shankar 习题完整解答</div>
+    <div class="tile-grid" id="quiz-tiles"></div>
+
+    <div class="section-label">Quiz 3 优先（流体 + 热学）</div>
+    <div class="tile-grid" id="priority-tiles"></div>
+
+    <div class="section-label">热力学衔接（Ch.22 起点）</div>
+    <div class="tile-grid" id="thermo-tiles"></div>
+
+    <div class="section-label">期末复习（振动与波）</div>
+    <div class="tile-grid" id="waves-tiles"></div>
+
+    <div class="box remark" style="margin-top:3rem">
+      <p class="box-title">使用建议</p>
+      <p>每页含：概念叙事、注释式推导（关键代数细节可折叠展开）、物理直觉框、必要时含交互组件、Shankar example 与 problem、自测题、公式速查表、术语表。</p>
+      <p>建议同一主题尽量一次过完。完整设计 spec 在 <code>SPEC.md</code>。</p>
+    </div>
+
+    <div class="box insight">
+      <p class="box-title">为什么按主题而不按讲次？</p>
+      <p>同一物理主题往往跨越多个讲次（例如 Bernoulli 跨 Lec 5.1、5.2、5.3、6.1）。按主题组织能让你在一处看到这个概念的全貌、推导链与各种应用，方便建立"心智地图"，而不是把同一概念碎片化地散落在多个讲次笔记里。</p>
+    </div>
+  </main>
+
+  <script src="interactive.js"></script>
+  <script>
+    const quiz3 = [
+      { num: 'Q3', slug: 'solutions', title: 'Quiz 3 真题解答', meta: '2026 春 4 道题完整解答', file: 'quiz3_solutions.html' },
+      { num: 'Q3', slug: 'problems',  title: 'Shankar 习题集',  meta: '10.1–10.20 + 11.1–11.7 共 27 题', file: 'quiz3_problems.html' },
+    ];
+    const quiz4 = [
+      { num: 'Q4', slug: 'problems',  title: 'Shankar + OpenStax + 动理论加题', meta: '11.9–11.28 + OS §3.3 + 动理论加题 KT.1–8 共 29 题', file: 'quiz4_problems.html' },
+    ];
+    const quiz5 = [
+      { num: 'Q5', slug: 'problems',  title: 'Shankar 11.18-11.36 + OS Ch.4 + 微观熵', meta: '11.18,19,20,29-36 共 11 题 + OS-A-D + BN-1，含 DI W9/W10 整合', file: 'quiz5_problems.html' },
+    ];
+    const priority = [
+      { num: '06', slug: 'fluid_statics',     title: '流体静力学',                     meta: 'Lec 4.2 · 5.1前 · 5.2尾' },
+      { num: '07', slug: 'fluid_dynamics',    title: 'Bernoulli 与流体动力学',         meta: 'Lec 5.1 · 5.2 · 5.3前 · 6.1前' },
+      { num: '08', slug: 'real_fluids_heat',  title: '真实流体 + 热学入门',           meta: 'Lec 6.1后 · 5.3后 · 6.2' },
+    ];
+    const thermo = [
+      { num: '09', slug: 'kinetic_theory',    title: '动理论：从 PV=NkT 到分子动能',  meta: 'Lec 6.3 · Shankar §22.1–22.2' },
+      { num: '10', slug: 'maxwell_boltzmann', title: 'Maxwell-Boltzmann 分布',         meta: 'Lec 7.1 · Shankar §22.3–22.5' },
+      { num: '11', slug: 'first_law',         title: '等分定理、内能、第一定律',        meta: 'Lec 7.2 · Shankar §22.4–22.7' },
+      { num: '12', slug: 'processes_cycles',  title: '四种基本过程与循环',              meta: 'Lec 7.2–7.3 · Shankar §22.6–§23.1 · OS §3.4–3.6' },
+      { num: '13', slug: 'carnot_second_law', title: 'Carnot 循环、第二定律与熵',       meta: 'Lec 8.2 · Shankar §23.3–§24.1' },
+      { num: '14', slug: 'entropy_macroscopic', title: '宏观熵与第二定律',                  meta: 'Lec 9.1–9.3 · Shankar §24.1–24.3' },
+      { num: '15', slug: 'boltzmann_statistical', title: 'Boltzmann 统计熵',                meta: 'Lec 10.1 · Shankar §24.4' },
+    ];
+    const waves = [
+      { num: '01', slug: 'shm',                   title: '简谐振动 SHM',                   meta: 'Lec 1.1' },
+      { num: '02', slug: 'wave_propagation',      title: '一维波传播',                     meta: 'Lec 1.2 · 1.3' },
+      { num: '03', slug: '3d_waves_sound',        title: '3D 波与声强',                    meta: 'Lec 2.1 · 4.1' },
+      { num: '04', slug: 'sound_microscopic',     title: '声波微观推导',                   meta: 'Lec 3.1尾 · 3.2 · 3.3' },
+      { num: '05', slug: 'interference_doppler',  title: '干涉、衍射、Doppler',           meta: 'Lec 2.2尾 · 2.3 · 3.1前' },
+    ];
+
+    function renderQuizTile(t) {
+      const status = (getProgress()[t.file] || {}).status || 'todo';
+      return `
+        <a class="tile" href="${t.file}" style="background:linear-gradient(135deg,#fef2f2 0%,white 60%);border-color:#fecaca">
+          <div class="tile-num" style="color:#dc2626">${t.num}</div>
+          <div class="tile-title">${t.title}</div>
+          <div class="tile-meta">${t.meta}</div>
+          <span class="tile-status ${status}" data-file="${t.file}">${statusLabel(status)}</span>
+        </a>
+      `;
+    }
+
+    function renderTiles() {
+      document.getElementById('quiz5-tiles').innerHTML =
+        quiz5.map(t => renderQuizTile(t)).join('');
+      document.getElementById('quiz4-tiles').innerHTML =
+        quiz4.map(t => renderQuizTile(t)).join('');
+      document.getElementById('quiz-tiles').innerHTML =
+        quiz3.map(t => renderQuizTile(t)).join('');
+      document.getElementById('priority-tiles').innerHTML =
+        priority.map(t => renderIndexTile(t.num, t.slug, t.title, t.meta)).join('');
+      document.getElementById('thermo-tiles').innerHTML =
+        thermo.map(t => renderIndexTile(t.num, t.slug, t.title, t.meta)).join('');
+      document.getElementById('waves-tiles').innerHTML =
+        waves.map(t => renderIndexTile(t.num, t.slug, t.title, t.meta)).join('');
+      wireStatusPills(renderTiles);
+    }
+
+    renderTiles();
+  </script>
+</body>
+</html>

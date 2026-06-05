@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quiz 5 题集 — PHYS 4B 复习</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="theme.js"></script>
+  <style>
+    .problem-toc {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+      gap: .35rem;
+      margin: 1rem 0 2rem;
+      font-family: -apple-system, 'PingFang SC', sans-serif;
+      font-size: .82rem;
+    }
+    .problem-toc a {
+      display: block;
+      padding: .35rem .55rem;
+      background: white;
+      border: 1px solid #d6d3d1;
+      border-radius: 4px;
+      color: #134e4a;
+      text-decoration: none;
+      text-align: center;
+      transition: all .12s;
+    }
+    .problem-toc a:hover {
+      background: #0f766e;
+      color: white;
+      border-color: #0f766e;
+    }
+    .answer-box {
+      background: #eff6ff;
+      border-left: 3px solid #2563eb;
+      padding: .55rem .8rem;
+      margin: .65rem 0 .25rem;
+      font-weight: 500;
+      color: #1e3a8a;
+      font-family: -apple-system, 'PingFang SC', 'Helvetica Neue', sans-serif;
+    }
+    .answer-box::before {
+      content: '✓ 答案：';
+      color: #2563eb;
+      font-weight: 700;
+    }
+    .problem-statement {
+      background: #fafaf9;
+      border-left: 3px solid #a8a29e;
+      padding: .6rem .8rem;
+      margin: .35rem 0 .75rem;
+      font-style: italic;
+      color: #44403c;
+    }
+    .scope-tag {
+      display: inline-block;
+      font-size: .7rem;
+      padding: .1rem .4rem;
+      border-radius: 8px;
+      margin-left: .5rem;
+      font-family: -apple-system, sans-serif;
+      vertical-align: middle;
+      font-style: normal;
+      font-weight: 500;
+    }
+    .scope-s   { background: #fee2e2; color: #991b1b; }
+    .scope-di  { background: #d1fae5; color: #065f46; }
+    .scope-os  { background: #dbeafe; color: #1e40af; }
+    .scope-bn  { background: #fef3c7; color: #78350f; }
+    .difficulty { color: #d97706; letter-spacing: -.05em; }
+    .legend {
+      font-size: .85rem;
+      color: #6b7280;
+      margin: 1rem 0;
+      font-family: -apple-system, 'PingFang SC', sans-serif;
+    }
+    .legend .scope-tag { margin: 0 .35rem 0 0; }
+    .pv-diagram {
+      display: block;
+      margin: .6rem auto;
+      max-width: 360px;
+    }
+    .summary-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0;
+      font-size: .9rem;
+    }
+    .summary-table th, .summary-table td {
+      border: 1px solid #d6d3d1;
+      padding: .5rem .65rem;
+      text-align: left;
+      vertical-align: top;
+    }
+    .summary-table thead th {
+      background: #0f766e;
+      color: white;
+      font-family: -apple-system, 'PingFang SC', sans-serif;
+      font-weight: 600;
+    }
+    .summary-table tbody tr:nth-child(even) { background: #f7f5f0; }
+  </style>
+  <script>
+    MathJax = {
+      tex: { inlineMath: [['\\(', '\\)']], displayMath: [['$$', '$$']] },
+      svg: { fontCache: 'global' }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" async></script>
+</head>
+<body>
+
+<header class="site-header">
+  <a class="home-link" href="index.html">← PHYS 4B 复习</a>
+  <nav>
+    <a href="12_processes_cycles.html">12 过程+循环</a>
+    <a href="13_carnot_second_law.html">13 Carnot</a>
+    <a href="14_entropy_macroscopic.html">14 宏观熵</a>
+    <a href="15_boltzmann_statistical.html">15 Boltzmann</a>
+  </nav>
+</header>
+
+<main class="container">
+
+<div class="topic-header">
+  <h1>Quiz 5 题集</h1>
+  <p class="meta">Shankar Ch.11 问题 11.18, 11.19, 11.20, 11.29–11.36 共 11 题 · OpenStax UP2 Ch.4 加题 · Week 9/10 Discussion · 完整解答</p>
+  <p class="blurb">本页整理 Quiz 5 范围内的所有官方指定习题：Shankar Problem Set 11 中的 11.18–11.20 (week 8 cycle 类) 与 11.29–11.36 (week 9–10 entropy 类) 共 11 道，加上 Week 9/10 DI worksheet 中 TA Jiashu Han 已给解答的 8 道（与官方 11 题有部分重叠，本页采用最完整版本），再加 OpenStax UP2 Ch.4 风格的 4 道补充题。每题含题目、策略、关键步骤、答案核查；与课程概念对接的地方会回链对应主题 HTML（12/13/14/15）。</p>
+
+  <div class="box warning" style="font-size:.92rem">
+    <p class="box-title" style="font-size:.85rem">关于"范围看起来很短"的提醒</p>
+    <p>Quiz 5 官方范围 11 道 Shankar 习题，数量上比 Quiz 4 的 33 道少；但<strong>不要被数量迷惑</strong>：(1) <strong>11.18 Sterling 与 11.19 Otto 循环</strong>需要自己<em>推导</em>整个 \(\eta\) 表达式且证 \(\eta&lt;\eta_C\)，没法靠套公式；(2) <strong>11.36 是教材原作者标注"a very thorough test of many topics and endurance"</strong>——单道题考 8 个子问，集 Carnot/绝热/等压/等容/熵全套；(3) 熵的<em>替代可逆路径</em>技巧（free expansion 等）概念门槛比第一定律高；(4) 公式表照样有 mean free path / 声波 / 热传导这些<em>前几周内容</em>，意味着 Quiz 5 可能<em>不</em>限于熵——把整个 Ch.21-24 当成可考范围更安全。</p>
+  </div>
+</div>
+
+<div class="legend">
+  <span class="scope-tag scope-s">S</span> Shankar 官方指定（Quiz 5 范围）
+  <span class="scope-tag scope-di">DI</span> Week 9/10 Discussion 已讲（TA Jiashu Han 解答）
+  <span class="scope-tag scope-os">OS</span> OpenStax UP2 Ch.4 风格补题（教师 6/3 公告"additional problems on entropy"）
+  <span class="scope-tag scope-bn">BN</span> Bonus / 概念题（不在官方列表但有助理解）
+  <span class="difficulty">★</span> 基础 · <span class="difficulty">★★</span> 中等 · <span class="difficulty">★★★</span> 综合大题
+</div>
+
+<div class="box insight">
+  <p class="box-title">通用常数与物性参数</p>
+  <p>\(g=9.81\) m/s²；\(k_B=1.38\times 10^{-23}\) J/K；\(R=8.314\) J/(mol·K)；\(N_A=6.02\times 10^{23}\) mol⁻¹；\(P_{\text{atm}}=1.013\times 10^{5}\) Pa；\(1\) L = \(10^{-3}\) m³；\(c_{\text{water}}=4184\) J/(kg·K) = 1 kcal/(kg·K)；\(c_{\text{ice}}=2090\) J/(kg·K) ≈ 0.5 kcal/(kg·K)；\(L_{iw}=3.34\times 10^5\) J/kg = 80 kcal/kg（融化）；\(L_{wv}=2.26\times 10^6\) J/kg = 540 kcal/kg（汽化）；空气声速 \(v_s=343\) m/s。单原子 \(c_v=\tfrac32 R\)、\(\gamma=5/3\)；双原子室温 \(c_v=\tfrac52 R\)、\(\gamma=7/5\)。Mayer：\(c_p=c_v+R\)。</p>
+</div>
+
+<div class="box remark">
+  <p class="box-title">符号约定与关键公式</p>
+  <ul>
+    <li>第一定律 \(\Delta U=Q-W\)，\(W=\)气体对外做功（膨胀正）；准静态 \(\delta W=PdV\)。</li>
+    <li>四种过程：等容 \(W=0,Q=nc_v\Delta T\)；等压 \(W=P\Delta V=nR\Delta T\), \(Q=nc_p\Delta T\)；等温 \(\Delta U=0, W=Q=nRT\ln(V_f/V_i)\)；绝热 \(Q=0, W=nc_v(T_i-T_f)=(P_iV_i-P_fV_f)/(\gamma-1)\)，\(PV^\gamma=\text{const}\)，\(TV^{\gamma-1}=\text{const}\)。</li>
+    <li><strong>熵主公式</strong>：\(\Delta S=nc_v\ln(T_2/T_1)+nR\ln(V_2/V_1)\) 或等价 \(\Delta S=nc_p\ln(T_2/T_1)-nR\ln(P_2/P_1)\)（11.34 的形式）。</li>
+    <li>热库 \(\Delta S_{\text{res}}=Q_{\text{res}}/T_{\text{res}}=-Q_{\text{sys}}/T_{\text{res}}\)；宇宙 \(\Delta S_{\text{univ}}=\Delta S_{\text{sys}}+\Delta S_{\text{env}}\geq 0\)。</li>
+    <li>热机 \(\eta=W/Q_{\text{in}}=1-Q_{\text{out}}/Q_{\text{in}}\)；Carnot 上限 \(\eta_C=1-T_c/T_h\)。</li>
+    <li>制冷机 COP \(\kappa_{\text{ref}}=Q_c/W\)；热泵 \(\kappa_{\text{HP}}=Q_h/W=\kappa_{\text{ref}}+1\)。</li>
+    <li>Boltzmann \(S=k_B\ln\Omega\)；\(\Delta S=k_B\ln(\Omega_2/\Omega_1)\)。</li>
+  </ul>
+</div>
+
+<!-- ======================================================== -->
+
+<h2 id="sectionA">§A 熵的基本计算：相变 + 加热 + 混合</h2>
+
+<div class="problem-toc">
+  <a href="#p11-29">11.29 冰→水→50°C</a>
+  <a href="#p11-30">11.30 两份水混合</a>
+  <a href="#p11-35">11.35 Cu+水混合</a>
+  <a href="#osa">OS-A 冰水混合</a>
+</div>
+
+<div class="example" id="p11-29">
+  <h4>11.29 — 1 g 冰从 0°C 融化并加热到 50°C 的熵增 <span class="scope-tag scope-s">S</span><span class="scope-tag scope-di">DI W9 #1</span> <span class="difficulty">★</span></h4>
+  <p class="problem-statement">求 1 g 冰从 0°C 融化、再加热到 50°C 过程中的熵增。</p>
+
+  <div class="solution-step"><strong>策略</strong>：两段独立可逆替代路径求和。第一段相变在恒温 \(T_{\text{melt}}=273\) K，第二段水从 273 K → 323 K 沿等压加热。</div>
+
+  <div class="solution-step"><strong>第一段（相变）</strong>：恒温下吸热 \(Q_1=mL_{iw}\)，温度不变，所以
+    $$ \Delta S_{\text{melt}}=\frac{Q_1}{T_{\text{melt}}}=\frac{mL_{iw}}{T_{\text{melt}}}=\frac{0.001\cdot 3.34\times 10^5}{273}=1.22\text{ J/K}. $$
+  </div>
+
+  <div class="solution-step"><strong>第二段（加热）</strong>：水从 \(T_i=273\) K 加热到 \(T_f=323\) K，沿等压可逆路径 \(\delta Q=mc_w\,dT\)，故
+    $$ \Delta S_{\text{heat}}=\int_{T_i}^{T_f}\frac{mc_w\,dT}{T}=mc_w\ln(T_f/T_i)=0.001\cdot 4184\cdot\ln(323/273)\approx 0.70\text{ J/K}. $$
+  </div>
+
+  <div class="solution-step"><strong>合计</strong>：\(\Delta S=\Delta S_{\text{melt}}+\Delta S_{\text{heat}}\approx 1.22+0.70\approx 1.92\text{ J/K}\)。</div>
+
+  <div class="answer-box">\(\Delta S\approx 1.92\) J/K。两段贡献相当——相变项占 64%，加热项 36%。</div>
+</div>
+
+<div class="example" id="p11-30">
+  <h4>11.30 — 500 g 水（80°C） + 300 g 水（20°C）混合的熵变 <span class="scope-tag scope-s">S</span><span class="scope-tag scope-di">DI W10 #1</span> <span class="difficulty">★</span></h4>
+  <p class="problem-statement">500 g 水（80°C） 加到 300 g 水（20°C），求总熵变。</p>
+
+  <div class="solution-step"><strong>策略</strong>：(1) 能量守恒求最终温度 \(T_f\)；(2) 每部分沿等压可逆加热/冷却算 \(\Delta S\)；(3) 求和。两份水的比热相同（同种物质）。详见 <a href="14_entropy_macroscopic.html#sec:thermal-contact">14 §8 热接触</a>。</div>
+
+  <div class="solution-step"><strong>Step 1：终温</strong>：\(m_1=0.5\) kg、\(T_{1i}=353\) K；\(m_2=0.3\) kg、\(T_{2i}=293\) K。能量守恒（比热相同消掉）：
+    $$ T_f=\frac{m_1T_{1i}+m_2T_{2i}}{m_1+m_2}=\frac{0.5\cdot 353+0.3\cdot 293}{0.8}=\frac{176.5+87.9}{0.8}=330.5\text{ K}. $$
+  </div>
+
+  <div class="solution-step"><strong>Step 2：逐部分熵变</strong>：
+    $$ \Delta S_1=m_1c_w\ln(T_f/T_{1i})=0.5\cdot 4184\cdot\ln(330.5/353)=2092\cdot(-0.0659)\approx-137.8\text{ J/K}. $$
+    $$ \Delta S_2=m_2c_w\ln(T_f/T_{2i})=0.3\cdot 4184\cdot\ln(330.5/293)=1255.2\cdot 0.1205\approx+151.2\text{ J/K}. $$
+    热水放出熵 137.8，冷水获得熵 151.2——冷端的 \(1/T\) 大，熵增量也大。</div>
+
+  <div class="solution-step"><strong>Step 3：合计</strong>：\(\Delta S_{\text{tot}}=-137.8+151.2\approx 13.4\) J/K \(&gt;0\) ✓（finite-\(\Delta T\) 导热是不可逆的）。</div>
+
+  <div class="answer-box">\(T_f\approx 330.5\) K, \(\Delta S_{\text{tot}}\approx 13.4\) J/K \(&gt;0\)。</div>
+</div>
+
+<div class="example" id="p11-35">
+  <h4>11.35 — 10 kg Cu（100°C） + 5 L 水（0°C） <span class="scope-tag scope-s">S</span><span class="scope-tag scope-di">DI W10 #3</span> <span class="difficulty">★★</span></h4>
+  <p class="problem-statement">把 10 kg 铜（\(c_{Cu}=386\) J/(kg·K)，100°C）放入 5 L 水（\(c_w=4180\) J/(kg·K)，0°C）。求 (i) 终温；(ii) \(\Delta S_{Cu}\)；(iii) \(\Delta S_w\)；(iv) \(\Delta S_{\text{universe}}\)。</p>
+
+  <div class="solution-step"><strong>策略</strong>：与 11.30 相同框架，但比热不同——必须用加权平均。注意 5 L 水 \(=5\) kg。</div>
+
+  <div class="solution-step"><strong>Step 1：终温</strong>：
+    $$ T_f=\frac{m_{Cu}c_{Cu}T_{Cu,i}+m_wc_wT_{w,i}}{m_{Cu}c_{Cu}+m_wc_w}=\frac{10\cdot 386\cdot 373+5\cdot 4180\cdot 273}{10\cdot 386+5\cdot 4180}=\frac{1.44\times 10^6+5.71\times 10^6}{3860+20900}=\frac{7.15\times 10^6}{24760}\approx 288.6\text{ K}. $$
+    注意水的热容 \(C_w=m_wc_w=20900\) J/K 比铜 \(C_{Cu}=3860\) J/K <em>大 5.4 倍</em>，所以终温更接近水的初温——只升高 \(\sim 15.6\) K。</div>
+
+  <div class="solution-step"><strong>Step 2：铜的熵变</strong>：
+    $$ \Delta S_{Cu}=m_{Cu}c_{Cu}\ln(T_f/T_{Cu,i})=3860\cdot\ln(288.6/373)=3860\cdot(-0.2565)\approx-990\text{ J/K}. $$
+  </div>
+
+  <div class="solution-step"><strong>Step 3：水的熵变</strong>：
+    $$ \Delta S_w=m_wc_w\ln(T_f/T_{w,i})=20900\cdot\ln(288.6/273)=20900\cdot 0.0556\approx+1161\text{ J/K}. $$
+  </div>
+
+  <div class="solution-step"><strong>Step 4：宇宙熵变</strong>：\(\Delta S_{\text{universe}}=\Delta S_{Cu}+\Delta S_w\approx-990+1161\approx+171\) J/K \(&gt;0\) ✓。</div>
+
+  <div class="answer-box">\(T_f\approx 288.6\) K（15.6°C），\(\Delta S_{Cu}\approx-990\) J/K，\(\Delta S_w\approx+1161\) J/K，\(\Delta S_{\text{universe}}\approx+171\) J/K。</div>
+</div>
+
+<div class="example" id="osa">
+  <h4>OS-A — 冰水共存系统的熵变 <span class="scope-tag scope-os">OS</span> <span class="difficulty">★★</span></h4>
+  <p class="problem-statement">把 200 g 冰（0°C） 放入 1.0 kg 水（25°C） 的绝热容器中。冰是否完全融化？求最终温度与系统总熵变。</p>
+
+  <div class="solution-step"><strong>Step 1：测试冰是否能全部融化</strong>。如果冰全部融化，需要的热量
+    $$ Q_{\text{melt all}}=m_{\text{ice}}L_{iw}=0.2\cdot 3.34\times 10^5=6.68\times 10^4\text{ J}. $$
+    水从 25°C 降到 0°C 最多能释放
+    $$ Q_{\text{water max}}=m_wc_w\Delta T=1.0\cdot 4184\cdot 25=1.046\times 10^5\text{ J}. $$
+    \(Q_{\text{water max}}&gt;Q_{\text{melt all}}\) ⇒ 冰全部融化，并把得到的水继续加热。</div>
+
+  <div class="solution-step"><strong>Step 2：终温</strong>。融化后 200 g 0°C 的水 + 1 kg 25°C 的水，终温
+    $$ T_f=\frac{m_w T_{w,i}+m_{\text{melted}}T_{i}}{m_w+m_{\text{melted}}}-\frac{m_{\text{melted}}L_{iw}}{c_w(m_w+m_{\text{melted}})}. $$
+    或直接做能量平衡：\(0=m_{\text{ice}}L_{iw}+m_{\text{ice}}c_w(T_f-273)+m_wc_w(T_f-298)\)。代入数：
+    $$ 0=6.68\times 10^4+0.2\cdot 4184(T_f-273)+1.0\cdot 4184(T_f-298), $$
+    $$ 0=6.68\times 10^4+836.8 T_f-228446+4184 T_f-1246832, $$
+    $$ 0=-1.408\times 10^6+5020.8 T_f\Rightarrow T_f\approx 280.4\text{ K}\approx 7.4\text{°C}. $$
+  </div>
+
+  <div class="solution-step"><strong>Step 3：熵变三段</strong>。
+    <ul>
+      <li>(a) 冰融化：\(\Delta S_a=m_{\text{ice}}L_{iw}/T_{\text{melt}}=6.68\times 10^4/273=+245\) J/K。</li>
+      <li>(b) 融化后的水从 273 K → 280.4 K：\(\Delta S_b=m_{\text{ice}}c_w\ln(T_f/273)=836.8\cdot\ln(280.4/273)\approx 836.8\cdot 0.0267\approx+22.4\) J/K。</li>
+      <li>(c) 原水从 298 K → 280.4 K：\(\Delta S_c=m_wc_w\ln(T_f/298)=4184\cdot\ln(280.4/298)\approx 4184\cdot(-0.0609)\approx-254.7\) J/K。</li>
+    </ul>
+    总：\(\Delta S_{\text{tot}}=245+22.4-254.7\approx+12.7\) J/K \(&gt;0\) ✓。</div>
+
+  <div class="answer-box">冰全部融化；\(T_f\approx 280.4\) K（7.4°C）；\(\Delta S_{\text{tot}}\approx+12.7\) J/K。</div>
+</div>
+
+<!-- ======================================================== -->
+
+<h2 id="sectionB">§B 理想气体熵变：自由膨胀、绝热、(T,P) 形式</h2>
+
+<div class="problem-toc">
+  <a href="#p11-31">11.31 自由 vs 绝热</a>
+  <a href="#p11-34">11.34 (T,P) 形式</a>
+  <a href="#osb">OS-B 等温 Q_环境</a>
+</div>
+
+<div class="example" id="p11-31">
+  <h4>11.31 — 自由膨胀 vs 绝热膨胀 <span class="scope-tag scope-s">S</span><span class="scope-tag scope-di">DI W9 #3</span> <span class="difficulty">★★★</span></h4>
+  <p class="problem-statement">1 mol 单原子理想气体在绝热容器中被分隔到体积 \(V_0\)，容器总体积 \(3V_0\)，初压 \(P_0\)。<br>
+  (i) 移除分隔后气体填满整个容器，求 \(\Delta S_{\text{gas}}\) 与 \(\Delta S_{\text{universe}}\)。<br>
+  (ii) 移除前后微观态数之比是多少？<br>
+  (iii) 若改用慢推活塞维持等大反向压强直到体积变 \(3V_0\)（仍绝热隔离），\(\Delta S\) 是多少？<br>
+  (iv) 用 \(V_0, P_0\) 表达 (iii) 中气体做的功。<br>
+  (v) 内能变化是多少？</p>
+
+  <div class="solution-step"><strong>(i) 自由膨胀</strong>。\(Q=0\)（绝热）、\(W=0\)（对真空无功），所以 \(\Delta U=0\Rightarrow T_2=T_1\)。终态在同一条等温线上：\((P_0/3, 3V_0)\)。
+    用<strong>可逆等温替代路径</strong>：\(\delta Q_{\text{rev}}=PdV\)，\(P=nRT/V\)，
+    $$ \Delta S_{\text{gas}}=\int\frac{PdV}{T}=nR\int_{V_0}^{3V_0}\frac{dV}{V}=nR\ln 3=R\ln 3\approx 9.13\text{ J/K}. $$
+    环境（绝热壁外）没和气体交换热和功 ⇒ \(\Delta S_{\text{env}}=0\)。
+    $$ \boxed{\Delta S_{\text{universe}}=R\ln 3\approx 9.13\text{ J/K}.} $$
+  </div>
+
+  <div class="solution-step"><strong>(ii) 微观态数之比</strong>。\(S=k_B\ln\Omega\Rightarrow\Omega_2/\Omega_1=e^{\Delta S/k_B}\)。代入 \(\Delta S=N_Ak_B\ln 3\)：
+    $$ \boxed{\Omega_2/\Omega_1=e^{N_A\ln 3}=3^{N_A}.} $$
+    具象解释：每个分子的位置态数（cell 数）变 3 倍，独立 \(N_A\) 个分子合起来 \(3^{N_A}\)（详见 <a href="15_boltzmann_statistical.html#sec:p1">15 §3</a>）。</div>
+
+  <div class="solution-step"><strong>(iii) 可逆绝热膨胀</strong>。\(\delta Q_{\text{rev}}=0\)，所以
+    $$ \Delta S=\int\frac{\delta Q_{\text{rev}}}{T}=0. $$
+    可逆绝热 = isentropic。<strong>注意</strong>：这条路径与 (i) 的路径在 P-V 图上<em>不同</em>。沿绝热 \(PV^\gamma=\)const 终态压强是 \(P_3=P_0(V_0/3V_0)^\gamma=P_0\cdot 3^{-5/3}\approx 0.16 P_0\)（不是自由膨胀里的 \(P_0/3\approx 0.33 P_0\)），温度也降到 \(T_3=T_0\cdot 3^{-2/3}\approx 0.48 T_0\)。</div>
+
+  <div class="solution-step"><strong>(iv) 气体做的功</strong>。绝热 \(Q=0\)，第一定律给 \(W=-\Delta U=-\tfrac32 nR(T_2-T_1)=\tfrac32 nR T_1(1-T_2/T_1)\)。用 \(T_2/T_1=(V_1/V_2)^{\gamma-1}=(1/3)^{2/3}=3^{-2/3}\)：
+    $$ W=\tfrac32 P_0V_0\left(1-3^{-2/3}\right)\approx\tfrac32 P_0V_0\cdot 0.519\approx 0.778 P_0V_0. $$
+  </div>
+
+  <div class="solution-step"><strong>(v) 内能变化</strong>。\(\Delta U=-W=\tfrac32 P_0V_0(3^{-2/3}-1)\approx-0.778 P_0V_0\) \(&lt;0\)（气体冷却）。</div>
+
+  <div class="answer-box">(i) \(\Delta S_{\text{gas}}=\Delta S_{\text{univ}}=R\ln 3\approx 9.13\) J/K；(ii) \(\Omega_2/\Omega_1=3^{N_A}\)；(iii) \(\Delta S=0\)（绝热可逆）；(iv) \(W=\tfrac32 P_0V_0(1-3^{-2/3})\)；(v) \(\Delta U=-W\)。</div>
+
+  <div class="box insight" style="margin-top:.5rem">
+    <p class="box-title">为什么两种过程端点不同？</p>
+    <p>两种过程<em>都</em>从 \((P_0, V_0)\) 出发到 \(V=3V_0\)，但中间机制不同：(i) 是<em>非</em>准静态（气体冲入真空，没有外压做功），所以 \(\Delta U=0\)、温度不变；(iii) 是<em>慢</em>准静态（气体对外做功推活塞），所以 \(\Delta U&lt;0\)、温度下降。同样的"终体积" \(3V_0\) 但两种<em>不同</em>的终态——这就是为什么 \(\Delta S\) 也截然不同（前者 \(&gt;0\)，后者 \(=0\)）。</p>
+  </div>
+</div>
+
+<div class="example" id="p11-34">
+  <h4>11.34 — 理想气体熵的 \((T, P)\) 形式 <span class="scope-tag scope-s">S</span><span class="scope-tag scope-di">DI W9 #4</span> <span class="difficulty">★★</span></h4>
+  <p class="problem-statement">1 mol 理想气体从 \(1\equiv(P_1, V_1)\) 到 \(2\equiv(P_2&lt;P_1, V_2&gt;V_1)\)。用两段折线替代：先在 \(V_1\) 等容降压到中间态 \(0\equiv(P_0=P_2, V_0=V_1)\)，再在 \(P_0\) 等压扩展到 \(2\)。证明 \(S_2-S_1=c_p\ln(T_2/T_1)-R\ln(P_2/P_1)\)；并证明若 1、2 在同一条绝热曲线上，此式为零。<br><em>题目注：教师标记 11.34 有 typo——\(P_0=P_2\) 中的 0 应理解为 \(P_2\)，与中间态记号一致。</em></p>
+
+  <div class="solution-step"><strong>策略</strong>：两段都是<em>简单</em>的可逆过程，逐段算 \(\Delta S\) 即可。最后用 \(c_p=c_v+R\) 与理想气体律重组成 \((T, P)\) 形式。</div>
+
+  <div class="solution-step"><strong>等容段 1→0</strong>（\(V\) 不变，\(T\) 从 \(T_1\) 到 \(T_0\)）：
+    $$ \Delta S_{1\to 0}=\int_1^0\frac{\delta Q}{T}=nc_v\int_{T_1}^{T_0}\frac{dT}{T}=nc_v\ln(T_0/T_1). $$
+  </div>
+
+  <div class="solution-step"><strong>等压段 0→2</strong>（\(P\) 不变，\(T\) 从 \(T_0\) 到 \(T_2\)）：
+    $$ \Delta S_{0\to 2}=nc_p\int_{T_0}^{T_2}\frac{dT}{T}=nc_p\ln(T_2/T_0). $$
+  </div>
+
+  <div class="solution-step"><strong>合并</strong>：
+    $$ \Delta S=nc_v\ln(T_0/T_1)+nc_p\ln(T_2/T_0)=nc_p\ln(T_0/T_1)-nR\ln(T_0/T_1)+nc_p\ln(T_2/T_0), $$
+    用 \(c_v=c_p-R\)。前两项与第三项合并：
+    $$ \Delta S=nc_p[\ln(T_0/T_1)+\ln(T_2/T_0)]-nR\ln(T_0/T_1)=nc_p\ln(T_2/T_1)-nR\ln(T_0/T_1). $$
+    现在用理想气体律：\(P_0V_0=nRT_0\)、\(P_1V_1=nRT_1\)，且 \(V_0=V_1, P_0=P_2\)：
+    $$ \frac{T_0}{T_1}=\frac{P_0V_0}{P_1V_1}=\frac{P_2}{P_1}. $$
+    所以
+    $$ \boxed{\Delta S=nc_p\ln(T_2/T_1)-nR\ln(P_2/P_1).} $$
+    \(n=1\) 时和题目要求形式一致。</div>
+
+  <div class="solution-step"><strong>绝热情形验证</strong>。沿绝热 \(PV^\gamma=\)const，结合理想气体律 \(PV=nRT\)，得 \(P^{1-\gamma}T^\gamma=\)const，所以
+    $$ T_2/T_1=(P_2/P_1)^{(\gamma-1)/\gamma}. $$
+    代入：
+    $$ \Delta S=c_p\cdot\frac{\gamma-1}{\gamma}\ln(P_2/P_1)-R\ln(P_2/P_1). $$
+    用 \(\gamma=c_p/c_v\) 与 \(c_p-c_v=R\)：\(c_p(\gamma-1)/\gamma=c_p\cdot(c_p-c_v)/c_p=c_p-c_v=R\)。所以
+    $$ \Delta S=R\ln(P_2/P_1)-R\ln(P_2/P_1)=0\text{ ✓}. $$
+    这与"可逆绝热 = isentropic"一致。</div>
+
+  <div class="answer-box">\(\Delta S=nc_p\ln(T_2/T_1)-nR\ln(P_2/P_1)\)；绝热曲线上自动为零。</div>
+
+  <div class="box remark" style="margin-top:.5rem">
+    <p class="box-title">三种等价形式</p>
+    <p>理想气体熵变有三种常用写法（任两个变量为独立）：</p>
+    <ul>
+      <li>\((T, V)\)：\(\Delta S=nc_v\ln(T_2/T_1)+nR\ln(V_2/V_1)\)（最常用，从第一定律最直接推）</li>
+      <li>\((T, P)\)：\(\Delta S=nc_p\ln(T_2/T_1)-nR\ln(P_2/P_1)\)（本题，处理等压问题方便）</li>
+      <li>\((P, V)\)：\(\Delta S=nc_v\ln(P_2/P_1)+nc_p\ln(V_2/V_1)\)（处理 P-V 端点直接给定的情形）</li>
+    </ul>
+    <p>三者用 \(PV=nRT\) 互推。考试时按已知端点形式选最方便的。</p>
+  </div>
+</div>
+
+<div class="example" id="osb">
+  <h4>OS-B — 等温膨胀中气体 + 环境的熵变 <span class="scope-tag scope-os">OS</span> <span class="difficulty">★★</span></h4>
+  <p class="problem-statement">2 mol 理想气体在 \(T=400\) K 等温<em>可逆</em>膨胀，体积从 \(V_1=2\) L 增到 \(V_2=8\) L。求气体、环境、宇宙各自的熵变。再考虑同样端点但<em>不可逆</em>（外压突降到 \(P_2\) 后恒压等待）的情形，做对比。</p>
+
+  <div class="solution-step"><strong>(a) 可逆情形 — 气体熵变</strong>。等温 \(\Delta U=0\)，熵主公式只剩 \(V\) 项：
+    $$ \Delta S_{\text{gas}}=nR\ln(V_2/V_1)=2\cdot 8.314\cdot\ln 4\approx 23.1\text{ J/K}. $$
+  </div>
+
+  <div class="solution-step"><strong>(a) 可逆情形 — 环境熵变</strong>。气体吸热 \(Q_{\text{rev}}=W_{\text{rev}}=nRT\ln(V_2/V_1)=2\cdot 8.314\cdot 400\cdot\ln 4\approx 9220\) J，热从热库取走。热库恒温 \(T=400\) K：
+    $$ \Delta S_{\text{env}}=-Q_{\text{rev}}/T=-9220/400\approx-23.1\text{ J/K}. $$
+    宇宙：\(\Delta S_{\text{univ}}=23.1-23.1=0\) ✓（可逆）。</div>
+
+  <div class="solution-step"><strong>(b) 不可逆情形</strong>。端点相同，所以 \(\Delta S_{\text{gas}}=23.1\) J/K 不变（态函数！）。但实际 \(Q\) 不同：恒外压 \(P_{\text{ext}}=P_2=nRT/V_2\)，气体做功
+    $$ W_{\text{irrev}}=P_{\text{ext}}(V_2-V_1)=\frac{nRT}{V_2}(V_2-V_1)=nRT(1-V_1/V_2)=2\cdot 8.314\cdot 400\cdot 0.75\approx 4988\text{ J}. $$
+    等温 \(\Delta U=0\Rightarrow Q_{\text{irrev}}=W_{\text{irrev}}\approx 4988\) J（比可逆少 ~4232 J）。环境：
+    $$ \Delta S_{\text{env}}=-4988/400\approx-12.5\text{ J/K}. $$
+    宇宙：\(\Delta S_{\text{univ}}=23.1-12.5\approx+10.6\) J/K \(&gt;0\) ✓（不可逆）。</div>
+
+  <div class="answer-box">(a) 可逆：\(\Delta S_{\text{gas}}=+23.1, \Delta S_{\text{env}}=-23.1, \Delta S_{\text{univ}}=0\) J/K；(b) 不可逆：\(\Delta S_{\text{gas}}=+23.1, \Delta S_{\text{env}}=-12.5, \Delta S_{\text{univ}}=+10.6\) J/K。</div>
+
+  <div class="box insight" style="margin-top:.5rem">
+    <p class="box-title">关键观察</p>
+    <p>系统熵变 \(\Delta S_{\text{gas}}\) 由端点决定，两种过程相同；但环境熵变取决于<em>实际</em>热 \(Q\)。可逆过程气体做更多功（拿走更多热），所以环境失更多熵；不可逆过程"漏掉了"那部分功，所以环境失的熵更少——多出的部分就成了宇宙的净熵增。</p>
+  </div>
+</div>
+
+<!-- ======================================================== -->
+
+<h2 id="sectionC">§C 热机循环：Sterling、Otto、矩形</h2>
+
+<div class="problem-toc">
+  <a href="#p11-18">11.18 Sterling</a>
+  <a href="#p11-19">11.19 Otto</a>
+  <a href="#p11-20">11.20 矩形</a>
+</div>
+
+<div class="example" id="p11-18">
+  <h4>11.18 — Sterling 循环效率 <span class="scope-tag scope-s">S</span> <span class="difficulty">★★★</span></h4>
+  <p class="problem-statement">单原子理想气体走 Sterling 循环：两条等温（\(T_h\) 和 \(T_c\)）+ 两条等容线（\(V_1\) 和 \(V_2\)）。(i) 用 \(T_h, T_c, V_1, V_2, R\) 求效率 \(\eta=W/Q_{\text{in}}\)（注意逐段判断热的进出方向）。(ii) 证明 \(\eta&lt;\eta_C\) 的 Carnot 效率（提示：考虑 \(1-\eta_C/\eta\)）。</p>
+
+  <svg class="pv-diagram" viewBox="0 0 320 260" xmlns="http://www.w3.org/2000/svg">
+    <line x1="40" y1="20" x2="40" y2="220" stroke="#475569" stroke-width="1.5"/>
+    <line x1="40" y1="220" x2="300" y2="220" stroke="#475569" stroke-width="1.5"/>
+    <text x="20" y="16" font-size="12" font-family="serif" fill="#475569">P</text>
+    <text x="305" y="224" font-size="12" font-family="serif" fill="#475569">V</text>
+    <!-- isotherm Th: top, V1->V2 -->
+    <path d="M 90 50 Q 150 75 240 110" stroke="#dc2626" stroke-width="2" fill="none"/>
+    <text x="120" y="65" font-size="11" font-family="serif" fill="#dc2626">T_h</text>
+    <!-- isotherm Tc: bottom, V2->V1 -->
+    <path d="M 240 175 Q 150 165 90 140" stroke="#2563eb" stroke-width="2" fill="none"/>
+    <text x="160" y="195" font-size="11" font-family="serif" fill="#2563eb">T_c</text>
+    <!-- isochore V1: left (vertical) -->
+    <line x1="90" y1="50" x2="90" y2="140" stroke="#65a30d" stroke-width="2"/>
+    <!-- isochore V2: right (vertical) -->
+    <line x1="240" y1="110" x2="240" y2="175" stroke="#65a30d" stroke-width="2"/>
+    <!-- corners -->
+    <circle cx="90" cy="50" r="3.5" fill="#0f172a"/><text x="68" y="46" font-size="11" font-family="serif" font-weight="700">1</text>
+    <circle cx="240" cy="110" r="3.5" fill="#0f172a"/><text x="245" y="106" font-size="11" font-family="serif" font-weight="700">2</text>
+    <circle cx="240" cy="175" r="3.5" fill="#0f172a"/><text x="245" y="186" font-size="11" font-family="serif" font-weight="700">3</text>
+    <circle cx="90" cy="140" r="3.5" fill="#0f172a"/><text x="72" y="155" font-size="11" font-family="serif" font-weight="700">4</text>
+    <!-- ticks -->
+    <line x1="90" y1="218" x2="90" y2="223" stroke="#475569"/><text x="83" y="236" font-size="11" font-family="serif" fill="#475569">V_1</text>
+    <line x1="240" y1="218" x2="240" y2="223" stroke="#475569"/><text x="233" y="236" font-size="11" font-family="serif" fill="#475569">V_2</text>
+  </svg>
+
+  <div class="solution-step"><strong>Step 1：逐段 \(Q, W\)</strong>。沿顺时针 1→2→3→4→1：
+    <ul>
+      <li>1→2（等温 \(T_h\) 膨胀）：\(Q_{12}=W_{12}=nRT_h\ln(V_2/V_1)&gt;0\) <strong>吸热</strong>。</li>
+      <li>2→3（等容 \(V_2\) 降温到 \(T_c\)）：\(W_{23}=0\)，\(Q_{23}=nc_v(T_c-T_h)&lt;0\) <strong>放热</strong>。</li>
+      <li>3→4（等温 \(T_c\) 压缩）：\(Q_{34}=W_{34}=nRT_c\ln(V_1/V_2)&lt;0\) <strong>放热</strong>。</li>
+      <li>4→1（等容 \(V_1\) 升温回 \(T_h\)）：\(W_{41}=0\)，\(Q_{41}=nc_v(T_h-T_c)&gt;0\) <strong>吸热</strong>。</li>
+    </ul>
+  </div>
+
+  <div class="solution-step"><strong>Step 2：识别 \(Q_{\text{in}}\)</strong>。题目<em>关键</em>提醒"make sure you know for each segment if any heat is absorbed or released"——因为 Sterling 的<em>两段</em>都吸热（1→2 与 4→1），不只是等温段。
+    $$ Q_{\text{in}}=Q_{12}+Q_{41}=nRT_h\ln(V_2/V_1)+nc_v(T_h-T_c). $$
+    单原子 \(c_v=\tfrac32 R\)：\(Q_{\text{in}}=nR[T_h\ln(V_2/V_1)+\tfrac32(T_h-T_c)]\)。</div>
+
+  <div class="solution-step"><strong>Step 3：净功</strong>。等容段不做功；等温段两段对消部分但不为零：
+    $$ W=Q_{12}+Q_{34}=nRT_h\ln(V_2/V_1)-nRT_c\ln(V_2/V_1)=nR(T_h-T_c)\ln(V_2/V_1). $$
+    （等容段的 \(Q\) 互相抵消 \(Q_{23}+Q_{41}=0\)，但因为它们都是"内部"热交换，要把 \(Q_{41}\) 计入 \(Q_{\text{in}}\)）。</div>
+
+  <div class="solution-step"><strong>Step 4：效率</strong>。
+    $$ \boxed{\eta=\frac{W}{Q_{\text{in}}}=\frac{R(T_h-T_c)\ln(V_2/V_1)}{RT_h\ln(V_2/V_1)+\tfrac32 R(T_h-T_c)}=\frac{(T_h-T_c)\ln(V_2/V_1)}{T_h\ln(V_2/V_1)+\tfrac32(T_h-T_c)}.} $$
+  </div>
+
+  <div class="solution-step"><strong>(ii) 证 \(\eta&lt;\eta_C\)</strong>。Carnot \(\eta_C=1-T_c/T_h=(T_h-T_c)/T_h\)。考虑比值：
+    $$ \frac{\eta_C}{\eta}=\frac{(T_h-T_c)/T_h}{(T_h-T_c)\ln(V_2/V_1)/[T_h\ln(V_2/V_1)+\tfrac32(T_h-T_c)]}
+    =\frac{T_h\ln(V_2/V_1)+\tfrac32(T_h-T_c)}{T_h\ln(V_2/V_1)}=1+\frac{\tfrac32(T_h-T_c)}{T_h\ln(V_2/V_1)}. $$
+    \(T_h&gt;T_c\Rightarrow\) 第二项 \(&gt;0\Rightarrow \eta_C/\eta&gt;1\Rightarrow\eta&lt;\eta_C\) ✓。</div>
+
+  <div class="answer-box">\(\eta=\dfrac{(T_h-T_c)\ln(V_2/V_1)}{T_h\ln(V_2/V_1)+\tfrac32(T_h-T_c)}&lt;\eta_C=1-T_c/T_h\)。</div>
+
+  <div class="box insight" style="margin-top:.5rem">
+    <p class="box-title">为什么 Sterling \(&lt;\) Carnot？</p>
+    <p>Carnot 用<em>两段绝热</em>把工质温度搬到等温段，所以"非等温段不参与热交换"。Sterling 用<em>等容</em>代替绝热，等容段必须吸/放热（沿过程温度变化），这相当于在<em>不同</em>温度热源间用 Fourier 方式传热——本质上是引入了不可逆性。要让 Sterling 接近 Carnot，可以引入"regenerator"（吸收 2→3 放的热再供给 4→1 用），理论上能让 Sterling 趋近于 Carnot 上限——这就是 Sterling 引擎工程上的<em>实际</em>设计。</p>
+  </div>
+</div>
+
+<div class="example" id="p11-19">
+  <h4>11.19 — Otto 循环效率 <span class="scope-tag scope-s">S</span> <span class="difficulty">★★</span></h4>
+  <p class="problem-statement">Otto 循环图形与 Sterling 一致，但 1→2 和 3→4 是绝热曲线（不是等温）。证明 \(\eta=1-(T_2-T_3)/(T_1-T_4)\)，用压缩比 \(r=V_2/V_1=V_3/V_4\) 表达。</p>
+
+  <div class="solution-step"><strong>Step 1：识别 \(Q\)</strong>。Otto 的四段：
+    <ul>
+      <li>1→2（绝热膨胀）：\(Q=0\)，温度从 \(T_1\) 降到 \(T_2\)。</li>
+      <li>2→3（等容 \(V_2\) 降温）：\(Q_{23}=nc_v(T_3-T_2)&lt;0\) 放热。</li>
+      <li>3→4（绝热压缩）：\(Q=0\)，温度从 \(T_3\) 升到 \(T_4\)。</li>
+      <li>4→1（等容 \(V_1\) 升温）：\(Q_{41}=nc_v(T_1-T_4)&gt;0\) <strong>唯一吸热段</strong>。</li>
+    </ul>
+    所以 \(Q_{\text{in}}=nc_v(T_1-T_4)\)，\(Q_{\text{out}}=|Q_{23}|=nc_v(T_2-T_3)\)（注意正负号约定）。</div>
+
+  <div class="solution-step"><strong>Step 2：效率定义</strong>：
+    $$ \eta=1-\frac{Q_{\text{out}}}{Q_{\text{in}}}=1-\frac{nc_v(T_2-T_3)}{nc_v(T_1-T_4)}=1-\frac{T_2-T_3}{T_1-T_4}. $$
+    与题目要求一致 ✓。</div>
+
+  <div class="solution-step"><strong>Step 3：用压缩比表达</strong>。沿绝热 \(TV^{\gamma-1}=\)const：
+    <ul>
+      <li>1→2（同绝热）：\(T_1V_1^{\gamma-1}=T_2V_2^{\gamma-1}\Rightarrow T_2=T_1(V_1/V_2)^{\gamma-1}=T_1 r^{-(\gamma-1)}\)。</li>
+      <li>3→4（同绝热）：\(T_4V_1^{\gamma-1}=T_3V_2^{\gamma-1}\Rightarrow T_3=T_4 r^{-(\gamma-1)}\)。</li>
+    </ul>
+    所以
+    $$ \frac{T_2-T_3}{T_1-T_4}=\frac{T_1 r^{-(\gamma-1)}-T_4 r^{-(\gamma-1)}}{T_1-T_4}=r^{-(\gamma-1)}=\frac{1}{r^{\gamma-1}}. $$
+    最终：
+    $$ \boxed{\eta_{\text{Otto}}=1-\frac{1}{r^{\gamma-1}}.} $$
+  </div>
+
+  <div class="answer-box">\(\eta=1-(T_2-T_3)/(T_1-T_4)=1-r^{-(\gamma-1)}\)。</div>
+
+  <div class="box insight" style="margin-top:.5rem">
+    <p class="box-title">Otto 与汽油机</p>
+    <p>实际汽车汽油机的<em>理论</em>循环就是 Otto。典型压缩比 \(r\approx 8\sim 12\)（受爆震限制），双原子 \(\gamma=7/5\)：\(\eta=1-r^{-2/5}\)。\(r=10\) 给 \(\eta\approx 60\%\)（理论上限），实际效率 \(\sim 25-30\%\) 因摩擦、不完全燃烧、有限速等。Diesel 引擎压缩比更高（\(r\approx 15\sim 22\)）所以理论效率更高，这是 Diesel 比汽油经济的物理根源。</p>
+  </div>
+</div>
+
+<div class="example" id="p11-20">
+  <h4>11.20 — 矩形循环热机效率 <span class="scope-tag scope-s">S</span><span class="scope-tag scope-di">DI W9 #2</span> <span class="difficulty">★★</span></h4>
+  <p class="problem-statement">热机走矩形循环 1→2→3→4→1，角 1: (1 Pa, 1 L)、2: (4 Pa, 1 L)、3: (4 Pa, 4 L)、4: (1 Pa, 4 L)。\(T_1=100\) K，\(\gamma=c_p/c_v=1.4\)。求效率。提示：只用 \(c_p=c_v+R\) 与理想气体律。</p>
+
+  <svg class="pv-diagram" viewBox="0 0 300 260" xmlns="http://www.w3.org/2000/svg">
+    <line x1="40" y1="20" x2="40" y2="220" stroke="#475569" stroke-width="1.5"/>
+    <line x1="40" y1="220" x2="280" y2="220" stroke="#475569" stroke-width="1.5"/>
+    <text x="20" y="16" font-size="12" font-family="serif" fill="#475569">P(Pa)</text>
+    <text x="285" y="224" font-size="12" font-family="serif" fill="#475569">V(L)</text>
+    <!-- rectangle: 1(1,1)=(80,180), 2(4,1)=(80,60), 3(4,4)=(240,60), 4(1,4)=(240,180) -->
+    <path d="M 80 180 L 80 60 L 240 60 L 240 180 Z" stroke="#dc2626" stroke-width="2" fill="none"/>
+    <circle cx="80" cy="180" r="3.5" fill="#0f172a"/><text x="62" y="195" font-size="11" font-family="serif" font-weight="700">1</text>
+    <circle cx="80" cy="60" r="3.5" fill="#0f172a"/><text x="62" y="55" font-size="11" font-family="serif" font-weight="700">2</text>
+    <circle cx="240" cy="60" r="3.5" fill="#0f172a"/><text x="245" y="55" font-size="11" font-family="serif" font-weight="700">3</text>
+    <circle cx="240" cy="180" r="3.5" fill="#0f172a"/><text x="245" y="195" font-size="11" font-family="serif" font-weight="700">4</text>
+    <!-- arrows -->
+    <polygon points="80,120 75,128 85,128" fill="#dc2626"/>
+    <polygon points="160,60 168,55 168,65" fill="#dc2626"/>
+    <polygon points="240,120 235,112 245,112" fill="#dc2626"/>
+    <polygon points="160,180 152,175 152,185" fill="#dc2626"/>
+    <!-- ticks -->
+    <text x="73" y="236" font-size="10" font-family="serif" fill="#475569">1</text>
+    <text x="233" y="236" font-size="10" font-family="serif" fill="#475569">4</text>
+    <text x="22" y="184" font-size="10" font-family="serif" fill="#475569">1</text>
+    <text x="22" y="64" font-size="10" font-family="serif" fill="#475569">4</text>
+  </svg>
+
+  <div class="solution-step"><strong>Step 1：先推导 \(c_v\)</strong>。\(\gamma=c_p/c_v=1+R/c_v=1.4\Rightarrow R/c_v=0.4\Rightarrow c_v=\tfrac52 R\)，\(c_p=\tfrac72 R\)（双原子）。</div>
+
+  <div class="solution-step"><strong>Step 2：各段功</strong>。1→2 等容（\(W_{12}=0\)）；2→3 等压膨胀 \(W_{23}=P_2\Delta V=4\cdot 3\times 10^{-3}=0.012\) J；3→4 等容（\(W_{34}=0\)）；4→1 等压压缩 \(W_{41}=P_4\Delta V=1\cdot(-3\times 10^{-3})=-0.003\) J。
+    $$ W=W_{23}+W_{41}=0.012-0.003=0.009\text{ J}. $$
+  </div>
+
+  <div class="solution-step"><strong>Step 3：各段热</strong>。等容段 \(Q=nc_v\Delta T=\tfrac52 nR\Delta T=\tfrac52\Delta(PV)\)（用 \(PV=nRT\Rightarrow nR\Delta T=\Delta(PV)\) 仅在等容 \(\Delta V=0\) 时严格）。等压段 \(Q=nc_p\Delta T=\tfrac72\Delta(PV)\)（同样 \(\Delta V\neq 0\) 时严格 \(nR\Delta T=\Delta(PV)-P\Delta V=V\Delta P=0\) on isobar... 我重新整理）。
+    <p style="margin-top:.4rem">直接用 \(\Delta(PV)=nR\Delta T\)（对理想气体恒成立），加上分别选 \(c_v\) 或 \(c_p\)：</p>
+    <ul>
+      <li>\(Q_{12}=\tfrac52(P_2V_2-P_1V_1)=\tfrac52(4-1)\cdot 10^{-3}=0.0075\) J，\(&gt;0\) 吸热。</li>
+      <li>\(Q_{23}=\tfrac72(P_3V_3-P_2V_2)=\tfrac72(16-4)\cdot 10^{-3}=0.042\) J，\(&gt;0\) 吸热。</li>
+      <li>\(Q_{34}=\tfrac52(P_4V_4-P_3V_3)=\tfrac52(4-16)\cdot 10^{-3}=-0.030\) J，放热。</li>
+      <li>\(Q_{41}=\tfrac72(P_1V_1-P_4V_4)=\tfrac72(1-4)\cdot 10^{-3}=-0.0105\) J，放热。</li>
+    </ul>
+    \(Q_{\text{in}}=Q_{12}+Q_{23}=0.0075+0.042=0.0495\) J。</div>
+
+  <div class="solution-step"><strong>Step 4：效率</strong>。
+    $$ \eta=\frac{W}{Q_{\text{in}}}=\frac{0.009}{0.0495}\approx 0.182\approx\boxed{18\%}. $$
+    Carnot 上限：温度极值是 \(T_1=100\) K 与 \(T_3=PV/(nR)\) 估算。\(P_1V_1=10^{-3}=nR\cdot 100\Rightarrow nR=10^{-5}\)。\(T_3=P_3V_3/(nR)=16\times 10^{-3}/10^{-5}=1600\) K。\(\eta_C=1-100/1600=93.75\%\)，远高于 \(18\%\) ✓。</div>
+
+  <div class="answer-box">\(\eta\approx 18\%\)。</div>
+</div>
+
+<!-- ======================================================== -->
+
+<h2 id="sectionD">§D Carnot 与第二定律</h2>
+
+<div class="problem-toc">
+  <a href="#p11-32">11.32 串联</a>
+  <a href="#p11-33">11.33 反证</a>
+  <a href="#osc">OS-C 冰箱最小功</a>
+</div>
+
+<div class="example" id="p11-32">
+  <h4>11.32 — 两 Carnot 串联 <span class="scope-tag scope-s">S</span><span class="scope-tag scope-di">DI W10 #2</span> <span class="difficulty">★</span></h4>
+  <p class="problem-statement">两个 Carnot 引擎串联：第一个在 \(T_1\) 吸热、\(T_0\) 放热；第二个在 \(T_0\) 吸入第一个放出的热、\(T_2\) 放热。(i) 组合效率 \(\eta_{12}\) 用 \(T_1, T_0, T_2\) 表达。(ii) 用 \(\eta_{10}\) 和 \(\eta_{02}\) 表达 \(\eta_{12}\)。</p>
+
+  <div class="solution-step"><strong>(i) 用温度</strong>。串联看作"一个大 Carnot"——只有最高和最低温度热源参与净热和净功的计算（中间温度 \(T_0\) 完全相消）。所以
+    $$ \boxed{\eta_{12}=1-T_2/T_1.} $$
+    严格证明：第一个引擎 \(Q_0=Q_1\cdot T_0/T_1\)（Carnot 关系）；第二个引擎吸 \(Q_0\)、放 \(Q_2=Q_0\cdot T_2/T_0=Q_1\cdot T_2/T_1\)。两个引擎总输出 \(W=W_1+W_2=(Q_1-Q_0)+(Q_0-Q_2)=Q_1-Q_2\)，\(\eta=W/Q_1=1-Q_2/Q_1=1-T_2/T_1\) ✓。</div>
+
+  <div class="solution-step"><strong>(ii) 用单引擎效率</strong>。每个 Carnot：\(\eta_{10}=1-T_0/T_1\)、\(\eta_{02}=1-T_2/T_0\)。我们要把 \(\eta_{12}=1-T_2/T_1\) 写成 \(\eta_{10}\) 和 \(\eta_{02}\) 的式子。
+    <p style="margin-top:.4rem">注意 \(T_2/T_1=(T_2/T_0)(T_0/T_1)=(1-\eta_{02})(1-\eta_{10})\)。所以</p>
+    $$ \eta_{12}=1-(1-\eta_{10})(1-\eta_{02})=\eta_{10}+\eta_{02}-\eta_{10}\eta_{02}=\eta_{10}+(1-\eta_{10})\eta_{02}. $$
+    最后形式有<em>物理解释</em>：第二引擎拿到第一台引擎"剩下的"\((1-\eta_{10})\) 份热作为它的输入热源，再对其按 \(\eta_{02}\) 的比率提取功——所以总功 = 第一台输出 \(\eta_{10}\) + 第二台从废热中提取 \((1-\eta_{10})\eta_{02}\)。</div>
+
+  <div class="answer-box">(i) \(\eta_{12}=1-T_2/T_1\)（与 \(T_0\) 无关）；(ii) \(\eta_{12}=\eta_{10}+(1-\eta_{10})\eta_{02}=\eta_{10}+\eta_{02}-\eta_{10}\eta_{02}\)。</div>
+</div>
+
+<div class="example" id="p11-33">
+  <h4>11.33 — Carnot 反证："比 Carnot 更好"的引擎不可能 <span class="scope-tag scope-s">S</span> <span class="difficulty">★★</span></h4>
+  <p class="problem-statement">Carnot 的第二定律陈述："不能制造一个唯一效果是把热从冷物体传到热物体的过程。" 考虑一台 Carnot 引擎：在 \(T_1\) 吸 100 J、在 \(T_2\) 放 60 J。某人声称有一台<em>更好</em>的引擎：在 \(T_1\) 吸 100 J、在 \(T_2\) 放 20 J。证明把两台组合在一起可以违反 Carnot 公设。</p>
+
+  <div class="solution-step"><strong>策略</strong>：经典 Carnot 定理反证。把"更好"的引擎当热机用，用它的功反向驱动 Carnot 当制冷机——观察净效应。</div>
+
+  <div class="solution-step"><strong>Step 1：分别记录</strong>。
+    <ul>
+      <li>Carnot 引擎正向（\(C^+\)）：吸 100, 放 60, 输出 \(W_C=40\) J。\(\eta_C=40\%\)。</li>
+      <li>"更好"的引擎（\(B\)）：吸 100, 放 20, 输出 \(W_B=80\) J。\(\eta_B=80\%\gg\eta_C\)。</li>
+      <li>Carnot 反向（\(C^-\)，制冷机）：用 \(W=40\) J 输入，从 \(T_2\) 取 60 J，向 \(T_1\) 放 100 J。</li>
+    </ul>
+  </div>
+
+  <div class="solution-step"><strong>Step 2：用 \(B\) 的功驱动 \(C^-\)</strong>。\(B\) 输出 80 J，其中 40 J 输入 \(C^-\)、剩 40 J "白拿"。\(C^-\) 吸 60 J 从冷库、放 100 J 到热库。
+    <p style="margin-top:.4rem">净账：</p>
+    <ul>
+      <li>热库 \(T_1\)：被 \(B\) 拿走 100 J、被 \(C^-\) 还回 100 J → <strong>净 0</strong>。</li>
+      <li>冷库 \(T_2\)：被 \(B\) 放入 20 J、被 \(C^-\) 取走 60 J → <strong>净失 40 J</strong>。</li>
+      <li>外部功：白拿 \(40\) J（来自 \(W_B-W_C^-=80-40=40\)）。</li>
+    </ul>
+  </div>
+
+  <div class="solution-step"><strong>Step 3：识别违反</strong>。组合系统的"唯一效果"是从冷库 \(T_2\) 取出 40 J 热量，全部转化为对外做的功——这违反了 Kelvin–Planck 陈述（单热源全转功不可能）。<em>或等价地</em>：若把 40 J 功通过摩擦转回 \(T_1\)（也是 100% 转化为热），那么唯一效果是热从 \(T_2\) 流向 \(T_1\)（冷→热），违反 Clausius/Carnot 陈述 ✓。</div>
+
+  <div class="answer-box">"更好的"引擎与 Carnot 制冷机组合，能从冷库纯抽取 40 J 转为功（K-P 违反），或等价地把 40 J 热从冷库搬到热库无需净外功（Clausius 违反）。所以 \(\eta_B&gt;\eta_C\) 不可能。</div>
+
+  <div class="box insight" style="margin-top:.5rem">
+    <p class="box-title">Carnot 定理</p>
+    <p>这就是 Carnot 定理的反证形式："任何运行在固定温度热源 \(T_1, T_2\) 间的热机效率 \(\leq\eta_C\)；等号仅可逆热机成立"。它把第二定律从陈述层升格为一个具体的<em>上限</em>。</p>
+  </div>
+</div>
+
+<div class="example" id="osc">
+  <h4>OS-C — 冰箱最小耗电与现实 COP <span class="scope-tag scope-os">OS</span> <span class="difficulty">★★</span></h4>
+  <p class="problem-statement">家用冰箱内 \(T_c=270\) K、室温 \(T_h=300\) K。每秒有 200 J 热从内壁渗入需要被泵出。(i) 最小耗电功率（Carnot COP）是多少？(ii) 真实冰箱 COP 约为 Carnot 的 1/3，实际功率？(iii) 一台号称 COP=15 的产品是否违反第二定律？</p>
+
+  <div class="solution-step"><strong>(i) Carnot 上限</strong>：
+    $$ \kappa_{\text{ref,Carnot}}=\frac{T_c}{T_h-T_c}=\frac{270}{30}=9. $$
+    最小功率 \(P_{\min}=\dot Q_c/\kappa_{\text{Carnot}}=200/9\approx 22.2\) W。</div>
+
+  <div class="solution-step"><strong>(ii) 真实功率</strong>：\(\kappa_{\text{real}}\approx 3\)，\(P_{\text{real}}=200/3\approx 67\) W。一年（24 h × 365 d）耗电约 \(67\cdot 8760\approx 587\) kWh，与家用冰箱实际能耗量级一致。</div>
+
+  <div class="solution-step"><strong>(iii) COP=15 检查</strong>：\(\kappa^{\max}=9\)，所以 COP=15 超过 Carnot 上限 → <strong>违反第二定律</strong>。除非工作温差不同（如热泵在 \(T_h=290, T_c=285\)，\(\kappa^{\max}=57\) 时 15 合法）。任何号称比 Carnot 高效的产品在指定温差下都是骗人的。</div>
+
+  <div class="answer-box">(i) \(P_{\min}\approx 22.2\) W；(ii) \(P_{\text{real}}\approx 67\) W；(iii) 在 \(T_h=300, T_c=270\) K 下 COP=15 违反第二定律。</div>
+</div>
+
+<!-- ======================================================== -->
+
+<h2 id="sectionE">§E 综合大题</h2>
+
+<div class="problem-toc">
+  <a href="#p11-36">11.36 ABCDA 完整</a>
+</div>
+
+<div class="example" id="p11-36">
+  <h4>11.36 — 完整循环 ABCDA（"a very thorough test of many topics and endurance"）<span class="scope-tag scope-s">S</span><span class="scope-tag scope-di">DI W10 #4</span> <span class="difficulty">★★★</span></h4>
+  <p class="problem-statement">2 mol 双原子理想气体走 ABCDA 循环。\(T_A=800\) K, \(P_A=6\times 10^5\) Pa, \(V_B=3V_A\), \(P_C=10^5\) Pa；AB 等温，BC 绝热，CD 等压，DA 等容。求 (i) 全部端点 \((P, V, T)\)；(ii) 各段功与总功；(iii) 各段热；(iv) 效率；(v) 各段熵变与总熵变。</p>
+
+  <svg class="pv-diagram" viewBox="0 0 320 260" xmlns="http://www.w3.org/2000/svg">
+    <line x1="40" y1="20" x2="40" y2="220" stroke="#475569" stroke-width="1.5"/>
+    <line x1="40" y1="220" x2="300" y2="220" stroke="#475569" stroke-width="1.5"/>
+    <text x="20" y="16" font-size="12" font-family="serif" fill="#475569">P</text>
+    <text x="305" y="224" font-size="12" font-family="serif" fill="#475569">V</text>
+    <!-- A high P low V; B same T as A higher V; C from B adiabat lower; D same V as A, same P as C -->
+    <!-- A=(80, 40), B=(160, 100), C=(260, 180), D=(80, 180) -->
+    <path d="M 80 40 Q 110 60 160 100" stroke="#dc2626" stroke-width="2" fill="none"/>
+    <text x="100" y="55" font-size="11" font-family="serif" fill="#dc2626">isothermal</text>
+    <path d="M 160 100 Q 200 130 260 180" stroke="#ea580c" stroke-width="2" fill="none" stroke-dasharray="4 2"/>
+    <text x="195" y="160" font-size="11" font-family="serif" fill="#ea580c">adiabat</text>
+    <line x1="260" y1="180" x2="80" y2="180" stroke="#2563eb" stroke-width="2"/>
+    <text x="160" y="195" font-size="11" font-family="serif" fill="#2563eb">isobar</text>
+    <line x1="80" y1="180" x2="80" y2="40" stroke="#65a30d" stroke-width="2"/>
+    <text x="48" y="115" font-size="11" font-family="serif" fill="#65a30d">isochore</text>
+    <circle cx="80" cy="40" r="3.5" fill="#0f172a"/><text x="62" y="36" font-size="11" font-family="serif" font-weight="700">A</text>
+    <circle cx="160" cy="100" r="3.5" fill="#0f172a"/><text x="165" y="96" font-size="11" font-family="serif" font-weight="700">B</text>
+    <circle cx="260" cy="180" r="3.5" fill="#0f172a"/><text x="265" y="176" font-size="11" font-family="serif" font-weight="700">C</text>
+    <circle cx="80" cy="180" r="3.5" fill="#0f172a"/><text x="62" y="195" font-size="11" font-family="serif" font-weight="700">D</text>
+  </svg>
+
+  <div class="solution-step"><strong>(i) 端点</strong>。
+    <ul>
+      <li><strong>A</strong>: \(P_A=6\times 10^5\) Pa, \(T_A=800\) K, \(V_A=nRT_A/P_A=2\cdot 8.314\cdot 800/(6\times 10^5)\approx 0.022\) m³。</li>
+      <li><strong>B</strong>: 等温 \(\Rightarrow T_B=T_A=800\) K；\(V_B=3V_A\approx 0.067\) m³；\(P_B=nRT_B/V_B=P_A/3\approx 2\times 10^5\) Pa。</li>
+      <li><strong>C</strong>: \(P_C=10^5\) Pa；沿 BC 绝热 \(P_BV_B^\gamma=P_CV_C^\gamma\)（\(\gamma=7/5\)）：
+        $$ V_C=(P_BV_B^\gamma/P_C)^{1/\gamma}=V_B\cdot(P_B/P_C)^{1/\gamma}=0.067\cdot 2^{5/7}\approx 0.067\cdot 1.641\approx 0.11\text{ m}^3. $$
+        \(T_C=P_CV_C/(nR)=10^5\cdot 0.11/(2\cdot 8.314)\approx 656\) K。</li>
+      <li><strong>D</strong>: \(P_D=P_C=10^5\) Pa（等压）；\(V_D=V_A\approx 0.022\) m³（等容）；\(T_D=P_DV_D/(nR)=10^5\cdot 0.022/(2\cdot 8.314)\approx 133\) K。</li>
+    </ul>
+  </div>
+
+  <div class="solution-step"><strong>(ii) 功</strong>。
+    <ul>
+      <li>\(W_{AB}=nRT_A\ln(V_B/V_A)=2\cdot 8.314\cdot 800\cdot\ln 3\approx 14614\) J（等温膨胀）。</li>
+      <li>\(W_{BC}=-\Delta U_{BC}=\tfrac52 nR(T_B-T_C)=\tfrac52\cdot 2\cdot 8.314\cdot 144\approx 5975\) J（绝热膨胀，气体降温做功）。</li>
+      <li>\(W_{CD}=P_C(V_D-V_C)=10^5\cdot(0.022-0.11)=-8695\) J（等压压缩，外界做正功）。</li>
+      <li>\(W_{DA}=0\)（等容）。</li>
+      <li>总 \(W=14614+5975-8695+0\approx 11894\) J。</li>
+    </ul>
+  </div>
+
+  <div class="solution-step"><strong>(iii) 热</strong>。
+    <ul>
+      <li>\(Q_{AB}=W_{AB}\approx 14614\) J（等温 \(\Delta U=0\Rightarrow Q=W\)），<strong>吸热</strong>。</li>
+      <li>\(Q_{BC}=0\)（绝热）。</li>
+      <li>\(Q_{CD}=\Delta U_{CD}+W_{CD}=\tfrac52 nR(T_D-T_C)+W_{CD}=\tfrac52\cdot 2\cdot 8.314\cdot(133-656)+(-8695)=-21739-8695\approx-30434\) J，<strong>放热</strong>。</li>
+      <li>\(Q_{DA}=\Delta U_{DA}=\tfrac52 nR(T_A-T_D)=\tfrac52\cdot 2\cdot 8.314\cdot 667\approx 27713\) J（等容），<strong>吸热</strong>。</li>
+    </ul>
+    \(Q_{\text{in}}=Q_{AB}+Q_{DA}\approx 14614+27713=42327\) J。</div>
+
+  <div class="solution-step"><strong>(iv) 效率</strong>：
+    $$ \eta=W/Q_{\text{in}}=11894/42327\approx\boxed{28\%}. $$
+    Carnot 上限 \(\eta_C=1-T_D/T_A\)... 等等，Carnot 上限取最高/最低温度的比，但<em>哪两个</em>是端点？最高 \(T_A=800\)，最低 \(T_D=133\)，\(\eta_C=1-133/800\approx 83\%\)。28% 比这个低很多 ✓。</div>
+
+  <div class="solution-step"><strong>(v) 熵变</strong>。
+    <ul>
+      <li>\(\Delta S_{AB}\)（等温 \(T_A\)）：\(=nR\ln(V_B/V_A)=2R\ln 3\approx 18.27\) J/K。</li>
+      <li>\(\Delta S_{BC}\)（绝热可逆）：\(=0\)。</li>
+      <li>\(\Delta S_{CD}\)（等压 C→D）：\(=nc_p\ln(T_D/T_C)=2\cdot\tfrac72 R\ln(133/656)=7R\cdot(-1.594)\approx-92.78\) J/K。</li>
+      <li>\(\Delta S_{DA}\)（等容 D→A）：\(=nc_v\ln(T_A/T_D)=2\cdot\tfrac52 R\ln(800/133)=5R\cdot 1.795\approx 74.62\) J/K。</li>
+    </ul>
+    总 \(\Delta S_{\text{cycle}}=18.27+0-92.78+74.62\approx 0.11\) J/K \(\approx 0\) ✓（循环 \(S\) 是态函数；微小偏差来自四舍五入）。</div>
+
+  <div class="answer-box">(i) \(A=(6\text{e5}, 0.022, 800)\), \(B=(2\text{e5}, 0.067, 800)\), \(C=(1\text{e5}, 0.11, 656)\), \(D=(1\text{e5}, 0.022, 133)\)。(ii) \(W\approx 11894\) J。(iii) \(Q_{\text{in}}\approx 42327\) J。(iv) \(\eta\approx 28\%\)。(v) \(\Delta S_{AB}=2R\ln 3, \Delta S_{BC}=0, \Delta S_{CD}=7R\ln(T_D/T_C), \Delta S_{DA}=5R\ln(T_A/T_D)\)；循环和为零。</div>
+</div>
+
+<!-- ======================================================== -->
+
+<h2 id="sectionF">§F Bonus：微观熵</h2>
+
+<div class="problem-toc">
+  <a href="#bnf1">DI W10 #5 计数</a>
+  <a href="#osd">OS-D Boltzmann</a>
+</div>
+
+<div class="example" id="bnf1">
+  <h4>BN-1 — 微观态计数 <span class="scope-tag scope-bn">BN</span><span class="scope-tag scope-di">DI W10 #5</span> <span class="difficulty">★★</span></h4>
+  <p class="problem-statement">有一个有 \(3N\) 个槽的盒子，每槽恰能容一枚硬币。盒子被分成两部分：左侧 \(N\) 槽装 \(N\) 枚相同硬币（可正反面），右侧 \(2N\) 槽为空。摇盒子使硬币可翻面或与邻居换位。求隔板移除<em>前后</em>系统的熵；并解释为什么 \(\Delta S&gt;0\)。</p>
+
+  <div class="solution-step"><strong>策略</strong>。微观态 = 两件事的乘积：(1) 硬币<em>位置</em>的安排数；(2) 每种位置下硬币的<em>朝向</em>数。硬币本身相同（不可区分），但槽位可区分。</div>
+
+  <div class="solution-step"><strong>移除前</strong>。左侧 \(N\) 槽装 \(N\) 枚硬币——只有<em>一种</em>位置安排（每槽各占一个）。每枚硬币 2 个朝向（H/T），\(N\) 枚独立 → \(2^N\) 个朝向。
+    $$ \Omega_{\text{before}}=1\cdot 2^N=2^N\Rightarrow S_{\text{before}}=k_B\ln 2^N=Nk_B\ln 2. $$
+  </div>
+
+  <div class="solution-step"><strong>移除后</strong>。\(3N\) 槽可放 \(N\) 枚相同硬币——位置安排数是组合 \(\binom{3N}{N}=(3N)!/[N!(2N)!]\)。朝向仍然 \(2^N\)：
+    $$ \Omega_{\text{after}}=\binom{3N}{N}2^N. $$
+    熵：
+    $$ S_{\text{after}}=k_B\ln\Omega_{\text{after}}=k_B\ln\binom{3N}{N}+Nk_B\ln 2. $$
+  </div>
+
+  <div class="solution-step"><strong>熵差</strong>：
+    $$ \Delta S=S_{\text{after}}-S_{\text{before}}=k_B\ln\binom{3N}{N}&gt;0. $$
+    大 \(N\) 用 Stirling 近似 \(\ln\binom{3N}{N}\approx 3N\ln 3-2N\ln 2\approx N(3\ln 3-2\ln 2)\approx 1.91 N\)。所以 \(\Delta S\approx 1.91 Nk_B\)。</div>
+
+  <div class="solution-step"><strong>对比理想气体公式</strong>。把硬币视为可在槽中"扩散"——左侧体积 \(N\)（一个 cell 一枚），右侧加上 \(2N\)，总体积 \(3N\)。从 11.31 思路：熵增 \(=nR\ln 3=Nk_B\ln 3\approx 1.10 Nk_B\)。结果不一样——因为本题中硬币<em>恰好填满</em>左侧，导致每个槽都被占用（没有"空位"贡献位置熵）。如果原始密度不是 100%，结果会向 \(Nk_B\ln 3\) 靠拢。</div>
+
+  <div class="answer-box">\(S_{\text{before}}=Nk_B\ln 2\)；\(S_{\text{after}}=k_B\ln\binom{3N}{N}+Nk_B\ln 2\)；\(\Delta S=k_B\ln\binom{3N}{N}\approx 1.91 Nk_B&gt;0\)。</div>
+</div>
+
+<div class="example" id="osd">
+  <h4>OS-D — 自发反向膨胀的概率 <span class="scope-tag scope-os">OS</span><span class="scope-tag scope-bn">BN</span> <span class="difficulty">★</span></h4>
+  <p class="problem-statement">1 mol 理想气体自由膨胀使体积加倍（\(V\to 2V\)）。后续观察到所有分子<em>恰好</em>都跑回原来的一半体积的概率有多大？此事件违反第二定律吗？</p>
+
+  <div class="solution-step"><strong>(i) 概率</strong>。每个分子独立在两半中"选边"，落在指定半边概率 \(=1/2\)。\(N_A\) 个分子同时落在左半概率
+    $$ P=\left(\tfrac12\right)^{N_A}=2^{-N_A}\approx 10^{-1.81\times 10^{23}}. $$
+    宇宙年龄 \(\sim 10^{17}\) s，每秒原子碰撞 \(\sim 10^{10}\) 次，宇宙原子数 \(\sim 10^{80}\)——所有这些数加在一起也<em>远</em>不够等到这件事发生。</div>
+
+  <div class="solution-step"><strong>(ii) 是否违反第二定律？</strong>第二定律的<strong>统计</strong>表述："孤立系统的熵以<em>压倒性概率</em>不减"。所以这个事件不违反第二定律，只是它的概率小到<em>实际上</em>从不发生。换言之：第二定律在 Boltzmann 统计意义下是<em>概率定律</em>而非严格定律；只有在热力学极限 \(N\to\infty\) 下才变成严格不等式。</div>
+
+  <div class="answer-box">概率 \(2^{-N_A}\approx 10^{-1.81\times 10^{23}}\)，宇宙寿命内几乎不可能；不违反第二定律的统计形式（详见 <a href="15_boltzmann_statistical.html#sec:p2">15 §9 Q4</a>）。</div>
+</div>
+
+<!-- ======================================================== -->
+
+<h2 id="strategy">§G 解题策略与常见陷阱</h2>
+
+<div class="box insight">
+  <p class="box-title">熵问题的判定流程</p>
+  <ol>
+    <li><strong>识别系统与环境</strong>。问的是系统熵、环境熵还是宇宙熵？"是否可能发生"几乎总是问 \(\Delta S_{\text{universe}}\)。</li>
+    <li><strong>系统熵 \(\Delta S_{\text{sys}}\) 用替代可逆路径</strong>。
+      <ul>
+        <li>相变恒温：\(\Delta S=mL/T_{\text{phase}}\)（11.29 第一段）。</li>
+        <li>加热/冷却（无相变）：\(\Delta S=mc\ln(T_f/T_i)\)（11.29 第二段、11.30、11.35）。</li>
+        <li>理想气体：直接套主公式 \(\Delta S=nc_v\ln(T_f/T_i)+nR\ln(V_f/V_i)\)（11.31、11.34、11.36）。</li>
+      </ul>
+    </li>
+    <li><strong>环境熵 \(\Delta S_{\text{env}}\)</strong>：热库恒温，\(\Delta S_{\text{env}}=-Q_{\text{sys}}/T_{\text{env}}\)。多个热库分别算。</li>
+    <li><strong>检验可逆性</strong>：\(\Delta S_{\text{universe}}=0\) ↔ 可逆；\(\Delta S_{\text{universe}}&gt;0\) ↔ 不可逆。负值 → 计算错误。</li>
+  </ol>
+</div>
+
+<div class="box warning">
+  <p class="box-title">常见陷阱</p>
+  <ul>
+    <li><strong>把 \(Q=0\) 与 \(\Delta S=0\) 混淆</strong>。\(Q=0\) 仅说明<em>实际过程绝热</em>；只有<em>可逆且</em> \(Q=0\) 才给 \(\Delta S=0\)。自由膨胀就是 \(Q=0\) 但 \(\Delta S&gt;0\) 的典型。</li>
+    <li><strong>不可逆过程沿真实路径积分 \(\delta Q/T\)</strong>。结果<em>不</em>是 \(\Delta S\)，是 Clausius 不等式中的<em>较小</em>那一半。必须用<em>可逆替代路径</em>。</li>
+    <li><strong>把 \(PV^\gamma=\)const 用在不可逆绝热</strong>。\(PV^\gamma=\)const 只对可逆绝热（沿 isentropic 曲线）成立。自由膨胀虽然绝热，但终态<em>不</em>在 \(PV^\gamma=\)const 曲线上（11.31 三种过程比较）。</li>
+    <li><strong>循环的 \(\Delta S_{\text{cycle}}\neq 0\) 的算数错误</strong>。任何<em>闭合</em>循环系统熵变都 \(=0\)（态函数），不论循环是否可逆。\(\Delta S\neq 0\) 表明算术错误。11.36 (v) 的核验。</li>
+    <li><strong>热机吸热段误识别</strong>。Sterling 循环（11.18）的两个等容段一个吸一个放——必须逐段判断符号。Otto（11.19）只有一段吸（等容升温段），其它三段不参与 \(Q_{\text{in}}\) 统计。</li>
+    <li><strong>多 Carnot 串联的中间温度</strong>。串联组合效率<em>不</em>包含中间温度（11.32 (i)）。这是 \(\eta_C=1-T_2/T_1\) 普适性的体现。</li>
+    <li><strong>用错 \(c_v\) 与 \(c_p\)</strong>。等容/等温/绝热用 \(c_v\)；等压用 \(c_p\)。\(\gamma=c_p/c_v\)；单原子 \(\gamma=5/3\)，双原子室温 \(\gamma=7/5\)。</li>
+    <li><strong>"超 Carnot" COP 的合法性取决于温差</strong>（OS-C）。\(\kappa^{\max}=T_c/(T_h-T_c)\)：温差小时 COP 可以很大；温差大时上限很紧。</li>
+  </ul>
+</div>
+
+<!-- ======================================================== -->
+
+<h2 id="formula-recap">§H 公式速查（Quiz 5 范围）</h2>
+
+<table class="summary-table">
+  <thead><tr><th>主题</th><th>关键公式</th><th>使用场景</th></tr></thead>
+  <tbody>
+    <tr><td>相变熵</td><td>\(\Delta S=mL/T_{\text{phase}}\)</td><td>11.29 融化段</td></tr>
+    <tr><td>加热/冷却熵</td><td>\(\Delta S=mc\ln(T_f/T_i)\)</td><td>11.29-11.30-11.35</td></tr>
+    <tr><td>热接触终温</td><td>\(T_f=\sum m_ic_iT_i/\sum m_ic_i\)</td><td>11.30、11.35</td></tr>
+    <tr><td>理想气体主公式</td><td>\(\Delta S=nc_v\ln(T_2/T_1)+nR\ln(V_2/V_1)\)</td><td>万能</td></tr>
+    <tr><td>(T,P) 形式</td><td>\(\Delta S=nc_p\ln(T_2/T_1)-nR\ln(P_2/P_1)\)</td><td>11.34</td></tr>
+    <tr><td>(P,V) 形式</td><td>\(\Delta S=nc_v\ln(P_2/P_1)+nc_p\ln(V_2/V_1)\)</td><td>P-V 端点已知</td></tr>
+    <tr><td>自由膨胀</td><td>\(Q=W=0, \Delta U=0, \Delta S=nR\ln(V_f/V_i)\)</td><td>11.31(i)</td></tr>
+    <tr><td>可逆绝热</td><td>\(\Delta S=0, PV^\gamma=\text{const}, TV^{\gamma-1}=\text{const}\)</td><td>11.31(iii)</td></tr>
+    <tr><td>热库熵</td><td>\(\Delta S_{\text{env}}=-Q_{\text{sys}}/T_{\text{env}}\)</td><td>OS-B</td></tr>
+    <tr><td>宇宙熵</td><td>\(\Delta S_{\text{univ}}=\Delta S_{\text{sys}}+\Delta S_{\text{env}}\geq 0\)</td><td>所有判定题</td></tr>
+    <tr><td>热机效率</td><td>\(\eta=W/Q_{\text{in}}=1-Q_{\text{out}}/Q_{\text{in}}\)</td><td>11.18-11.20, 11.36</td></tr>
+    <tr><td>Carnot 效率</td><td>\(\eta_C=1-T_c/T_h\)</td><td>11.32(i)</td></tr>
+    <tr><td>Otto 效率</td><td>\(\eta=1-r^{-(\gamma-1)}, r=V_{\max}/V_{\min}\)</td><td>11.19</td></tr>
+    <tr><td>Sterling 效率</td><td>\(\eta=\frac{(T_h-T_c)\ln(V_2/V_1)}{T_h\ln(V_2/V_1)+\tfrac32(T_h-T_c)}\)</td><td>11.18</td></tr>
+    <tr><td>Carnot 串联</td><td>\(\eta_{12}=\eta_{10}+(1-\eta_{10})\eta_{02}\)</td><td>11.32(ii)</td></tr>
+    <tr><td>制冷 COP</td><td>\(\kappa_{\text{ref}}=Q_c/W=T_c/(T_h-T_c)\) (Carnot)</td><td>OS-C</td></tr>
+    <tr><td>热泵 COP</td><td>\(\kappa_{\text{HP}}=Q_h/W=\kappa_{\text{ref}}+1\)</td><td>OS-C 衍生</td></tr>
+    <tr><td>Boltzmann 熵</td><td>\(S=k_B\ln\Omega, \Delta S=k_B\ln(\Omega_2/\Omega_1)\)</td><td>11.31(ii), BN-1</td></tr>
+    <tr><td>第一定律</td><td>\(\Delta U=Q-W, \delta W=PdV\)</td><td>所有循环题</td></tr>
+    <tr><td>Mayer</td><td>\(c_p=c_v+R, \gamma=c_p/c_v\)</td><td>转换 \(c\) 用</td></tr>
+  </tbody>
+</table>
+
+<p class="back-link" style="margin-top:2rem"><a href="index.html">← 回到复习总目录</a> · <a href="14_entropy_macroscopic.html">14 宏观熵</a> · <a href="15_boltzmann_statistical.html">15 Boltzmann 统计熵</a></p>
+
+</main>
+
+</body>
+</html>

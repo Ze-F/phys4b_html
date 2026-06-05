@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>12 · 四种基本过程与循环 — PHYS 4B 复习</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="theme.js"></script>
+  <style>
+    /* 过程统一表 */
+    .process-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0;
+      font-size: .92rem;
+    }
+    .process-table th, .process-table td {
+      border: 1px solid #d6d3d1;
+      padding: .55rem .65rem;
+      text-align: left;
+      vertical-align: top;
+    }
+    .process-table thead th {
+      background: #0f766e;
+      color: white;
+      font-family: -apple-system, 'PingFang SC', sans-serif;
+      font-weight: 600;
+    }
+    .process-table tbody tr:nth-child(even) { background: #f7f5f0; }
+    .process-table th.row-head {
+      background: #fef3c7;
+      color: #78350f;
+      font-family: -apple-system, 'PingFang SC', sans-serif;
+      font-weight: 600;
+    }
+    /* PV widget */
+    .pv-widget {
+      background: white;
+      border: 1px solid #ddd6fe;
+      border-radius: 8px;
+      padding: 1rem;
+      margin: 1rem 0;
+    }
+    .pv-widget canvas {
+      display: block;
+      margin: 0 auto .5rem;
+      background: #fafaf9;
+      border: 1px solid #e7e5e4;
+    }
+    .pv-widget .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .5rem;
+      justify-content: center;
+      margin-bottom: .5rem;
+    }
+    .pv-widget button {
+      padding: .35rem .75rem;
+      font-family: -apple-system, 'PingFang SC', sans-serif;
+      font-size: .88rem;
+      border: 1px solid #a8a29e;
+      background: white;
+      color: #44403c;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all .12s;
+    }
+    .pv-widget button:hover { background: #f5f5f4; }
+    .pv-widget button.active {
+      background: #0f766e;
+      color: white;
+      border-color: #0f766e;
+    }
+    .pv-widget .readout {
+      font-family: -apple-system, 'PingFang SC', sans-serif;
+      font-size: .9rem;
+      text-align: center;
+      color: #475569;
+      padding: .5rem;
+      background: #f1f5f9;
+      border-radius: 4px;
+    }
+    .pv-widget .readout span { font-family: 'Charter', serif; color: #0f766e; font-weight: 600; }
+    .answer-box {
+      background: #eff6ff;
+      border-left: 3px solid #2563eb;
+      padding: .55rem .8rem;
+      margin: .65rem 0 .25rem;
+      font-weight: 500;
+      color: #1e3a8a;
+      font-family: -apple-system, 'PingFang SC', 'Helvetica Neue', sans-serif;
+    }
+    .answer-box::before {
+      content: '✓ 答案：';
+      color: #2563eb;
+      font-weight: 700;
+    }
+    .problem-statement {
+      background: #fafaf9;
+      border-left: 3px solid #a8a29e;
+      padding: .6rem .8rem;
+      margin: .35rem 0 .75rem;
+      font-style: italic;
+      color: #44403c;
+    }
+  </style>
+  <script>
+    MathJax = {
+      tex: { inlineMath: [['\\(', '\\)']], displayMath: [['$$', '$$']] },
+      svg: { fontCache: 'global' }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" async></script>
+</head>
+<body>
+
+<header class="site-header">
+  <a class="home-link" href="index.html">← PHYS 4B 复习</a>
+  <nav>
+    <a href="11_first_law.html">← 第一定律</a>
+    <a href="quiz4_problems.html">Quiz 4 题集</a>
+    <a href="13_carnot_second_law.html">Carnot &amp; 2nd Law →</a>
+  </nav>
+</header>
+
+<main class="container">
+
+<div class="topic-header">
+  <h1>12 · 四种基本过程与循环</h1>
+  <p class="meta">Lec 7.2 §10 预告 + Lec 7.3 + 7.3 后半 + Shankar §22.6–22.7 + §23.1 · OpenStax Vol.2 §3.4–3.6</p>
+  <p class="blurb">第 11 页给出了热力学第一定律 \(dU=\delta Q-PdV\) 与态/路径函数的语言。本页把这条"母方程"在四种<strong>基本过程</strong>（等容/等压/等温/绝热）下展开为具体的 \(Q,W,\Delta U\) 表达式，详细推导<strong>绝热过程</strong> \(PV^\gamma=\text{const}\) 与 <strong>Mayer 关系</strong> \(c_p-c_v=R\)，然后把这些片段拼成<strong>循环</strong>分析（净功 = 围出面积、顺时针 vs 逆时针）和<strong>热机效率</strong>。这是 Quiz 4 所有"算 \(W,Q,\Delta U\)" 类题的应试主干。</p>
+</div>
+
+<!-- ======================================================== -->
+
+<div class="box key-result">
+  <p class="box-title">一页速览</p>
+  <ul>
+    <li><strong>母方程：</strong>\(dU=\delta Q-PdV\)。结合 \(U=(f/2)nRT\) 和 \(PV=nRT\) 可解所有过程。</li>
+    <li><strong>等容</strong> \(dV=0\)：\(W=0\)，\(Q=\Delta U=nc_v\Delta T\)。</li>
+    <li><strong>等压</strong> \(dP=0\)：\(W=P\Delta V=nR\Delta T\)，\(Q=nc_p\Delta T\)，<strong>Mayer</strong> \(c_p-c_v=R\)。</li>
+    <li><strong>等温</strong> \(dT=0\)（理想气体 \(\Rightarrow dU=0\)）：\(Q=W=nRT\ln(V_f/V_i)=P_iV_i\ln(V_f/V_i)\)。</li>
+    <li><strong>绝热</strong> \(\delta Q=0\)：\(PV^\gamma=\text{const}\)，\(TV^{\gamma-1}=\text{const}\)，\(W=-\Delta U=nc_v(T_i-T_f)=\dfrac{P_iV_i-P_fV_f}{\gamma-1}\)。</li>
+    <li><strong>γ 取值：</strong>monatomic 5/3、diatomic 室温 7/5；\(\gamma=(f+2)/f\)。</li>
+    <li><strong>绝热 vs 等温斜率：</strong>\(\big|dP/dV\big|_{\text{绝热}}=\gamma\cdot\big|dP/dV\big|_{\text{等温}}\)——绝热更陡。</li>
+    <li><strong>循环：</strong>\(\oint dU=0\Rightarrow W_{\text{cycle}}=Q_{\text{net}}=\) P-V 图围出的有向面积。顺时针 = 热机；逆时针 = 制冷/泵。</li>
+    <li><strong>热机效率：</strong>\(\eta=W_{\text{net}}/Q_{\text{in}}\)；Carnot 上限 \(\eta_C=1-T_c/T_h\)（Quiz 5 重点，本节作预告）。</li>
+  </ul>
+</div>
+
+<!-- ======================================================== -->
+
+<h2>§1 母方程：把第一定律展开成四种过程</h2>
+
+<p>"过程"在热力学里就是<strong>系统从一个平衡态到另一个平衡态的连续路径</strong>。对理想气体，每个状态由 \((P, V, T)\) 三个变量描述，但 \(PV=nRT\) 给出一个约束，所以只有<strong>两个独立</strong>。如果在某种过程中固定其中一个（或者某个组合），剩下的关系就把过程"曲线化"成 P-V 图上的一条特定形状的曲线。</p>
+
+<p>四种"基本"过程对应固定四种东西：</p>
+
+<table class="process-table">
+  <thead>
+    <tr><th>过程</th><th>约束</th><th>P-V 图形状</th><th>主要应用</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><strong>等容</strong>（isochoric）</td><td>\(V=\text{const}\)</td><td>竖直线</td><td>密闭加热（压力锅）；循环中的"无功加热段"</td></tr>
+    <tr><td><strong>等压</strong>（isobaric）</td><td>\(P=\text{const}\)</td><td>水平线</td><td>开放容器加热（大气下）；活塞静负载</td></tr>
+    <tr><td><strong>等温</strong>（isothermal）</td><td>\(T=\text{const}\)</td><td>双曲线 \(PV=k\)</td><td>慢过程接热库；Carnot 的"接触"段</td></tr>
+    <tr><td><strong>绝热</strong>（adiabatic）</td><td>\(\delta Q=0\)</td><td>更陡的双曲线 \(PV^\gamma=k\)</td><td>快过程（声波、柴油机点火、打气筒发烫）；Carnot 的"脱离"段</td></tr>
+  </tbody>
+</table>
+
+<div class="box remark">
+  <p class="box-title">为什么是这四种？</p>
+  <p>它们各自只锁定一个变量——是<strong>最简单的非平凡过程</strong>。任意真实过程（如不规则的多元过程）总可以分解或近似为这四种基本过程的组合。Quiz 4 的题型几乎都是"过 A 点画一段等温到 B，再等容到 C"这种组合——掌握这四个就能解 90% 的题。</p>
+</div>
+
+<p>下面以 \(dU=\delta Q-PdV\) 为母方程，结合理想气体 \(dU=nc_v dT\)（注意：理想气体 \(U=U(T)\) 是一<strong>个</strong>无可避免的事实——所以 \(dU=nc_v dT\) 在<strong>任何过程</strong>都成立，包括等压、等温、绝热——而非只在等容中成立），逐个展开。</p>
+
+<!-- ======================================================== -->
+
+<h2>§2 等容过程</h2>
+
+<p>设 \(V=\text{const}\Rightarrow dV=0\Rightarrow \delta W=PdV=0\)。母方程退化成 \(\delta Q=dU=nc_v dT\)，积分：</p>
+
+$$ \boxed{W=0,\qquad Q=\Delta U=nc_v(T_f-T_i)=\frac{V}{\gamma-1}(P_f-P_i).} $$
+
+<p>最后一种形式来自 \(c_v=R/(\gamma-1)\) 和 \(nR\Delta T=V\Delta P\)（等容时 \(P/T=\text{const}\)）。这在循环里特别好用：等容段不用做积分，温度差直接由 \(\Delta P\) 给出。</p>
+
+<div class="box insight">
+  <p class="box-title">物理图像</p>
+  <p>等容相当于<strong>把气体关在刚性壁里加热/冷却</strong>。所有吸入的热都用于"内能涨"，没有任何"对外推活塞"的耗散通道。这是为什么 \(c_v\) 而不是 \(c_p\) 是"单位温升所需<em>最少</em>的热"——任何允许膨胀的过程都得额外多出一份 \(PdV\) 的功。</p>
+</div>
+
+<!-- ======================================================== -->
+
+<h2>§3 等压过程与 Mayer 关系</h2>
+
+<p>设 \(P=\text{const}\)。功：</p>
+
+$$ W=\int P\,dV=P(V_f-V_i)=P\Delta V. $$
+
+<p>用 \(PV=nRT\Rightarrow P\Delta V=nR\Delta T\)（等压时 \(V/T=\text{const}\)）：</p>
+
+$$ \boxed{W=P\Delta V=nR\Delta T.} $$
+
+<p>由第一定律 \(Q=\Delta U+W=nc_v\Delta T+nR\Delta T=n(c_v+R)\Delta T\)。把<strong>定压摩尔比热</strong>定义为 \(Q=nc_p\Delta T\)，立即得到</p>
+
+$$ \boxed{c_p=c_v+R\quad\Leftrightarrow\quad c_p-c_v=R\quad\text{(Mayer 关系)}.} $$
+
+<div class="box insight">
+  <p class="box-title">Mayer 关系的物理含义</p>
+  <p>在<strong>等压</strong>下升温 \(\Delta T\)，气体除了吸 \(nc_v\Delta T\) 提高内能外，还要额外吸 \(nR\Delta T\)<strong>去推开活塞做功</strong>。这"额外"那一份恰好是 \(R\) 每摩尔每开尔文——一个普适常数，与气体种类无关。可视为：单原子 \(c_v=\tfrac32 R\to c_p=\tfrac52 R\)，\(\gamma=5/3\)；双原子 \(c_v=\tfrac52 R\to c_p=\tfrac72 R\)，\(\gamma=7/5\)。</p>
+</div>
+
+<div class="box remark">
+  <p class="box-title">从 \(\gamma\) 倒推 \(f\)（应试技巧）</p>
+  <p>给你 \(\gamma=4/3\)（如 Shankar 11.28），怎么得到 \(c_v\)？用 \(\gamma=(f+2)/f\Rightarrow f=2/(\gamma-1)=2/(1/3)=6\)，故 \(c_v=(f/2)R=3R\)。或者用 \(c_v=R/(\gamma-1)=R/(1/3)=3R\)，<strong>这一步</strong>更快。记住公式 \(\boxed{c_v=R/(\gamma-1)}\)、\(\boxed{c_p=\gamma R/(\gamma-1)}\)。</p>
+</div>
+
+<!-- ======================================================== -->
+
+<h2>§4 等温过程</h2>
+
+<p>设 \(T=\text{const}\)。对<strong>理想气体</strong>，\(U=U(T)\Rightarrow dU=0\)，故 \(\delta Q=\delta W=PdV\)。代入 \(P=nRT/V\) 并积分：</p>
+
+$$ W=\int_{V_i}^{V_f}\frac{nRT}{V}dV=nRT\ln\!\frac{V_f}{V_i}=P_iV_i\ln\!\frac{V_f}{V_i}. $$
+
+<p>由于 \(dU=0\)，\(Q=W\)：</p>
+
+$$ \boxed{\Delta U=0,\qquad W=Q=nRT\ln(V_f/V_i)=P_iV_i\ln(V_f/V_i).} $$
+
+<div class="box insight">
+  <p class="box-title">和"自由膨胀"的对比（最常考的反差题）</p>
+  <p>同样起点 \((P_i, V_i, T_i)\)、同样终点 \((P_f, V_f, T_i)\)，<strong>等温准静态</strong>膨胀：\(W=Q=nRT\ln(V_f/V_i)>0\)；<strong>自由膨胀</strong>（进入真空）：\(W=0\)（无外阻力），\(Q=0\)（隔热），\(\Delta U=0\)（自洽），\(T\) 不变。两种"端点相同"的过程，\(\Delta U\) 都是 0，但 \(W\) 与 \(Q\) 完全不同——这是<strong>态函数 vs 路径函数</strong>最干净的算例。也<strong>不</strong>违反第二定律：自由膨胀<strong>不可逆</strong>，熵增；等温准静态可逆，无熵增（外界放热熵 + 气体吸热熵相抵）。</p>
+</div>
+
+<div class="box remark">
+  <p class="box-title">公式三种写法等价</p>
+  <p>\(nRT\ln(V_f/V_i) = P_iV_i\ln(V_f/V_i) = P_fV_f\ln(V_f/V_i)\)（因为 \(PV=nRT\) 在等温过程中是恒量）。题目给你<strong>哪两个变量</strong>，就用<strong>哪种写法</strong>，省去先算 \(nRT\) 的步骤。</p>
+</div>
+
+<!-- ======================================================== -->
+
+<h2 id="sec5">§5 绝热过程（完整推导）</h2>
+
+<h3>5.1 从 \(\delta Q=0\) 推出 \(PV^\gamma=\text{const}\)</h3>
+
+<p>绝热意味着<strong>不与环境交换热</strong>（\(\delta Q=0\)），但可以有功。母方程退化为</p>
+
+$$ nc_v\,dT=-P\,dV. \tag{5.1} $$
+
+<p>用理想气体 \(PV=nRT\) 微分（对 \(T\) 隐式表达）：\(P\,dV+V\,dP=nR\,dT\)，即</p>
+
+$$ dT=\frac{P\,dV+V\,dP}{nR}. \tag{5.2} $$
+
+<p>把 (5.2) 代入 (5.1)：</p>
+
+$$ \frac{c_v}{R}(P\,dV+V\,dP)=-P\,dV. $$
+
+<p>整理（用 \(c_v/R=1/(\gamma-1)\)，再乘以 \(\gamma-1\)）：</p>
+
+$$ P\,dV+V\,dP=-(\gamma-1)P\,dV
+   \;\Longrightarrow\;
+   V\,dP=-\gamma P\,dV. $$
+
+<p>分离变量：</p>
+
+$$ \frac{dP}{P}=-\gamma\,\frac{dV}{V}
+   \;\Longrightarrow\;
+   \ln P=-\gamma\ln V+\text{const}
+   \;\Longrightarrow\;
+   \boxed{PV^\gamma=\text{const}.} \tag{5.3} $$
+
+<p>对 \(PV=nRT\) 两边用 \(P=\text{const}'/V^\gamma\) 代入：</p>
+
+$$ \frac{\text{const}'\cdot V}{V^\gamma}=nRT
+   \;\Longrightarrow\;
+   T V^{\gamma-1}=\text{const}. \tag{5.4} $$
+
+<p>同样 \(T=PV/(nR)\) 代入 \(PV^\gamma=\text{const}\)：</p>
+
+$$ TP^{(1-\gamma)/\gamma}=\text{const}. \tag{5.5} $$
+
+<div class="box key-result">
+  <p class="box-title">绝热三条等价关系</p>
+  <ul>
+    <li>\(PV^\gamma=\text{const}\) — 用 P, V 时</li>
+    <li>\(TV^{\gamma-1}=\text{const}\) — 用 T, V 时（11.22 用这条）</li>
+    <li>\(TP^{(1-\gamma)/\gamma}=\text{const}\) — 用 T, P 时
+        <br><span style="color:#64748b">（两边取 \(\gamma\) 次方等价于 Hirsch 板书写法 \(T^\gamma P^{1-\gamma}=\text{const}\)）</span></li>
+  </ul>
+  <p>三条互为等价；选哪条只看题目给的初始信息。</p>
+</div>
+
+<h3>5.2 绝热过程做的功</h3>
+
+<p>从第一定律 \(\delta Q=0\Rightarrow W=-\Delta U=-nc_v(T_f-T_i)\)。即</p>
+
+$$ \boxed{W_{\text{adiab}}=nc_v(T_i-T_f)=\frac{P_iV_i-P_fV_f}{\gamma-1}.} \tag{5.6} $$
+
+<p>第二种形式由 \(nRT=PV\Rightarrow nc_v T=PV/(\gamma-1)\) 得来——<strong>非常实用</strong>：题目给了两个端点的 \((P, V)\) 就直接算。</p>
+
+<details class="more-detail">
+  <summary>展开：直接积分 \(W=\int P\,dV\) 验证</summary>
+  <p>沿绝热线 \(P=k/V^\gamma\)（\(k=P_iV_i^\gamma\)）：
+  $$ W=\int_{V_i}^{V_f}\frac{k}{V^\gamma}dV=k\cdot\frac{V^{1-\gamma}}{1-\gamma}\Big|_{V_i}^{V_f}=\frac{k(V_f^{1-\gamma}-V_i^{1-\gamma})}{1-\gamma}. $$
+  用 \(k=P_iV_i^\gamma=P_fV_f^\gamma\)：分子 \(P_fV_f-P_iV_i\)；再加负号 → \(W=(P_iV_i-P_fV_f)/(\gamma-1)\)。与 (5.6) 一致 ✓。</p>
+</details>
+
+<h3>5.3 绝热曲线比等温曲线"陡"</h3>
+
+<p>沿等温：\(PV=k\Rightarrow dP/dV=-P/V\)。沿绝热：\(PV^\gamma=k'\Rightarrow dP/dV=-\gamma P/V\)。在<strong>同一</strong>点 \((P, V)\) 处</p>
+
+$$ \left|\frac{dP}{dV}\right|_{\text{adiab}}=\gamma\,\left|\frac{dP}{dV}\right|_{\text{iso}}. $$
+
+<p>因 \(\gamma>1\)（任何 \(f\geq 3\) 自由度的气体），绝热曲线<strong>更陡</strong>。物理直觉：等温膨胀靠从环境吸热<strong>补偿</strong>降温压降，所以压降"温和"；绝热膨胀没有外热补偿，温度<strong>也</strong>下降（带走更多 \(P\)），所以同 \(\Delta V\) 下 \(\Delta P\) 更大。<strong>11.28 判哪段是绝热</strong>就靠这条：图中更陡的那段。</p>
+
+<svg viewBox="0 0 300 220" xmlns="http://www.w3.org/2000/svg" style="display:block;margin:.5rem auto;max-width:340px">
+  <line x1="40" y1="20" x2="40" y2="190" stroke="#475569" stroke-width="1.5"/>
+  <line x1="40" y1="190" x2="280" y2="190" stroke="#475569" stroke-width="1.5"/>
+  <text x="20" y="14" font-size="11" font-family="serif" fill="#475569">P</text>
+  <text x="286" y="194" font-size="11" font-family="serif" fill="#475569">V</text>
+  <!-- common point at (V=2, P=2), shown at x=120, y=100 -->
+  <circle cx="120" cy="100" r="3.5" fill="#dc2626"/>
+  <text x="125" y="95" font-size="10" fill="#dc2626">共起点</text>
+  <!-- isotherm: PV=240, sample some points starting from (120,100) -->
+  <!-- V=80,P=150; V=120,P=100; V=180,P=66.7; V=240,P=50 -->
+  <path d="M 80 150 Q 100 120 120 100 Q 160 75 220 60" stroke="#0369a1" stroke-width="2" fill="none"/>
+  <text x="220" y="55" font-size="11" fill="#0369a1">等温 PV=k</text>
+  <!-- adiabat (gamma=1.4): PV^1.4 = const at (120,100), gives much steeper curve -->
+  <path d="M 80 178 Q 100 145 120 100 Q 145 60 195 35" stroke="#7c3aed" stroke-width="2" fill="none"/>
+  <text x="195" y="30" font-size="11" fill="#7c3aed">绝热 PV^γ=k'</text>
+  <text x="200" y="180" font-size="10" fill="#64748b">同 ΔV → 绝热掉得更多</text>
+</svg>
+
+<h3>5.4 番外：P-V 图上"无名"的直线过程（Hirsch 8.1 加题）</h3>
+
+<p>课堂上 Hirsch 给的第五个例子既不是 isochoric、isobaric、isothermal，也不是 adiabatic——它是 \(P\) 关于 \(V\) 的<strong>线性</strong>过程，即在 P-V 图上是一条任意斜率的直线。这种过程没有名字，但功能写出来非常干净。</p>
+
+<p>设过程从 \((V_a, P_a)\) 沿直线走到 \((V_b, P_b)\)，参数化</p>
+
+$$ P(V)=P_a+\frac{P_b-P_a}{V_b-V_a}\,(V-V_a), \qquad P(V_a)=P_a,\ P(V_b)=P_b. \tag{5.7} $$
+
+<p>气体对外做功 \(W=\int_{V_a}^{V_b} P(V)\,dV\) 把常数项和线性项分开积分（或直接看几何——梯形面积）：</p>
+
+<div class="box key-result">
+  <p class="box-title">线性过程做的功（梯形规则）</p>
+  $$ \boxed{\,W_{a\to b}^{(\text{line})}=\tfrac12\,(P_a+P_b)\,(V_b-V_a)\,} \tag{5.8} $$
+  <p>这<strong>不是</strong>近似——因为 \(P(V)\) 真的是线性的，梯形规则<strong>精确</strong>等于积分。
+     符号继承 \(V_b-V_a\) 的方向：膨胀 \(>0\)、压缩 \(<0\)。</p>
+</div>
+
+<details class="more-detail">
+  <summary>展开：拆成"水平段 + 三角形"两步积分</summary>
+  <p>记斜率 \(m=(P_b-P_a)/(V_b-V_a)\)，则
+  \( W=\int_{V_a}^{V_b}[P_a+m(V-V_a)]\,dV
+      =P_a(V_b-V_a)+m\cdot\tfrac{(V_b-V_a)^2}{2}\)。
+  把 \(m\) 代回去，整理成 \(P_a(V_b-V_a)+\tfrac12(P_b-P_a)(V_b-V_a)=\tfrac12(P_a+P_b)(V_b-V_a)\) ✓。</p>
+</details>
+
+<div class="box insight">
+  <p class="box-title">为什么这个工具值得记？</p>
+  <ul>
+    <li>四种"有名字"的过程之所以特殊，只是因为 \(P(V)\) 曲线特别简单（竖线、横线、双曲线、更陡的双曲线）。问题里只要 \(P(V)\) 写得出来，\(W=\int P\,dV\) 就照算。</li>
+    <li>线性过程的<strong>下游</strong>（\(\Delta U\) 和 \(Q\)）仍走理想气体板砖：
+        \(\Delta U=nc_v(T_b-T_a)=\tfrac{c_v}{R}(P_bV_b-P_aV_a)\)，
+        \(Q=\Delta U+W\)。注意此时<strong>没有</strong>对应的"恒定 \(C_?\)"——线性过程的"路径热容"是位置依赖的。</li>
+    <li>Otto/Diesel 循环里的等容、等压段如果"理想化拉成斜线"，就用这条公式估算。</li>
+  </ul>
+</div>
+
+<svg viewBox="0 0 300 200" xmlns="http://www.w3.org/2000/svg" style="display:block;margin:.5rem auto;max-width:340px">
+  <!-- axes -->
+  <line x1="40" y1="20" x2="40" y2="170" stroke="#475569" stroke-width="1.5"/>
+  <line x1="40" y1="170" x2="280" y2="170" stroke="#475569" stroke-width="1.5"/>
+  <text x="22" y="14" font-size="11" font-family="serif" fill="#475569">P</text>
+  <text x="286" y="174" font-size="11" font-family="serif" fill="#475569">V</text>
+  <!-- ticks -->
+  <line x1="80" y1="170" x2="80" y2="174" stroke="#475569"/>
+  <text x="68" y="187" font-size="10" fill="#475569">V_a</text>
+  <line x1="220" y1="170" x2="220" y2="174" stroke="#475569"/>
+  <text x="210" y="187" font-size="10" fill="#475569">V_b</text>
+  <line x1="36" y1="50" x2="40" y2="50" stroke="#475569"/>
+  <text x="14" y="54" font-size="10" fill="#475569">P_a</text>
+  <line x1="36" y1="130" x2="40" y2="130" stroke="#475569"/>
+  <text x="14" y="134" font-size="10" fill="#475569">P_b</text>
+  <!-- trapezoid shade -->
+  <polygon points="80,170 80,50 220,130 220,170" fill="#fed7aa" fill-opacity="0.55" stroke="none"/>
+  <!-- line from (80,50) to (220,130) -->
+  <line x1="80" y1="50" x2="220" y2="130" stroke="#dc2626" stroke-width="2"/>
+  <!-- endpoints -->
+  <circle cx="80" cy="50" r="3.5" fill="#dc2626"/>
+  <text x="58" y="44" font-size="10" fill="#dc2626">(V_a, P_a)</text>
+  <circle cx="220" cy="130" r="3.5" fill="#dc2626"/>
+  <text x="226" y="128" font-size="10" fill="#dc2626">(V_b, P_b)</text>
+  <text x="130" y="120" font-size="11" fill="#9a3412">W = ½(P_a+P_b)(V_b−V_a)</text>
+</svg>
+
+<!-- ======================================================== -->
+
+<h2>§6 四种过程统一表（应试速查）</h2>
+
+<table class="process-table">
+  <thead>
+    <tr><th>过程</th><th>约束</th><th>\(W\)（气体对外做功）</th><th>\(\Delta U\)</th><th>\(Q\)</th><th>关键曲线</th></tr>
+  </thead>
+  <tbody>
+    <tr><th class="row-head">等容</th><td>\(dV=0\)</td><td>\(0\)</td><td>\(nc_v\Delta T\)</td><td>\(nc_v\Delta T\)</td><td>竖直</td></tr>
+    <tr><th class="row-head">等压</th><td>\(dP=0\)</td><td>\(P\Delta V=nR\Delta T\)</td><td>\(nc_v\Delta T\)</td><td>\(nc_p\Delta T\)</td><td>水平</td></tr>
+    <tr><th class="row-head">等温</th><td>\(dT=0\)</td><td>\(nRT\ln(V_f/V_i)\)</td><td>\(0\)</td><td>\(=W\)</td><td>双曲线 \(PV=k\)</td></tr>
+    <tr><th class="row-head">绝热</th><td>\(\delta Q=0\)</td><td>\(nc_v(T_i-T_f)\)<br>\(=\dfrac{P_iV_i-P_fV_f}{\gamma-1}\)</td><td>\(-W\)</td><td>\(0\)</td><td>更陡双曲线 \(PV^\gamma=k\)</td></tr>
+  </tbody>
+</table>
+
+<div class="box remark">
+  <p class="box-title">三个救命对偶</p>
+  <ol>
+    <li><strong>等容 vs 等压</strong>：差一个 \(nR\Delta T\)（推活塞的功）——这就是 Mayer 关系。</li>
+    <li><strong>等温 vs 绝热</strong>：都是"无明显约束符号"的连续过程，但 \(Q=0\) 与 \(\Delta U=0\) 互为对偶——前者关掉热通道，后者关掉内能变化。</li>
+    <li><strong>等温的 \(\ln\) vs 绝热的代数</strong>：等温做功必含 \(\ln(V_f/V_i)\)，绝热做功是<strong>多项式形式</strong> \((P_iV_i-P_fV_f)/(\gamma-1)\)——看到 \(\ln\) 就想到等温，看到 \(\gamma\) 在分母就想到绝热。</li>
+  </ol>
+</div>
+
+<!-- ======================================================== -->
+
+<h2>§7 循环（Cycle）：闭合 P-V 路径</h2>
+
+<h3>7.1 \(\oint dU=0\) 与"围出面积"</h3>
+
+<p>循环（cycle）= 系统经过一系列过程后回到<strong>初态</strong>。由于 \(U\) 是态函数</p>
+
+$$ \oint dU=0\;\Longrightarrow\;Q_{\text{cycle}}=W_{\text{cycle}}. $$
+
+<p>第一定律告诉我们：<strong>循环中吸入的净热全部转化为对外做的净功</strong>。这是热机的物理基础。</p>
+
+<p>几何上 \(W=\int P\,dV\) 是 P-V 曲线下的有符号面积；对闭合路径，</p>
+
+$$ W_{\text{cycle}}=\oint P\,dV=\pm\,\text{曲线围出的面积}. $$
+
+<h3>7.2 顺时针 vs 逆时针</h3>
+
+<svg viewBox="0 0 540 220" xmlns="http://www.w3.org/2000/svg" style="display:block;margin:.5rem auto;max-width:560px">
+  <!-- Left: clockwise = engine -->
+  <g transform="translate(0,0)">
+    <line x1="40" y1="20" x2="40" y2="190" stroke="#475569" stroke-width="1.5"/>
+    <line x1="40" y1="190" x2="250" y2="190" stroke="#475569" stroke-width="1.5"/>
+    <text x="20" y="14" font-size="11" font-family="serif" fill="#475569">P</text>
+    <text x="256" y="194" font-size="11" font-family="serif" fill="#475569">V</text>
+    <!-- Rectangle ABCD clockwise -->
+    <path d="M 70 160 L 70 50 L 220 50 L 220 160 Z" fill="#fef3c7" stroke="#d97706" stroke-width="2"/>
+    <!-- Arrows -->
+    <polygon points="140,49 130,44 130,54" fill="#d97706"/>
+    <polygon points="221,110 226,100 216,100" fill="#d97706"/>
+    <polygon points="140,161 150,156 150,166" fill="#d97706"/>
+    <polygon points="69,110 64,120 74,120" fill="#d97706"/>
+    <text x="100" y="120" font-size="14" font-weight="700" fill="#92400e">CW</text>
+    <text x="100" y="138" font-size="11" fill="#92400e">热机方向</text>
+    <text x="60" y="210" font-size="10" fill="#475569">W &gt; 0：净输出功</text>
+  </g>
+  <!-- Right: counterclockwise = refrigerator -->
+  <g transform="translate(280,0)">
+    <line x1="40" y1="20" x2="40" y2="190" stroke="#475569" stroke-width="1.5"/>
+    <line x1="40" y1="190" x2="250" y2="190" stroke="#475569" stroke-width="1.5"/>
+    <text x="20" y="14" font-size="11" font-family="serif" fill="#475569">P</text>
+    <text x="256" y="194" font-size="11" font-family="serif" fill="#475569">V</text>
+    <path d="M 70 160 L 220 160 L 220 50 L 70 50 Z" fill="#dbeafe" stroke="#1d4ed8" stroke-width="2"/>
+    <polygon points="140,159 150,164 150,154" fill="#1d4ed8"/>
+    <polygon points="221,110 216,120 226,120" fill="#1d4ed8"/>
+    <polygon points="140,51 130,56 130,46" fill="#1d4ed8"/>
+    <polygon points="69,110 74,100 64,100" fill="#1d4ed8"/>
+    <text x="100" y="120" font-size="14" font-weight="700" fill="#1e3a8a">CCW</text>
+    <text x="100" y="138" font-size="11" fill="#1e3a8a">制冷/泵方向</text>
+    <text x="60" y="210" font-size="10" fill="#475569">W &lt; 0：外界净做功</text>
+  </g>
+</svg>
+
+<p>判循环方向的<strong>最快办法</strong>：找两点 \(A, B\)，\(V_B>V_A\)。看气体先膨胀（\(A\to B\)）还是先收缩（\(B\to A\)）。<strong>先膨胀</strong>则是<strong>顺时针</strong>——膨胀段 \(P\) 高于收缩段的同 \(V\) 时 \(P\)，所以净功为正。这对应 <strong>热机</strong>：从高温热库吸热 \(Q_h\)、对外做功 \(W\)、向低温热库放热 \(Q_c\)，且 \(Q_h=W+Q_c\)。</p>
+
+<h3>7.3 用图<em>不要</em>用代数判方向（应试技巧）</h3>
+
+<p>很多学生硬算每段功的代数符号——这容易错。正确做法：先<strong>画 P-V 图</strong>，看箭头方向。如果题目像 OS #45 那样按顺序给出 \(A\to B\to C\to D\to A\) 而你已经知道四点的坐标，瞄一眼就行：在矩形上"自然地"按顺序连起来是不是顺时针。</p>
+
+<!-- ======================================================== -->
+
+<h2>§8 热机效率（预告 Quiz 5 / Ch.23）</h2>
+
+<p>本节只做最简单的预告，详细 Carnot 循环留到下一阶段。</p>
+
+<p><strong>定义</strong>：</p>
+
+$$ \boxed{\eta=\frac{W_{\text{net}}}{Q_{\text{in}}}=\frac{Q_h-Q_c}{Q_h}=1-\frac{Q_c}{Q_h}.} $$
+
+<p>分子是循环对外的净功；分母是循环中<em>所有吸热段</em>吸入的热量之和（不计放热段）。</p>
+
+<p><strong>Carnot 上限</strong>（任何在 \(T_c\lt T_h\) 之间工作的热机都满足）：</p>
+
+$$ \boxed{\eta\leq \eta_C=1-\frac{T_c}{T_h}.} $$
+
+<p>等号在 Carnot 循环（两段等温 + 两段绝热）时成立。Quiz 4 不会让你算 \(\eta_C\)，但可能让你<strong>算 \(\eta\) 本身</strong>——按定义算 \(W_{\text{net}}/Q_{\text{in}}\) 即可。</p>
+
+<div class="box warning">
+  <p class="box-title">分母里不算什么</p>
+  <p>\(Q_{\text{in}}\) 是<strong>吸热段</strong>的总和，不是循环净热！如果一个循环吸热 100 J + 放热 60 J，净 \(Q_{\text{net}}=W_{\text{net}}=40\) J，但 \(\eta=40/100=0.4\)，<strong>不是</strong> \(40/40=1\)。</p>
+</div>
+
+<!-- ======================================================== -->
+
+<h2>§9 交互：P-V 图上的过程</h2>
+
+<div class="box interactive">
+  <p class="box-title">点击切换过程，看每种过程在 P-V 图上的形状</p>
+  <div class="pv-widget">
+    <canvas id="pv-canvas" width="540" height="320"></canvas>
+    <div class="controls">
+      <button data-process="isochoric" class="active">等容</button>
+      <button data-process="isobaric">等压</button>
+      <button data-process="isothermal">等温</button>
+      <button data-process="adiabatic">绝热 (γ=7/5)</button>
+      <button data-process="all">全部</button>
+    </div>
+    <div class="readout" id="pv-readout"></div>
+  </div>
+</div>
+
+<script>
+(function() {
+  const cv = document.getElementById('pv-canvas');
+  if (!cv) return;
+  const ctx = cv.getContext('2d');
+  const W = cv.width, H = cv.height;
+  const pad = 50;
+  const Vmin = 1, Vmax = 6, Pmin = 0, Pmax = 6;
+  const x = V => pad + (V - Vmin)/(Vmax - Vmin) * (W - pad - 20);
+  const y = P => H - pad - (P - Pmin)/(Pmax - Pmin) * (H - pad - 20);
+  const V0 = 2, P0 = 4;        // 起点 A
+  const gamma = 7/5;
+  const readout = document.getElementById('pv-readout');
+
+  function drawAxes() {
+    ctx.clearRect(0, 0, W, H);
+    ctx.strokeStyle = '#475569'; ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.moveTo(pad, 20); ctx.lineTo(pad, H - pad);
+    ctx.lineTo(W - 20, H - pad);
+    ctx.stroke();
+    ctx.fillStyle = '#475569';
+    ctx.font = '13px serif';
+    ctx.fillText('P', pad - 22, 28);
+    ctx.fillText('V', W - 18, H - pad + 4);
+
+    // gridlines + ticks
+    ctx.strokeStyle = '#e5e7eb'; ctx.lineWidth = 1;
+    ctx.font = '11px -apple-system, sans-serif';
+    ctx.fillStyle = '#64748b';
+    for (let v = Vmin; v <= Vmax; v++) {
+      ctx.beginPath(); ctx.moveTo(x(v), 20); ctx.lineTo(x(v), H - pad); ctx.stroke();
+      ctx.fillText(v, x(v) - 4, H - pad + 16);
+    }
+    for (let p = Pmin; p <= Pmax; p++) {
+      ctx.beginPath(); ctx.moveTo(pad, y(p)); ctx.lineTo(W - 20, y(p)); ctx.stroke();
+      ctx.fillText(p, pad - 18, y(p) + 4);
+    }
+    // 起点 A
+    ctx.fillStyle = '#dc2626';
+    ctx.beginPath(); ctx.arc(x(V0), y(P0), 5, 0, 2*Math.PI); ctx.fill();
+    ctx.font = '13px -apple-system, sans-serif';
+    ctx.fillText('A', x(V0) - 16, y(P0) + 4);
+  }
+
+  function drawCurve(process) {
+    ctx.lineWidth = 2.5;
+    ctx.setLineDash([]);
+    if (process === 'isochoric') {
+      ctx.strokeStyle = '#0369a1';
+      ctx.beginPath();
+      ctx.moveTo(x(V0), y(0.5));
+      ctx.lineTo(x(V0), y(Pmax - 0.3));
+      ctx.stroke();
+      return '等容 · V=const · W=0, Q=ΔU=nc_v ΔT';
+    }
+    if (process === 'isobaric') {
+      ctx.strokeStyle = '#16a34a';
+      ctx.beginPath();
+      ctx.moveTo(x(Vmin + 0.2), y(P0));
+      ctx.lineTo(x(Vmax - 0.2), y(P0));
+      ctx.stroke();
+      return '等压 · P=const · W=P ΔV, Q=nc_p ΔT';
+    }
+    if (process === 'isothermal') {
+      ctx.strokeStyle = '#9333ea';
+      const k = P0 * V0;
+      ctx.beginPath();
+      let first = true;
+      for (let v = Vmin + 0.05; v <= Vmax; v += 0.05) {
+        const p = k / v;
+        if (p > Pmax || p < 0.1) continue;
+        if (first) { ctx.moveTo(x(v), y(p)); first = false; }
+        else ctx.lineTo(x(v), y(p));
+      }
+      ctx.stroke();
+      return '等温 · PV=k=' + (P0*V0).toFixed(0) + ' · ΔU=0, Q=W=nRT ln(V_f/V_i)';
+    }
+    if (process === 'adiabatic') {
+      ctx.strokeStyle = '#dc2626';
+      const k = P0 * Math.pow(V0, gamma);
+      ctx.beginPath();
+      let first = true;
+      for (let v = Vmin + 0.05; v <= Vmax; v += 0.05) {
+        const p = k / Math.pow(v, gamma);
+        if (p > Pmax || p < 0.1) continue;
+        if (first) { ctx.moveTo(x(v), y(p)); first = false; }
+        else ctx.lineTo(x(v), y(p));
+      }
+      ctx.stroke();
+      return '绝热 · PV^γ=k, γ=1.4 · Q=0, W=-ΔU=nc_v (T_i-T_f)';
+    }
+    if (process === 'all') {
+      // draw all four
+      drawCurve('isochoric');
+      drawCurve('isobaric');
+      drawCurve('isothermal');
+      drawCurve('adiabatic');
+      // legend
+      ctx.font = '11px -apple-system, sans-serif';
+      const labels = [
+        ['等容', '#0369a1'], ['等压', '#16a34a'],
+        ['等温', '#9333ea'], ['绝热', '#dc2626']
+      ];
+      labels.forEach(([t, c], i) => {
+        ctx.fillStyle = c;
+        ctx.fillRect(W - 110, 30 + i*18, 14, 12);
+        ctx.fillStyle = '#1f2937';
+        ctx.fillText(t, W - 90, 40 + i*18);
+      });
+      return '四种过程共一起点 A=(V=2, P=4)。注意绝热比等温陡 γ=1.4 倍。';
+    }
+  }
+
+  let active = 'isochoric';
+  function render() {
+    drawAxes();
+    const msg = drawCurve(active);
+    readout.innerHTML = '<span>' + active + '</span>：' + msg;
+  }
+  document.querySelectorAll('.pv-widget button').forEach(b => {
+    b.addEventListener('click', () => {
+      document.querySelectorAll('.pv-widget button').forEach(b2 => b2.classList.remove('active'));
+      b.classList.add('active');
+      active = b.dataset.process;
+      render();
+    });
+  });
+  render();
+})();
+</script>
+
+<!-- ======================================================== -->
+
+<h2>§10 Worked Examples</h2>
+
+<div class="example">
+  <h4>Example A — 绝热压缩升温（11.22 风格）★</h4>
+  <p class="problem-statement">双原子理想气体（\(c_v=\tfrac52 R\)）初态 \(T_i=300\) K，\(V_i=2\) L，绝热压缩到 \(V_f=0.5\) L。求 \(T_f, P_f/P_i, W\)（每摩尔）。</p>
+
+  <div class="solution-step"><strong>(1) 求 \(\gamma\)</strong>：\(\gamma=c_p/c_v=(c_v+R)/c_v=(\tfrac72 R)/(\tfrac52 R)=7/5=1.4\)。</div>
+
+  <div class="solution-step"><strong>(2) \(T_f\) 用 \(TV^{\gamma-1}=\text{const}\)</strong>：
+    $$ T_f=T_i(V_i/V_f)^{\gamma-1}=300\cdot 4^{0.4}. $$
+    \(4^{0.4}=e^{0.4\ln 4}=e^{0.5545}=1.741\)。\(T_f=300\cdot 1.741\approx 522\) K（升温 220 K）。
+  </div>
+
+  <div class="solution-step"><strong>(3) \(P_f/P_i\) 用 \(PV^\gamma=\text{const}\)</strong>：
+    $$ P_f/P_i=(V_i/V_f)^\gamma=4^{1.4}=4^{1}\cdot 4^{0.4}=4\cdot 1.741\approx 6.96. $$
+    或独立检验：\(P_f V_f=nRT_f, P_iV_i=nRT_i\Rightarrow P_f/P_i=(T_f/T_i)(V_i/V_f)=1.741\cdot 4\approx 6.96\) ✓。
+  </div>
+
+  <div class="solution-step"><strong>(4) 功（每摩尔）</strong>：\(W=c_v(T_i-T_f)=\tfrac52\cdot 8.31\cdot(300-522)=20.78\cdot(-222)\approx -4612\) J/mol。负号 = 外界对气体做功（压缩），合理。</div>
+
+  <div class="answer-box">\(T_f\approx 522\) K；\(P_f/P_i\approx 6.96\)；\(W\approx -4.6\) kJ/mol（外界做功）</div>
+</div>
+
+<div class="example">
+  <h4>Example B — 三段循环效率（仿照 OS #45 + 11.27 风格）★★</h4>
+  <p class="problem-statement">单原子理想气体 1 mol 走循环 A→B→C→A：
+  <ul>
+    <li>A=(V=2 L, T=300 K)；</li>
+    <li>A→B 等压加热到 \(V_B=6\) L；</li>
+    <li>B→C 等容冷却到 \(T_C=300\) K；</li>
+    <li>C→A 等温压缩回到 A。</li>
+  </ul>
+  求 (i) B、C 的 \((P, V, T)\)；(ii) 每段 \(W, Q, \Delta U\)；(iii) 循环效率 \(\eta\)。</p>
+
+  <div class="solution-step"><strong>(0) \(P_A\)</strong>：\(P_A=nRT_A/V_A=1\cdot 8.31\cdot 300/(2\times 10^{-3})=1.247\times 10^6\) Pa \(\approx 1.25\) MPa。</div>
+
+  <div class="solution-step"><strong>(i) B 与 C</strong>：
+    <ul>
+      <li>等压 A→B：\(P_B=P_A=1.25\) MPa，\(V_B=6\) L。\(T_B=T_A(V_B/V_A)=300\cdot 3=900\) K。</li>
+      <li>等容 B→C：\(V_C=V_B=6\) L，\(T_C=300\) K。\(P_C=P_B(T_C/T_B)=1.25\cdot(1/3)\approx 0.417\) MPa。</li>
+      <li>等温 C→A 检查：\(P_C V_C=0.417\times 10^6\cdot 6\times 10^{-3}=2502\) J；\(P_A V_A=1.25\times 10^6\cdot 2\times 10^{-3}=2500\) J ✓（小舍入差异）</li>
+    </ul>
+  </div>
+
+  <div class="solution-step"><strong>(ii) 每段 W, Q, ΔU</strong>（单原子 \(c_v=\tfrac32 R\)，\(c_p=\tfrac52 R\)）：
+    <ul>
+      <li>A→B 等压：\(W=P\Delta V=1.25\times 10^6\cdot 4\times 10^{-3}=5000\) J。\(\Delta U=nc_v\Delta T=1\cdot\tfrac32\cdot 8.31\cdot 600=7479\) J。\(Q=\Delta U+W=12479\) J（吸热）。</li>
+      <li>B→C 等容：\(W=0\)。\(\Delta U=nc_v(T_C-T_B)=1\cdot\tfrac32\cdot 8.31\cdot(-600)=-7479\) J。\(Q=\Delta U=-7479\) J（放热）。</li>
+      <li>C→A 等温：\(\Delta U=0\)。\(W=nRT_C\ln(V_A/V_C)=1\cdot 8.31\cdot 300\cdot\ln(2/6)=2493\cdot(-1.0986)\approx -2739\) J。\(Q=W=-2739\) J（放热）。</li>
+    </ul>
+  </div>
+
+  <div class="solution-step"><strong>(iii) 循环效率</strong>：
+    $$ W_{\text{net}}=5000+0-2739=2261\text{ J}. $$
+    $$ Q_{\text{in}}=Q_{AB}=12479\text{ J}\quad(\text{只有 AB 吸热，BC 和 CA 都放热}). $$
+    $$ \eta=W_{\text{net}}/Q_{\text{in}}=2261/12479\approx 0.181=18.1\%. $$
+    Carnot 上限 \(\eta_C=1-T_c/T_h=1-300/900=0.667\)——实际 \(\eta=0.18\) 远低于 Carnot，提醒"等压加热 + 等温压缩 + 等容冷却"不是高效循环。
+  </div>
+
+  <div class="solution-step"><strong>核查</strong>：\(\sum\Delta U=7479-7479+0=0\) ✓；\(\sum Q=12479-7479-2739=2261=W_{\text{net}}\) ✓。</div>
+
+  <div class="answer-box">B=(1.25 MPa, 6 L, 900 K)；C=(0.417 MPa, 6 L, 300 K)；\(W_{\text{net}}\approx 2261\) J；\(\eta\approx 18\%\)</div>
+</div>
+
+<div class="example">
+  <h4>Example C — γ 反推 + 多端点信息（11.28 风格）★★</h4>
+  <p class="problem-statement">1 mol 理想气体走两段：(i) 从 A=(\(P_A=10^5\) Pa, \(V_A=10\) L, \(T_A=120\) K) 沿绝热曲线压缩到 \(V_B=2.5\) L。已知 B 的温度 \(T_B=210\) K。求气体的 \(\gamma\) 与 \(c_v\)；并求绝热段做的功（每摩尔）。</p>
+
+  <div class="solution-step"><strong>(1) γ 反推</strong>：用 \(TV^{\gamma-1}=\text{const}\)：
+    $$ \frac{T_B}{T_A}=\left(\frac{V_A}{V_B}\right)^{\gamma-1}
+       \;\Longrightarrow\;
+       \ln(T_B/T_A)=(\gamma-1)\ln(V_A/V_B). $$
+    $$ \gamma-1=\frac{\ln(210/120)}{\ln(10/2.5)}=\frac{\ln 1.75}{\ln 4}=\frac{0.5596}{1.3863}=0.4036. $$
+    \(\gamma\approx 1.40\)——双原子（\(f=5\)）的特征值。
+  </div>
+
+  <div class="solution-step"><strong>(2) \(c_v\)</strong>：\(c_v=R/(\gamma-1)=8.31/0.4036\approx 20.6\) J/(mol·K) \(\approx\tfrac52 R\) ✓。</div>
+
+  <div class="solution-step"><strong>(3) 做的功</strong>：
+    $$ W=c_v(T_A-T_B)=20.6\cdot(120-210)=20.6\cdot(-90)\approx -1854\text{ J/mol}. $$
+    负值 = 外界对气体做功（压缩），合理。
+  </div>
+
+  <div class="solution-step"><strong>另一种核查</strong>：用 \(W=(P_iV_i-P_fV_f)/(\gamma-1)\)。\(P_A V_A=10^5\cdot 10^{-2}=1000\) J；\(P_B=P_A(V_A/V_B)^\gamma=10^5\cdot 4^{1.4}=10^5\cdot 6.96=6.96\times 10^5\) Pa；\(P_B V_B=6.96\times 10^5\cdot 2.5\times 10^{-3}=1740\) J。\(W=(1000-1740)/0.4036\approx -1834\) J（与上面 -1854 J 在 1% 内一致，差异来自 γ 的小舍入）✓。</div>
+
+  <div class="answer-box">\(\gamma\approx 1.40\)（双原子）；\(c_v\approx 20.6\) J/(mol·K)；\(W\approx -1.85\) kJ/mol</div>
+</div>
+
+<div class="example">
+  <h4>Example D — Hirsch 板书循环 1→2→3→1（Lec 8.1 同款）★★</h4>
+  <p class="problem-statement">1 mol 单原子理想气体（\(c_v=\tfrac32 R\)，\(c_p=\tfrac52 R\)）走闭合循环：
+  <ul>
+    <li>State 1: \(V_1=8.31\) L, \(T_1=300\) K（\(P_1=nRT_1/V_1=3.00\times 10^5\) Pa \(\approx 2.96\) atm）。</li>
+    <li>1 → 2：<strong>等温膨胀</strong>至 \(V_2=2V_1=16.62\) L（\(T_2=T_1=300\) K, \(P_2=P_1/2=1.50\times 10^5\) Pa）。</li>
+    <li>2 → 3：<strong>等容加热</strong>到 \(P_3=P_1\)（\(V_3=V_2=16.62\) L, \(T_3=P_1V_2/(nR)=2T_1=600\) K）。</li>
+    <li>3 → 1：<strong>等压压缩</strong>回到起点。</li>
+  </ul>
+  求每段 \(W, \Delta U, Q\)；循环总 \(W, Q, \Delta U\)；并指出循环方向是 CW 还是 CCW。</p>
+
+  <svg viewBox="0 0 300 220" xmlns="http://www.w3.org/2000/svg" style="display:block;margin:.5rem auto;max-width:340px">
+    <line x1="40" y1="20" x2="40" y2="190" stroke="#475569" stroke-width="1.5"/>
+    <line x1="40" y1="190" x2="280" y2="190" stroke="#475569" stroke-width="1.5"/>
+    <text x="22" y="14" font-size="11" font-family="serif" fill="#475569">P</text>
+    <text x="286" y="194" font-size="11" font-family="serif" fill="#475569">V</text>
+    <line x1="80" y1="190" x2="80" y2="194" stroke="#475569"/>
+    <text x="68" y="207" font-size="10" fill="#475569">V_1</text>
+    <line x1="220" y1="190" x2="220" y2="194" stroke="#475569"/>
+    <text x="210" y="207" font-size="10" fill="#475569">V_2</text>
+    <line x1="36" y1="55" x2="40" y2="55" stroke="#475569"/>
+    <text x="14" y="59" font-size="10" fill="#475569">P_1</text>
+    <line x1="36" y1="125" x2="40" y2="125" stroke="#475569"/>
+    <text x="14" y="129" font-size="10" fill="#475569">P_2</text>
+    <!-- isotherm 1->2: P*V = const, from (80,55) to (220,125) curve -->
+    <path d="M 80 55 Q 130 75 220 125" stroke="#0369a1" stroke-width="2" fill="none"/>
+    <text x="105" y="68" font-size="10" fill="#0369a1">1→2 等温</text>
+    <!-- arrow midway down isotherm -->
+    <text x="146" y="92" font-size="14" fill="#0369a1">▶</text>
+    <!-- isochore 2->3: vertical at V=V2 -->
+    <line x1="220" y1="125" x2="220" y2="55" stroke="#7c3aed" stroke-width="2"/>
+    <text x="226" y="92" font-size="10" fill="#7c3aed">2→3 等容</text>
+    <text x="217" y="98" font-size="14" fill="#7c3aed">▲</text>
+    <!-- isobar 3->1: horizontal at P=P1 -->
+    <line x1="220" y1="55" x2="80" y2="55" stroke="#ea580c" stroke-width="2"/>
+    <text x="125" y="50" font-size="10" fill="#ea580c">3→1 等压</text>
+    <text x="146" y="55" font-size="14" fill="#ea580c">◀</text>
+    <!-- points -->
+    <circle cx="80" cy="55" r="3.5" fill="#dc2626"/>
+    <text x="58" y="50" font-size="11" fill="#dc2626">1</text>
+    <circle cx="220" cy="125" r="3.5" fill="#dc2626"/>
+    <text x="226" y="138" font-size="11" fill="#dc2626">2</text>
+    <circle cx="220" cy="55" r="3.5" fill="#dc2626"/>
+    <text x="226" y="50" font-size="11" fill="#dc2626">3</text>
+  </svg>
+
+  <div class="solution-step"><strong>(1) 1→2 等温</strong>：\(\Delta U_{12}=0\) 因 \(T_2=T_1\)；
+    $$ W_{12}=nRT_1\ln(V_2/V_1)=1\cdot 8.314\cdot 300\cdot\ln 2=2494\cdot 0.693\approx 1729\text{ J}, $$
+    \(Q_{12}=W_{12}\approx 1729\) J（气体吸热）。
+  </div>
+
+  <div class="solution-step"><strong>(2) 2→3 等容</strong>：\(W_{23}=0\)；
+    $$ \Delta U_{23}=nc_v(T_3-T_1)=\tfrac32\cdot 8.314\cdot 300\approx 3741\text{ J}, $$
+    \(Q_{23}=\Delta U_{23}\approx 3741\) J（等容加热段，吸热升压）。
+  </div>
+
+  <div class="solution-step"><strong>(3) 3→1 等压</strong>：
+    $$ W_{31}=P_1(V_1-V_2)=nR(T_1-T_3)=8.314\cdot(-300)\approx -2494\text{ J}\quad\text{(压缩)}, $$
+    $$ \Delta U_{31}=nc_v(T_1-T_3)\approx -3741\text{ J}, $$
+    $$ Q_{31}=nc_p(T_1-T_3)=\tfrac52\cdot 8.314\cdot(-300)\approx -6236\text{ J}\quad\text{(放热)}. $$
+    可独立核查：\(Q_{31}=\Delta U_{31}+W_{31}=-3741-2494=-6235\) J ✓（Mayer 关系 \(c_p=c_v+R\) 的精确体现）。
+  </div>
+
+  <div class="solution-step"><strong>(4) 循环总量</strong>：
+    \(\Delta U_{\text{cyc}}=0+3741-3741=0\) ✓（态函数闭合）；
+    \(W_{\text{cyc}}=1729+0-2494=-765\) J；
+    \(Q_{\text{cyc}}=1729+3741-6236=-766\) J（≈ \(W_{\text{cyc}}\)，差异为四舍五入）✓。
+  </div>
+
+  <div class="solution-step"><strong>(5) 方向</strong>：1→2 沿等温曲线<strong>往右下</strong>，2→3 沿等容<strong>往上</strong>，3→1 沿等压<strong>往左</strong> ⇒ <strong>逆时针</strong>（CCW）⇒ \(W_{\text{cyc}}<0\)，气体净吸功、净放热——这是<strong>冰箱/热泵方向</strong>的循环。把方向反过来跑（1→3→2→1）就成了顺时针的热机。</div>
+
+  <div class="answer-box">CCW 循环；\(W_{\text{cyc}}=Q_{\text{cyc}}\approx -766\) J；\(\Delta U_{\text{cyc}}=0\)。等温段 \(W=Q\approx 1729\) J，等容加热段 \(Q\approx 3741\) J，等压压缩段 \(Q\approx -6236\) J；三段 \(Q\) 和等于 \(W\)。</div>
+</div>
+
+<!-- ======================================================== -->
+
+<h2>§11 Self-check</h2>
+
+<div class="self-check">
+  <p class="question">Q1. 同样的两个端点 \((P_1, V_1)\to(P_2, V_2)\)，气体走"等温 + 等压"组合 vs 走"绝热 + 等压"组合，\(\Delta U\) 一样吗？\(W\)、\(Q\) 呢？</p>
+  <details><summary>查看答案</summary>
+  <p>\(\Delta U\) <strong>一样</strong>（态函数，端点定）。\(W\) 与 \(Q\) <strong>不一样</strong>（路径函数，依赖中间走法）。具体：在 P-V 图上画出两种路径，曲线下方的面积不同——所以 \(W\) 不同；又因 \(\Delta U\) 相同，\(Q=\Delta U+W\) 也不同。<strong>这是 OS #45 和 Shankar 11.27 的核心结构</strong>。</p>
+  </details>
+</div>
+
+<div class="self-check">
+  <p class="question">Q2. 在 P-V 图上看到一条曲线，怎么<strong>不用代数</strong>区分它是等温还是绝热？</p>
+  <details><summary>查看答案</summary>
+  <p><strong>比斜率</strong>。在<strong>同一点</strong>，绝热斜率是等温的 \(\gamma\) 倍（\(\gamma=5/3\) 或 \(7/5\)），所以绝热<strong>更陡</strong>。如果图里只有一条曲线无对比，看端点：等温 \(PV=k\Rightarrow P_iV_i=P_fV_f\)；绝热 \(P_iV_i\neq P_fV_f\)（因为 \(T\) 变了）。<strong>11.28 判 AC 还是 AB 是绝热</strong>就靠这条。</p>
+  </details>
+</div>
+
+<div class="self-check">
+  <p class="question">Q3. 一道循环题给你 \(W_{\text{net}}=200\) J 和 \(Q_h=600\) J，\(\eta=?\)。如果同时给你 \(Q_c=400\) J，自洽吗？</p>
+  <details><summary>查看答案</summary>
+  <p>\(\eta=W_{\text{net}}/Q_h=200/600=1/3\approx 33\%\)。\(Q_c=Q_h-W_{\text{net}}=600-200=400\) J ✓ 与给的 \(Q_c\) 自洽（第一定律对循环的强制要求 \(W_{\text{net}}=Q_h-Q_c\)）。如果给 \(Q_c=350\) J 就矛盾，说明题目数据出错或忽略了其他热交换。</p>
+  </details>
+</div>
+
+<div class="self-check">
+  <p class="question">Q4. 为什么"\(dU=nc_v dT\) 在任何过程都成立"，而"\(\delta Q=nc_v dT\) 仅在等容成立"？</p>
+  <details><summary>查看答案</summary>
+  <p>因为<strong>对理想气体 \(U=U(T)\)</strong>——内能<em>只</em>是温度的函数，与 \(V, P\) 无关。所以 \(dU=(\partial U/\partial T)dT=nc_v dT\) 在任何路径都成立（\(c_v\) 是"在等容下测定的"系数，但 \(U(T)\) 的导数本身与如何测无关）。<br>而 \(\delta Q\) 是路径函数，<strong>等于</strong> \(dU+\delta W=nc_v dT+PdV\)。只有当 \(dV=0\)（等容）时，\(\delta Q=nc_v dT\)；其他过程都有 \(PdV\) 的贡献。这是初学者最易混的概念点。</p>
+  </details>
+</div>
+
+<div class="self-check">
+  <p class="question">Q5. Mayer 关系 \(c_p-c_v=R\) 对真实（非理想）气体也成立吗？</p>
+  <details><summary>查看答案</summary>
+  <p>严格意义<strong>不</strong>成立。Mayer 推导依赖 \(PV=nRT\) 和 \(U=U(T)\)——两条都只对理想气体精确成立。对真实气体，等压加热时除了"内能涨 + 推活塞"之外，还要克服分子间引力的功，所以 \(c_p-c_v>R\) 一些。但室温下大多数稀气体（远离液化点）偏离 \(R\) 不到 1%，把它当 \(R\) 用足够。<br>液体和固体的 \(c_p-c_v\) 远小于 \(R\)（因为膨胀系数 \(\beta\) 极小，\(PdV\) 贡献可忽略）。</p>
+  </details>
+</div>
+
+<div class="self-check">
+  <p class="question">Q6. 一个"等温膨胀"过程，从分子层面是<em>谁</em>在提供 \(W\) 的能量？</p>
+  <details><summary>查看答案</summary>
+  <p>是<strong>热库</strong>。等温意味着 \(T\) 恒定，理想气体平均动能 \(\tfrac32 kT\) 也恒定，分子集体动能没变。但气体确实对外做了 \(W\) 的功——这部分能量来自哪里？由于 \(\Delta U=0\)、\(Q=W\)，热库源源不断输送 \(Q=W\) 的热进入气体。<br>微观图像：分子撞活塞失去一点动能（推动活塞做功），紧接着撞热壁又获得一点动能（吸热）；统计上速度分布保持 \(T\) 不变的 MB 形状。这就是"接触热库"在分子层面的运作。</p>
+  </details>
+</div>
+
+<!-- ======================================================== -->
+
+<h2>§12 公式速查表</h2>
+
+<table class="formula-table">
+  <thead><tr><th>主题</th><th>公式</th><th>备注</th></tr></thead>
+  <tbody>
+    <tr><td>母方程</td><td>\(dU=\delta Q-PdV\)</td><td>准静态、理想气体所有过程</td></tr>
+    <tr><td>内能（理想气体）</td><td>\(dU=nc_v\,dT\)，\(U=(f/2)nRT\)</td><td>任何过程都成立（不只等容）</td></tr>
+    <tr><td>等容</td><td>\(W=0\)；\(Q=\Delta U=nc_v\Delta T\)</td><td>竖直 P-V 线</td></tr>
+    <tr><td>等压</td><td>\(W=P\Delta V=nR\Delta T\)；\(Q=nc_p\Delta T\)</td><td>水平 P-V 线</td></tr>
+    <tr><td>Mayer 关系</td><td>\(c_p-c_v=R\)；\(\gamma=c_p/c_v=(f+2)/f\)</td><td>从等压 vs 等容对比推出</td></tr>
+    <tr><td>等温</td><td>\(\Delta U=0\)；\(W=Q=nRT\ln(V_f/V_i)\)</td><td>双曲线 \(PV=k\)</td></tr>
+    <tr><td>绝热（P, V）</td><td>\(PV^\gamma=\text{const}\)</td><td>从 \(nc_v dT=-PdV\) 推</td></tr>
+    <tr><td>绝热（T, V）</td><td>\(TV^{\gamma-1}=\text{const}\)</td><td>11.22 直接用</td></tr>
+    <tr><td>绝热（T, P）</td><td>\(TP^{(1-\gamma)/\gamma}=\text{const}\)</td><td>少见</td></tr>
+    <tr><td>绝热做功</td><td>\(W=nc_v(T_i-T_f)=(P_iV_i-P_fV_f)/(\gamma-1)\)</td><td>不要积分曲线下面积</td></tr>
+    <tr><td>绝热斜率</td><td>\(|dP/dV|_{\text{绝热}}=\gamma\cdot|dP/dV|_{\text{等温}}\)</td><td>更陡的就是绝热</td></tr>
+    <tr><td>\(c_v\) 与 \(\gamma\) 互换</td><td>\(c_v=R/(\gamma-1)\)，\(c_p=\gamma R/(\gamma-1)\)</td><td>γ ↔ f 速换</td></tr>
+    <tr><td>循环</td><td>\(\oint dU=0\Rightarrow W_{\text{cycle}}=Q_{\text{net}}=\) 围出的有向面积</td><td>CW=engine, CCW=fridge</td></tr>
+    <tr><td>热机效率</td><td>\(\eta=W_{\text{net}}/Q_{\text{in}}=1-Q_c/Q_h\)</td><td>\(Q_{\text{in}}\) 只算吸热段</td></tr>
+    <tr><td>Carnot 上限</td><td>\(\eta_C=1-T_c/T_h\)</td><td>两段等温+两段绝热构造</td></tr>
+  </tbody>
+</table>
+
+<!-- ======================================================== -->
+
+<h2>§13 术语</h2>
+
+<dl>
+  <dt>准静态 (quasi-static)</dt><dd>过程慢到每一刻系统都处在内部平衡态——\(P\) 才有意义、\(\delta W=PdV\) 才成立。</dd>
+  <dt>等容/等压/等温/绝热</dt><dd>四种最简单的非平凡过程：分别由 \(dV=0, dP=0, dT=0, \delta Q=0\) 定义。</dd>
+  <dt>绝热指数 \(\gamma\)</dt><dd>\(\gamma=c_p/c_v=(f+2)/f\)。单原子 5/3，双原子室温 7/5，多原子接近 1。</dd>
+  <dt>Mayer 关系</dt><dd>\(c_p-c_v=R\)——任何理想气体的恒等式。</dd>
+  <dt>循环 (cycle)</dt><dd>系统经过一系列过程回到初态。\(\Delta U_{\text{cycle}}=0\Rightarrow Q_{\text{net}}=W_{\text{net}}\)。</dd>
+  <dt>热机 (heat engine)</dt><dd>顺时针循环：从高温热库吸 \(Q_h\)、对外做净功 \(W\)、向低温热库放 \(Q_c\)，\(W=Q_h-Q_c\)。</dd>
+  <dt>制冷机 / 热泵</dt><dd>逆时针循环：外界对系统做净功，把热从低温处搬到高温处。</dd>
+  <dt>效率 \(\eta\)</dt><dd>\(\eta=W_{\text{net}}/Q_{\text{in}}\)。Carnot 上限 \(\eta_C=1-T_c/T_h\)。</dd>
+  <dt>Carnot 循环</dt><dd>两段等温（接热库）+ 两段绝热（脱离热库）组成的可逆循环——所有在 \(T_c, T_h\) 之间工作的热机效率上限。</dd>
+</dl>
+
+<p class="back-link" style="margin-top:2rem"><a href="index.html">← 回到复习总目录</a> · <a href="quiz4_problems.html">Quiz 4 题集</a> · <a href="13_carnot_second_law.html">Carnot &amp; 第二定律 →</a></p>
+
+</main>
+
+</body>
+</html>

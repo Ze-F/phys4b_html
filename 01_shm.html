@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>01 · 简谐振动 — PHYS 4B 复习</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="theme.js"></script>
+  <script>
+    MathJax = {
+      tex: { inlineMath: [['\\(', '\\)']], displayMath: [['$$', '$$']] },
+      svg: { fontCache: 'global' }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" async></script>
+</head>
+<body>
+
+<header class="site-header">
+  <a class="home-link" href="index.html">← PHYS 4B 复习</a>
+  <nav>
+    <a href="02_wave_propagation.html">下一篇：一维波传播 →</a>
+  </nav>
+</header>
+
+<main class="container">
+
+<div class="topic-header">
+  <h1>01 · 简谐振动 (SHM)</h1>
+  <p class="meta">Lec 1.1 · Shankar §17.1–17.4</p>
+  <p class="blurb">SHM 是物理里最重要的"模型问题"之一——任何处于稳定平衡附近的系统在小扰动下都退化成 SHM。掌握 SHM 等于打开了一把通用钥匙：弹簧、单摆、LC 电路、原子振动、声波、量子谐振子，乃至广义相对论里的引力波，都共享相同的数学结构。</p>
+</div>
+
+<!-- ======================================================== -->
+
+<div class="box key-result">
+  <p class="box-title">一页速览</p>
+  <ul>
+    <li><strong>无阻尼 SHM</strong>：\(m\ddot x=-kx\)，解 \(x(t)=A\cos(\omega_0 t+\varphi)\)，\(\omega_0=\sqrt{k/m}\)，\(T=2\pi/\omega_0\)。</li>
+    <li><strong>能量</strong>：\(E=\tfrac12 kA^2\) 守恒；KE 与 PE 周期性互换，平均值各占一半。</li>
+    <li><strong>阻尼</strong>：\(m\ddot x+\gamma\dot x+kx=0\)。三种区域由 \(\gamma\) vs \(2\sqrt{mk}\) 比较：欠阻尼（振荡衰减）、临界阻尼（最快回归无振荡）、过阻尼（慢指数回归）。</li>
+    <li><strong>受迫</strong>：\(m\ddot x+\gamma\dot x+kx=F_0\cos\omega t\)。稳态振幅 \(A(\omega)=F_0/\sqrt{m^2(\omega^2-\omega_0^2)^2+\gamma^2\omega^2}\)，在 \(\omega\approx\omega_0\) 出现共振峰。</li>
+    <li><strong>Q 因子</strong>：\(Q=\omega_0 m/\gamma\)，刻画峰锐度与每周期能量损失的反比。</li>
+  </ul>
+</div>
+
+<!-- ======================================================== -->
+
+<h2>§1 故事线：为什么 SHM 是"普世"模型</h2>
+
+<p>把任何稳定平衡点附近的势能 \(U(x)\) 在 \(x_0\) 处 Taylor 展开：</p>
+
+<p>$$ U(x) \approx U(x_0) + 0\cdot(x-x_0) + \tfrac12 U''(x_0)(x-x_0)^2 + \cdots. $$</p>
+
+<p>第一项常数无关紧要；第二项 \(U'(x_0)=0\)（这就是"平衡"的定义）；剩下的二阶项就是<strong>抛物形势</strong>，对应力 \(F=-U'(x)=-U''(x_0)(x-x_0)\)，即 Hooke 定律。把 \(k\equiv U''(x_0)\)，问题立刻退化成 \(m\ddot x=-kx\)。</p>
+
+<p>这就是为什么 SHM 是物理的"通用语言"——任何平衡点附近<em>小振幅</em>下都长这个样，不管底层物理机制是弹簧、引力、电场、还是分子键。</p>
+
+<div class="box insight">
+  <p class="box-title">非线性恢复力的"小角近似"</p>
+  <p>单摆的真实运动方程是 \(\ddot\theta=-(g/L)\sin\theta\)，<strong>不是</strong> SHM。但 \(\sin\theta\approx\theta\) 在 \(\theta\ll 1\) 下成立，于是退化成 \(\ddot\theta=-(g/L)\theta\)，得到 \(T=2\pi\sqrt{L/g}\) ——周期与振幅无关（"等时性"，伽利略 1602 年的发现）。一旦摆幅大到几十度，这个近似失效，周期开始依赖振幅。Shankar §17.4 里有完整的非线性修正级数。</p>
+</div>
+
+<!-- ======================================================== -->
+
+<h2>§2 无阻尼 SHM：方程与解</h2>
+
+<h3>2.1 方程</h3>
+
+<p>质量 \(m\) 系于弹簧（劲度 \(k\)），坐标 \(x\) 从平衡位置算起。Hooke 定律 \(F=-kx\) 配 Newton 第二定律：</p>
+
+<p>$$ m\ddot x = -kx \;\Longleftrightarrow\;
+   \boxed{\;\ddot x + \omega_0^2\,x = 0\;,\quad \omega_0\equiv\sqrt{k/m}\;.\;}\tag{2.1}$$</p>
+
+<p>这是一个二阶<strong>常系数齐次线性</strong>微分方程，解空间是二维的（需要两个初条件 \(x(0)\) 和 \(\dot x(0)\)）。</p>
+
+<h3>2.2 复指数解法</h3>
+
+<p>设试解 \(x=e^{\lambda t}\)，代入：\(\lambda^2+\omega_0^2=0\)，于是 \(\lambda=\pm i\omega_0\)。两个独立解 \(e^{i\omega_0 t}\) 和 \(e^{-i\omega_0 t}\) 张成解空间。一般解：</p>
+
+<p>$$ x(t) = c_+ e^{i\omega_0 t} + c_- e^{-i\omega_0 t}, $$</p>
+
+<p>取实部并合成：</p>
+
+<p>$$ \boxed{\;x(t) = A\cos(\omega_0 t + \varphi)\;}\tag{2.2}$$</p>
+
+<p>其中振幅 \(A\) 与初相 \(\varphi\) 由初条件 \(x(0), \dot x(0)\) 决定：</p>
+
+<p>$$ A=\sqrt{x_0^2+(\dot x_0/\omega_0)^2},\qquad \tan\varphi=-\dot x_0/(\omega_0 x_0). $$</p>
+
+<details class="more-detail">
+  <summary>展开：为什么用复指数？</summary>
+  <p>三角函数（\(\cos, \sin\)）与复指数 \(e^{i\omega t}\) 是同一个数学对象的不同写法（Euler 公式）。用复指数有几个优势：</p>
+  <ol>
+    <li>导数运算简化为乘以 \(i\omega\)：\(d/dt[e^{i\omega t}]=i\omega e^{i\omega t}\)。 二阶导是 \(-\omega^2 e^{i\omega t}\)。</li>
+    <li>线性方程的解可以用幅相图（phasor）几何相加，避免恼人的三角恒等式。</li>
+    <li>统一处理实信号（取实部）与复振幅（含相位信息）。</li>
+  </ol>
+  <p>本课程的所有振动 / 波动 / 阻抗 / 共振计算都建立在这个工具之上。一旦熟练，三角恒等式几乎不再需要。</p>
+</details>
+
+<h3>2.3 周期与频率</h3>
+
+<table class="formula-table">
+  <tbody>
+    <tr><th>角频率</th><td>\(\omega_0=\sqrt{k/m}\)（rad/s）</td></tr>
+    <tr><th>频率</th><td>\(f=\omega_0/(2\pi)\)（Hz）</td></tr>
+    <tr><th>周期</th><td>\(T=2\pi/\omega_0=2\pi\sqrt{m/k}\)</td></tr>
+  </tbody>
+</table>
+
+<p>\(\omega_0\) 由系统本身决定（"natural frequency"），跟振幅或初条件无关——这是 SHM 的标志性特征（"等时性"）。</p>
+
+<!-- ======================================================== -->
+
+<h2>§3 能量</h2>
+
+<p>无阻尼 SHM 是保守系统：</p>
+
+<p>$$ E = \underbrace{\tfrac12 m\dot x^2}_{\text{KE}} + \underbrace{\tfrac12 k x^2}_{\text{PE}}. $$</p>
+
+<p>代入 \(x=A\cos(\omega_0 t+\varphi)\)，\(\dot x=-A\omega_0\sin(\omega_0 t+\varphi)\)：</p>
+
+<p>$$ E = \tfrac12 m A^2\omega_0^2\sin^2(\cdot)+\tfrac12 k A^2\cos^2(\cdot)
+     = \tfrac12 k A^2[\sin^2+\cos^2] = \boxed{\;\tfrac12 k A^2\;}. \tag{3.1}$$</p>
+
+<p>能量守恒，且只取决于振幅。KE 与 PE 在一周期内来回转换，时间平均都是 \(E/2\)。</p>
+
+<div class="box remark">
+  <p class="box-title">类比：动能与势能的"互换"</p>
+  <p>振幅最大时 \(x=A\)：所有能量是 PE，KE = 0；过平衡点时 \(x=0\)：所有能量是 KE，PE = 0。这种"完美"的能量来回转换是 SHM 区别于一般振荡的核心。它对应几何上：相空间 \((x, \dot x/\omega_0)\) 里的运动是<strong>正圆</strong>，半径恒为 \(A\)。</p>
+</div>
+
+<!-- ======================================================== -->
+
+<h2>§4 阻尼振动</h2>
+
+<p>实际系统总有摩擦（空气阻力、内摩擦、辐射）。最简单的模型是<strong>线性阻尼</strong>：阻力正比于速度，\(F_{\text{drag}}=-\gamma\dot x\)。运动方程：</p>
+
+<p>$$ \boxed{\;m\ddot x+\gamma\dot x+kx=0\;.\;}\tag{4.1}$$</p>
+
+<h3>4.1 求解</h3>
+
+<p>试解 \(x=e^{\lambda t}\)：\(m\lambda^2+\gamma\lambda+k=0\)。由二次方程：</p>
+
+<p>$$ \lambda = -\frac{\gamma}{2m}\pm\sqrt{\Bigl(\frac{\gamma}{2m}\Bigr)^2-\omega_0^2}. $$</p>
+
+<p>判别式的符号决定运动形态：</p>
+
+<table class="formula-table">
+  <thead>
+    <tr><th>区域</th><th>条件</th><th>解的形态</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>欠阻尼</strong> (underdamped)</td>
+      <td>\(\gamma<2\sqrt{mk}\)，即 \((\gamma/2m)^2<\omega_0^2\)</td>
+      <td>\(x=Ae^{-\gamma t/2m}\cos(\omega_d t+\varphi)\)，<br>\(\omega_d=\sqrt{\omega_0^2-(\gamma/2m)^2}\)</td>
+    </tr>
+    <tr>
+      <td><strong>临界阻尼</strong> (critical)</td>
+      <td>\(\gamma=2\sqrt{mk}\)</td>
+      <td>\(x=(c_1+c_2 t)e^{-\gamma t/2m}\)，无振荡，最快回零</td>
+    </tr>
+    <tr>
+      <td><strong>过阻尼</strong> (overdamped)</td>
+      <td>\(\gamma>2\sqrt{mk}\)</td>
+      <td>\(x=c_1 e^{-\alpha_+ t}+c_2 e^{-\alpha_- t}\)，慢指数回归</td>
+    </tr>
+  </tbody>
+</table>
+
+<details class="more-detail">
+  <summary>展开：欠阻尼 ω_d 怎么来的</summary>
+  <p>欠阻尼时 \((\gamma/2m)^2<\omega_0^2\)，开方下出现负数，写成 \(\pm i\omega_d\) 其中 \(\omega_d\equiv\sqrt{\omega_0^2-(\gamma/2m)^2}\)。两个根 \(\lambda=-\gamma/2m\pm i\omega_d\) 给出</p>
+  <p>$$ x = e^{-\gamma t/2m}(c_+ e^{i\omega_d t}+c_- e^{-i\omega_d t})
+       = A e^{-\gamma t/2m}\cos(\omega_d t+\varphi). $$</p>
+  <p>振荡频率 \(\omega_d<\omega_0\) ——阻尼会"减慢"振荡。包络线 \(e^{-\gamma t/2m}\) 给出指数衰减，时间常数 \(\tau=2m/\gamma\)。</p>
+</details>
+
+<h3>4.2 临界阻尼为什么"最快"？</h3>
+
+<p>常被问到的问题：欠阻尼"振荡着衰减"，过阻尼"慢慢爬回"，那介于其间的<strong>临界阻尼为什么是最快</strong>？答：</p>
+<ul>
+  <li>欠阻尼的衰减率 \(\gamma/2m\) 随 \(\gamma\) 增大而增大（阻尼越大、包络线衰减越快）。但它会振荡，可能"穿越"零点。</li>
+  <li>过阻尼有两个时间常数 \(\tau_+=1/\alpha_+\) 与 \(\tau_-=1/\alpha_-\)；其中 \(\tau_-\) 总是较慢的那一个。</li>
+  <li>临界阻尼恰好是这两种行为的"交界"，没有振荡，且没有"慢"指数项——所有衰减都用最快的速率 \(\gamma/2m\)。</li>
+</ul>
+
+<div class="box insight">
+  <p class="box-title">门 closer / 汽车减震器为什么用临界阻尼</p>
+  <p>家里厨房的回弹门、汽车的减震器、模拟仪表针的指示——这些设备都希望"快速回到平衡，但不要振荡"。所以厂家把阻尼调到接近临界值。略偏欠阻尼会让车开起来"颠两下"才稳；略偏过阻尼会让车"慢慢压实"才停。临界阻尼是工程上的甜点。</p>
+</div>
+
+<div class="box interactive">
+  <p class="box-title">交互：阻尼比 ζ 决定的三种形态</p>
+  <p>定义 \(\zeta=\gamma/(2\sqrt{mk})\)，\(\zeta<1\) 欠阻尼，\(\zeta=1\) 临界，\(\zeta>1\) 过阻尼。下图展示从静止释放（\(x_0=1, \dot x_0=0\)）的位移随时间。</p>
+
+  <div class="widget">
+    <canvas id="damping-canvas" width="600" height="280"></canvas>
+    <div class="controls">
+      <div class="control-row">
+        <label>阻尼比 ζ</label>
+        <input type="range" id="damping-zeta" min="0" max="2.5" step="0.05" value="0.3" />
+        <span class="readout" id="damping-zeta-readout"></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<h3>4.3 时间常数：振幅与能量的两个 τ</h3>
+
+<p>欠阻尼解 \(x=A e^{-\gamma t/(2m)}\cos(\omega_d t+\varphi)\) 里的指数衰减，自然引出两个不同的<strong>时间常数</strong>。这是阻尼振子（以及一切线性一阶系统）最重要的概念之一，也是后面 \(Q\) 因子的来源。</p>
+
+<h4>4.3.1 振幅 vs 能量：相差 2 倍</h4>
+
+<p>振幅按 \(e^{-\gamma t/(2m)}\) 衰减；能量正比于振幅平方，所以按 \(e^{-\gamma t/m}\) 衰减——两者的"指数斜率"差 2 倍：</p>
+
+<p>$$ \boxed{\;\tau_A = \frac{2m}{\gamma}\quad\text{(振幅时间常数)}\,,\qquad \tau_E = \frac{m}{\gamma}=\frac{\tau_A}{2}\quad\text{(能量时间常数)}\,.\;}\tag{4.2}$$</p>
+
+<p>具体说，在 \(t=\tau_A\) 时刻：</p>
+<ul>
+  <li>振幅 \(=A_0/e\approx 37\%\) of \(A_0\)；</li>
+  <li>能量 \(=E_0/e^2\approx 14\%\) of \(E_0\)（因为 \(E\propto A^2\)）。</li>
+</ul>
+
+<div class="box warning">
+  <p class="box-title">常见混淆：用错时间常数</p>
+  <p>"4 秒后振幅衰到 \(1/e\)" 的题目里，振幅时间常数 \(\tau_A=4\) s，但能量时间常数只有 \(\tau_E=2\) s。当你写"每周期能量损失比例 = \(T/\tau\)"时，<strong>必须用 \(\tau_E\)</strong>，否则会差 2 倍。这是 §6-Problem 2 里被绊到的点。</p>
+</div>
+
+<h4>4.3.2 三种等价的物理解读</h4>
+
+<p>对任意指数衰减 \(y(t)=y_0 e^{-t/\tau}\)：</p>
+
+<ol>
+  <li><strong>1/e 法则</strong>：每过一个 \(\tau\)，量减为原来的 \(1/e\approx 37\%\)。</li>
+  <li><strong>切线法则</strong>：在 \(t=0\) 的切线斜率 \(\dot y(0)=-y_0/\tau\)；如果速率保持初始值不变（线性外推），\(t=\tau\) 时归零。几何上 \(\tau\) 是切线与时间轴的交点。</li>
+  <li><strong>平均寿命</strong>：\(\tau\) 是单个粒子（或单位"扰动"）的预期寿命 \(\langle t\rangle = \int_0^\infty t\cdot \frac{e^{-t/\tau}}{\tau}\,dt = \tau\)。</li>
+</ol>
+
+<h4>4.3.3 半衰期与"几个 τ 后归零"</h4>
+
+<p><strong>半衰期</strong>（量衰为一半时间）：</p>
+
+<p>$$ y(t_{1/2})=y_0/2 \;\Longrightarrow\; t_{1/2}=\tau\ln 2\approx 0.693\,\tau. $$</p>
+
+<p><strong>多少 τ 后"基本"归零</strong>（工程速查）：</p>
+
+<table class="formula-table">
+  <thead>
+    <tr><th>时间</th><th>剩余比例 \(e^{-t/\tau}\)</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>\(\tau\)</td><td>36.8%</td></tr>
+    <tr><td>\(2\tau\)</td><td>13.5%</td></tr>
+    <tr><td>\(3\tau\)</td><td>5.0%</td></tr>
+    <tr><td>\(5\tau\)</td><td>0.67%（电气工程的"归零"惯例）</td></tr>
+    <tr><td>\(7\tau\)</td><td>0.09%</td></tr>
+  </tbody>
+</table>
+
+<h4>4.3.4 与 Q 因子的连接（提前预告 §5.3）</h4>
+
+<p>能量时间常数 \(\tau_E\) 与 \(Q\) 直接挂钩：</p>
+
+<p>$$ \boxed{\;Q=\omega_0\,\tau_E=\omega_0\,\tau_A/2\;.\;}\tag{4.3}$$</p>
+
+<p>意思：\(Q\) 是系统能量衰到 \(1/e\) 之前振了多少弧度。换成<em>周期数</em>：</p>
+
+<p>$$ N_{\text{periods}}=\tau_E/T=\frac{Q}{2\pi}. $$</p>
+
+<p>例：\(Q=4150\) 的吉他弦，能量衰到 \(1/e\) 之前振了约 \(4150/(2\pi)\approx 660\) 个周期；以 330 Hz 计，正好对应 \(\tau_E\approx 2\) s。✓</p>
+
+<div class="box remark">
+  <p class="box-title">同源现象：所有线性一阶系统共享 τ</p>
+  <table class="formula-table">
+    <tbody>
+      <tr><th>RC 电路充/放电</th><td>\(\tau=RC\)</td></tr>
+      <tr><th>RL 电路</th><td>\(\tau=L/R\)</td></tr>
+      <tr><th>Newton 冷却定律</th><td>\(\tau=mc/(hA)\)</td></tr>
+      <tr><th>放射性衰变</th><td>\(\tau=1/\lambda\)（\(\lambda\) = 衰变常数）</td></tr>
+      <tr><th>阻尼振子（振幅 / 能量）</th><td>\(\tau_A=2m/\gamma\) / \(\tau_E=m/\gamma\)</td></tr>
+      <tr><th>等温大气</th><td>"空间 \(\tau\)" \(H=P_0/(\rho_0 g)\)（用高度代替时间，参 06 节）</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<h4>4.3.5 速查表：常见问题对应哪个 τ</h4>
+
+<table class="formula-table">
+  <tbody>
+    <tr><th>振幅多久衰到 \(1/e\)？</th><td>\(\tau_A=2m/\gamma\)</td></tr>
+    <tr><th>能量多久衰到 \(1/e\)？</th><td>\(\tau_E=m/\gamma=\tau_A/2\)</td></tr>
+    <tr><th>振幅减半？</th><td>\(\tau_A\ln 2\)</td></tr>
+    <tr><th>能量减半？</th><td>\(\tau_E\ln 2\)</td></tr>
+    <tr><th>每周期能量损失比例（指数衰减下不依赖时间！）</th><td>\(T/\tau_E\)</td></tr>
+    <tr><th>Q 因子</th><td>\(Q=\omega_0\tau_E\)</td></tr>
+    <tr><th>能量衰到 \(1/e\) 前振几周期</th><td>\(N=Q/(2\pi)\)</td></tr>
+  </tbody>
+</table>
+
+<!-- ======================================================== -->
+
+<h2>§5 受迫振动与共振</h2>
+
+<p>对阻尼系统加一个周期性外力 \(F(t)=F_0\cos\omega t\)：</p>
+
+<p>$$ m\ddot x+\gamma\dot x+kx=F_0\cos\omega t. \tag{5.1}$$</p>
+
+<h3>5.1 暂态 + 稳态</h3>
+
+<p>解 = 齐次（暂态，按 \(e^{-\gamma t/2m}\) 衰减）+ 非齐次（稳态，按驱动频率 \(\omega\) 振荡）。等暂态衰完，只剩稳态：</p>
+
+<p>$$ x_{\text{ss}}(t) = A(\omega)\cos[\omega t-\delta(\omega)], $$</p>
+
+<p>用复指数试解 \(x=\tilde A e^{i\omega t}\)，代入 (5.1)（驱动写成 \(\text{Re}[F_0 e^{i\omega t}]\)）：</p>
+
+<p>$$ \tilde A = \frac{F_0}{m(\omega_0^2-\omega^2)+i\gamma\omega}, $$</p>
+
+<p>取模为振幅，取相角为相位滞后：</p>
+
+<p>$$ \boxed{\;A(\omega)=\frac{F_0}{\sqrt{m^2(\omega_0^2-\omega^2)^2+\gamma^2\omega^2}}\;,\quad\tan\delta=\frac{\gamma\omega}{m(\omega_0^2-\omega^2)}\;.\;}\tag{5.2}$$</p>
+
+<h3>5.2 共振</h3>
+
+<p>振幅 \(A(\omega)\) 在某个特定频率出现峰值。求 \(dA/d\omega=0\)：</p>
+
+<p>$$ \omega_{\text{res}}^2 = \omega_0^2-\frac{\gamma^2}{2m^2}. $$</p>
+
+<p>弱阻尼下 \(\omega_{\text{res}}\approx\omega_0\)（共振频率几乎等于自然频率）。峰值大小：</p>
+
+<p>$$ A_{\max} \approx \frac{F_0}{\gamma\omega_0}\quad(\text{弱阻尼}). $$</p>
+
+<p><strong>峰宽 \(\Delta\omega\)</strong>（半峰全宽 FWHM）：在能量响应 \(|A(\omega)|^2\) 的曲线上，<em>从峰高一半的那个值算两边的频率间距</em>就是 \(\Delta\omega\)。具体地，在弱阻尼下 \(|A|^2\) 近似 Lorentzian \(\propto 1/[(\omega-\omega_0)^2+(\gamma/2m)^2]\)，半峰处 \((\omega-\omega_0)^2=(\gamma/2m)^2\)，所以</p>
+
+<p>$$ \boxed{\;\Delta\omega=\gamma/m\;.\;}\tag{5.2'}$$</p>
+
+<div class="box insight">
+  <p class="box-title">Δω 与 τ_E 的"不确定性"关系</p>
+  <p>注意到 \(\Delta\omega = \gamma/m = 1/\tau_E\)，于是</p>
+  <p>$$ \boxed{\;\Delta\omega\cdot\tau_E = 1\;.\;}$$</p>
+  <p>这是经典版本的<strong>不确定性关系</strong>：峰窄（\(\Delta\omega\) 小）⇔ 衰减慢（\(\tau_E\) 大）⇔ 系统"记忆好"。数学上是 Fourier 变换"<em>时域窄 ↔ 频域宽</em>"的体现：振幅按 \(e^{-t/\tau_E}\) 衰减的信号，做 Fourier 变换得到的频谱就是 Lorentzian，宽度恰好 \(1/\tau_E\)。在量子力学里这成为 \(\Delta E\cdot\Delta t\sim\hbar\)。</p>
+</div>
+
+<h3>5.3 Q 因子</h3>
+
+<p>定义品质因子（quality factor）</p>
+
+<p>$$ \boxed{\;Q\equiv\frac{\omega_0 m}{\gamma}=\frac{\omega_0}{\Delta\omega}\;.\;}\tag{5.3}$$</p>
+
+<p>其中 \(\Delta\omega=\gamma/m\) 是 §5.2 定义的共振峰半峰全宽（FWHM）。\(Q\) 同时刻画三件事：</p>
+<ul>
+  <li><strong>峰锐度</strong>：\(Q\) 大 ⇒ \(\Delta\omega\) 小 ⇒ 共振峰窄而高。</li>
+  <li><strong>能量记忆度</strong>：\(Q=\omega_0\tau_E\)（参 §4.3）。\(Q\) 大 ⇒ 自由振荡持续时间长。</li>
+  <li><strong>每周期能量损失比</strong>：\(Q=2\pi\cdot E/\Delta E_{\text{cycle}}\)。\(Q\) 大 ⇒ 系统"记忆好"，振荡很多周期才衰减完。</li>
+</ul>
+<p>三种说法本质等价，靠 \(\Delta\omega\cdot\tau_E=1\) 互换。</p>
+
+<div class="box interactive">
+  <p class="box-title">交互：受迫振动的振幅响应</p>
+  <p>固定 \(\omega_0=1\)、\(F_0/m=1\)，调整阻尼。看 \(A(\omega/\omega_0)\) 曲线：阻尼越小，共振峰越尖锐。</p>
+
+  <div class="widget">
+    <canvas id="resonance-canvas" width="600" height="280"></canvas>
+    <div class="controls">
+      <div class="control-row">
+        <label>阻尼 γ/m</label>
+        <input type="range" id="resonance-gamma" min="0.05" max="2.0" step="0.05" value="0.3" />
+        <span class="readout" id="resonance-gamma-readout"></span>
+      </div>
+      <div class="control-row">
+        <label></label>
+        <span style="font-size:.85rem;color:#6b7280">
+          Q ≈ <span id="resonance-q" style="font-family:Menlo,monospace;color:#0f766e"></span>
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="box insight">
+  <p class="box-title">共振无处不在</p>
+  <p>SHM 的共振响应公式 (5.2) 是物理里最有用的方程之一：</p>
+  <ul>
+    <li><strong>电路 LC 滤波</strong>（收音机选台）：电感和电容构成 SHM 类比，调节 \(\omega_0\) 让目标电台恰好共振。</li>
+    <li><strong>核磁共振 (NMR)</strong>：质子在磁场中以 Larmor 频率 \(\omega_0\) 进动；扫一个射频驱动场，与之共振时质子吸能翻转——医院 MRI 的物理原理。</li>
+    <li><strong>原子谱线</strong>：原子吸收/发射特定频率光，其本质是电子云的共振响应；\(Q\) 决定谱线宽度。</li>
+    <li><strong>建筑工程</strong>：要避开！1940 Tacoma Narrows Bridge 在风载驱动下与扭转模式共振，4 个月内倒塌。塞马克大厦、台北 101 都装有调谐质量阻尼器（TMD）来"吸"掉风共振。</li>
+  </ul>
+</div>
+
+<!-- ======================================================== -->
+
+<h2>§6 Worked Examples</h2>
+
+<div class="example">
+  <h4>Example：从位移 + 速度求振幅与相位</h4>
+  <p class="source">改编自 Shankar §17.1 例</p>
+  <p>质量 \(m=0.5\) kg 系于劲度 \(k=200\) N/m 的弹簧，无阻尼。\(t=0\) 时观测到 \(x_0=0.10\) m, \(\dot x_0=2.0\) m/s。求振幅 \(A\) 与初相 \(\varphi\)；写出 \(x(t)\)。</p>
+
+  <div class="solution-step"><strong>角频率</strong>：\(\omega_0=\sqrt{k/m}=\sqrt{200/0.5}=20\) rad/s。</div>
+
+  <div class="solution-step"><strong>振幅</strong>：能量法。\(E=\tfrac12 k x_0^2+\tfrac12 m\dot x_0^2=\tfrac12 kA^2\)：
+    $$ A=\sqrt{x_0^2+(\dot x_0/\omega_0)^2}=\sqrt{0.01+(2/20)^2}=\sqrt{0.02}\approx 0.141\text{ m}. $$
+  </div>
+
+  <div class="solution-step"><strong>初相</strong>：从 \(x_0=A\cos\varphi\) 与 \(\dot x_0=-A\omega_0\sin\varphi\)：
+    $$ \tan\varphi=-\frac{\dot x_0}{\omega_0 x_0}=-\frac{2}{20\cdot 0.10}=-1
+       \;\Longrightarrow\;\varphi=-\pi/4. $$
+    （取使 \(\cos\varphi>0\) 的一支：\(-\pi/4\) 或 \(7\pi/4\)。）
+  </div>
+
+  <div class="solution-step"><strong>结果</strong>：\(x(t)=0.141\cos(20t-\pi/4)\) m。验证：\(t=0\) 时 \(x=0.141\cos(-\pi/4)=0.141\cdot \frac{\sqrt 2}{2}\approx 0.10\) ✓；\(\dot x=-0.141\cdot 20\sin(-\pi/4)=2.82\cdot \frac{\sqrt 2}{2}\approx 2.0\) ✓。</div>
+</div>
+
+<div class="example">
+  <h4>Example：单摆周期与小角近似</h4>
+  <p class="source">Shankar §17.4</p>
+  <p>长度 \(L=1.0\) m 的单摆。求 (a) 小幅振动周期；(b) 把 \(L\) 加长为 \(L'=4L\) 时的周期；(c) 在月球上（\(g_{\text{moon}}=1.62\) m/s²）的周期。</p>
+
+  <div class="solution-step"><strong>小角运动方程</strong>：\(\ddot\theta=-(g/L)\sin\theta\approx -(g/L)\theta\)。立刻识别为 SHM，\(\omega_0=\sqrt{g/L}\)，\(T=2\pi\sqrt{L/g}\)。</div>
+
+  <div class="solution-step"><strong>(a)</strong> \(T=2\pi\sqrt{1/9.8}\approx 2.01\) s。
+    <strong>(b)</strong> \(L\to 4L\)：\(T\to 2T\approx 4.02\) s（与 \(\sqrt L\) 成正比）。
+    <strong>(c)</strong> \(g\to g/6\)：\(T\to T\sqrt 6\approx 4.93\) s。Apollo 宇航员在月球行走、跳跃的"慢动作"画面就来源于此（步态周期与 SHM 单摆相同标度律）。
+  </div>
+
+  <div class="solution-step"><strong>注</strong>：单摆周期与<em>振幅无关</em>（小角下）。这是伽利略 1602 年的发现，也是早期机械钟的物理基础。</div>
+</div>
+
+<div class="example">
+  <h4>Problem (★ harder)：两质量耦合振子的简正模式</h4>
+  <p class="source">改编自 Shankar §17 problem set</p>
+  <p>两个质量 \(m\) 通过中间一根劲度 \(k\) 的弹簧连接，外侧两端各通过劲度 \(k\) 的弹簧固定到墙上（共三根弹簧）。求这个二自由度系统的简正频率。</p>
+
+  <div class="solution-step"><strong>列方程</strong>：设两质量位移 \(x_1, x_2\)。中间弹簧的伸长是 \(x_2-x_1\)。Newton 第二定律：
+    $$ m\ddot x_1=-kx_1+k(x_2-x_1),\qquad m\ddot x_2=-k(x_2-x_1)-kx_2. $$
+    化简：
+    $$ m\ddot x_1=-2kx_1+kx_2,\qquad m\ddot x_2=kx_1-2kx_2. $$
+  </div>
+
+  <div class="solution-step"><strong>简正模式</strong>：试解 \(x_1=a_1 e^{i\omega t}\), \(x_2=a_2 e^{i\omega t}\)，得本征值方程
+    $$ \begin{pmatrix}-2k+m\omega^2 & k\\k & -2k+m\omega^2\end{pmatrix}\begin{pmatrix}a_1\\a_2\end{pmatrix}=0. $$
+    要有非平庸解：行列式为零，给 \((m\omega^2-2k)^2=k^2\)。
+  </div>
+
+  <div class="solution-step"><strong>两个简正频率</strong>：
+    $$ \omega^2=\frac{2k\pm k}{m}\;\Longrightarrow\;\omega_-=\sqrt{k/m},\;\omega_+=\sqrt{3k/m}. $$
+    对应：
+    <ul>
+      <li>对称模式 \(\omega_-\)：\(a_1=a_2\)（两质量同向运动，中间弹簧不变形——只有外侧弹簧起作用）。</li>
+      <li>反对称模式 \(\omega_+\)：\(a_1=-a_2\)（两质量相向运动，中间弹簧变形最大）。</li>
+    </ul>
+  </div>
+
+  <div class="solution-step"><strong>物理解读</strong>：耦合系统的任意振动可分解为这两个模式的线性叠加。一般会有"拍频"现象——把能量注入一个质量后，能量在两个简正模式间来回流动。这是弹性振动里最简单的<em>非平庸</em>例子，也是分子振动光谱、晶格振子、声子等概念的基础。</div>
+</div>
+
+<div class="example">
+  <h4>Problem (★★ challenge)：从衰减观测估计 Q 因子</h4>
+  <p class="source">改编自 Shankar §17 problem set</p>
+  <p>一个吉他弦的高音 E（330 Hz）。拨响后听 4 秒，振幅衰减到原来的 \(1/e\)。求 (a) 阻尼系数 \(\gamma/m\)；(b) 该模式的 \(Q\) 因子；(c) 共振峰半宽 \(\Delta f\)。</p>
+
+  <div class="solution-step"><strong>(a)</strong> 欠阻尼振幅按 \(e^{-\gamma t/2m}\) 衰减。\(1/e\) 衰减时间 \(\tau=2m/\gamma\)。题给 \(\tau=4\) s：
+    $$ \gamma/m = 2/\tau = 0.5\text{ s}^{-1}. $$
+  </div>
+
+  <div class="solution-step"><strong>(b)</strong> \(\omega_0=2\pi f=2\pi\cdot 330\approx 2073\) rad/s。
+    $$ Q=\omega_0 m/\gamma=\omega_0/(\gamma/m)=2073/0.5\approx 4147. $$
+  </div>
+
+  <div class="solution-step"><strong>(c)</strong> 共振峰半宽 \(\Delta\omega\approx\gamma/m=0.5\) rad/s，对应 \(\Delta f=\Delta\omega/(2\pi)\approx 0.08\) Hz。</div>
+
+  <div class="solution-step"><strong>物理解读</strong>：吉他弦的 \(Q\sim 4000\) 意味着每周期只损失约 \(2\pi/Q\sim 0.16\%\) 的能量——这是为什么拨弦余音可以持续好几秒。比较一下：
+    <ul>
+      <li>NMR 谱线：\(Q\sim 10^8{-}10^9\)（现代高场 NMR 的线宽 \(\sim 0.1\) Hz at 500 MHz 以上，足以分辨化学位移 ppm 级别的差异）</li>
+      <li>原子吸收线：\(Q\sim 10^6{-}10^9\)</li>
+      <li>RLC 收音机滤波：\(Q\sim 10{-}100\)</li>
+      <li>汽车减震器：\(Q\sim 0.7\)（接近临界）</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ======================================================== -->
+
+<h2>§7 Self-check</h2>
+
+<div class="self-check">
+  <p class="question">Q1. 一个质量 \(m\) 系于<em>竖直</em>弹簧，重力会改变其振动周期吗？</p>
+  <details>
+    <summary>查看答案</summary>
+    <p>不会。重力只是把<em>平衡位置</em>从弹簧自然长度处移到 \(x_{\text{eq}}=mg/k\) 处。在新平衡位置附近，运动方程仍是 \(m\ddot{\xi}=-k\xi\)（\(\xi\equiv x-x_{\text{eq}}\)），周期依然是 \(T=2\pi\sqrt{m/k}\)。一般性结论：<strong>常力不影响 SHM 周期</strong>，只移动平衡点。这跟"势能里的常数项无意义"是同一个事实。</p>
+  </details>
+</div>
+
+<div class="self-check">
+  <p class="question">Q2. 把质量加倍、劲度也加倍，周期变成原来的多少？</p>
+  <details>
+    <summary>查看答案</summary>
+    <p>\(T=2\pi\sqrt{m/k}\)，\(m\to 2m\), \(k\to 2k\)，\(T\) 不变。两个变量互相抵消。</p>
+  </details>
+</div>
+
+<div class="self-check">
+  <p class="question">Q3. 你在静止液体里下潜（无阻尼场景），听见一个周期性低频声波。当把麦克风换成在水里振动的振子，振子接收到的频率与空气中的频率相同吗？</p>
+  <details>
+    <summary>查看答案</summary>
+    <p><strong>相同</strong>。频率是<em>振源</em>决定的——振源每秒振动多少次，每秒发出多少个波峰，跟传播媒介无关。变的是波长（\(\lambda=v/f\)，水中 \(v\approx 1500\) m/s 是空气的 4-5 倍，所以同频率水中波长长得多），不是频率。</p>
+  </details>
+</div>
+
+<div class="self-check">
+  <p class="question">Q4. 一个汽车减震器轻微"过阻尼"会怎样？</p>
+  <details>
+    <summary>查看答案</summary>
+    <p>压过减速带后，车身慢慢"压实"回平衡位置，没有振荡——但<em>恢复速度比临界阻尼慢</em>。乘坐感是"软"，因为车响应迟缓。轻微"欠阻尼"则会颠两下。厂家通常瞄准临界稍偏欠（\(\zeta\approx 0.7\)），平衡舒适感和稳定性。</p>
+  </details>
+</div>
+
+<div class="self-check">
+  <p class="question">Q5. 两座桥都遭遇与其自然频率相近的风激励。一座桥 \(Q=10\)，另一座 \(Q=1000\)。哪座更危险？</p>
+  <details>
+    <summary>查看答案</summary>
+    <p><strong>\(Q=1000\) 更危险</strong>。共振响应振幅约 \(F_0\cdot Q/k\)（弱阻尼时），\(Q\) 越大，稳态振幅越大。\(Q=1000\) 的桥会比 \(Q=10\) 的振幅大 100 倍。Tacoma Narrows 倒塌很大原因就在结构 \(Q\) 极高（钢混结构内阻很小），加上没有 TMD（调谐质量阻尼器），风激发的扭振模式共振到了破坏阈值。</p>
+  </details>
+</div>
+
+<div class="self-check">
+  <p class="question">Q6. 把摆球质量加倍，单摆周期变成原来的多少？</p>
+  <details>
+    <summary>查看答案</summary>
+    <p>不变。\(T=2\pi\sqrt{L/g}\) 与摆球质量<em>无关</em>。这是因为引力（与 \(m\) 成正比）与惯性（与 \(m\) 成正比）恰好抵消——这是"等效原理"的一个具体体现，也是相对论里弱等效原理的非相对论版本。把单摆放进 GM/r² 不同的场（不同 \(g\)）会改变 \(T\)，但摆球本身的化学组成、密度、形状（在小球极限下）都无关紧要。</p>
+  </details>
+</div>
+
+<!-- ======================================================== -->
+
+<h2>§8 公式速查表</h2>
+
+<table class="formula-table">
+  <tbody>
+    <tr><th>无阻尼方程</th><td>\(\ddot x+\omega_0^2 x=0\)，\(\omega_0=\sqrt{k/m}\)</td></tr>
+    <tr><th>无阻尼解</th><td>\(x(t)=A\cos(\omega_0 t+\varphi)\)</td></tr>
+    <tr><th>振幅由初条件</th><td>\(A=\sqrt{x_0^2+(\dot x_0/\omega_0)^2}\)，\(\tan\varphi=-\dot x_0/(\omega_0 x_0)\)</td></tr>
+    <tr><th>周期</th><td>\(T=2\pi/\omega_0=2\pi\sqrt{m/k}\)</td></tr>
+    <tr><th>能量</th><td>\(E=\tfrac12 kA^2\)，\(\langle K\rangle=\langle U\rangle=E/2\)</td></tr>
+    <tr><th>阻尼方程</th><td>\(m\ddot x+\gamma\dot x+kx=0\)</td></tr>
+    <tr><th>阻尼临界条件</th><td>\(\gamma=2\sqrt{mk}\)（\(\zeta=1\)）</td></tr>
+    <tr><th>欠阻尼解</th><td>\(x=Ae^{-\gamma t/2m}\cos(\omega_d t+\varphi)\)，\(\omega_d=\sqrt{\omega_0^2-(\gamma/2m)^2}\)</td></tr>
+    <tr><th>振幅时间常数</th><td>\(\tau_A=2m/\gamma\)（振幅 \(A\) 衰到 \(1/e\) 的时间）</td></tr>
+    <tr><th>能量时间常数</th><td>\(\tau_E=m/\gamma=\tau_A/2\)（能量 \(E\propto A^2\) 衰到 \(1/e\) 的时间）</td></tr>
+    <tr><th>半衰期</th><td>\(t_{1/2}=\tau\ln 2\approx 0.693\,\tau\)</td></tr>
+    <tr><th>每周期能量损失比例</th><td>\(\Delta E/E=T/\tau_E\)（指数衰减下与时间无关）</td></tr>
+    <tr><th>受迫方程</th><td>\(m\ddot x+\gamma\dot x+kx=F_0\cos\omega t\)</td></tr>
+    <tr><th>稳态振幅</th><td>\(A(\omega)=F_0/\sqrt{m^2(\omega_0^2-\omega^2)^2+\gamma^2\omega^2}\)</td></tr>
+    <tr><th>共振频率</th><td>\(\omega_{\text{res}}=\sqrt{\omega_0^2-\gamma^2/(2m^2)}\)，弱阻尼下 \(\approx\omega_0\)</td></tr>
+    <tr><th>峰值振幅（弱阻尼）</th><td>\(A_{\max}\approx F_0/(\gamma\omega_0)\)</td></tr>
+    <tr><th>共振峰宽（FWHM）</th><td>\(\Delta\omega=\gamma/m=1/\tau_E\)</td></tr>
+    <tr><th>不确定性关系</th><td>\(\Delta\omega\cdot\tau_E=1\)（Fourier 时-频对偶）</td></tr>
+    <tr><th>Q 因子</th><td>\(Q=\omega_0 m/\gamma=\omega_0\tau_E=\omega_0/\Delta\omega=2\pi E/\Delta E_{\text{cycle}}\)</td></tr>
+    <tr><th>能量衰到 1/e 前振几周期</th><td>\(N=Q/(2\pi)\)</td></tr>
+    <tr><th>单摆（小角）</th><td>\(T=2\pi\sqrt{L/g}\)，振幅无关</td></tr>
+  </tbody>
+</table>
+
+<!-- ======================================================== -->
+
+<div class="glossary">
+  <h2>术语表</h2>
+  <dl>
+    <dt>简谐振动 (simple harmonic motion, SHM)</dt>
+    <dd>恢复力线性正比于位移 \(F=-kx\) 时的运动；解为正弦/余弦。</dd>
+
+    <dt>自然频率 (natural frequency, ω₀)</dt>
+    <dd>无阻尼无外力时系统的振动角频率；只取决于系统本身。</dd>
+
+    <dt>振幅 (amplitude, A)</dt>
+    <dd>位移的最大值；能量 \(E=\tfrac12 kA^2\)。</dd>
+
+    <dt>相位 (phase, φ)</dt>
+    <dd>振动周期内的位置；不同初条件对应不同初相。</dd>
+
+    <dt>阻尼系数 (damping coefficient, γ)</dt>
+    <dd>线性阻力的比例系数：\(F_{\text{drag}}=-\gamma\dot x\)。</dd>
+
+    <dt>阻尼比 (damping ratio, ζ)</dt>
+    <dd>\(\zeta=\gamma/(2\sqrt{mk})\)，无量纲；\(\zeta=1\) 为临界。</dd>
+
+    <dt>欠 / 临界 / 过阻尼</dt>
+    <dd>分别对应 \(\zeta<1, =1, >1\)；行为分别为衰减振荡 / 最快单调回归 / 慢指数回归。</dd>
+
+    <dt>时间常数 (time constant, τ)</dt>
+    <dd>指数衰减 \(y\propto e^{-t/\tau}\) 中的特征时间；每过 \(\tau\) 量减为 \(1/e\)。半衰期 \(=\tau\ln 2\)。</dd>
+
+    <dt>振幅 / 能量时间常数 (\(\tau_A\) / \(\tau_E\))</dt>
+    <dd>阻尼振子振幅按 \(e^{-t/\tau_A}\) 衰减、能量按 \(e^{-t/\tau_E}\) 衰减；因 \(E\propto A^2\) 故 \(\tau_E=\tau_A/2\)。</dd>
+
+    <dt>受迫振动 (driven oscillation)</dt>
+    <dd>系统受到周期性外力时的稳态响应。</dd>
+
+    <dt>共振 (resonance)</dt>
+    <dd>驱动频率接近自然频率时，振幅响应出现峰值。</dd>
+
+    <dt>半峰全宽 (FWHM, Δω)</dt>
+    <dd>共振峰高一半处的两个频率之差；阻尼振子 \(\Delta\omega=\gamma/m=1/\tau_E\)。是 \(Q=\omega_0/\Delta\omega\) 里的"宽"。</dd>
+
+    <dt>Q 因子 (quality factor)</dt>
+    <dd>\(Q=\omega_0 m/\gamma\)，刻画共振峰锐度与每周期能量损失的反比。</dd>
+
+    <dt>简正模式 (normal mode)</dt>
+    <dd>多自由度系统中所有自由度按同一频率、同一相位振动的运动模式。</dd>
+
+    <dt>调谐质量阻尼器 (tuned mass damper, TMD)</dt>
+    <dd>大型建筑里加装的辅助质量-弹簧系统，吸收主结构的共振能量；台北 101、东京晴空塔皆有。</dd>
+  </dl>
+</div>
+
+<!-- ======================================================== -->
+
+<nav class="page-nav">
+  <a class="nav-prev" href="index.html">总目录</a>
+  <a class="nav-next" href="02_wave_propagation.html">一维波传播</a>
+</nav>
+
+</main>
+
+<script src="interactive.js"></script>
+<script>
+  markCurrentReviewing('01_shm.html');
+
+  // -------- Damping regimes --------
+  (function() {
+    const setup = setupCanvas('damping-canvas', 600, 280);
+    if (!setup) return;
+    const { ctx, w, h } = setup;
+    const omega0 = 1;     // natural freq
+    const Tmax = 30;      // time range
+
+    function draw(zeta) {
+      ctx.clearRect(0, 0, w, h);
+      drawAxes(ctx, w, h, {
+        padL: 50, padR: 20, padT: 20, padB: 35,
+        xLabel: 't  (单位 1/ω₀)', yLabel: 'x(t)',
+      });
+      const map = makeMap({
+        padL: 50, padR: 20, padT: 20, padB: 35,
+        w, h, xMin: 0, xMax: Tmax, yMin: -1.2, yMax: 1.2,
+      });
+
+      // grid + zero line
+      ctx.strokeStyle = '#e7e5e4';
+      [-1, -0.5, 0, 0.5, 1].forEach(yv => {
+        const py = map.yToPx(yv);
+        ctx.beginPath();
+        ctx.moveTo(50, py); ctx.lineTo(w - 20, py);
+        ctx.stroke();
+        ctx.fillStyle = '#9ca3af';
+        ctx.font = "10px -apple-system, sans-serif";
+        ctx.textAlign = 'right';
+        ctx.fillText(yv.toFixed(1), 47, py + 3);
+      });
+
+      // x-axis ticks
+      [0, 5, 10, 15, 20, 25, 30].forEach(xv => {
+        const px = map.xToPx(xv);
+        ctx.fillStyle = '#9ca3af';
+        ctx.textAlign = 'center';
+        ctx.fillText(xv, px, h - 20);
+      });
+
+      // analytic solutions for x(0)=1, x'(0)=0
+      let traj = [];
+      const dt = 0.05;
+      for (let t = 0; t <= Tmax; t += dt) {
+        let x;
+        if (Math.abs(zeta - 1) < 0.001) {
+          // critical
+          x = (1 + omega0 * t) * Math.exp(-omega0 * t);
+        } else if (zeta < 1) {
+          const wd = omega0 * Math.sqrt(1 - zeta * zeta);
+          const env = Math.exp(-zeta * omega0 * t);
+          // for x(0)=1, dot=0:
+          // x = e^{-zw0 t}(cos(wd t)+ (zw0/wd)sin(wd t))
+          x = env * (Math.cos(wd * t) + (zeta * omega0 / wd) * Math.sin(wd * t));
+        } else {
+          // overdamped
+          const root = omega0 * Math.sqrt(zeta * zeta - 1);
+          const a = -zeta * omega0;
+          const lam1 = a + root, lam2 = a - root;
+          // x(0)=1, x'(0)=0:
+          // c1 + c2 = 1, lam1 c1 + lam2 c2 = 0
+          // c2 = -lam1/lam2 c1, c1 (1 - lam1/lam2)=1, c1 = lam2/(lam2-lam1)
+          const c1 = lam2 / (lam2 - lam1);
+          const c2 = 1 - c1;
+          x = c1 * Math.exp(lam1 * t) + c2 * Math.exp(lam2 * t);
+        }
+        traj.push([t, x]);
+      }
+
+      // color by zeta
+      let color, label;
+      if (zeta < 1) { color = '#0f766e'; label = '欠阻尼'; }
+      else if (Math.abs(zeta - 1) < 0.05) { color = '#9333ea'; label = '临界阻尼'; }
+      else { color = '#ea580c'; label = '过阻尼'; }
+      ctx.strokeStyle = color;
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      traj.forEach(([t, x], i) => {
+        const px = map.xToPx(t), py = map.yToPx(x);
+        if (i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+      });
+      ctx.stroke();
+
+      // label
+      ctx.fillStyle = color;
+      ctx.font = "13px -apple-system, sans-serif";
+      ctx.textAlign = 'left';
+      ctx.fillText(label, w - 130, 30);
+    }
+
+    bindSlider('damping-zeta', 'damping-zeta-readout',
+      v => draw(v),
+      v => v.toFixed(2)
+    );
+  })();
+
+  // -------- Resonance curve --------
+  (function() {
+    const setup = setupCanvas('resonance-canvas', 600, 280);
+    if (!setup) return;
+    const { ctx, w, h } = setup;
+    const omega0 = 1, F0overM = 1;
+
+    function draw(gamma_over_m) {
+      ctx.clearRect(0, 0, w, h);
+      drawAxes(ctx, w, h, {
+        padL: 50, padR: 20, padT: 20, padB: 35,
+        xLabel: 'ω / ω₀', yLabel: 'A(ω)',
+      });
+      const map = makeMap({
+        padL: 50, padR: 20, padT: 20, padB: 35,
+        w, h, xMin: 0, xMax: 2.5, yMin: 0, yMax: 8,
+      });
+
+      // grid
+      ctx.strokeStyle = '#e7e5e4';
+      [0, 2, 4, 6, 8].forEach(yv => {
+        const py = map.yToPx(yv);
+        ctx.beginPath();
+        ctx.moveTo(50, py); ctx.lineTo(w - 20, py); ctx.stroke();
+        ctx.fillStyle = '#9ca3af';
+        ctx.font = "10px -apple-system, sans-serif";
+        ctx.textAlign = 'right';
+        ctx.fillText(yv, 47, py + 3);
+      });
+      [0, 0.5, 1, 1.5, 2, 2.5].forEach(xv => {
+        const px = map.xToPx(xv);
+        ctx.fillStyle = '#9ca3af';
+        ctx.textAlign = 'center';
+        ctx.fillText(xv, px, h - 20);
+      });
+
+      // amplitude curve A(omega)/F0/m
+      ctx.strokeStyle = '#0f766e';
+      ctx.lineWidth = 2.5;
+      ctx.beginPath();
+      for (let i = 0; i <= 250; i++) {
+        const wRatio = (i / 100); // 0 to 2.5
+        const omega = wRatio * omega0;
+        const denom = Math.sqrt(
+          Math.pow(omega0 * omega0 - omega * omega, 2)
+          + gamma_over_m * gamma_over_m * omega * omega
+        );
+        const A = F0overM / denom;
+        const px = map.xToPx(wRatio), py = map.yToPx(A);
+        if (i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+      }
+      ctx.stroke();
+
+      // resonance vertical line at omega_res / omega_0
+      const omegaRes = Math.sqrt(Math.max(0, omega0 * omega0 - 0.5 * gamma_over_m * gamma_over_m));
+      const xRes = omegaRes / omega0;
+      ctx.strokeStyle = '#ea580c';
+      ctx.setLineDash([4, 4]);
+      ctx.beginPath();
+      ctx.moveTo(map.xToPx(xRes), map.yToPx(0));
+      ctx.lineTo(map.xToPx(xRes), map.yToPx(8));
+      ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.fillStyle = '#ea580c';
+      ctx.font = "11px -apple-system, sans-serif";
+      ctx.textAlign = 'center';
+      ctx.fillText('ω_res', map.xToPx(xRes), 18);
+
+      // Q factor
+      const Q = omega0 / gamma_over_m;
+      document.getElementById('resonance-q').textContent = Q.toFixed(1);
+    }
+
+    bindSlider('resonance-gamma', 'resonance-gamma-readout',
+      v => draw(v),
+      v => v.toFixed(2) + ' /s'
+    );
+  })();
+</script>
+
+</body>
+</html>

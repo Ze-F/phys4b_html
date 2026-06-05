@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quiz 3 题集 — PHYS 4B 复习</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="theme.js"></script>
+  <style>
+    .problem-toc {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+      gap: .35rem;
+      margin: 1rem 0 2rem;
+      font-family: -apple-system, 'PingFang SC', sans-serif;
+      font-size: .82rem;
+    }
+    .problem-toc a {
+      display: block;
+      padding: .35rem .55rem;
+      background: white;
+      border: 1px solid #d6d3d1;
+      border-radius: 4px;
+      color: #134e4a;
+      text-decoration: none;
+      text-align: center;
+      transition: all .12s;
+    }
+    .problem-toc a:hover {
+      background: #0f766e;
+      color: white;
+      border-color: #0f766e;
+    }
+    .answer-box {
+      background: #eff6ff;
+      border-left: 3px solid #2563eb;
+      padding: .55rem .8rem;
+      margin: .65rem 0 .25rem;
+      font-weight: 500;
+      color: #1e3a8a;
+      font-family: -apple-system, 'PingFang SC', 'Helvetica Neue', sans-serif;
+    }
+    .answer-box::before {
+      content: '✓ 答案：';
+      color: #2563eb;
+      font-weight: 700;
+    }
+    .problem-statement {
+      background: #fafaf9;
+      border-left: 3px solid #a8a29e;
+      padding: .6rem .8rem;
+      margin: .35rem 0 .75rem;
+      font-style: italic;
+      color: #44403c;
+    }
+    .scope-tag {
+      display: inline-block;
+      font-size: .7rem;
+      padding: .1rem .4rem;
+      border-radius: 8px;
+      margin-left: .5rem;
+      font-family: -apple-system, sans-serif;
+      vertical-align: middle;
+      font-style: normal;
+      font-weight: 500;
+    }
+    .scope-q3 { background: #fee2e2; color: #991b1b; }
+    .scope-q2 { background: #fef3c7; color: #92400e; }
+    .scope-w4 { background: #e0f2fe; color: #075985; }
+    .scope-w5 { background: #f3e8ff; color: #6b21a8; }
+    .legend {
+      font-size: .85rem;
+      color: #6b7280;
+      margin: 1rem 0;
+      font-family: -apple-system, 'PingFang SC', sans-serif;
+    }
+    .legend .scope-tag { margin: 0 .35rem 0 0; }
+  </style>
+  <script>
+    MathJax = {
+      tex: { inlineMath: [['\\(', '\\)']], displayMath: [['$$', '$$']] },
+      svg: { fontCache: 'global' }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" async></script>
+</head>
+<body>
+
+<header class="site-header">
+  <a class="home-link" href="index.html">← PHYS 4B 复习</a>
+  <nav>
+    <a href="06_fluid_statics.html">06 流体静</a>
+    <a href="07_fluid_dynamics.html">07 流体动</a>
+    <a href="08_real_fluids_heat.html">08 真实+热</a>
+  </nav>
+</header>
+
+<main class="container">
+
+<div class="topic-header">
+  <h1>Quiz 3 题集</h1>
+  <p class="meta">Shankar Problem Set 10 (Ch.20, 流体) + Problem Set 11 (Ch.21–24, 热学) · 27 道题完整解答</p>
+  <p class="blurb">本页把 Quiz 3 范围内的所有 Shankar 习题（流体 10.1–10.20 + 热学 11.1–11.7）配以中文解答整理在一处。每题给出题目、策略、关键步骤、答案核查；与课程概念对接的地方会回链到对应主题 HTML（06/07/08）。</p>
+</div>
+
+<div class="legend">
+  <span class="scope-tag scope-q3">Q3 新</span> 仅 Quiz 3 直接覆盖（新内容）
+  <span class="scope-tag scope-q2">Q2 残留</span> Quiz 2 涉及但仍在 Q3 范围
+  <span class="scope-tag scope-w4">第 4 周</span> 第 4 周课覆盖
+  <span class="scope-tag scope-w5">第 5 周</span> 第 5 周课覆盖（热学）
+</div>
+
+<div class="box insight">
+  <p class="box-title">通用常数（Shankar p.501）</p>
+  <p>\(g=9.81\) m/s²；\(\rho_{\text{water}}=10^3\) kg/m³；\(\rho_{\text{air}}=1.2\) kg/m³；\(L_f=334\) kJ/kg \(=80\) kcal/kg；\(L_v=2257\) kJ/kg \(\approx 540\) kcal/kg；\(c_{\text{water}}=4184\) J/(kg·K) \(=1\) cal/(g·°C)；\(c_{\text{ice}}\approx 2090\) J/(kg·K) \(\approx 0.5\) cal/(g·°C)；\(c_{\text{Cu}}\approx 386\) J/(kg·K) \(\approx 0.092\) cal/(g·°C)；1 cal = 4.184 J。</p>
+</div>
+
+<!-- ======================================================== -->
+
+<h2 id="ch20">Problem Set 10 — Chapter 20（流体）</h2>
+
+<div class="problem-toc">
+  <a href="#p10-1">10.1</a>
+  <a href="#p10-2">10.2</a>
+  <a href="#p10-3">10.3</a>
+  <a href="#p10-4">10.4</a>
+  <a href="#p10-5">10.5</a>
+  <a href="#p10-6">10.6</a>
+  <a href="#p10-7">10.7</a>
+  <a href="#p10-8">10.8</a>
+  <a href="#p10-9">10.9</a>
+  <a href="#p10-10">10.10</a>
+  <a href="#p10-11">10.11</a>
+  <a href="#p10-12">10.12</a>
+  <a href="#p10-13">10.13</a>
+  <a href="#p10-14">10.14</a>
+  <a href="#p10-15">10.15</a>
+  <a href="#p10-16">10.16</a>
+  <a href="#p10-17">10.17</a>
+  <a href="#p10-18">10.18</a>
+  <a href="#p10-19">10.19</a>
+  <a href="#p10-20">10.20</a>
+</div>
+
+<!-- ============== 10.1 ============== -->
+<div class="example" id="p10-1">
+  <h4>10.1 — 油 + 水柱底压强 <span class="scope-tag scope-q2">Q2</span></h4>
+  <p class="problem-statement">竖直管半径 1 cm，顶端开口对大气，内含 2 cm 油（\(\rho_{\text{oil}}=0.82\rho_{\text{water}}\)）浮在 3 cm 水之上。求底部的<strong>表压</strong>（gauge pressure，超出大气压的部分）。</p>
+
+  <div class="solution-step"><strong>策略</strong>：表压只看流体柱的重量贡献：\(\Delta P=\rho gh\)（不可压缩流体的静力学方程）。两层流体的贡献叠加。</div>
+
+  <div class="solution-step"><strong>计算</strong>：
+    $$ P_{\text{gauge}} = \rho_{\text{oil}}\,g\,h_{\text{oil}} + \rho_{\text{water}}\,g\,h_{\text{water}}
+       = 820\cdot 9.81\cdot 0.02 + 1000\cdot 9.81\cdot 0.03. $$
+    $$ = 161 + 294 = 455 \text{ Pa}. $$
+  </div>
+
+  <div class="solution-step"><strong>注意</strong>：管子半径 1 cm 与本题无关——表压只看高度。如果题问的是底面承受的<em>力</em>，那才需要面积。</div>
+
+  <div class="answer-box">\(P_{\text{gauge}}\approx 455\) Pa</div>
+</div>
+
+<!-- ============== 10.2 ============== -->
+<div class="example" id="p10-2">
+  <h4>10.2 — 用吸管喝水：所需最小压差 <span class="scope-tag scope-q2">Q2</span></h4>
+  <p class="problem-statement">想用一根 120 cm 高的吸管喝水。求大气与口腔内部之间的最小压差。</p>
+
+  <div class="solution-step"><strong>策略</strong>：水从管子底部上升到嘴里，需要嘴里的压强比大气低，差额恰好支撑 \(h=1.20\) m 高的水柱。</div>
+
+  <div class="solution-step"><strong>计算</strong>：
+    $$ \Delta P_{\min} = \rho_{\text{water}}\,g\,h = 1000\cdot 9.81\cdot 1.20 \approx 1.18\times 10^4\text{ Pa}. $$
+  </div>
+
+  <div class="solution-step"><strong>解读</strong>：约 0.12 atm。注意一个上限——水柱无法超过 \(P_{\text{atm}}/(\rho g)\approx 10.3\) m，因为嘴里压强即使为<em>真空</em>也只能支撑这么高的水柱。这就是为什么"用吸管从 11 楼吸下面 1 楼的可乐"在物理上不可能。</div>
+
+  <div class="answer-box">\(\Delta P_{\min}\approx 1.2\times 10^4\) Pa</div>
+</div>
+
+<!-- ============== 10.3 ============== -->
+<div class="example" id="p10-3">
+  <h4>10.3 — 罐子开孔的射程优化 <span class="scope-tag scope-w4">W4</span></h4>
+  <p class="problem-statement">宽水罐装水到高 \(h\)。问：应在距离底部多高 \(z\) 处开孔，使得 (i) 射程最远；(ii) 射出水柱水平距离恰好等于竖直下落距离；(iii) 射程的最大值是多少？忽略液面下降速度。</p>
+
+  <div class="solution-step"><strong>策略</strong>：Bernoulli 给孔口出射速度 \(v=\sqrt{2g(h-z)}\)；自由落体下落 \(z\) 用时 \(t=\sqrt{2z/g}\)。射程 \(R=vt=2\sqrt{z(h-z)}\)。详见 <a href="07_fluid_dynamics.html#sec:range">07 §5</a>。</div>
+
+  <div class="solution-step"><strong>(i) 求最大值</strong>：\(\dfrac{d}{dz}[z(h-z)]=h-2z=0\Rightarrow z=h/2\)。</div>
+
+  <div class="solution-step"><strong>(ii) 水平=竖直</strong>：要求 \(R=z\)：
+    $$ 2\sqrt{z(h-z)}=z\;\Longrightarrow\;4z(h-z)=z^2
+       \;\Longrightarrow\;4(h-z)=z\;\Longrightarrow\;z=\frac{4h}{5}. $$
+  </div>
+
+  <div class="solution-step"><strong>(iii) 最大射程</strong>：代回 \(z=h/2\)：\(R_{\max}=2\sqrt{(h/2)(h/2)}=h\)。</div>
+
+  <div class="answer-box">(i) \(z=h/2\)；(ii) \(z=4h/5\)；(iii) \(R_{\max}=h\)</div>
+</div>
+
+<!-- ============== 10.4 ============== -->
+<div class="example" id="p10-4">
+  <h4>10.4 — 矩形孔的初始流量（积分） <span class="scope-tag scope-w4">W4</span></h4>
+  <p class="problem-statement">圆柱形容器侧壁开一矩形孔，宽 \(w\)，孔上下边缘自液面深度 \(d_1, d_2\)（\(d_2>d_1\)）。
+    (i) 用积分证明初始体积流率 \(\displaystyle Q=\frac{2w}{3}\sqrt{2g}\,(d_2^{3/2}-d_1^{3/2})\)（忽略液面运动）。
+    (ii) 设 \(d_2=d_1+\delta\)，\(\delta\) 极小，计算流率，并验证它是 (i) 的极限。</p>
+
+  <div class="box warning" style="font-size:.92rem">
+    <p class="box-title" style="font-size:.85rem">变量约定（与 10.3 不同）</p>
+    <p>本题里 \(d\)（包括 \(d_1, d_2\)）是<strong>距水面的<em>深度</em></strong>，不是距底部的高度。所以 Torricelli 直接写成 \(v(d)=\sqrt{2gd}\)（公式内核：\(v=\sqrt{2g\cdot\text{孔距水面的深度}}\)）。10.3 用 \(z\) 表示<em>孔距底部的高度</em>、\(h\) 是总水位，所以那里的形式是 \(v=\sqrt{2g(h-z)}\)。两者一回事，只是命名不同。</p>
+  </div>
+
+  <div class="solution-step"><strong>(i) 策略</strong>：把矩形孔切成水平细条，每条深 \(d\)、宽 \(w\)、高 \(dd\)。Torricelli 给该条的出射速度 \(v(d)=\sqrt{2gd}\)。该条流率 \(dQ=v\cdot w\cdot dd\)。对 \(d\) 从 \(d_1\) 到 \(d_2\) 积分：
+    $$ Q=w\sqrt{2g}\int_{d_1}^{d_2}\sqrt{d}\,dd=w\sqrt{2g}\cdot\frac{2}{3}\bigl(d_2^{3/2}-d_1^{3/2}\bigr)
+        =\frac{2w}{3}\sqrt{2g}\,(d_2^{3/2}-d_1^{3/2}). $$
+  </div>
+
+  <div class="solution-step"><strong>(ii) 极限 \(d_2=d_1+\delta\)</strong>：用二项展开 \((1+\delta/d_1)^{3/2}\approx 1+\tfrac32\delta/d_1\)：
+    $$ d_2^{3/2}=d_1^{3/2}(1+\delta/d_1)^{3/2}\approx d_1^{3/2}+\tfrac32 d_1^{1/2}\delta. $$
+    代入 (i)：
+    $$ Q \approx\frac{2w}{3}\sqrt{2g}\cdot \tfrac32\sqrt{d_1}\,\delta
+        =w\sqrt{2gd_1}\cdot \delta. $$
+    这正是"狭缝面积 \(w\delta\) 乘以 Torricelli 速度 \(\sqrt{2gd_1}\)"——薄片极限下与 Torricelli 一致。✓
+  </div>
+
+  <div class="answer-box">(i) 见上；(ii) \(Q\to w\sqrt{2gd_1}\,\delta\)（恢复 Torricelli）</div>
+</div>
+
+<!-- ============== 10.5 ============== -->
+<div class="example" id="p10-5">
+  <h4>10.5 — 落入水中的密度 ρ 物体 <span class="scope-tag scope-q3">Q3</span></h4>
+  <p class="problem-statement">密度 \(\rho\) 的物体从高 \(H\) 处自由落入密度 \(\rho_w>\rho\) 的水。
+    (i) 它沉到多深 \(d\) 后开始上浮？(ii) 浮起后水下体积占总体积的比例 \(f\) 是多少？</p>
+
+  <div class="solution-step"><strong>(i) 用功-能量定理</strong>。物体进入水面时速度 \(v_0=\sqrt{2gH}\)，动能 \(KE_0=\tfrac12 m v_0^2 = mgH\)。到最深处（瞬间停下）\(KE_f=0\)。下沉过程中两个力做功（\(V\) = 物体体积，\(m=\rho V\)）：
+    <ul>
+      <li>重力（向下 \(mg\)，运动向下，<strong>同向</strong>）做<em>正</em>功：\(W_{\text{重}}=+mgd\)</li>
+      <li>浮力（向上 \(\rho_w V g\)，运动向下，<strong>反向</strong>）做<em>负</em>功：\(W_{\text{浮}}=-\rho_w Vgd\)</li>
+    </ul>
+    功-能量定理 \(\Delta KE = W_{\text{总}}\)：
+    $$ 0 - mgH = mgd - \rho_w Vgd. $$
+    用 \(m=\rho V\)，把右边整理成 \((\rho-\rho_w)Vgd\)：
+    $$ -\rho V g H = (\rho-\rho_w)Vgd
+       \;\Longrightarrow\;
+       \rho V g H = (\rho_w-\rho)Vgd. $$
+    解得 \(\boxed{d=\dfrac{\rho H}{\rho_w-\rho}}\)。
+  </div>
+
+  <div class="solution-step"><strong>(ii) 浮起后平衡</strong>：浮力 = 重力。设水下体积 \(V_{\text{sub}}\)：
+    $$ \rho_w V_{\text{sub}}\,g = \rho V g
+       \;\Longrightarrow\;
+       \boxed{f=V_{\text{sub}}/V=\rho/\rho_w}. $$
+  </div>
+
+  <div class="solution-step"><strong>极限核查</strong>：\(\rho\to\rho_w\)：\(d\to\infty\)（轻物入水沉得极深），\(f\to 1\)（几乎全淹）。\(\rho\ll\rho_w\)：\(d\to 0\)（沉得不深），\(f\to 0\)（几乎全露）。</div>
+
+  <div class="answer-box">(i) \(d=H\rho/(\rho_w-\rho)\)；(ii) \(f=\rho/\rho_w\)</div>
+</div>
+
+<!-- ============== 10.6 ============== -->
+<div class="example" id="p10-6">
+  <h4>10.6 — 拉住浮起的软木 <span class="scope-tag scope-q3">Q3</span></h4>
+  <p class="problem-statement">软木密度 \(\rho=0.22\,\rho_{\text{water}}\) 用一根线拴在水底，全部浸没。求线张力与软木重力之比 \(T/(mg)\)。</p>
+
+  <div class="solution-step"><strong>受力分析</strong>：浮力（向上）\(\rho_w V g\)；重力（向下）\(mg=\rho Vg\)；张力（向下，把它拉住）\(T\)。平衡：
+    $$ \rho_w V g = \rho V g + T
+       \;\Longrightarrow\;
+       T=(\rho_w-\rho)Vg = (\rho_w/\rho - 1)\,mg. $$
+  </div>
+
+  <div class="solution-step"><strong>代入</strong>：\(\rho_w/\rho=1/0.22\approx 4.545\)。
+    $$ T/(mg)=4.545-1=3.545\approx 3.5. $$
+  </div>
+
+  <div class="answer-box">\(T/(mg)\approx 3.5\)</div>
+</div>
+
+<!-- ============== 10.7 ============== -->
+<div class="example" id="p10-7">
+  <h4>10.7 — 浮体的小幅振动周期 <span class="scope-tag scope-q3">Q3</span></h4>
+  <p class="problem-statement">截面积 \(A\)、质量 \(m\) 的圆柱竖直浮于密度 \(\rho\) 的流体。略微下压再松手，小幅振动周期是多少？</p>
+
+  <div class="solution-step"><strong>策略</strong>：任意位移 \(y\)（从平衡位置向下）使额外排水体积 \(Ay\)，多出的浮力 \(\rho A y g\)（向上）变成<strong>恢复力</strong>。这正是 Hooke 定律 \(F=-ky\)，其中"等效劲度" \(k=\rho A g\)。</div>
+
+  <div class="solution-step"><strong>SHM 周期</strong>：
+    $$ T=2\pi\sqrt{m/k}=\boxed{2\pi\sqrt{\dfrac{m}{\rho g A}}}. $$
+  </div>
+
+  <div class="solution-step"><strong>核查</strong>：维度 \([m/(\rho g A)]=\)kg/(kg/m³·m/s²·m²)=s²。✓ 形式：\(\rho A\) 越大（流体重、截面大），恢复力越强，振得越快——合理。</div>
+
+  <div class="answer-box">\(T=2\pi\sqrt{m/(\rho g A)}\)</div>
+</div>
+
+<!-- ============== 10.8 ============== -->
+<div class="example" id="p10-8">
+  <h4>10.8 — Venturi 流量 <span class="scope-tag scope-w4">W4</span></h4>
+  <p class="problem-statement">水平水管直径 \(d_1=10\) cm，缩窄到 \(d_2=4\) cm。\(P_1=10^5\) Pa，\(P_2=8\times 10^4\) Pa。求体积流率。</p>
+
+  <div class="solution-step"><strong>策略</strong>：连续性 \(A_1 v_1=A_2 v_2\)，Bernoulli 同高 \(P_1+\tfrac12\rho v_1^2=P_2+\tfrac12\rho v_2^2\)。详见 <a href="07_fluid_dynamics.html#sec:venturi">07 §7</a>。</div>
+
+  <div class="solution-step"><strong>消 \(v_2=v_1 A_1/A_2\)</strong>：
+    $$ P_1-P_2 = \tfrac12\rho v_1^2\!\left(\frac{A_1^2}{A_2^2}-1\right)
+       \;\Longrightarrow\;
+       v_1=\sqrt{\frac{2(P_1-P_2)/\rho}{A_1^2/A_2^2-1}}. $$
+  </div>
+
+  <div class="solution-step"><strong>数值</strong>：\(A_1=\pi(0.05)^2=7.85\times 10^{-3}\) m²；\(A_2=\pi(0.02)^2=1.26\times 10^{-3}\) m²；\(A_1/A_2=6.25\)；\(A_1^2/A_2^2=39.0\)；\(P_1-P_2=2\times 10^4\) Pa。
+    $$ v_1=\sqrt{\frac{2\cdot 2\times 10^4/1000}{39-1}}=\sqrt{40/38}\approx 1.026\text{ m/s}. $$
+    $$ Q = A_1 v_1 = 7.85\times 10^{-3}\cdot 1.026\approx 8.1\times 10^{-3}\text{ m}^3/\text{s}. $$
+  </div>
+
+  <div class="answer-box">\(Q\approx 8.1\times 10^{-3}\) m³/s</div>
+</div>
+
+<!-- ============== 10.9 ============== -->
+<div class="example" id="p10-9">
+  <h4>10.9 — 机翼升力（Bernoulli 视角） <span class="scope-tag scope-w4">W4</span></h4>
+  <p class="problem-statement">机翼面积 \(50\) m²，上下表面气流速度分别为 \(v_{\text{上}}=90\) m/s，\(v_{\text{下}}=70\) m/s，\(\rho_{\text{air}}=1.16\) kg/m³。求升力。</p>
+
+  <div class="solution-step"><strong>Bernoulli</strong>（同一流线，等高近似）：
+    $$ P_{\text{下}}-P_{\text{上}}=\tfrac12\rho(v_{\text{上}}^2-v_{\text{下}}^2). $$
+    $$ \Delta P=\tfrac12\cdot 1.16\cdot (90^2-70^2)=\tfrac12\cdot 1.16\cdot 3200=1856\text{ Pa}. $$
+  </div>
+
+  <div class="solution-step"><strong>升力</strong>：
+    $$ L=\Delta P\cdot A=1856\cdot 50\approx 9.3\times 10^4\text{ N}. $$
+    约 9.5 公吨——足够把一架小型客机抬起（一架小型支线客机典型起飞重量 \(\sim 50\) 公吨需要 4 倍翼面积或更高速度）。
+  </div>
+
+  <div class="answer-box">\(L\approx 9.3\times 10^4\) N</div>
+</div>
+
+<!-- ============== 10.10 ============== -->
+<div class="example" id="p10-10">
+  <h4>10.10 — 泳池侧壁的水压合力 <span class="scope-tag scope-q2">Q2</span></h4>
+  <p class="problem-statement">户外泳池的一面墙长 10 m，深 2 m。问需要多大水平合力顶住它？</p>
+
+  <div class="solution-step"><strong>策略</strong>：墙面上的压强随深度线性增加 \(P(h)=\rho gh\)（表压，去掉大气压因为另一侧也是大气）。把压强积分到面积上。</div>
+
+  <div class="solution-step"><strong>积分</strong>：墙宽 \(L=10\) m，深 \(D=2\) m。在深度 \(h\) 处的水平条带 \(L\,dh\) 受压力 \(P(h)L\,dh=\rho g h L\,dh\)：
+    $$ F=\int_0^D \rho g h L\,dh=\rho g L \cdot \frac{D^2}{2}=1000\cdot 9.81\cdot 10\cdot 2=196200\text{ N}. $$
+  </div>
+
+  <div class="solution-step"><strong>等价表述</strong>：相当于在墙的"压强中心"（深度 \(D/2\) 处）作用平均压强 \(\rho gD/2\) 乘以墙面积 \(LD\)：
+    $$ F=\rho g(D/2)(LD)=\rho g LD^2/2. $$
+  </div>
+
+  <div class="answer-box">\(F\approx 196\) kN</div>
+</div>
+
+<!-- ============== 10.11 ============== -->
+<div class="example" id="p10-11">
+  <h4>10.11 — 充氦气球的浮力与加速度 <span class="scope-tag scope-q3">Q3</span></h4>
+  <p class="problem-statement">气球自重 \(M=4\) kg，体积 \(V=18\) m³，内充氦 \(m=3.2\) kg。\(\rho_{\text{air}}=1.3\) kg/m³。求 (i) 浮力；(ii) 气球加速度。</p>
+
+  <div class="solution-step"><strong>(i) 浮力</strong>（Archimedes）：
+    $$ F_{\text{buoy}}=\rho_{\text{air}} V g=1.3\cdot 18\cdot 9.81\approx 229.5\text{ N}\;(\approx 229.3\text{ N，Shankar 答案}). $$
+  </div>
+
+  <div class="solution-step"><strong>(ii) 加速度</strong>：总质量 \(M_{\text{tot}}=M+m=7.2\) kg，总重 \((M+m)g=70.6\) N。
+    $$ M_{\text{tot}}\,a = F_{\text{buoy}}-(M+m)g = 229.5 - 70.6 = 158.9\text{ N}. $$
+    $$ a=158.9/7.2\approx 22.1\text{ m/s}^2\approx 22\text{ m/s}^2. $$
+  </div>
+
+  <div class="solution-step"><strong>解读</strong>：加速度比 \(g\) 还大！这是因为浮力 (229 N) 远大于自重 (71 N)，多出来的部分给气球极快的初始上升。当然，气球升高、空气稀薄、浮力减小，加速度会下降。</div>
+
+  <div class="answer-box">(i) \(F_{\text{buoy}}\approx 229\) N；(ii) \(a\approx 22\) m/s²</div>
+</div>
+
+<!-- ============== 10.12 ============== -->
+<div class="example" id="p10-12">
+  <h4>10.12 — 真空吸盘吊枝形吊灯 <span class="scope-tag scope-q2">Q2</span></h4>
+  <p class="problem-statement">980 N 重的吊灯靠一个吸盘（内部真空）吸在天花板上。吸盘最小面积是多少？</p>
+
+  <div class="solution-step"><strong>策略</strong>：吸盘外是大气压 \(P_{\text{atm}}\) 压紧吸盘上方天花板；吸盘内真空。两者压差 \(P_{\text{atm}}\) 乘以面积 = 吸盘吊起的最大力。最小面积时这个力刚好 = 吊灯重 980 N。</div>
+
+  <div class="solution-step"><strong>计算</strong>：
+    $$ P_{\text{atm}}\cdot A_{\min}=980
+       \;\Longrightarrow\;
+       A_{\min}=\frac{980}{1.013\times 10^5}\approx 9.7\times 10^{-3}\text{ m}^2\approx 97\text{ cm}^2. $$
+  </div>
+
+  <div class="solution-step"><strong>解读</strong>：约 10 cm × 10 cm 的吸盘就能拎起一个家用吊灯——这是为什么吸盘式挂钩特别好用。但如果吊灯太重或吸盘表面有任何漏气，"真空"立刻被填补，吸力消失，吊灯掉下来。</div>
+
+  <div class="answer-box">\(A_{\min}\approx 9.8\times 10^{-3}\) m²</div>
+</div>
+
+<!-- ============== 10.13 ============== -->
+<div class="example" id="p10-13">
+  <h4>10.13 — 加速容器中的水面倾角 <span class="scope-tag scope-w4">W4</span></h4>
+  <p class="problem-statement">已知加速参考系里每个质量 \(m\) 多一个伪力 \(-m\vec a\)。证明：当烧杯沿 \(\hat x\) 加速 \(\vec a=a\hat x\) 时，水面与 \(x\) 轴夹角 \(\theta=\tan^{-1}(a/g)\)。</p>
+
+  <div class="solution-step"><strong>策略</strong>：在加速参考系里，水"感受到"的"有效重力"是<strong>真实重力 \(-mg\hat y\)</strong>加<strong>伪力 \(-ma\hat x\)</strong>。合成的"局部 g"指向 \((-a, -g)\) 方向。水面是垂直于"局部 g"的等势面。</div>
+
+  <div class="solution-step"><strong>推导</strong>：合力方向与 \(-\hat y\) 夹角 \(\theta\) 满足
+    $$ \tan\theta = \frac{a}{g}. $$
+    水面（与"局部 g"垂直）就与 \(x\) 轴夹角 \(\theta\)。证毕。
+  </div>
+
+  <div class="solution-step"><strong>实验验证</strong>：在汽车里放一杯水，地猛踩油门（\(a\sim 5\) m/s²），水面前低后高，倾角 \(\sim\tan^{-1}(0.5)\approx 27°\)，肉眼可见。这就是"水平仪"的反面应用——通过水面倾角推断加速度。</div>
+
+  <div class="answer-box">见证明</div>
+</div>
+
+<!-- ============== 10.14 ============== -->
+<div class="example" id="p10-14">
+  <h4>10.14 — 液压机：力放大与功不变 <span class="scope-tag scope-q2">Q2</span></h4>
+  <p class="problem-statement">液压机活塞面积 \(A_1=1\) m², \(A_2=2\) m²。
+    (i) 在小活塞上施加多大力，可托起 1000 kg 在大活塞上？(ii) 要把 1000 kg 抬起 2 cm，小活塞需移动多远？(iii) 两边做的功之比？</p>
+
+  <div class="solution-step"><strong>(i) Pascal 原理</strong>：\(F_1/A_1=F_2/A_2\)，\(F_2=mg=9810\) N。
+    $$ F_1=F_2\frac{A_1}{A_2}=9810\cdot\frac{1}{2}=\boxed{4905\text{ N}}. $$
+  </div>
+
+  <div class="solution-step"><strong>(ii) 体积守恒</strong>：\(A_1 x_1=A_2 x_2\)，\(x_2=2\) cm。
+    $$ x_1=x_2\frac{A_2}{A_1}=2\cdot 2=\boxed{4\text{ cm}}. $$
+  </div>
+
+  <div class="solution-step"><strong>(iii)</strong> \(W_1=F_1 x_1=4905\cdot 0.04=196.2\) J；\(W_2=F_2 x_2=9810\cdot 0.02=196.2\) J。
+    $$ W_1/W_2=\boxed{1}. $$
+    完全相同——液压机放大力，但<strong>功不变</strong>。这是机械装置的普遍规律（"机械优势"装置不能造能量）。
+  </div>
+
+  <div class="answer-box">(i) 4900 N；(ii) 4 cm；(iii) 1</div>
+</div>
+
+<!-- ============== 10.15 ============== -->
+<div class="example" id="p10-15">
+  <h4>10.15 — U 形管 + 顶部气流（Bernoulli 测风速） <span class="scope-tag scope-w4">W4</span></h4>
+  <p class="problem-statement">U 形管两端开口大气，内装等高水银（\(\rho_{\text{Hg}}=13.6\times 10^3\) kg/m³）。一边管口上方有空气以速度 \(v\) 流过；这一边水银<strong>升高</strong> 4 cm（高于原水平面）。\(\rho_a=1\) kg/m³。求 \(v\)。</p>
+
+  <div class="solution-step"><strong>Bernoulli</strong>：流动一边气压 \(P_1=P_{\text{atm}}-\tfrac12\rho_a v^2\)（动压减低静压）；另一边静止 \(P_2=P_{\text{atm}}\)。两边压差驱使水银从静止侧升到流动侧。</div>
+
+  <div class="solution-step"><strong>水银柱高度差</strong>：题目说一边升 4 cm（另一边降 4 cm，因为体积守恒），所以总水银高度差 \(\Delta h=8\) cm = 0.08 m。压差用静水柱表示：
+    $$ P_2-P_1 = \rho_{\text{Hg}}\,g\,\Delta h. $$
+    其中 \(P_2-P_1=\tfrac12\rho_a v^2\)。所以：
+    $$ \tfrac12\rho_a v^2 = \rho_{\text{Hg}}\,g\,\Delta h
+       \;\Longrightarrow\;
+       v=\sqrt{\frac{2\rho_{\text{Hg}}\,g\,\Delta h}{\rho_a}}. $$
+  </div>
+
+  <div class="solution-step"><strong>数值</strong>：
+    $$ v=\sqrt{\frac{2\cdot 13600\cdot 9.81\cdot 0.08}{1}}=\sqrt{2.135\times 10^4}\approx 146\text{ m/s}. $$
+    约 525 km/h（亚音速 Mach 0.43）——远超台风风速，更接近高速喷气流量级。这是 Pitot 管测空速的简化版。
+  </div>
+
+  <div class="answer-box">\(v\approx 146\) m/s</div>
+</div>
+
+<!-- ============== 10.16 ============== -->
+<div class="example" id="p10-16">
+  <h4>10.16 — 旋转水桶的抛物面（旋转参考系推导） <span class="scope-tag scope-w4">W4</span></h4>
+  <p class="problem-statement">水以 \(\omega\) 在桶里旋转。在旋转参考系里，水面除了重力外受到径向离心力 \(\omega^2 r\)（每单位质量）。两者矢量和的方向是"局部 g"，水面与之垂直。从倾角的正切推出 \(dy/dx=Cx\)。
+    (i) \(C=?\)；(ii) 积分得 \(y(x)\)。</p>
+
+  <div class="solution-step"><strong>(i) 倾角</strong>：在径向 \(r\) 处，离心（向外）= \(\omega^2 r\)，重力（向下）= \(g\)。"局部 g"与垂直方向的倾角 \(\theta\) 满足
+    $$ \tan\theta=\frac{\omega^2 r}{g}. $$
+    水面与"局部 g"垂直 ⇒ 水面切线斜率 = \(\tan\theta\)：
+    $$ \frac{dy}{dr}=\frac{\omega^2 r}{g}=\boxed{C r,\quad C=\omega^2/g}. $$
+  </div>
+
+  <div class="solution-step"><strong>(ii) 积分</strong>：\(y(r)=\int (\omega^2/g)\,r\,dr=\dfrac{\omega^2 r^2}{2g}+\)常数：
+    $$ \boxed{y(r)=\frac{\omega^2 r^2}{2g}+C_1}. $$
+    抛物面（paraboloid of revolution）。详见 <a href="07_fluid_dynamics.html#sec:spinning">07 §8</a>。
+  </div>
+
+  <div class="answer-box">(i) \(C=\omega^2/g\)；(ii) \(y(r)=\omega^2 r^2/(2g)+\)const</div>
+</div>
+
+<!-- ============== 10.17 ============== -->
+<div class="example" id="p10-17">
+  <h4>10.17 — 一管分三管的连续性 <span class="scope-tag scope-w4">W4</span></h4>
+  <p class="problem-statement">流体在直径 4 mm 的管里以 60 m/s 流过。管子分叉成三根直径 \(d\) 的相同细管，流速 80 cm/s。求 \(d\)。</p>
+
+  <div class="box warning">
+    <p class="box-title">⚠ Shankar 原书题面与答案矛盾</p>
+    <p>题面写"60 m/s"与"80 cm/s"，但答案册给 \(d=2\) mm。这两者不能同时成立。</p>
+    <p>按字面值计算（连续性方程）：\(d^2=d_1^2\,v_1/(3 v_2)=16\cdot 60/(3\cdot 0.8)=400\) mm² ⇒ \(d=20\) mm。<strong>这跟答案 2 mm 不符。</strong></p>
+    <p>反推 \(d=2\) mm 要求 \(v_2/v_1=4/3\)，即两个流速量级<em>相同</em>——很可能原书是 60 cm/s + 80 cm/s（同 cm/s）<em>或</em> 60 m/s + 80 m/s（同 m/s）的印刷错误。</p>
+  </div>
+
+  <div class="solution-step"><strong>策略</strong>：无论哪种修正，只要把两个流速单位统一，连续性方程
+    $$ A_1 v_1 = 3 A_2 v_2 \;\Longrightarrow\;
+       d^2=d_1^2\cdot\frac{v_1}{3 v_2}=16\cdot\frac{60}{3\cdot 80}=4
+       \;\Longrightarrow\;\boxed{d=2\text{ mm}}. $$
+  </div>
+
+  <div class="solution-step"><strong>物理直觉</strong>：分叉后总截面积 \(3 A_2 = 3\pi(1\text{ mm})^2 = 3\pi\) mm²，比原管 \(A_1 = 4\pi\) mm² <em>小</em> 25%。所以流速<strong>升高</strong>而非降低（连续性强制）。这种"细管加速"是为什么浇花喷头里的水从总管进来后变得激射。</div>
+
+  <div class="answer-box">\(d=2\) mm（注：题面单位应统一）</div>
+</div>
+
+<!-- ============== 10.18 ============== -->
+<div class="example" id="p10-18">
+  <h4>10.18 — Pascal 桶：细管也能"压爆"大桶 <span class="scope-tag scope-q2">Q2</span></h4>
+  <p class="problem-statement">水桶盖半径 \(R\)，盖子上接一根细管，管里加水到高度 \(h\)。
+    (i) 盖子下方因水柱产生的压强？(ii) 盖子上的总力？数值：\(h=12\) m，\(R=0.5\) m。</p>
+
+  <div class="solution-step"><strong>(i)</strong> 静水柱压强（无关细管直径！）：
+    $$ P=\rho_w g h=1000\cdot 9.81\cdot 12\approx 1.18\times 10^5\text{ Pa}. $$
+    （略高于 1 atm。）
+  </div>
+
+  <div class="solution-step"><strong>(ii) 盖子上的合力</strong>：盖子面积 \(A=\pi R^2=\pi\cdot 0.25\approx 0.785\) m²。
+    $$ F=PA=1.18\times 10^5\cdot 0.785\approx 9.2\times 10^4\text{ N}. $$
+    相当于大约 9.5 公吨重物压在盖子上。<strong>桶被"压爆"</strong>——Pascal 在 1648 年用这个实验震惊了观众：往细管子里再加几滴水，桶就裂开了。
+  </div>
+
+  <div class="solution-step"><strong>核心物理</strong>：盖子上的总力<strong>不取决于</strong>细管的直径！只看水柱高度 \(h\) 和盖子面积 \(A\)。这就是"hydrostatic paradox"：用一根细如发丝的管子注水到 12 米高，足以压爆一个大圆桶。能量上不矛盾——你只用了一点点水（细管里），却能放大压力（Pascal 原理）。</div>
+
+  <div class="answer-box">(i) \(P\approx 1.2\times 10^5\) Pa；(ii) \(F\approx 9.2\times 10^4\) N</div>
+</div>
+
+<!-- ============== 10.19 ============== -->
+<div class="example" id="p10-19">
+  <h4>10.19 — 拉住浸没软木：变体 <span class="scope-tag scope-q3">Q3</span></h4>
+  <p class="problem-statement">软木（密度 \(\rho_c\)）在空气中重 1 N。完全浸入水中需要 3 N 的<em>外力</em>把它按住。求 \(\rho_w/\rho_c\)。</p>
+
+  <div class="solution-step"><strong>受力</strong>：浸没时受
+    <ul>
+      <li>浮力 \(F_b=\rho_w V g\)（向上）</li>
+      <li>重力 \(W=\rho_c V g = 1\) N（向下）</li>
+      <li>外力 \(F=3\) N（向下，按住）</li>
+    </ul>
+    平衡：\(F_b=W+F\)，所以 \(\rho_w V g=4\) N。
+  </div>
+
+  <div class="solution-step"><strong>密度比</strong>：
+    $$ \frac{\rho_w}{\rho_c}=\frac{\rho_w V g}{\rho_c V g}=\frac{4}{1}=\boxed{4}. $$
+  </div>
+
+  <div class="solution-step"><strong>对比 10.6</strong>：那题给 \(\rho_c/\rho_w=0.22\)（\(\rho_w/\rho_c\approx 4.55\)），结果 \(T/(mg)=3.5\)。这里 \(\rho_w/\rho_c=4\)，结果 \(F/W=3\)。两者都是 \(\rho_w/\rho_c-1\)——<strong>同一公式</strong>：\(F/W=\rho_w/\rho_c-1\)。</div>
+
+  <div class="answer-box">\(\rho_w/\rho_c=4\)</div>
+</div>
+
+<!-- ============== 10.20 ============== -->
+<div class="example" id="p10-20">
+  <h4>10.20 — 氦气球能拎多重 <span class="scope-tag scope-q3">Q3</span></h4>
+  <p class="problem-statement">氦气球：体积 \(V\)，自重 2 kg，氦气密度 \(\rho_{\text{He}}=0.18\) kg/m³，能拎起 1000 N 的负载。\(\rho_{\text{air}}=1.29\) kg/m³。求 \(V\)。</p>
+
+  <div class="solution-step"><strong>策略</strong>：浮力 = 自重 + 氦气重 + 负载（边缘平衡）。</div>
+
+  <div class="solution-step"><strong>列方程</strong>：
+    $$ \rho_{\text{air}}V g = M_{\text{shell}}g + \rho_{\text{He}}V g + W. $$
+    $$ V g(\rho_{\text{air}}-\rho_{\text{He}}) = M_{\text{shell}}g + W. $$
+    $$ V = \frac{M_{\text{shell}} g + W}{g(\rho_{\text{air}}-\rho_{\text{He}})}. $$
+  </div>
+
+  <div class="solution-step"><strong>数值</strong>：\(M_{\text{shell}}g=2\cdot 9.81=19.62\) N；\(W=1000\) N；\(\rho_{\text{air}}-\rho_{\text{He}}=1.11\) kg/m³。
+    $$ V=\frac{19.62+1000}{9.81\cdot 1.11}=\frac{1019.62}{10.89}\approx 93.6\text{ m}^3\approx 94\text{ m}^3. $$
+    球形直径约 \(2(3V/4\pi)^{1/3}\approx 5.65\) m——一个三层楼高的气球，大约能拎起 100 公斤的载荷。
+  </div>
+
+  <div class="answer-box">\(V\approx 94\) m³</div>
+</div>
+
+<!-- ============== END Ch 20 ============== -->
+
+<h2 id="ch21">Problem Set 11 — Chapters 21–24（热学）</h2>
+
+<div class="problem-toc">
+  <a href="#p11-1">11.1</a>
+  <a href="#p11-2">11.2</a>
+  <a href="#p11-3">11.3</a>
+  <a href="#p11-4">11.4</a>
+  <a href="#p11-5">11.5</a>
+  <a href="#p11-6">11.6</a>
+  <a href="#p11-7">11.7</a>
+</div>
+
+<!-- ============== 11.1 ============== -->
+<div class="example" id="p11-1">
+  <h4>11.1 — 把 1 kg 冰从 −10°C 加热到 100°C 蒸气 <span class="scope-tag scope-w5">W5</span></h4>
+  <p class="problem-statement">需多少热量把 1 kg 冰从 −10°C 变到 100°C 的蒸气？注意冰和水比热不同。</p>
+
+  <div class="solution-step"><strong>分四段</strong>（对应加热曲线的两段斜线 + 两段平台）：详见 <a href="08_real_fluids_heat.html#sec:latent-heat">08 §10</a>。</div>
+
+  <div class="solution-step">
+    <table class="data-table">
+      <thead><tr><th>阶段</th><th>公式</th><th>数值（kJ）</th></tr></thead>
+      <tbody>
+        <tr><td>冰升温 −10→0°C</td><td>\(m c_{\text{ice}}\Delta T = 1\cdot 2090\cdot 10\)</td><td>20.9</td></tr>
+        <tr><td>融化（潜热）</td><td>\(m L_f = 1\cdot 334000\)</td><td>334</td></tr>
+        <tr><td>水升温 0→100°C</td><td>\(m c_w\Delta T = 1\cdot 4184\cdot 100\)</td><td>418.4</td></tr>
+        <tr><td>汽化（潜热）</td><td>\(m L_v = 1\cdot 2257000\)</td><td>2257</td></tr>
+        <tr><td><strong>总计</strong></td><td></td><td><strong>≈ 3030</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="solution-step"><strong>解读</strong>：汽化潜热占总能量的 \(\sim\) 75%——这是热学问题最常见的"主项"。把水"烧干"远比"烧开"耗能。这也解释了为什么蒸发是身体最有效的散热方式（汗液蒸发把巨大能量带走）。</div>
+
+  <div class="answer-box">\(Q\approx 3030\) kJ</div>
+</div>
+
+<!-- ============== 11.2 ============== -->
+<div class="example" id="p11-2">
+  <h4>11.2 — 子弹打入铅块的温升 <span class="scope-tag scope-w5">W5</span></h4>
+  <p class="problem-statement">铅子弹质量 \(m\)、比热 \(c=130\) J/(kg·K)，速度 \(v_0\)，撞入静止铅块（质量 \(M\)）后嵌入其中。损失的动能全转为热。求最终温升 \(\Delta T\)。数值：\(m=5\) g，\(M=100\) g，\(v_0=200\) m/s。</p>
+
+  <div class="solution-step"><strong>动量守恒</strong>：完全非弹性碰撞，最终速度
+    $$ v_f=\frac{m v_0}{m+M}=\frac{5\cdot 200}{105}\approx 9.52\text{ m/s}. $$
+  </div>
+
+  <div class="solution-step"><strong>损失的动能</strong>：
+    $$ \Delta K = \tfrac12 m v_0^2 - \tfrac12(m+M)v_f^2
+       = \tfrac12 m v_0^2\!\left(1-\frac{m}{m+M}\right)
+       = \tfrac12 \cdot\frac{mM}{m+M}\,v_0^2. $$
+    （这就是约化质量 \(\mu=mM/(m+M)\) 出现的地方。）
+  </div>
+
+  <div class="solution-step"><strong>转为热</strong>：\(\Delta K = (m+M) c\,\Delta T\)：
+    $$ \Delta T = \frac{1}{2}\cdot\frac{mM}{(m+M)^2}\cdot\frac{v_0^2}{c}. $$
+    数值：
+    $$ \Delta T=\frac{1}{2}\cdot\frac{5\cdot 100}{105^2}\cdot\frac{200^2}{130}
+       =\frac{500}{22050}\cdot\frac{40000}{130}
+       =0.02268\cdot 307.7\approx 7.0\text{ °C}. $$
+  </div>
+
+  <div class="solution-step"><strong>解读</strong>：仅 7°C——比直觉小得多。原因：(1) 大部分动能进了"宏观运动"（碰撞后 \(v_f=9.5\) m/s 仍在动），(2) 铅的比热不算大。损失比例完全由<em>对方惯性</em>决定：
+    $$ \frac{\Delta K}{K_0} = \frac{M}{m+M}. $$
+    本题 \(M/(m+M)=100/105\approx 95\%\)，所以已经损失了大部分；剩 5% 留在合体宏观动能里。
+  </div>
+
+  <div class="solution-step"><strong>极限 \(M\to\infty\)（固定铅块）</strong>：损失比例 \(\to 100\%\)。所有动能全转热：
+    $$ \Delta T_{\max} = \frac{v_0^2}{2c} = \frac{200^2}{2\cdot 130}\approx 154\,°\text{C}. $$
+    子弹温度从 20°C 升到约 \(174\)°C，<strong>仍未到铅熔点</strong>（327°C）。要把铅熔化需 \(v_0\) 比这再大 \(\sim 1.5\) 倍（约 300 m/s 以上）。
+  </div>
+
+  <div class="box insight">
+    <p class="box-title">"动量哪去了？"——固定铅块的能量分析</p>
+    <p>把铅块焊死在墙上，子弹撞上后 \(v_f=0\)（铅块不动、子弹也嵌住停下）。表面看动量从 \(m v_0\) 变到 0，<strong>动量不守恒</strong>。这违反守恒律吗？没有，因为：</p>
+    <ul>
+      <li><strong>外约束力</strong>（墙对铅块的反作用力）在碰撞瞬间作用，把动量传给了墙→建筑→地球。</li>
+      <li>这个约束力做<strong>多少功</strong>？力 × <em>铅块位移</em> = 力 × 0 = 0（铅块没动）。所以约束力<strong>带走动量但不吸能量</strong>。</li>
+      <li>结果：所有动能 \(\tfrac12 m v_0^2\) 都留在子弹+铅块系统里，转成热。</li>
+    </ul>
+    <p>从公式看：地球质量 \(M_\oplus\to\infty\)，动量 \(p\) 给地球后地球速度 \(v=p/M_\oplus\to 0\)，地球获得的动能 \(p^2/(2M_\oplus)\to 0\)。所以"无穷大惯性"接收任意有限动量后<em>不带走能量</em>——这就是把"固定"等价于 \(M\to\infty\) 极限的物理基础。</p>
+    <p><strong>反之</strong>：自由的有限 \(M\) 铅块碰撞后会动起来，带走部分能量进入<em>宏观运动</em>（不是热）。这就是为什么 \(M/(m+M)<1\) 时损失 \(<100\%\)。</p>
+  </div>
+
+  <div class="solution-step"><strong>实际场景对照</strong>：
+    <ul>
+      <li><strong>子弹打靶嵌在沙包里</strong>：\(M\) 不太大于 \(m\)，沙包后滑，损失比例 \(<100\%\)。</li>
+      <li><strong>子弹打防弹墙</strong>：\(M\) 极大（墙→建筑→地球），效果接近"固定"，几乎 100% 损失。</li>
+      <li><strong>子弹弹性反弹于钢板</strong>：理想弹性 → 0% 损失（动能全保留为反弹动能）；实际有部分塑性变形 → 部分热。</li>
+      <li><strong>子弹打入水池</strong>：水也跑（搅动），不是 100% 损失——一部分变水的宏观动能。</li>
+    </ul>
+  </div>
+
+  <div class="answer-box">\(\Delta T\approx 7\) °C（自由 \(M=100\) g）；\(\Delta T_{\max}\approx 154\) °C（\(M\to\infty\) 即固定铅块）</div>
+</div>
+
+<!-- ============== 11.3 ============== -->
+<div class="example" id="p11-3">
+  <h4>11.3 — 水（20°C）+ 冰（0°C）的混合 <span class="scope-tag scope-w5">W5</span></h4>
+  <p class="problem-statement">把 500 g 水（20°C）与 200 g 冰（0°C）混合，求终态。</p>
+
+  <div class="solution-step"><strong>策略</strong>：先估算"放热端最多能放多少" vs "吸热端最少需要多少"，判断终态。</div>
+
+  <div class="solution-step"><strong>水放热（20→0°C 全部冷却）最多</strong>：
+    $$ Q_{\text{water,max}}=500\cdot 1\cdot 20=10000\text{ cal}. $$
+    <strong>冰吸热（融化全部）最少</strong>：
+    $$ Q_{\text{ice,need}}=200\cdot 80=16000\text{ cal}. $$
+    水放完 10000 cal 不够融化全部冰（需 16000）——所以<strong>终态是 0°C 平台</strong>，部分冰融化部分仍剩余。
+  </div>
+
+  <div class="solution-step"><strong>多少冰融化</strong>：水放热 10000 cal 全用于融化冰：
+    $$ m_{\text{melted}}=10000/80=125\text{ g}. $$
+    剩 \(200-125=75\) g 冰；总水量 \(500+125=625\) g。
+  </div>
+
+  <div class="answer-box">75 g 冰 + 625 g 水共存于 0°C</div>
+</div>
+
+<!-- ============== 11.4 ============== -->
+<div class="example" id="p11-4">
+  <h4>11.4 — 蒸气（100°C）+ 冰（0°C）的混合 <span class="scope-tag scope-w5">W5</span></h4>
+  <p class="problem-statement">20 g 蒸气（100°C）+ 150 g 冰（0°C）。求终态。<br>
+  <strong>注</strong>（来自助教）：Shankar 答案使用 \(L_v=540\) kcal/kg；他在书中说"大约 500"，要求你试一下用 500 会怎样。</p>
+
+  <div class="solution-step"><strong>策略</strong>：估算放/吸热预算。</div>
+
+  <div class="solution-step"><strong>用 \(L_v=540\)（Shankar 答案）</strong>：
+    <ul>
+      <li>蒸气最多放：凝结 \(20\cdot 540=10800\) cal + 100→0 \(20\cdot 100=2000\) cal = <strong>12800 cal</strong></li>
+      <li>冰最少吸（全部融化）：\(150\cdot 80=12000\) cal</li>
+    </ul>
+    12800 &gt; 12000 — 冰刚好全部融化，剩余 800 cal 把 \(150+20=170\) g 水从 0°C 升温：
+    $$ \Delta T=800/170\approx 4.7\text{ °C}. $$
+  </div>
+
+  <div class="solution-step"><strong>用 \(L_v=500\)（书中文字）</strong>：
+    <ul>
+      <li>蒸气最多放：\(20\cdot 500+2000=12000\) cal</li>
+      <li>冰最少吸：\(12000\) cal</li>
+    </ul>
+    12000 = 12000——蒸气恰好把全部冰融化，能量耗尽。终态 \(\boxed{170\text{ g 水 at 0°C}}\)，没有剩余蒸气，没有剩余冰，温度卡在 0°C。
+  </div>
+
+  <div class="solution-step"><strong>对比</strong>：仅仅 \(L_v\) 数值差 8% (540 vs 500)，终态完全不同——一个是 4.7°C 的水，另一个是 0°C 的水（无温升）。这是为什么"知道精确常数"在热学问题里如此重要——边界情形对常数极其敏感。</div>
+
+  <div class="answer-box">\(L_v=540\)：水 4.7°C，170 g；\(L_v=500\)：水 0°C，170 g</div>
+</div>
+
+<!-- ============== 11.5 ============== -->
+<div class="example" id="p11-5">
+  <h4>11.5 — 雪球落地融化的比例 <span class="scope-tag scope-w5">W5</span></h4>
+  <p class="problem-statement">雪球以 100 m/s 落地，全部动能转为热。融化的比例是多少？</p>
+
+  <div class="solution-step"><strong>策略</strong>：每单位质量的动能除以每单位质量的融化潜热。雪球初温取 0°C（暗示题目）。</div>
+
+  <div class="solution-step"><strong>计算</strong>：
+    $$ \frac{K/m}{L_f}=\frac{(1/2)v^2}{L_f}=\frac{(1/2)\cdot 100^2}{334\times 10^3}=\frac{5000}{334000}\approx 0.015. $$
+  </div>
+
+  <div class="solution-step"><strong>解读</strong>：仅 1.5% 融化——动能远小于潜热。要全部融化需要 \(\sqrt{2L_f}\approx 817\) m/s，差不多是声速 2.4 倍——极不切实际。这就是为什么雪球落到地上多数是<strong>碎成颗粒</strong>而非<strong>融化</strong>。</div>
+
+  <div class="answer-box">\(\approx 0.015\) (1.5%)</div>
+</div>
+
+<!-- ============== 11.6 ============== -->
+<div class="example" id="p11-6">
+  <h4>11.6 — 大量水 + 小量冰的混合 <span class="scope-tag scope-w5">W5</span></h4>
+  <p class="problem-statement">400 g 冰（−2°C）放入 1 kg 水（21°C）。求终态。</p>
+
+  <div class="solution-step"><strong>预算</strong>：
+    <ul>
+      <li>水放热（21→0）：\(1000\cdot 1\cdot 21=21000\) cal</li>
+      <li>冰升温到 0°C：\(400\cdot 0.5\cdot 2=400\) cal</li>
+      <li>冰全部融化：\(400\cdot 80=32000\) cal</li>
+      <li>冰需要总量：\(400+32000=32400\) cal</li>
+    </ul>
+    水可放 21000 cal &lt; 冰需 32400 cal ⇒ <strong>冰不全部融化，终态 0°C 平台</strong>。
+  </div>
+
+  <div class="solution-step"><strong>多少冰融化</strong>：水放的 21000 cal 先用于把冰升温到 0°C（400 cal），余 20600 cal 用来融化冰：
+    $$ m_{\text{melted}}=20600/80=257.5\text{ g}. $$
+    剩冰 \(400-257.5=142.5\) g \(\approx 0.14\) kg；总水量 \(1000+257.5=1257.5\) g \(\approx 1.26\) kg。
+  </div>
+
+  <div class="answer-box">1.26 kg 水 + 0.14 kg 冰，全部 0°C</div>
+</div>
+
+<!-- ============== 11.7 ============== -->
+<div class="example" id="p11-7">
+  <h4>11.7 — 求未知材料 X 的比热 <span class="scope-tag scope-w5">W5</span></h4>
+  <p class="problem-statement">把 75 g 材料 X 放入 30 g 铜量热器（含 65 g 水），全部 20°C。再加入 100 g 80°C 的水。最终温度 49°C。求 X 的比热 \(c_X\)。<br>
+  <strong>注</strong>（助教）：需要查铜的比热。\(c_{\text{Cu}}\approx 386\) J/(kg·K) \(\approx 0.092\) cal/(g·°C)。</p>
+
+  <div class="solution-step"><strong>能量守恒</strong>：热水放热 = 冷水 + 铜 + X 吸热（全部从 20°C 升到 49°C，热水从 80°C 降到 49°C）。用 cal 单位：</div>
+
+  <div class="solution-step">
+    <ul>
+      <li><strong>热水放热</strong>：\(100\cdot 1\cdot (80-49)=3100\) cal</li>
+      <li><strong>冷水吸热</strong>：\(65\cdot 1\cdot (49-20)=1885\) cal</li>
+      <li><strong>铜量热器吸热</strong>：\(30\cdot 0.092\cdot 29\approx 80\) cal</li>
+      <li><strong>X 吸热</strong>：\(75\cdot c_X\cdot 29\) cal（\(c_X\) 以 cal/(g·°C) 为单位）</li>
+    </ul>
+  </div>
+
+  <div class="solution-step"><strong>解 \(c_X\)</strong>：
+    $$ 3100 = 1885+80+75\cdot c_X\cdot 29
+       \;\Longrightarrow\;
+       75\cdot c_X\cdot 29 = 1135. $$
+    $$ c_X = \frac{1135}{75\cdot 29}=\frac{1135}{2175}\approx 0.522\text{ cal/(g·°C)}. $$
+    换 SI：
+    $$ c_X = 0.522\cdot 4184\approx 2180\text{ J/(kg·K)}. $$
+  </div>
+
+  <div class="solution-step"><strong>识别材料？</strong>这个值跟许多有机物相近：聚乙烯 \(\sim 2300\)，聚苯乙烯 \(\sim 1300\)，木材 \(\sim 1700\)，冰 \(\sim 2090\)，乙醇 \(\sim 2440\) J/(kg·K)。\(c_X\approx 2180\) 倒像冰或乙醇——但若 X 在 49°C 仍是固体，就只能是某种聚合物或木质材料。</div>
+
+  <div class="answer-box">\(c_X\approx 2180\) J/(kg·K) \(\approx 0.52\) cal/(g·°C)</div>
+</div>
+
+<!-- ======================================================== -->
+
+<h2>使用建议</h2>
+
+<div class="box remark">
+  <p class="box-title">怎么用这份题集</p>
+  <ul>
+    <li><strong>先自己做</strong>：盖住答案试做几道，看哪类问题易卡。</li>
+    <li><strong>对答案 + 看策略</strong>：每题先看"策略"段，再回到问题自己列方程。</li>
+    <li><strong>归类</strong>：流体题大致分四类——静水压（10.1, 10.2, 10.10, 10.18）、浮力（10.5, 10.6, 10.11, 10.19, 10.20）、Bernoulli/Torricelli（10.3, 10.4, 10.8, 10.9, 10.15, 10.17）、特殊系（液压 10.12, 10.14；加速参考系 10.13, 10.16；振动 10.7）。</li>
+    <li><strong>热学</strong>题清一色"能量预算"——先估算两端能否平衡，再列方程；这是避开符号错误的最稳妥方式。</li>
+  </ul>
+</div>
+
+<div class="box warning">
+  <p class="box-title">考前最容易踩的坑</p>
+  <ol>
+    <li><strong>表压 vs 绝对压</strong>：题目问"gauge pressure"还是"pressure"？前者去掉大气压。</li>
+    <li><strong>潜热数值</strong>：\(L_v=540\) kcal/kg = 2257 kJ/kg；不要忘了写 cal 还是 J。</li>
+    <li><strong>能量预算</strong>：终态可能停在 0°C 或 100°C 平台（含两相共存），不一定全是某一相。</li>
+    <li><strong>浮力中的"V"</strong>：是<em>排开</em>的体积，不是物体总体积（部分浸没时）。</li>
+    <li><strong>液压机功不变</strong>：\(W_1=W_2\)；如果你算出 \(W_1\neq W_2\) 就一定算错了。</li>
+    <li><strong>方向 / 符号</strong>：竖直管中"压强差"=\(\rho g\Delta h\)，但<em>哪一边高、哪一边低</em>由物理决定（高速侧低压）。</li>
+  </ol>
+</div>
+
+<!-- ======================================================== -->
+
+<nav class="page-nav">
+  <a class="nav-prev" href="index.html">总目录</a>
+  <a class="nav-next" href="06_fluid_statics.html">06 流体静力学</a>
+</nav>
+
+</main>
+
+<script src="interactive.js"></script>
+<script>
+  markCurrentReviewing('quiz3_problems.html');
+</script>
+
+</body>
+</html>

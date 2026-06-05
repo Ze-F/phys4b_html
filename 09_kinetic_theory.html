@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>09 · 动理论：从 PV=NkT 到分子动能 — PHYS 4B 复习</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="theme.js"></script>
+  <script>
+    MathJax = {
+      tex: { inlineMath: [['\\(', '\\)']], displayMath: [['$$', '$$']] },
+      svg: { fontCache: 'global' }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" async></script>
+</head>
+<body>
+
+<header class="site-header">
+  <a class="home-link" href="index.html">← PHYS 4B 复习</a>
+  <nav>
+    <a href="08_real_fluids_heat.html">← 真实流体 + 热学</a>
+    <a href="01_shm.html">SHM →</a>
+  </nav>
+</header>
+
+<main class="container">
+
+<div class="topic-header">
+  <h1>09 · 动理论：从 \(PV=NkT\) 到分子动能</h1>
+  <p class="meta">Lec 6.3 · Shankar §22.1–22.2</p>
+  <p class="blurb">Quiz 3 之后那节短课只讲了 15 分钟，但内容是承上启下的关键：把上一章把<strong>理想气体定律</strong>当作经验事实接受下来的 \(PV=NkT\) ，用一个简洁的<strong>分子碰撞</strong>论证转化为关于分子动能的微观陈述 \(\tfrac12 m\langle v^2\rangle=\tfrac32 kT\)。这一公式定义了"温度"的微观含义，是 Ch.22 (Thermodynamics I) 与 Ch.24 (Entropy) 一切内容的起点，也回答了我们从声学一路用到现在的 \(v=\sqrt{\gamma kT/m}\) 究竟来自哪里。</p>
+</div>
+
+<!-- ======================================================== -->
+
+<div class="box key-result">
+  <p class="box-title">一页速览</p>
+  <ul>
+    <li><strong>实验输入：</strong>\(PV=NkT\)，\(k=1.38\times 10^{-23}\) J/K（对每种稀薄气体都一样）。</li>
+    <li><strong>单次碰撞冲量：</strong>\(\Delta p=2mv_x\)（弹性、镜面、墙不动）。</li>
+    <li><strong>slab 论证：</strong>时间 \(dt\) 内贴墙厚度 \(v\,dt\) 内、朝墙运动的分子撞墙；外加 \(\tfrac13\)（各向同性）与 \(\tfrac12\)（朝墙方向）两个几何因子。</li>
+    <li><strong>动理论压强：</strong>\(\;P=\tfrac13\,\dfrac{N}{V}\,m\langle v^2\rangle.\)</li>
+    <li><strong>温度的微观定义：</strong>与 \(PV=NkT\) 联立 \(\Rightarrow\) \(\tfrac12 m\langle v^2\rangle=\tfrac32 kT\)。每分子平均平动动能 \(\propto T\)。</li>
+    <li><strong>RMS 速率：</strong>\(v_{\text{rms}}=\sqrt{3kT/m}=\sqrt{3RT/M}\)；N₂ 在 300 K 下 \(\approx 517\) m/s。</li>
+    <li><strong>Equipartition：</strong>每个二次自由度贡献 \(\tfrac12 kT\)；单原子 3 DOF→\(\tfrac32 kT\)，双原子 5 DOF→\(\tfrac52 kT\)。</li>
+    <li><strong>内能：</strong>单原子 \(U=\tfrac32 NkT=\tfrac32 nRT\)（仅依赖 \(T\)，不依赖 \(V\) 或 \(P\)）。</li>
+    <li><strong>声速与 \(v_{\text{rms}}\)：</strong>\(v_{\text{sound}}/v_{\text{rms}}=\sqrt{\gamma/3}<1\)。声音骑在分子运动上，永远比分子慢。</li>
+  </ul>
+</div>
+
+<!-- ======================================================== -->
+
+<h2>§1 故事线：宏观经验律 → 微观分子图像</h2>
+
+<p>上一章我们记下了两条事实：</p>
+
+<ol>
+  <li><strong>所有稀薄气体的 \(PV\) 数据都落在同一条直线上</strong>：\(PV=NkT\)，Boltzmann 常数 \(k\) 对每种气体相同。这是定义 Kelvin 温标的实验输入——温标的"零点"和"刻度"都由这条线决定。</li>
+  <li>但我们 <em>不</em> 知道它"为什么"成立。气体凭什么压强这么"听话"？什么是温度？</li>
+</ol>
+
+<p>Lec 6.3 给出了答案的第一步：把气体看成一群在盒子里乱飞、弹性撞墙的小球，<strong>从牛顿力学推出压强</strong>，然后跟 \(PV=NkT\) 比较——这一比，就把"温度"逐出宏观舞台，钉死成了一个微观量：每个分子的平均动能。</p>
+
+<div class="box remark">
+  <p class="box-title">这是 Ch.21 → Ch.22 的桥</p>
+  <p>Ch.21 把热力学完全当作宏观现象（温度计、比热、潜热、Fourier 律）来处理；从 Ch.22 起，我们站到分子的高度上，用统计/平均的语言重新解释一切。这节短课就是<strong>那一脚跨过去的位置</strong>。</p>
+</div>
+
+<!-- ======================================================== -->
+
+<h2>§2 起点：理想气体定律</h2>
+
+<p>把上一章的结果原样请回：</p>
+
+<p>$$ \boxed{\;PV=NkT\;,\qquad k=1.38\times 10^{-23}\,\mathrm{J/K}.\;}\tag{2.1}$$</p>
+
+<p>三件事要注意：</p>
+
+<ul>
+  <li><strong>\(N\) 是分子数，不是摩尔数。</strong>等价的摩尔形式 \(PV=nRT\)，与 \(R=N_A k=8.314\) J/(mol·K)。</li>
+  <li><strong>\(k\) 是普适常数。</strong>氦、氮、氩……所有稀薄气体共用一个 \(k\)。正是这种普适性，让 (2.1) 不止于一个经验拟合，而暗示了背后有共同的微观机制。</li>
+  <li><strong>\(T\) 是 Kelvin 温度。</strong>它在 (2.1) 中出现的方式就是它的定义：能让 \(PV\) 与 \(N\) 成正比的那个变量。</li>
+</ul>
+
+<p>我们在本页 <em>不</em> 推 (2.1)。我们的任务是：另写一个 \(P\) 的公式（从分子碰撞算出来），令它与 (2.1) 相容，看看会逼出什么微观结论。</p>
+
+<!-- ======================================================== -->
+
+<h2>§3 模型设置</h2>
+
+<p>把气体抽象为：边长 \(L\) 的立方体（体积 \(V=L^3\)）里 \(N\) 个相同的"点"分子，每个质量 \(m\)。四条假设：</p>
+
+<table class="formula-table" style="margin: 1.2rem auto">
+  <thead><tr><th>编号</th><th>假设</th><th>物理含义</th></tr></thead>
+  <tbody>
+    <tr><td>A1</td><td>自由飞行</td><td>分子之间无长程作用；分子尺寸 ≪ 平均自由程。</td></tr>
+    <tr><td>A2</td><td>弹性镜面碰撞</td><td>撞墙时垂直分量反号、平行分量不变（墙比分子重很多、且同温度）。</td></tr>
+    <tr><td>A3</td><td>空间均匀</td><td>数密度 \(N/V\) 处处一样。</td></tr>
+    <tr><td>A4</td><td>速度各向同性</td><td>\(\langle v_x^2\rangle=\langle v_y^2\rangle=\langle v_z^2\rangle=\tfrac13\langle v^2\rangle\)。</td></tr>
+  </tbody>
+</table>
+
+<p>这四条就是"理想气体"的全部含义。任何违反它们的修正（分子间互相吸引/排斥、分子有体积、气体太密等）都会让 (2.1) 失准——van der Waals 方程就是处理这类修正的最简朴版本，但那是后话。</p>
+
+<!-- ======================================================== -->
+
+<h2>§4 推导 I：板书版（快、带 \(\tfrac13\cdot\tfrac12\) 因子）</h2>
+
+<p>策略：算<strong>单次碰撞的动量</strong>，乘以<strong>每秒撞墙的分子数</strong>，得到力；除以墙面积，得到压强。</p>
+
+<h3>4.1 单次碰撞：\(\Delta p=2mv\)</h3>
+
+<p>一个分子以 \(x\) 方向速度 \(+v\) 撞墙。弹性反射后 \(x\) 速度变成 \(-v\)；其他方向不变。分子的动量变化 \(\Delta p_{\text{molec}}=-2mv\)；由 Newton 第三律，<strong>墙得到的冲量是 \(+2mv\)</strong>：</p>
+
+<p>$$ \boxed{\;\Delta p_{\text{wall}}=2mv\;\text{（单次碰撞）}.\;}\tag{4.1}$$</p>
+
+<h3>4.2 slab 论证：每秒撞墙的分子数</h3>
+
+<p>面对面积 \(A\) 的墙（法向 \(\hat x\)）。在短时间 \(dt\) 内，能到达这堵墙的分子，必然位于贴墙厚度 \(v\,dt\) 的一层——再远就来不及，再近就已经撞过。这一"slab"的体积是</p>
+
+<p>$$ dV_{\text{slab}}=A\,v\,dt. \tag{4.2}$$</p>
+
+<p>slab 里总共有 \((N/V)\cdot A v\,dt\) 个分子。但其中只有一部分会真撞这堵墙，得加两个几何因子：</p>
+
+<ul>
+  <li><strong>\(\tfrac13\)：各向同性</strong>。slab 里的分子有的飞 \(x\)、有的飞 \(y\)、有的飞 \(z\)——平均三个方向均分，只有 \(1/3\) 属于 \(x\) 方向。</li>
+  <li><strong>\(\tfrac12\)：朝墙方向</strong>。\(x\) 方向的分子里，一半朝 \(+x\)（即朝我们的墙），一半朝 \(-x\)。</li>
+</ul>
+
+<div class="box warning">
+  <p class="box-title">\(\tfrac13\) 与 \(\tfrac12\) 是"启发式"</p>
+  <p>这两个因子直觉上对（事实上数值上也对），但严格说要把它们写成<strong>对速度分布的积分</strong>。Lec 板书直接给了数值，把启发式写到一起、不去拆。下面 §5 的推导更干净：用一个分子绕盒往返、不需要 \(\tfrac12\)；最后用 (4.4) 的各向同性关系换出 \(\tfrac13\)。</p>
+</div>
+
+<h3>4.3 凑出压强</h3>
+
+<p>力 = 单位时间内传递给墙的动量 = (slab 分子数)·(几何因子)·(单次冲量)：</p>
+
+<p>$$ F\,dt = \underbrace{\frac{N}{V}A v\,dt}_{\text{slab 分子}}
+   \cdot\underbrace{\tfrac13}_{\text{各向同性}}
+   \cdot\underbrace{\tfrac12}_{\text{朝墙}}
+   \cdot\underbrace{2mv}_{\text{单冲量}}
+   = \frac{N}{V}\cdot A\cdot \tfrac13 m v^2\,dt. \tag{4.3}$$</p>
+
+<p>左右消掉 \(dt\)，左右消掉 \(A\)：</p>
+
+<p>$$ P=\frac{F}{A}=\tfrac13\,\frac{N}{V}\,m\,v^2. $$</p>
+
+<p>这是单个 \(v\) 的结果；真实气体有速率分布，把 \(v^2\to\langle v^2\rangle\)（对所有 \(N\) 个分子取均方）：</p>
+
+<div class="box key-result">
+  <p class="box-title">动理论压强（中心结论）</p>
+  <p>$$ \boxed{\;P=\tfrac13\,\frac{N}{V}\,m\,\langle v^2\rangle.\;}\tag{4.4}$$</p>
+  <p>压强等于"数密度 × 单分子质量 × 均方速度 / 3"。这是把宏观 \(P\) 全部翻译成微观量。</p>
+</div>
+
+<details class="more-detail">
+  <summary>展开：两个有趣的代数巧合</summary>
+  <ul>
+    <li><strong>"slab 厚度 \(v\,dt\)" 与 "单冲量 \(2mv\)" 共谋出 \(mv^2\)。</strong>没有 slab 中的 \(v\) 因子，压强就不会有 \(v^2\)；正是"快的分子撞得多 <em>又</em> 撞得狠"双重作用，才有压强∝\(v^2\)。</li>
+    <li><strong>"\(\tfrac12\)" 与 "\(2\)" 恰好对消</strong>：朝墙的几何因子 \(\tfrac12\) 与弹性反射的动量倍增 \(\times 2\)。物理上，这两件事都来自"墙只反射、自己不动"，所以最终公式里只剩"分子数密度 × 撞击通量 × \(mv\)"。</li>
+  </ul>
+</details>
+
+<!-- ======================================================== -->
+
+<h2>§5 推导 II：清洁版（一个分子绕盒往返）</h2>
+
+<p>板书的 \(\tfrac13\cdot\tfrac12\) 让人不踏实。Shankar §22.2 用更干净的"单分子往返"论证，最后用各向同性收尾。结论一致。</p>
+
+<h3>5.1 一个分子，反复撞</h3>
+
+<p>立方盒，边长 \(L\)，体积 \(V=L^3\)。取一个分子，速度 \((v_x,v_y,v_z)\)。它在右墙与左墙之间往返：</p>
+
+<ul>
+  <li>右墙→左墙距离 \(L\)，速度 \(v_x\)（取正），用时 \(L/v_x\)。</li>
+  <li>左墙→右墙再用时 \(L/v_x\)。</li>
+  <li>所以右墙的两次连续碰撞间隔 \(\Delta t=2L/v_x\)。</li>
+</ul>
+
+<p>每次碰撞把 \(2m v_x\) 的动量交给右墙（弹性，\(v_x\) 反号一次为 \(-v_x\)，再回来又一次反号）。这一<em>个</em>分子对右墙的平均作用力</p>
+
+<p>$$ F_1=\frac{\Delta p}{\Delta t}=\frac{2mv_x}{2L/v_x}=\frac{m v_x^2}{L}. \tag{5.1}$$</p>
+
+<p><strong>注意 \(v_x\) 出现成了平方</strong>——正负无关。也就是说，板书里"朝墙的 \(\tfrac12\)"已经自动消失了：在 \(2L/v_x\) 这一往返时间里。</p>
+
+<h3>5.2 求和到全部 \(N\) 个分子</h3>
+
+<p>$$ F=\sum_{i=1}^N \frac{m v_{x,i}^2}{L}
+   = \frac{m}{L}\sum_{i=1}^N v_{x,i}^2
+   = \frac{Nm}{L}\,\langle v_x^2\rangle, \tag{5.2}$$</p>
+
+<p>其中 \(\langle v_x^2\rangle\equiv\tfrac1N\sum_i v_{x,i}^2\) 是均值。除以墙面积 \(A=L^2\)：</p>
+
+<p>$$ P=\frac{F}{A}=\frac{Nm\langle v_x^2\rangle}{L\cdot L^2}=\frac{N}{V}m\langle v_x^2\rangle. \tag{5.3}$$</p>
+
+<h3>5.3 用各向同性收尾</h3>
+
+<p>(A4) 给</p>
+
+<p>$$ \langle v_x^2\rangle=\langle v_y^2\rangle=\langle v_z^2\rangle,\qquad
+   v^2=v_x^2+v_y^2+v_z^2\;\Rightarrow\;\langle v_x^2\rangle=\tfrac13\langle v^2\rangle. \tag{5.4}$$</p>
+
+<p>代回 (5.3) 立即得到 (4.4)。</p>
+
+<div class="box remark">
+  <p class="box-title">两个推导，一个答案</p>
+  <p>板书版（§4）走 Eulerian 视角——盯着空间 slab、统计 \(dt\) 内的通量；清洁版（§5）走 Lagrangian 视角——盯住一个分子的整段往返。两者最终都把 \(\tfrac13\) 钉死在了"三维空间的各向同性"上。<strong>2D 世界里 \(\tfrac13\) 会变 \(\tfrac12\)，1D 世界里变 \(1\)。</strong>空间维度从这一个数字里露脸。</p>
+</div>
+
+<!-- ======================================================== -->
+
+<h2>§6 温度 = 平均平动动能</h2>
+
+<p>两个 \(P\) 的表达式：</p>
+
+<p>$$ \underbrace{P=\frac{NkT}{V}}_{\text{实验}}\qquad\text{与}\qquad
+   \underbrace{P=\frac{N}{V}\cdot\tfrac13 m\langle v^2\rangle}_{\text{动理论 (4.4)}}. $$</p>
+
+<p>消去公共的 \(N/V\)：</p>
+
+<p>$$ kT=\tfrac13 m\langle v^2\rangle\;\Longleftrightarrow\;m\langle v^2\rangle=3kT. $$</p>
+
+<p>左右乘 \(\tfrac12\)：</p>
+
+<div class="box key-result">
+  <p class="box-title">温度的微观定义</p>
+  <p>$$ \boxed{\;\tfrac12 m\langle v^2\rangle=\tfrac32\,kT\;.\;}\tag{6.1}$$</p>
+  <p><strong>温度，到 \(\tfrac{2}{3k}\) 这个换算系数为止，就是单分子平均平动动能。</strong>热的气体 = 跑得快的分子。</p>
+</div>
+
+<h3>6.1 立即推出三件事</h3>
+
+<ol>
+  <li><strong>内能</strong>。把 (6.1) 乘 \(N\)：单原子理想气体内能
+    $$ U=N\cdot\tfrac32 kT=\tfrac32 NkT=\tfrac32 nRT. \tag{6.2}$$
+    \(U\) <strong>只</strong>依赖 \(T\)，不依赖 \(V\) 或 \(P\)。这就是 Ch.22 里 Joule 自由膨胀实验的理论解释。
+  </li>
+  <li><strong>RMS 速率</strong>：
+    $$ v_{\text{rms}}\equiv\sqrt{\langle v^2\rangle}=\sqrt{\frac{3kT}{m}}=\sqrt{\frac{3RT}{M}}, \tag{6.3}$$
+    其中 \(M=N_A m\) 是摩尔质量。<strong>同温度下，重分子慢、轻分子快。</strong>
+  </li>
+  <li><strong>动能不含 \(m\)</strong>。(6.1) 右边没有 \(m\)。氦原子和氮分子在同一温度下平均动能<em>相等</em>，但速率不等：氦更轻、速率更高。这就是为什么氢和氦容易从地球大气逃逸，而氮氧不会——它们的 \(v_{\text{rms}}\) 已经接近第二宇宙速度的尾分布。</li>
+</ol>
+
+<h3>6.2 数值核查：N₂ 在 300 K</h3>
+
+<p>取 \(T=300\) K，\(M_{N_2}=28\times 10^{-3}\) kg/mol：</p>
+
+<p>$$ v_{\text{rms}}=\sqrt{\frac{3\cdot 8.314\cdot 300}{0.028}}\approx \sqrt{2.67\times 10^5}\approx 517\text{ m/s}. $$</p>
+
+<p>对比上学期我们用过的<strong>空气中声速</strong>(Lec 3) \(v_s\approx 343\) m/s：</p>
+
+<p>$$ \frac{v_s}{v_{\text{rms}}}=\sqrt{\frac{\gamma}{3}}=\sqrt{\frac{7/5}{3}}=\sqrt{7/15}\approx 0.683,
+   \qquad \frac{343}{517}\approx 0.66\ \checkmark $$</p>
+
+<div class="box insight">
+  <p class="box-title">声速为什么总比 \(v_{\text{rms}}\) 慢？</p>
+  <p>声音是分子集体的"步调一致"的压缩波；它的速度受集体的<strong>弹性</strong>和<strong>惯性</strong>限制：\(v_s=\sqrt{B/\rho}\)。Ch.22 会推出 \(B_{\text{adiabatic}}=\gamma P\)，所以 \(v_s=\sqrt{\gamma kT/m}\)。比 \(v_{\text{rms}}=\sqrt{3kT/m}\) 小了一个因子 \(\sqrt{\gamma/3}\approx 0.68\)。<strong>声波骑在分子运动上，不能比分子本身更快。</strong>这是从 Ch.18 到 Ch.22 一条隐藏的红线。</p>
+</div>
+
+<!-- ======================================================== -->
+
+<h2>§7 交互：2D 分子气体</h2>
+
+<div class="box interactive">
+  <p class="box-title">交互：拖动温度滑块，看分子盒的压强如何变化</p>
+  <p>下面是一个简化的二维气体：\(N=40\) 个小球在 \(L\times L\) 的盒子里自由飞、撞墙弹性反射（忽略球-球碰撞 — 这是理想气体的核心假设）。所有球初始速率相同（模拟"温度"），初始方向随机。拖动 \(T\) 滑块改变速率 \(v\propto\sqrt{T}\)。</p>
+
+  <p>我们实时统计两件事：</p>
+  <ul>
+    <li><strong>测量压强</strong>：累计右墙每秒收到的动量冲量 / 墙长，做滑动平均。</li>
+    <li><strong>预测压强</strong>：用动理论公式 \(P_{\text{2D}}=\tfrac12\,(N/A)\,m\langle v^2\rangle\)（2D 里 \(\tfrac13\to\tfrac12\)）。</li>
+  </ul>
+  <p>稳态下两者应当一致——这就是 (4.4) 在你眼前发生。</p>
+
+  <div class="widget">
+    <canvas id="gas-canvas" width="600" height="320"></canvas>
+    <div class="controls">
+      <div class="control-row">
+        <label>温度 T (相对单位)</label>
+        <input type="range" id="gas-T" min="0.2" max="4" step="0.05" value="1.0" />
+        <span class="readout" id="gas-T-readout"></span>
+      </div>
+      <div class="control-row">
+        <label>分子数 N</label>
+        <input type="range" id="gas-N" min="10" max="80" step="2" value="40" />
+        <span class="readout" id="gas-N-readout"></span>
+      </div>
+      <div class="control-row">
+        <label></label>
+        <span style="font-size:.85rem;color:#6b7280">
+          \(\langle v^2\rangle\) = <span id="gas-v2" style="font-family:Menlo,monospace;color:#0f766e"></span>，
+          \(P_{\text{measured}}\) = <span id="gas-Pm" style="font-family:Menlo,monospace;color:#0f766e"></span>，
+          \(P_{\text{predicted}}\) = <span id="gas-Pp" style="font-family:Menlo,monospace;color:#0f766e"></span>
+        </span>
+      </div>
+      <div class="control-row">
+        <label></label>
+        <span style="font-size:.85rem;color:#6b7280">比值 \(P_{\text{m}}/P_{\text{p}}\) = <span id="gas-ratio" style="font-family:Menlo,monospace;color:#0f766e"></span>（理论值 1）</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="box remark">
+  <p class="box-title">为什么 \(P_{\text{measured}}\) 会上下波动？</p>
+  <p>这正是<strong>有限 \(N\) 的统计涨落</strong>：单位时间里撞墙的分子数是一个泊松过程，相对涨落 \(\sim 1/\sqrt{N}\)。把 \(N\) 拉到 80 你会看到比值更稳；把 \(N\) 降到 10，比值剧烈跳动，但<strong>时间平均</strong>依旧逼近 1。真实空气里 \(N\sim 10^{23}\)，相对涨落 \(\sim 10^{-11.5}\)——所以我们的耳膜从不"察觉"压强是来自一颗一颗分子的撞击。</p>
+</div>
+
+<!-- ======================================================== -->
+
+<h2>§8 Equipartition 定理</h2>
+
+<p>把 (6.1) 拆到三个方向上。用 (5.4)，再乘 \(\tfrac12 m\)：</p>
+
+<p>$$ \tfrac12 m\langle v_x^2\rangle=\tfrac12 m\langle v_y^2\rangle=\tfrac12 m\langle v_z^2\rangle=\tfrac12 kT. \tag{8.1}$$</p>
+
+<p>每个 Cartesian 方向贡献 \(\tfrac12 kT\)。把这个观察推广，就是<strong>能量均分定理</strong>：</p>
+
+<div class="box key-result">
+  <p class="box-title">Equipartition 定理（预告）</p>
+  <p>在温度 \(T\) 的平衡态下，能量中每个二次形式 \(\tfrac12 a q^2\)（动能或势能、任何广义坐标 \(q\)）对平均能量贡献</p>
+  <p>$$ \langle \tfrac12 a q^2\rangle=\tfrac12 kT. \tag{8.2}$$</p>
+  <p>说一个自由度"激活"，就是说它在能量里以二次形式出现、并享有这份 \(\tfrac12 kT\)。</p>
+</div>
+
+<h3>8.1 应用清单</h3>
+
+<table class="formula-table">
+  <thead><tr><th>体系</th><th>激活的二次项</th><th>\(\langle E\rangle\)</th><th>\(c_v\)（每分子）</th><th>\(\gamma=c_p/c_v\)</th></tr></thead>
+  <tbody>
+    <tr><td>单原子气 (He, Ne, Ar)</td><td>3 (平动)</td><td>\(\tfrac32 kT\)</td><td>\(\tfrac32 k\)</td><td>\(5/3\)</td></tr>
+    <tr><td>双原子气 (N₂, O₂, H₂)，室温</td><td>3 (平动) + 2 (转动)</td><td>\(\tfrac52 kT\)</td><td>\(\tfrac52 k\)</td><td>\(7/5\)</td></tr>
+    <tr><td>双原子气，高温</td><td>3 + 2 + 2 (振动 KE+PE)</td><td>\(\tfrac72 kT\)</td><td>\(\tfrac72 k\)</td><td>\(9/7\)</td></tr>
+    <tr><td>晶体固体（Dulong–Petit）</td><td>3 (KE) + 3 (PE)</td><td>\(3kT\)</td><td>\(3k\)</td><td>—</td></tr>
+  </tbody>
+</table>
+
+<p>第二行的 \(\gamma=7/5\) 正是我们从 Lec 3 到 Lec 4 一直用的 <strong>空气的 \(\gamma\)</strong>——空气主要由双原子的 \(N_2\) 与 \(O_2\) 组成。</p>
+
+<div class="box insight">
+  <p class="box-title">为什么转动的"沿对称轴"那一项不算？</p>
+  <p>双原子分子有三个转动轴。其中绕分子轴（连接两核的方向）的转动惯量 \(I_\parallel\) 极小，对应的能级间距 \(\hbar^2/2I_\parallel\)<strong>远远超过 \(kT\)</strong>，量子力学使得这个自由度在室温下被"冻结"——平均没有任何能量。这就是为什么只算两个转动，不是三个。Ch.22 在这个细节上点到即止，量子统计要到下学期。</p>
+</div>
+
+<div class="box insight">
+  <p class="box-title">为什么固体得到 \(3kT\) 而不是 \(\tfrac32 kT\)？</p>
+  <p>气体分子的能量只有动能（自由飞行）；晶体里的原子被键住，<strong>同时</strong>有 KE 和 PE，每个原子相当于三维谐振子——三个 KE 二次项加三个 PE 二次项，共 6 个二次形式，每个贡献 \(\tfrac12 kT\)，加起来 \(3kT\)。Dulong–Petit 定律 \(c_v\approx 3R\approx 25\) J/(mol·K) 对大多数固体在室温都对得很准（铜、铝、铁实测都在 \(24{-}25\) 这个数字）。</p>
+</div>
+
+<h3>8.2 失效：低温的"冻结"</h3>
+
+<p>Equipartition 假定能量是连续的。量子力学告诉我们能级是分立的；当 \(kT\) 降到比能级间距还小，对应的自由度就"冻结"，不再贡献 \(\tfrac12 kT\)。例如：</p>
+
+<ul>
+  <li><strong>双原子振动</strong>的能级间距 \(\hbar\omega\sim 0.3\) eV \(\sim 3500\) K（对 \(H_2\)）。所以室温（300 K）下振动是冻结的——这就是为什么我们上面的表里"室温双原子" 只算 5 DOF。</li>
+  <li><strong>双原子转动</strong>的能级间距 \(\hbar^2/I\sim 100\) K（对 \(H_2\)）。所以室温下转动激活，低温（几十 K）下也冻结，让 \(H_2\) 的 \(\gamma\) 从 \(7/5\) 漂回 \(5/3\)。</li>
+</ul>
+
+<p>这一连串"激活"和"冻结"是量子统计力学的胜利，但走出本课范围。</p>
+
+<!-- ======================================================== -->
+
+<h2>§9 与之前章节的连接</h2>
+
+<div class="box remark">
+  <p class="box-title">声速 \(v_{\text{sound}}=\sqrt{\gamma kT/m}\) 的归属</p>
+  <p>从 Lec 3 起我们就直接<em>给出</em>声速这个公式而没有解释。现在线索齐了：</p>
+  <ol>
+    <li><strong>从动理论</strong>：\(v_{\text{rms}}=\sqrt{3kT/m}\)（本课）。</li>
+    <li><strong>从 Equipartition + 第一定律</strong>（Ch.22 即将讲）：单原子 \(\gamma=5/3\)、双原子 \(\gamma=7/5\)。</li>
+    <li><strong>从 Newton–Laplace</strong>（绝热而非等温）：\(B=\gamma P\)，故 \(v_s=\sqrt{B/\rho}=\sqrt{\gamma P/\rho}=\sqrt{\gamma kT/m}\)。</li>
+  </ol>
+  <p>三个公式串成一条独立可验证的链。</p>
+</div>
+
+<div class="box remark">
+  <p class="box-title">比热从经验数到推算数</p>
+  <p>Lec 6.2 我们把 \(c\) 当作每种物质给定的实验参数（水 \(c=4184\) J/(kg·K)、铜 \(c=387\) J/(kg·K)……）。现在 Equipartition 告诉我们：<strong>单原子理想气体</strong> \(c_v=\tfrac32 k=\tfrac32 R/M\) 是<em>算</em>出来的，与实验对得严丝合缝（He 实测 \(c_v M/R\approx 1.50\)）。固体的 \(c\approx 3R/M\) 也是算出来的（Dulong–Petit）。比热从"测一测"变成"算一算"——这是动理论最直接的应用胜利。</p>
+</div>
+
+<div class="box remark">
+  <p class="box-title">大气标高 \(H=kT/(mg)\)</p>
+  <p>Lec 5.2 推出等温大气的标高 \(H=P_0/(\rho_0 g)\)。把 \(P_0=NkT/V\) 与 \(\rho_0=Nm/V\) 代入即得 \(H=kT/(mg)\)：<strong>分子越重越冷，标高越小</strong>。N₂ 在 300 K 给 \(H\approx 8.6\) km，与上次得到的一致。这给标高一个分子学解释——它就是分子重力势能差 \(mgH\) 等于 \(kT\) 的高度。</p>
+</div>
+
+<!-- ======================================================== -->
+
+<h2>§10 三个长度尺度 + Dalton 定律（Lec 7.3）</h2>
+
+<p>到目前为止动理论只关心一个标度——分子的<strong>速度</strong>（\(v_{\text{rms}}\)）。Lec 7.3 把同样的微观图像延伸到三个相互独立的<strong>长度</strong>标度，并用 \(PV=NkT\) 推出多组分气体的 Dalton 定律。</p>
+
+<h3>10.1 平均自由程 \(\ell\)</h3>
+
+<p>把分子看成直径 \(d\) 的刚性球：一颗"测试"分子在时间 \(t\) 内沿直线扫过一根<strong>圆柱体</strong>，截面 \(\pi d^2\)、长度 \(vt\)。任何中心落在这柱体内的目标分子都算被撞上。</p>
+
+<svg viewBox="0 0 460 130" style="display:block;margin:1rem auto;max-width:100%;background:#fafafa;border-radius:6px">
+  <rect x="20" y="20" width="420" height="90" fill="none" stroke="#374151" stroke-width="1.5"/>
+  <!-- trajectory and cylinder boundaries -->
+  <line x1="20" y1="65" x2="440" y2="65" stroke="#1e40af" stroke-width="2"/>
+  <line x1="20" y1="40" x2="440" y2="40" stroke="#9ca3af" stroke-dasharray="4,3"/>
+  <line x1="20" y1="90" x2="440" y2="90" stroke="#9ca3af" stroke-dasharray="4,3"/>
+  <!-- test molecule -->
+  <circle cx="35" cy="65" r="10" fill="#1e40af"/>
+  <text x="20" y="115" font-size="11" font-family="Charter, serif" fill="#1e40af">test</text>
+  <!-- a target it hits -->
+  <circle cx="220" cy="55" r="10" fill="#b91c1c"/>
+  <text x="208" y="115" font-size="11" font-family="Charter, serif" fill="#b91c1c">hit</text>
+  <!-- a miss -->
+  <circle cx="340" cy="20" r="10" fill="#fca5a5"/>
+  <text x="324" y="12" font-size="11" font-family="Charter, serif" fill="#dc2626">miss</text>
+  <!-- diameter indicator -->
+  <line x1="100" y1="40" x2="100" y2="90" stroke="#374151" stroke-width="1" marker-start="url(#arr)" marker-end="url(#arr)"/>
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#374151"/>
+    </marker>
+  </defs>
+  <text x="105" y="68" font-size="12" font-family="Charter, serif">\(d\)</text>
+  <text x="240" y="115" font-size="11" font-family="Charter, serif" fill="#374151">扫过的圆柱：截面 \(\pi d^2\)，长度 \(vt\)</text>
+</svg>
+
+<p>在数密度 \(n_0=N/V\) 下，时间 \(t\) 内碰撞次数 \(N_{\text{col}}=n_0\cdot \pi d^2\cdot vt\)。把路径长度 \(vt\) 除以 \(N_{\text{col}}\) 给"目标静止"近似下的平均自由程</p>
+
+<p>$$ \ell_{\text{naive}}=\frac{vt}{n_0\pi d^2 vt}=\frac{1}{n_0\pi d^2}. \tag{10.1} $$</p>
+
+<p>但目标分子也在跑，相关运动学量是<strong>相对速度</strong>。MB 分布给 \(\langle|\vec v_1-\vec v_2|\rangle=\sqrt 2\,\bar v\)（推导见展开），所以碰撞率快 \(\sqrt 2\) 倍，平均自由程短 \(\sqrt 2\) 倍：</p>
+
+<div class="box key-result">
+  <p class="box-title">平均自由程（含 \(\sqrt 2\) 修正）</p>
+  <p>$$ \boxed{\;\ell=\frac{1}{\sqrt 2\,n_0\,\pi d^2}=\frac{kT}{\sqrt 2\,P\,\pi d^2}\;} \tag{10.2}$$</p>
+  <p>第二种形式用 \(n_0=P/(kT)\) 直接得到（\(PV=NkT\)）。</p>
+</div>
+
+<details class="more-detail">
+  <summary>展开：\(\sqrt 2\) 因子的来历</summary>
+  <p>对两颗独立从 MB 分布抽取的分子，</p>
+  <p>$$\langle |\vec v_1-\vec v_2|^2\rangle = \langle v_1^2\rangle+\langle v_2^2\rangle - 2\langle\vec v_1\!\cdot\!\vec v_2\rangle = 2\langle v^2\rangle - 0 = 2\langle v^2\rangle.$$</p>
+  <p>因为各向同性 \(\langle\vec v_1\rangle=\vec 0\) 且两速度不相关。所以典型相对速率比单颗快 \(\sqrt 2\) 倍。更细致地把 MB 分布积分给 \(\langle|\vec v_1-\vec v_2|\rangle=\sqrt 2\,\bar v\) 严格成立。</p>
+</details>
+
+<p>由此立刻得到<strong>平均碰撞时间</strong></p>
+
+<p>$$ \tau=\frac{\ell}{\bar v}. \tag{10.3} $$</p>
+
+<p>空气 STP 数值：\(d\sim 3\times 10^{-10}\) m, \(n_0\sim 2.7\times 10^{25}\)/m³，给 \(\ell\sim 70\) nm 与（用 \(\bar v\sim 500\) m/s）\(\tau\sim 1.4\times 10^{-10}\) s。一颗 N₂ 分子室温下每秒撞 \(\sim 10^{10}\) 次。</p>
+
+<h3>10.2 平均分子间距 \(d_i\)</h3>
+
+<p>另一个相关但不同的长度——如果把分子排成立方点阵，最近邻距离就是</p>
+
+<p>$$ d_i=\left(\frac{V}{N}\right)^{1/3}=\left(\frac{kT}{P}\right)^{1/3}. \tag{10.4} $$</p>
+
+<p>对 STP 空气：\(d_i\sim 3.4\) nm，是分子直径的 \(\sim 10\) 倍，又比 \(\ell\) 小 \(\sim 20\) 倍。三个标度形成清晰的等级：</p>
+
+<div class="box remark">
+  <p class="box-title">三个长度三种角色</p>
+  <table class="formula-table" style="margin-top:.4rem">
+    <thead><tr><th>标度</th><th>含义</th><th>STP 空气数值</th><th>决定什么</th></tr></thead>
+    <tbody>
+      <tr><td>\(d\)</td><td>分子直径</td><td>\(\sim 0.3\) nm</td><td>碰撞截面 \(\pi d^2\)</td></tr>
+      <tr><td>\(d_i=(V/N)^{1/3}\)</td><td>平均最近邻距离</td><td>\(\sim 3.4\) nm</td><td>经典极限 \(n_0\lambda_T^3\ll 1\)（即 \(d_i\gg\lambda_T\)）</td></tr>
+      <tr><td>\(\ell\)</td><td>平均自由程</td><td>\(\sim 70\) nm</td><td>输运系数（黏度、扩散、热导）；Knudsen 数 \(\mathrm{Kn}=\ell/L\)</td></tr>
+    </tbody>
+  </table>
+  <p>稀薄气体的工作定义就是 \(d<d_i<\ell\)：每颗分子大部分时间远离邻居，飞过许多 \(d_i\) 后才偶尔撞上一颗。</p>
+</div>
+
+<div class="box insight">
+  <p class="box-title">为什么 \(\ell\) 很重要</p>
+  <ul>
+    <li><strong>声波连续极限</strong>：声波要靠分子频繁碰撞维持局域热平衡。只要 \(\lambda\gg\ell\) 连续介质近似成立，Lec 3 的波动方程推导有效；空气声学高频上限 \(\sim 10\) MHz 正对应 \(\lambda\sim\ell\)。</li>
+    <li><strong>Maxwell 1860 结果</strong>：黏度 \(\eta\sim n_0 m\bar v\ell\sim m\bar v/(\sqrt 2 \pi d^2)\)——<em>不依赖密度</em>。这一反直觉预言是动理论的早期重大实验确认之一。</li>
+    <li><strong>Knudsen 数 \(\mathrm{Kn}=\ell/L\)</strong>：\(\mathrm{Kn}\ll 1\) 连续介质（Navier–Stokes 适用）；\(\mathrm{Kn}\gtrsim 1\) 自由分子流（真空腔、上层大气卫星、纳米通道适用弹道近似）。</li>
+  </ul>
+</div>
+
+<h3>10.3 Dalton 分压定律</h3>
+
+<p>两种理想气体共占体积 \(V\) 同温 \(T\)，分子数 \(N_1,N_2\)，因为它们互不相互作用，各自<strong>独立</strong>给壁施加压强：</p>
+
+<p>$$ P_1=\frac{N_1 kT}{V},\qquad P_2=\frac{N_2 kT}{V}. \tag{10.5} $$</p>
+
+<p>壁感受的是总动量流密度，所以压强相加：</p>
+
+<div class="box key-result">
+  <p class="box-title">Dalton 分压定律</p>
+  <p>$$ \boxed{\;P=P_1+P_2=(N_1+N_2)\frac{kT}{V}\;} \tag{10.6}$$</p>
+  <p>仅对<strong>理想（无相互作用）</strong>气体严格成立。</p>
+</div>
+
+<p>例：海平面大气 \(\sim\) 78% N₂ + 21% O₂ + 1% Ar（按粒子数）。分压 \(P_{\mathrm{N_2}}\approx 0.78\) atm, \(P_{\mathrm{O_2}}\approx 0.21\) atm, \(P_{\mathrm{Ar}}\approx 0.01\) atm，总和 \(\approx 1.01\times 10^5\) Pa。</p>
+
+<h3>10.4 顺便：Newton 的等温声速</h3>
+
+<p>用 \(PV=NkT\) 与 \(B=-V(\partial P/\partial V)_T\)：等温下 \(P\propto 1/V\)，所以 \(B_{\text{iso}}=P\)。代入 \(v_{\text{sound}}=\sqrt{B/\rho}\)，再用 \(\rho=Nm/V\) 与 \(PV=NkT\)：</p>
+
+<p>$$ v_{\text{sound}}^{(\text{iso})}=\sqrt{P/\rho}=\sqrt{kT/m}. \tag{10.7}$$</p>
+
+<p>这正是 Newton 1687 的值，对 N₂ 在 300 K 给 \(298\) m/s——比实测 \(343\) m/s 低 18%。Laplace 用绝热修正 \(B=\gamma P\) 把它补到 \(\sqrt{\gamma kT/m}=343\) m/s（详见 <a href="04_sound_microscopic.html">04 节 §8</a>）。比率 \(v_{\text{sound}}^{(\text{iso})}/v_{\text{rms}}=1/\sqrt 3\approx 0.58\) 与 \(\sqrt{\gamma/3}\approx 0.68\) 都低于 1，符合"声波不能超过支撑它的分子运动"这一运动学上限。</p>
+
+<!-- ======================================================== -->
+
+<h2>§11 Worked Examples</h2>
+
+<div class="example">
+  <h4>Example：估算 He 在 300 K 的 \(v_{\text{rms}}\)；与 N₂ 比较</h4>
+  <p class="source">改编自 Shankar §22.2</p>
+  <p>问：氦气在室温 \(T=300\) K 下的 RMS 速率？氦原子原子质量 4 g/mol。和 N₂ 的 517 m/s 比一比。</p>
+
+  <div class="solution-step"><strong>代入 (6.3)</strong>：\(M_{He}=4\times 10^{-3}\) kg/mol：
+    $$ v_{\text{rms}}^{(He)}=\sqrt{\frac{3RT}{M}}=\sqrt{\frac{3\cdot 8.314\cdot 300}{0.004}}\approx \sqrt{1.87\times 10^6}\approx 1370\text{ m/s}. $$
+  </div>
+
+  <div class="solution-step"><strong>比值核查</strong>：
+    $$ \frac{v_{\text{rms}}^{(He)}}{v_{\text{rms}}^{(N_2)}}=\sqrt{\frac{M_{N_2}}{M_{He}}}=\sqrt{\frac{28}{4}}=\sqrt 7\approx 2.65. $$
+    与计算结果 \(1370/517\approx 2.65\) ✓
+  </div>
+
+  <div class="solution-step"><strong>动能核查</strong>：
+    $$ \tfrac12 m_{He}v_{\text{rms},He}^2=\tfrac32 kT=\tfrac12 m_{N_2}v_{\text{rms},N_2}^2.$$
+    用质量比 \(m_{N_2}/m_{He}=7\) 与速率比 \(\sqrt 7\) 验证：\((\sqrt 7)^2/7=1\) ✓ 两种气体平均分子动能相等。
+  </div>
+
+  <div class="solution-step"><strong>物理含义</strong>：He 分子的速率约 1.37 km/s。地球第二宇宙速度 11.2 km/s 听起来远——但 He 的速率分布有长尾，确实有一小部分分子时刻在逃逸。这就是为什么地球大气中几乎没有原生氦：诞生几亿年内全跑光了；今天的工业氦全部来自地下衰变产物（α 粒子=He 核）。<em>动理论给天文学家解释行星大气组成。</em></div>
+</div>
+
+<div class="example">
+  <h4>Example：1 atm、300 K 下氮气的数密度与单分子动能</h4>
+  <p class="source">改编自 Shankar §22.1</p>
+  <p>(a) 在 1 atm、300 K 下，\(N_2\) 气的数密度 \(N/V\) 是多少？(b) 单个 \(N_2\) 分子的平均动能（J 单位、eV 单位）是多少？</p>
+
+  <div class="solution-step"><strong>(a) 数密度</strong>：(2.1) 改写 \(N/V=P/(kT)\)。
+    $$ \frac{N}{V}=\frac{1.013\times 10^5}{1.38\times 10^{-23}\cdot 300}
+       =\frac{1.013\times 10^5}{4.14\times 10^{-21}}\approx 2.45\times 10^{25}\text{ m}^{-3}. $$
+    每立方厘米约 \(2.45\times 10^{19}\) 个分子。这是 STP 下的"Loschmidt 数"。
+  </div>
+
+  <div class="solution-step"><strong>(b) 单分子动能（J）</strong>：直接 (6.1)：
+    $$ \langle\mathrm{KE}\rangle=\tfrac32 kT=\tfrac32\cdot 1.38\times 10^{-23}\cdot 300\approx 6.21\times 10^{-21}\text{ J}. $$
+  </div>
+
+  <div class="solution-step"><strong>(b') 转 eV</strong>：用 \(1\text{ eV}=1.602\times 10^{-19}\) J：
+    $$ \langle\mathrm{KE}\rangle\approx \frac{6.21\times 10^{-21}}{1.602\times 10^{-19}}\approx 0.0388\text{ eV}. $$
+  </div>
+
+  <div class="solution-step"><strong>记住这个数：\(kT\approx 1/40\) eV at 300 K</strong>。\(\tfrac32 kT\approx 1/26\) eV。这是凝聚态物理与化学里的"thermal energy"参考标度——化学键能 \(\sim 1\)–10 eV，所以室温下分子相对稳定（不会自发解离）；半导体带隙也常与 \(kT\) 比较来判断载流子统计。<em>整个化学和材料科学的"温度起点"就是这个数字。</em></div>
+</div>
+
+<div class="example">
+  <h4>Problem ★：从声速直接<em>测</em>气体的摩尔质量</h4>
+  <p class="source">改编自 Shankar Ch.22 习题</p>
+  <p>实验测得某未知双原子气在 300 K 下声速 \(v_s=308\) m/s。问它是哪种气体？</p>
+
+  <div class="solution-step"><strong>用 \(v_s=\sqrt{\gamma RT/M}\)</strong>。双原子（室温）\(\gamma=7/5\)。解 \(M\)：
+    $$ M=\frac{\gamma RT}{v_s^2}=\frac{1.4\cdot 8.314\cdot 300}{308^2}=\frac{3492}{94864}\approx 3.68\times 10^{-2}\text{ kg/mol}. $$
+  </div>
+
+  <div class="solution-step"><strong>识别</strong>：\(M\approx 36.8\) g/mol。最接近的双原子气是<strong>氯气 \(Cl_2\)</strong>（\(M=70.9\) g/mol，不对）……重新看：可能是<strong>HCl</strong>（\(M=36.5\)）？或者<strong>F₂</strong>（\(M=38\)）。F₂ 是双原子，匹配。注意，CO₂ 是三原子（\(\gamma\) 不是 7/5），不在选项里。</div>
+
+  <div class="solution-step"><strong>方法学注</strong>：声速测量是一种<em>非接触</em>、<em>无损</em>的气体识别手段；对工业气体监测、火星探测器分析大气成分都非常实用。\(v_s\propto 1/\sqrt M\) 给出对分子量的高灵敏度。</div>
+
+  <div class="solution-step"><strong>核查直觉</strong>：空气声速 343 m/s（平均摩尔质量 29 g/mol）。我们的未知气分子量比空气重一点点（37 vs 29），所以声速比空气慢一点（308 vs 343）。比值核查 \((343/308)^2\approx 1.24\)；摩尔质量比 \(37/29\approx 1.28\)。考虑温度可能略不同，吻合度合理。</div>
+</div>
+
+<div class="example">
+  <h4>Problem ★★：用 Equipartition 推 Mayer 关系 \(c_p-c_v=R\)</h4>
+  <p class="source">Shankar §22 综合题</p>
+  <p>对单原子理想气体，已知 \(U=\tfrac32 nRT\)。证明 \(c_p-c_v=R\)（每摩尔）。</p>
+
+  <div class="solution-step"><strong>策略</strong>：用<strong>热力学第一定律</strong> \(dU=dQ-dW\)（\(W\) 是气体对外做的功），分别在<strong>等容</strong>与<strong>等压</strong>过程下计算 \(dQ/dT\)。</div>
+
+  <div class="solution-step"><strong>等容过程</strong>（\(dV=0\)）：气体不做功，所有热都变内能：
+    $$ dQ_V=dU=\tfrac32 nR\,dT\;\Longrightarrow\;c_v\equiv\frac{1}{n}\frac{dQ_V}{dT}=\tfrac32 R. $$
+  </div>
+
+  <div class="solution-step"><strong>等压过程</strong>（\(dP=0\)）：气体既升温（增 \(U\)）也膨胀做功 \(dW=P\,dV\)。由 \(PV=nRT\) 微分：\(P\,dV=nR\,dT\)。所以
+    $$ dQ_P=dU+P\,dV=\tfrac32 nR\,dT+nR\,dT=\tfrac52 nR\,dT
+       \;\Longrightarrow\;c_p\equiv\frac{1}{n}\frac{dQ_P}{dT}=\tfrac52 R. $$
+  </div>
+
+  <div class="solution-step"><strong>结合</strong>：
+    $$ c_p-c_v=\tfrac52 R-\tfrac32 R=R. \tag*{$\blacksquare$}$$
+    更普遍地，对 \(f\) 个二次自由度：\(c_v=\tfrac{f}{2}R\)，\(c_p=\tfrac{f+2}{2}R\)，<strong>差始终是 \(R\)</strong>。
+  </div>
+
+  <div class="solution-step"><strong>物理含义</strong>：\(R\) 这个差额，正是"气体在等压升温时要顺便做的那点膨胀功"。这是第一定律最干净的应用之一。Ch.22 会反复用到。</div>
+</div>
+
+<!-- ======================================================== -->
+
+<h2>§12 Self-check</h2>
+
+<div class="self-check">
+  <p class="question">Q1. 为什么动理论压强公式里出现 \(\langle v^2\rangle\) 而不是 \(\langle v\rangle^2\)？两者一样吗？</p>
+  <details>
+    <summary>查看答案</summary>
+    <p>不一样：\(\langle v^2\rangle\ge \langle v\rangle^2\)（柯西-施瓦茨不等式）。在 (5.1) 里我们既要用 \(\Delta p\propto v_x\) 又要用碰撞率 \(\propto v_x\)，两个 \(v\) 因子相乘成 \(v_x^2\) 再取平均——所以是<strong>均方</strong>而不是<strong>方均</strong>。Maxwell-Boltzmann 分布下 \(\langle v\rangle\ne\sqrt{\langle v^2\rangle}\)（差一个 \(\sqrt{8/(3\pi)}\approx 0.92\) 的因子），所以这件事是有可观测后果的。</p>
+  </details>
+</div>
+
+<div class="self-check">
+  <p class="question">Q2. 两个气罐：A 装 He（4 g/mol），B 装 Ar（40 g/mol），<strong>同温同压</strong>。比较：<br/>
+  (a) 每分子平均动能；(b) RMS 速率；(c) 数密度。</p>
+  <details>
+    <summary>查看答案</summary>
+    <p>(a) \(\tfrac12 m\langle v^2\rangle=\tfrac32 kT\)，<strong>同温度则相同</strong>。He 和 Ar 每个分子动能一样。</p>
+    <p>(b) \(v_{\text{rms}}\propto 1/\sqrt m\)。He 比 Ar 轻 10 倍，所以 \(v_{\text{rms},He}/v_{\text{rms},Ar}=\sqrt{10}\approx 3.16\)：He 比 Ar 快约 3.2 倍。</p>
+    <p>(c) \(N/V=P/(kT)\)。<strong>同温同压则相同</strong>——这就是阿伏伽德罗定律：同温同压同体积的气体含相同分子数（不论是什么气体！）。</p>
+  </details>
+</div>
+
+<div class="self-check">
+  <p class="question">Q3. 板书推导里的因子 \(\tfrac13\) 从哪一条物理假设来？因子 \(\tfrac12\) 又是？</p>
+  <details>
+    <summary>查看答案</summary>
+    <p>\(\tfrac13\) 来自<strong>三维空间的各向同性</strong>（A4）：\(\langle v_x^2\rangle=\tfrac13\langle v^2\rangle\)。换到 2D 就是 \(\tfrac12\)，1D 就是 \(1\)。</p>
+    <p>\(\tfrac12\) 来自<strong>"朝墙"</strong>：slab 里只有一半 \(x\) 方向的分子是飞向我们这堵墙的。在 §5 的清洁推导里，这个 \(\tfrac12\) 自动吸收进了"往返时间 \(2L/v_x\)"——所以不是物理本质，只是计数方式。</p>
+  </details>
+</div>
+
+<div class="self-check">
+  <p class="question">Q4. 一个分子的速度从 \((v_x,v_y,v_z)=(300, 400, 0)\) m/s 变到 \((400, 300, 0)\) m/s。它的动能变了吗？这对动理论有什么意义？</p>
+  <details>
+    <summary>查看答案</summary>
+    <p>没变：\(v^2=300^2+400^2=400^2+300^2=250000\)。两个状态<strong>动能相同</strong>，因此对压强、温度的微观贡献完全一样。这是 (5.4) 的一个具体例子：动理论只看 \(\langle v^2\rangle\) 这个标量，对速度方向"色盲"。<strong>这一各向同性的事实是单一温度概念之所以成立的根本</strong>——如果我们能用方向区分分子的"x-温度"和"y-温度"，那温度就不是一个数而是一个张量了。气体内部各方向温度永远相等。</p>
+  </details>
+</div>
+
+<div class="self-check">
+  <p class="question">Q5. 室温下，\(N_2\) 的振动自由度对 \(c_v\) <em>不</em>贡献；但若把它加热到 5000 K，会怎么样？给出 \(c_v\) 的估计。</p>
+  <details>
+    <summary>查看答案</summary>
+    <p>振动能级间距 \(\hbar\omega\sim 0.3\) eV \(\sim 3500\) K（对 \(N_2\)）。室温（\(kT\sim 0.026\) eV）下振动冻结，仅 5 个 DOF：\(c_v=\tfrac52 k\)。当 \(T=5000\) K 远超 3500 K，振动激活——双原子振动算两个二次项（一个 KE \(\tfrac12 m\dot x^2\)，一个 PE \(\tfrac12 K x^2\)），所以 DOF 变成 \(3+2+2=7\)，每分子 \(c_v=\tfrac72 k\)，每摩尔 \(c_v=\tfrac72 R\approx 29\) J/(mol·K)。\(\gamma\) 从 \(7/5=1.4\) 漂到 \(9/7\approx 1.29\)。<strong>这种"加热让 \(c_v\) 一阶跳一阶"的阶梯，是双原子气加热曲线的标志特征</strong>，1900 年前后的实验观察是量子论的早期证据之一。</p>
+  </details>
+</div>
+
+<!-- ======================================================== -->
+
+<h2>§13 公式速查表</h2>
+
+<table class="formula-table">
+  <thead><tr><th>概念</th><th>公式</th></tr></thead>
+  <tbody>
+    <tr><th>理想气体定律（分子）</th><td>\(PV=NkT\)</td></tr>
+    <tr><th>理想气体定律（摩尔）</th><td>\(PV=nRT\)，\(R=N_A k\)</td></tr>
+    <tr><th>Boltzmann 常数</th><td>\(k=1.38\times 10^{-23}\) J/K</td></tr>
+    <tr><th>气体常数</th><td>\(R=8.314\) J/(mol·K)</td></tr>
+    <tr><th>单次碰撞冲量</th><td>\(\Delta p=2mv_x\)（墙获得）</td></tr>
+    <tr><th>slab 体积</th><td>\(dV=A\,v\,dt\)</td></tr>
+    <tr><th>动理论压强（板书形式）</th><td>\(P=\tfrac13\,(N/V)\,m\,\langle v^2\rangle\)</td></tr>
+    <tr><th>动理论压强（\(v_x\) 形式）</th><td>\(P=(N/V)\,m\,\langle v_x^2\rangle\)</td></tr>
+    <tr><th>各向同性关系</th><td>\(\langle v_x^2\rangle=\langle v_y^2\rangle=\langle v_z^2\rangle=\tfrac13\langle v^2\rangle\)</td></tr>
+    <tr><th>每分子平均动能</th><td>\(\tfrac12 m\langle v^2\rangle=\tfrac32 kT\)</td></tr>
+    <tr><th>单原子理想气内能</th><td>\(U=\tfrac32 NkT=\tfrac32 nRT\)</td></tr>
+    <tr><th>RMS 速率</th><td>\(v_{\text{rms}}=\sqrt{3kT/m}=\sqrt{3RT/M}\)</td></tr>
+    <tr><th>Equipartition（每二次项）</th><td>\(\langle\tfrac12 a q^2\rangle=\tfrac12 kT\)</td></tr>
+    <tr><th>每方向 KE</th><td>\(\tfrac12 m\langle v_i^2\rangle=\tfrac12 kT\)</td></tr>
+    <tr><th>双原子 \(c_v\)（室温）</th><td>\(c_v=\tfrac52 R\)，\(c_p=\tfrac72 R\)，\(\gamma=7/5\)</td></tr>
+    <tr><th>Dulong–Petit</th><td>\(c_v\approx 3R\)（晶体）</td></tr>
+    <tr><th>\(v_{\text{rms}}(N_2)\) at 300 K</th><td>\(\approx 517\) m/s</td></tr>
+    <tr><th>\(v_{\text{rms}}(He)\) at 300 K</th><td>\(\approx 1370\) m/s</td></tr>
+    <tr><th>声速与 \(v_{\text{rms}}\) 比</th><td>\(v_s/v_{\text{rms}}=\sqrt{\gamma/3}\)</td></tr>
+    <tr><th>\(kT\) at 300 K</th><td>\(\approx 1/40\) eV \(\approx 4.14\times 10^{-21}\) J</td></tr>
+    <tr><th>Loschmidt 数（1 atm, 300 K）</th><td>\(N/V\approx 2.45\times 10^{19}\) cm⁻³</td></tr>
+    <tr><th>平均自由程</th><td>\(\ell=1/(\sqrt 2\,n_0\,\pi d^2)=kT/(\sqrt 2\,P\,\pi d^2)\)</td></tr>
+    <tr><th>平均碰撞时间</th><td>\(\tau=\ell/\bar v\)</td></tr>
+    <tr><th>平均分子间距</th><td>\(d_i=(V/N)^{1/3}=(kT/P)^{1/3}\)</td></tr>
+    <tr><th>Dalton 分压定律</th><td>\(P=P_1+P_2=(N_1+N_2)kT/V\)</td></tr>
+    <tr><th>等温声速（Newton）</th><td>\(v_{\text{sound}}^{(\text{iso})}=\sqrt{P/\rho}=\sqrt{kT/m}\)</td></tr>
+    <tr><th>Knudsen 数</th><td>\(\mathrm{Kn}=\ell/L\)；\(\ll 1\) 连续介质，\(\gtrsim 1\) 弹道</td></tr>
+  </tbody>
+</table>
+
+<!-- ======================================================== -->
+
+<div class="glossary">
+  <h2>术语表</h2>
+  <dl>
+    <dt>动理论 (kinetic theory)</dt>
+    <dd>用分子运动的统计平均推导气体宏观性质（压强、温度、内能、声速、\(c_v\) 等）的框架。Maxwell、Clausius、Boltzmann 创立。</dd>
+
+    <dt>均方速度 (mean-square speed)</dt>
+    <dd>\(\langle v^2\rangle\equiv\tfrac1N\sum_i v_i^2\)。注意与"方均速度" \(\langle v\rangle^2\) 不同。</dd>
+
+    <dt>RMS 速率 (root-mean-square speed)</dt>
+    <dd>\(v_{\text{rms}}=\sqrt{\langle v^2\rangle}=\sqrt{3kT/m}\)。理想气体里最有用的速率标度。</dd>
+
+    <dt>各向同性 (isotropy)</dt>
+    <dd>无优先方向；对气体在平衡态成立，给 \(\langle v_x^2\rangle=\langle v_y^2\rangle=\langle v_z^2\rangle=\tfrac13\langle v^2\rangle\)。</dd>
+
+    <dt>自由度 (degree of freedom)</dt>
+    <dd>能量中独立的二次项个数。每个贡献 \(\tfrac12 kT\)。注意一维谐振子有 2 个 DOF（KE + PE），不是 1 个。</dd>
+
+    <dt>Equipartition 定理 (equipartition theorem)</dt>
+    <dd>平衡态下能量中每个二次项贡献 \(\tfrac12 kT\)。经典物理结论；量子修正给"冻结"。</dd>
+
+    <dt>Boltzmann 常数 (\(k\))</dt>
+    <dd>\(k=1.38\times 10^{-23}\) J/K。把宏观温度与微观能量挂钩的换算系数。\(k=R/N_A\)。</dd>
+
+    <dt>Avogadro 数 (\(N_A\))</dt>
+    <dd>\(6.022\times 10^{23}\) mol\(^{-1}\)。1 mol 物质的基本粒子数。</dd>
+
+    <dt>Loschmidt 数 (Loschmidt's number)</dt>
+    <dd>STP 下气体的数密度 \(\approx 2.45\times 10^{19}\) cm⁻³（或 1 atm, 300 K 下）。</dd>
+
+    <dt>内能 (internal energy, \(U\))</dt>
+    <dd>气体所有分子动能 + 势能之和；单原子理想气 \(U=\tfrac32 NkT\)，仅依赖 \(T\)。</dd>
+
+    <dt>定容比热 (\(c_v\))</dt>
+    <dd>等容过程下每单位质量（或摩尔）升温 1 K 所需热量。Equipartition 给 \(c_v=\tfrac{f}{2}R\)。</dd>
+
+    <dt>定压比热 (\(c_p\))</dt>
+    <dd>等压过程下的对应量。Mayer 关系 \(c_p-c_v=R\)（每摩尔）。</dd>
+
+    <dt>比热比 (\(\gamma=c_p/c_v\))</dt>
+    <dd>绝热指数；声速公式 \(v_s=\sqrt{\gamma kT/m}\) 与 \(PV^\gamma\) 等式都用到。</dd>
+
+    <dt>Maxwell-Boltzmann 分布 (MB distribution)</dt>
+    <dd>理想气体平衡态下分子速率分布 \(f(v)\propto v^2 e^{-mv^2/(2kT)}\)。本课暂不展开，Ch.24 给出。</dd>
+
+    <dt>冻结 (freezing-out)</dt>
+    <dd>当 \(kT\) 小于某自由度的能级间距时，该 DOF 对 \(c_v\) 不再贡献。量子统计现象。</dd>
+
+    <dt>Dulong–Petit 定律</dt>
+    <dd>晶体每摩尔比热 \(c_v\approx 3R\approx 25\) J/(mol·K)（每原子 6 个二次形式）。室温下对大多数固体准确。</dd>
+
+    <dt>平均自由程 (mean free path, \(\ell\))</dt>
+    <dd>分子两次连续碰撞间的平均距离。\(\ell=1/(\sqrt 2\,n_0\,\pi d^2)\)，\(\sqrt 2\) 来自 MB 相对速度。</dd>
+
+    <dt>平均碰撞时间 (\(\tau\))</dt>
+    <dd>\(\tau=\ell/\bar v\)；空气 STP \(\sim 10^{-10}\) s。决定输运过程与弛豫速率。</dd>
+
+    <dt>平均分子间距 (\(d_i\))</dt>
+    <dd>\(d_i=(V/N)^{1/3}=(kT/P)^{1/3}\)。比 \(\ell\) 小一个量级，比 \(d\) 大一个量级（稀薄气体 \(d<d_i<\ell\)）。</dd>
+
+    <dt>Knudsen 数 (\(\mathrm{Kn}\))</dt>
+    <dd>\(\mathrm{Kn}=\ell/L\)。判断气体是连续介质（\(\mathrm{Kn}\ll 1\)，N–S 方程）还是弹道（\(\mathrm{Kn}\gtrsim 1\)，自由分子流）。</dd>
+
+    <dt>Dalton 分压定律 (Dalton's law of partial pressures)</dt>
+    <dd>理想气体混合时 \(P=\sum_i P_i=\sum_i N_i kT/V\)。仅对无相互作用气体严格。</dd>
+  </dl>
+</div>
+
+<!-- ======================================================== -->
+
+<nav class="page-nav">
+  <a class="nav-prev" href="08_real_fluids_heat.html">真实流体 + 热学入门</a>
+  <a class="nav-next" href="01_shm.html">SHM</a>
+</nav>
+
+</main>
+
+<script src="interactive.js"></script>
+<script>
+  markCurrentReviewing('09_kinetic_theory.html');
+
+  // -------- Interactive: 2D ideal gas in a box --------
+  (function() {
+    const setup = setupCanvas('gas-canvas', 600, 320);
+    if (!setup) return;
+    const { ctx, w, h } = setup;
+
+    // Box geometry (in canvas pixels)
+    const boxX = 40, boxY = 20, boxW = 520, boxH = 280;
+    const massPerMolec = 1;   // arbitrary units
+    const baseSpeed = 80;     // pixels/s at T=1
+    let molecules = [];
+    let momentumAccum = 0;    // running sum of |Δp_x| delivered to right wall
+    let timeAccum = 0;
+    let curT = 1.0;
+    let curN = 40;
+
+    function resetMolecules(N, T) {
+      molecules = [];
+      const speed = baseSpeed * Math.sqrt(T);
+      for (let i = 0; i < N; i++) {
+        const theta = Math.random() * 2 * Math.PI;
+        molecules.push({
+          x: boxX + 10 + Math.random() * (boxW - 20),
+          y: boxY + 10 + Math.random() * (boxH - 20),
+          vx: speed * Math.cos(theta),
+          vy: speed * Math.sin(theta),
+        });
+      }
+      momentumAccum = 0;
+      timeAccum = 0;
+    }
+
+    function rescaleSpeeds(oldT, newT) {
+      const factor = Math.sqrt(newT / oldT);
+      molecules.forEach(m => { m.vx *= factor; m.vy *= factor; });
+      momentumAccum = 0;
+      timeAccum = 0;
+    }
+
+    function step(dt) {
+      molecules.forEach(m => {
+        m.x += m.vx * dt;
+        m.y += m.vy * dt;
+        // Walls
+        if (m.x < boxX + 4) { m.x = boxX + 4; m.vx = -m.vx; }
+        if (m.x > boxX + boxW - 4) {
+          // right wall: count momentum delivered = 2 * mass * |vx|
+          momentumAccum += 2 * massPerMolec * Math.abs(m.vx);
+          m.x = boxX + boxW - 4;
+          m.vx = -m.vx;
+        }
+        if (m.y < boxY + 4) { m.y = boxY + 4; m.vy = -m.vy; }
+        if (m.y > boxY + boxH - 4) { m.y = boxY + boxH - 4; m.vy = -m.vy; }
+      });
+      timeAccum += dt;
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, w, h);
+
+      // box
+      ctx.strokeStyle = '#374151';
+      ctx.lineWidth = 2;
+      ctx.strokeRect(boxX, boxY, boxW, boxH);
+
+      // right wall highlighted (the one we measure)
+      ctx.strokeStyle = '#ea580c';
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(boxX + boxW, boxY);
+      ctx.lineTo(boxX + boxW, boxY + boxH);
+      ctx.stroke();
+      ctx.fillStyle = '#ea580c';
+      ctx.font = "11px -apple-system, sans-serif";
+      ctx.textAlign = 'right';
+      ctx.fillText('measured wall →', boxX + boxW - 6, boxY - 6);
+
+      // molecules
+      ctx.fillStyle = '#0f766e';
+      molecules.forEach(m => {
+        ctx.beginPath();
+        ctx.arc(m.x, m.y, 3.5, 0, 2 * Math.PI);
+        ctx.fill();
+      });
+    }
+
+    function updateReadouts() {
+      // mean v^2 (in pixel/s units)
+      let v2sum = 0;
+      molecules.forEach(m => { v2sum += m.vx * m.vx + m.vy * m.vy; });
+      const v2 = molecules.length ? v2sum / molecules.length : 0;
+
+      // measured pressure: total |Δp_x| delivered to right wall / (wall length * time)
+      // wall length (2D analog of area) = boxH (in pixels)
+      const Pm = timeAccum > 0.05 ? momentumAccum / (boxH * timeAccum) : 0;
+
+      // predicted (2D): P = (N/A) * m * <v_x^2> = (N/A) * m * <v^2>/2
+      const area = boxW * boxH;
+      const Pp = molecules.length * massPerMolec * v2 / 2 / area;
+
+      // present in friendly numbers
+      const v2norm = v2 / (baseSpeed * baseSpeed);   // normalize so T=1 -> v^2 ~ 1
+      document.getElementById('gas-v2').textContent = v2norm.toFixed(2);
+      document.getElementById('gas-Pm').textContent = (Pm * 1000).toFixed(2);
+      document.getElementById('gas-Pp').textContent = (Pp * 1000).toFixed(2);
+      const ratio = Pp > 1e-9 ? Pm / Pp : 0;
+      document.getElementById('gas-ratio').textContent = ratio.toFixed(3);
+    }
+
+    // Animation loop
+    let lastTime = performance.now();
+    function loop(now) {
+      const dt = Math.min((now - lastTime) / 1000, 0.05);
+      lastTime = now;
+      step(dt);
+      draw();
+      updateReadouts();
+      requestAnimationFrame(loop);
+    }
+
+    // Init
+    resetMolecules(curN, curT);
+    requestAnimationFrame(loop);
+
+    // Controls
+    bindSlider('gas-T', 'gas-T-readout',
+      v => { rescaleSpeeds(curT, v); curT = v; },
+      v => v.toFixed(2)
+    );
+    bindSlider('gas-N', 'gas-N-readout',
+      v => {
+        const newN = Math.round(v);
+        if (newN !== curN) {
+          curN = newN;
+          resetMolecules(curN, curT);
+        }
+      },
+      v => Math.round(v).toString()
+    );
+  })();
+</script>
+
+</body>
+</html>

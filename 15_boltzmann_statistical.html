@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>15 · Boltzmann 统计熵 — PHYS 4B 复习</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="theme.js"></script>
+  <style>
+    .boltz-widget {
+      background: white;
+      border: 1px solid #ddd6fe;
+      border-radius: 8px;
+      padding: 1rem;
+      margin: 1rem 0;
+    }
+    .boltz-widget .controls {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(220px, 1fr));
+      gap: .6rem 1.2rem;
+      margin-bottom: .75rem;
+    }
+    .boltz-widget .control-row {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+    }
+    .boltz-widget label {
+      font-family: -apple-system, 'PingFang SC', sans-serif;
+      font-size: .9rem;
+      color: #475569;
+      min-width: 65px;
+    }
+    .boltz-widget input[type=range] {
+      flex: 1;
+      accent-color: #6b21a8;
+    }
+    .boltz-widget .readout {
+      font-family: 'Charter', serif;
+      font-size: .95rem;
+      color: #6b21a8;
+      font-weight: 600;
+      min-width: 70px;
+      text-align: right;
+    }
+    .boltz-widget .output {
+      background: #f5f3ff;
+      border-radius: 6px;
+      padding: .8rem 1rem;
+      margin-top: .5rem;
+      font-family: 'Charter', serif;
+      font-size: .95rem;
+      line-height: 1.7;
+      color: #44403c;
+    }
+    .boltz-widget .output strong { color: #6b21a8; }
+    .boltz-widget canvas {
+      display: block;
+      margin: .3rem auto .6rem;
+      background: #fafaf5;
+      border: 1px solid #e7e5e4;
+      border-radius: 6px;
+    }
+    .answer-box {
+      background: #eff6ff;
+      border-left: 3px solid #2563eb;
+      padding: .55rem .8rem;
+      margin: .65rem 0 .25rem;
+      font-weight: 500;
+      color: #1e3a8a;
+      font-family: -apple-system, 'PingFang SC', 'Helvetica Neue', sans-serif;
+    }
+    .answer-box::before {
+      content: '✓ 答案：';
+      color: #2563eb;
+      font-weight: 700;
+    }
+    .problem-statement {
+      background: #fafaf9;
+      border-left: 3px solid #a8a29e;
+      padding: .6rem .8rem;
+      margin: .35rem 0 .75rem;
+      font-style: italic;
+      color: #44403c;
+    }
+    .leg-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0;
+      font-size: .92rem;
+    }
+    .leg-table th, .leg-table td {
+      border: 1px solid #d6d3d1;
+      padding: .55rem .65rem;
+      text-align: left;
+      vertical-align: top;
+    }
+    .leg-table thead th {
+      background: #0f766e;
+      color: white;
+      font-family: -apple-system, 'PingFang SC', sans-serif;
+      font-weight: 600;
+    }
+    .leg-table tbody tr:nth-child(even) { background: #f7f5f0; }
+  </style>
+  <script>
+    MathJax = {
+      tex: { inlineMath: [['\\(', '\\)']], displayMath: [['$$', '$$']] },
+      svg: { fontCache: 'global' }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" async></script>
+</head>
+<body>
+
+<header class="site-header">
+  <a class="home-link" href="index.html">← PHYS 4B 复习</a>
+  <nav>
+    <a href="14_entropy_macroscopic.html">← 宏观熵</a>
+    <a href="index.html">总目录</a>
+    <a href="01_shm.html">SHM →</a>
+  </nav>
+</header>
+
+<main class="container">
+
+<div class="topic-header">
+  <h1>15 · Boltzmann 统计熵：从微观态数到 \(S\)</h1>
+  <p class="meta">Lec 10.1 · Shankar §24.4 · 通向 PHYS 140A 统计力学</p>
+  <p class="blurb">前 14 页里 \(S\) 是<em>定义</em>出来的态函数（从 Carnot 恒等式自然涌现），\(dS=\delta Q_{\text{rev}}/T\) 是它的相变。本页换微观视角：Boltzmann 1877 年用 \(S=k_B\ln\Omega\) 把熵<em>解释</em>成"微观态数的对数"——这是 Ch.24 最深的洞察，也是热力学进入统计力学的入口。具体推导分两步：位置空间计数给 \(nR\ln(V/Q^3)\)、动量空间（\(3N\) 维球面）给 \((3/2)nR\ln U=nC_V\ln T\)；加起来正好<em>复现</em> File 14 的宏观主公式 \(\Delta S=nC_V\ln(T_2/T_1)+nR\ln(V_2/V_1)\)——这就是 Lec 10.1 的核心成果。</p>
+</div>
+
+<!-- ======================================================== -->
+
+<div class="box key-result">
+  <p class="box-title">一页速览</p>
+  <ul>
+    <li><strong>Boltzmann：</strong>\(\boxed{S=k_B\ln\Omega}\)，\(\Omega\) 是宏观态 \((U, V, N)\) 对应的微观态数。</li>
+    <li><strong>宇宙熵账本：</strong>系统走循环 \(\Rightarrow\Delta S_{\text{sys}}=0\Rightarrow\Delta S_{\text{univ}}=\Delta S_{\text{surr}}\)；热库熵 \(\Delta S_{\text{surr}}=-Q_{\text{sys}}/T_{\text{surr}}\)。</li>
+    <li><strong>位置空间计数：</strong>分子可在 \(V/Q^3\) 个 cell 之一，\(N\) 个分子独立 \(\Rightarrow\Omega_{\text{pos}}=(V/Q^3)^N\Rightarrow S_{\text{pos}}=nR\ln(V/Q^3)\)。匹配等温膨胀 \(\Delta S=nR\ln(V_2/V_1)\) ✓。</li>
+    <li><strong>动量空间计数：</strong>能量 \(U\) 固定 \(\Rightarrow N\) 个分子的动量躺在 \(3N\) 维半径 \(R=\sqrt{2mU}\) 的球面上 \(\Rightarrow\Omega_{\text{mom}}\propto U^{3N/2}\Rightarrow S_{\text{mom}}=(3/2)nR\ln U=nC_V\ln T\)（单原子）。</li>
+    <li><strong>合并：</strong>\(\boxed{S(T,V,N)=nC_V\ln T+nR\ln V+\text{const}}\)，差分给 \(\Delta S=nC_V\ln(T_2/T_1)+nR\ln(V_2/V_1)\)，与 Clausius 宏观公式完全一致。</li>
+    <li><strong>cell 大小 \(Q\)：</strong>仅在加法常数里出现，差分中相消。量子修正 \(Q^3\to h^3\) 给 Sackur–Tetrode 形式。</li>
+  </ul>
+</div>
+
+<!-- ======================================================== -->
+
+<h2>§1 \(\Delta S_{\text{universe}}\) 账本回顾（与 Lec 10.1 开头一致）</h2>
+
+<p>讲下 Boltzmann 之前，Lec 10.1 先复习了 File 14 的宏观账本，把"宇宙熵分解"这件事正式固化下来。</p>
+
+<h3>分解与循环</h3>
+
+<p>宇宙 = 系统 + 环境：</p>
+
+$$ \Delta S_{\text{universe}}=\Delta S_{\text{system}}+\Delta S_{\text{surroundings}}. $$
+
+<p>如果系统完成一个<em>循环</em>，则 \(S\) 是态函数 \(\Rightarrow \Delta S_{\text{system}}=\Delta S_{\text{cycle}}=0\)，于是</p>
+
+$$ \boxed{\;\Delta S_{\text{universe}}=\Delta S_{\text{surroundings}}\;.} $$
+
+<p>循环情形下，<em>所有</em>宇宙熵变都进入环境账户。这是分析热机、制冷机时的核心账本。</p>
+
+<h3>环境再分解：两热库</h3>
+
+$$ \Delta S_{\text{surroundings}}=\Delta S_{\text{hot}}+\Delta S_{\text{cold}}\;
+\begin{cases}=0 & \text{可逆操作}\\>0 & \text{不可逆操作}\end{cases} $$
+
+<h3>热库的 \(\Delta S\)</h3>
+
+<p>热库（reservoir）热容无穷大——交换有限的热不改变其温度，所以从<em>它自己角度</em>每次热交换都是<em>可逆</em>的。设热库吸热 \(Q_{\text{sur}}\)（正值表示热进入环境）：</p>
+
+$$ \boxed{\;\Delta S_{\text{surroundings}}=\int\dfrac{\delta Q_{\text{sur}}}{T_{\text{sur}}}=\dfrac{Q_{\text{sur}}}{T_{\text{sur}}}=-\dfrac{Q_{\text{system}}}{T_{\text{sur}}}\;.} $$
+
+<p>负号来自 \(Q_{\text{sys}}+Q_{\text{sur}}=0\)。注意 \(T_{\text{sur}}\) 是<em>热库</em>的温度，不是系统温度——即使热是跨有限 \(\Delta T\) 流的，热库自己的温度依然恒定。</p>
+
+<div class="box remark">
+  <p class="box-title">不可逆过程的"假想可逆路径"</p>
+  <p>对系统部分若实际过程不可逆，仍然假想一条端点相同的<em>可逆路径</em> 把 \(\delta Q_{\text{rev}}/T\) 积出来——和 File 14 §1 的桥技巧完全相同。例如自由膨胀里 \(\Delta S_{\text{sys}}=nR\ln 2\) 用可逆等温膨胀替代算出，\(\Delta S_{\text{surr}}=0\)（绝热壁），\(\Delta S_{\text{univ}}=nR\ln 2>0\) ✓。</p>
+</div>
+
+<!-- ======================================================== -->
+
+<h2>§2 Boltzmann 的微观假设</h2>
+
+<p>宏观视角的熵从 Carnot 恒等式涌现。微观视角的熵 Boltzmann 给了一个更深的解释——把它定义成一个<em>计数函数</em>：</p>
+
+<div class="box key-result">
+  <p class="box-title">Boltzmann 熵公式</p>
+  $$ \boxed{\;S(U,V,N)\;=\;k_B\ln\Omega(U,V,N)\;,} $$
+  <p>\(\Omega\) 是与宏观态 \((U,V,N)\) 相容的<em>微观态数</em>。\(k_B=1.381\times 10^{-23}\) J/K 是 Boltzmann 常数。</p>
+</div>
+
+<p>"微观态"对 \(N\) 个经典粒子是一组 \(\{(\vec r_i,\vec p_i)\}_{i=1}^N\)——所有位置和动量的完整规定。"宏观态"只看 \((U, V, N)\)，是一个非常粗的描述。一个宏观态背后藏着<em>巨大</em>数量的微观态（典型 \(\Omega\sim 10^{10^{23}}\)），\(\ln\) 把它压成可处理的尺度。</p>
+
+<div class="box insight">
+  <p class="box-title">为什么 \(\ln\) 必须出现？</p>
+  <p>熵的<em>可加性</em>（两个独立子系统加在一起的熵 \(=\) 各自之和）+ 微观态数的<em>可乘性</em>（独立选择 \(\Omega_{\text{tot}}=\Omega_1\Omega_2\)）= 公式中必须有 \(\ln\)（唯一能把乘变加的函数，到差一常数）。\(k_B\) 的具体值由"匹配 Clausius 的 \(\Delta S=nR\ln 2\)"这一边界条件钉死。</p>
+</div>
+
+<!-- ======================================================== -->
+
+<h2>§3 位置空间计数：\(S_{\text{pos}}=nR\ln(V/Q^3)\)</h2>
+
+<p>先<em>不</em>管动量，只数位置。把容器划分成体积 \(Q^3\) 的微 cell（\(Q\) 是某个长度尺度，先当成任意；量子力学最终会把它钉死为热 de Broglie 波长 \(\lambda_T\)，但这<em>不影响</em> \(\Delta S\)）。每个分子能占任意一个 cell：</p>
+
+$$ \text{每分子选择数}=V/Q^3,\qquad
+   \text{N 个独立分子}\Rightarrow \Omega_{\text{pos}}=\left(\dfrac{V}{Q^3}\right)^N. $$
+
+<p>取对数：</p>
+
+$$ S_{\text{pos}}=k_B\ln\Omega_{\text{pos}}=Nk_B\ln(V/Q^3)=nR\ln(V/Q^3), $$
+
+<p>用了 \(Nk_B=nR\)。</p>
+
+<div class="box key-result">
+  <p class="box-title">位置熵</p>
+  $$ \boxed{\;S_{\text{pos}}=nR\ln\dfrac{V}{Q^3}\;,} $$
+  <p>差分给 \(\Delta S_{\text{pos}}=nR\ln(V_2/V_1)\)——\(Q\) 在差分中相消，与等温膨胀的 Clausius 结果<em>完美吻合</em>。</p>
+</div>
+
+<div class="box interactive">
+  <p class="box-title">交互：微观态盒</p>
+  <p style="margin:.3rem 0 .8rem">拉动 \(N\)（分子数）和 \(V/Q^3\)（cell 数）滑块，观察 \(\Omega_{\text{pos}}=(V/Q^3)^N\) 的爆炸式增长。底下显示对应的 \(\ln\Omega\)、\(S_{\text{pos}}\)（一摩尔）和差分 \(\Delta S_{\text{pos}}\)（相对于 \(N=2, V/Q^3=4\) 的参考态）。</p>
+  <div class="boltz-widget" id="bzcalc">
+    <div class="controls">
+      <div class="control-row"><label>N (分子数)</label><input type="range" id="bz-N" min="2" max="20" step="1" value="6"/><span class="readout" id="bz-Nr">6</span></div>
+      <div class="control-row"><label>V/Q³ (cell 数)</label><input type="range" id="bz-V" min="2" max="100" step="1" value="20"/><span class="readout" id="bz-Vr">20</span></div>
+    </div>
+    <canvas id="bz-canvas" width="540" height="180"></canvas>
+    <div class="output" id="bz-out"></div>
+  </div>
+  <p style="font-size:.85rem;color:#64748b;margin:.5rem 0 0">
+    画的小盒展示了 \(V/Q^3\) 个 cell 和 \(N\) 个粒子的<em>一种</em>分布。真实统计要遍历所有可能分布——\(\Omega\) 数已经在右边算出。注意 \(N=6, V/Q^3=20\) 时 \(\Omega\) 仅 \(20^6\approx 6.4\times 10^7\)，但真实 \(N\sim 10^{23}\) 时 \(\Omega\) 是天文数字——所以必须取 \(\ln\)。
+  </p>
+</div>
+
+<!-- ======================================================== -->
+
+<h2>§4 动量空间：\(N\) 分子能量面是 \(3N\) 维球面</h2>
+
+<h3>单分子情形</h3>
+
+<p>动能 \(\varepsilon\) 固定 \(\Rightarrow\)</p>
+
+$$ \dfrac{p_x^2+p_y^2+p_z^2}{2m}=\varepsilon\Rightarrow
+   p_x^2+p_y^2+p_z^2=2m\varepsilon. $$
+
+<p>动量矢量 \(\vec p\) 必落在 3D 动量空间里半径 \(R=\sqrt{2m\varepsilon}\) 的球面上。</p>
+
+<h3>\(N\) 分子情形：(3N−1)-球面</h3>
+
+<p>总内能 \(U=\sum_{i=1}^N(p_{x,i}^2+p_{y,i}^2+p_{z,i}^2)/2m\)。\(U=\)const 是 \(3N\) 个动量分量的<em>一个</em>方程约束，所以动量躺在 \(3N\) 维空间的<strong>(3N−1)-球面</strong>上，半径</p>
+
+$$ \boxed{\;R=\sqrt{2mU}\;.} $$
+
+<p>注意这里的 \(R\)（半径）<em>不是</em>气体常数；本节中气体常数都写成 \(N_Ak_B\) 以避免符号冲突。</p>
+
+<div class="box remark">
+  <p class="box-title">几何直觉</p>
+  <p>2D 等能面是圆，3D 是球面，4D 是 3-球面，\(D\) 维是 \((D{-}1)\)-球面。一个 \((D{-}1)\)-球面在 \(D\) 维空间里的"表面积"（\(D{-}1\) 维面积）\(\propto R^{D-1}\)（一般球面公式）。\(N\) 个分子的动量空间是 \(3N\) 维，所以等能面 \(\propto R^{3N-1}\)。</p>
+</div>
+
+<!-- ======================================================== -->
+
+<h2>§5 动量熵：\(S_{\text{mom}}=(3/2)nR\ln U=nC_V\ln T\)</h2>
+
+<p>动量微观态数与等能面"面积"成正比：</p>
+
+$$ \Omega_{\text{mom}}(U)\propto R^{3N-1}\propto\left(\sqrt{2mU}\right)^{3N-1}\propto U^{(3N-1)/2}. $$
+
+<p>对天文数量级 \(N\)，\(3N-1\approx 3N\)，所以</p>
+
+$$ \boxed{\;\Omega_{\text{mom}}(U)\propto U^{3N/2}\;.} $$
+
+<p>取对数：</p>
+
+$$ S_{\text{mom}}=k_B\ln\Omega_{\text{mom}}=k_B\cdot\dfrac{3N}{2}\ln U+\text{const}=\dfrac{3}{2}\,nR\ln U+\text{const}. $$
+
+<p>对单原子理想气体 \(C_V=\tfrac{3}{2}R\)，所以</p>
+
+$$ \boxed{\;S_{\text{mom}}=nC_V\ln U+\text{const}\;.} $$
+
+<h3>换成 \(\ln T\)</h3>
+
+<p>单原子理想气体的等分定理给 \(U=\tfrac{3}{2}Nk_BT=nC_VT\)，所以 \(\ln U=\ln T+\text{const}\)，故</p>
+
+$$ \boxed{\;S_{\text{mom}}=nC_V\ln T+\text{const}\;.} $$
+
+<div class="box insight">
+  <p class="box-title">为什么 \(\ln U\) 自然出 \(\ln T\)？</p>
+  <p>对理想气体 \(U\propto T\)（等分定理），所以 \(\ln U=\ln T+\)const，这两种写法等价。如果是非理想气体（如双原子振动 thawing 区域）\(U(T)\) 复杂，则要分别处理。但对 PHYS 4B 关心的"经典理想气体"，两者随便用。</p>
+</div>
+
+<!-- ======================================================== -->
+
+<h2>§6 合并：完整的 Boltzmann 理想气体熵</h2>
+
+<p>位置和动量两个计数<em>独立</em>（分子在哪儿不影响它的动量分布，反之亦然），所以</p>
+
+$$ \Omega(U,V,N)=\Omega_{\text{pos}}(V,N)\cdot\Omega_{\text{mom}}(U,N)
+   \Rightarrow S=S_{\text{pos}}+S_{\text{mom}}. $$
+
+<p>代入：</p>
+
+<div class="box key-result">
+  <p class="box-title">Boltzmann 理想气体熵（完整）</p>
+  $$ \boxed{\;S(U,V,N)=nR\ln\dfrac{V}{Q^3}+\dfrac{3}{2}nR\ln U+\text{const}\;,} $$
+  <p>或用 \(T\) 写出（单原子）：</p>
+  $$ \boxed{\;S(T,V,N)=nC_V\ln T+nR\ln V+\text{const}\;.} $$
+</div>
+
+<h3>差分回到宏观 Clausius 公式</h3>
+
+<p>差分（所有依赖 \(Q\) 与其他常数的部分相消）：</p>
+
+$$ \boxed{\;\Delta S=nC_V\ln\dfrac{T_2}{T_1}+nR\ln\dfrac{V_2}{V_1}\;,} $$
+
+<p>与 File 14 §3 的宏观主公式<em>完全一致</em>。</p>
+
+<div class="box insight">
+  <p class="box-title">Lec 10.1 的高潮</p>
+  <p>这一行就是 Lec 10.1 的核心结论——<em>同一个 \(\Delta S\)</em> 既可以从宏观第一定律（Clausius）推出，也可以从微观态计数（Boltzmann）推出。这<em>不是</em>巧合：它告诉我们 Clausius 的 \(dS=\delta Q_{\text{rev}}/T\) 与 Boltzmann 的 \(S=k_B\ln\Omega\) 是<em>同一个东西的两个等价定义</em>。常数 \(k_B\) 的精确值正是为了使两边数值上严格相等。</p>
+</div>
+
+<h3>四个特殊情形回到位置/动量分解</h3>
+
+<table class="leg-table">
+  <thead><tr><th>过程</th><th>位置项 \(S_{\text{pos}}\)</th><th>动量项 \(S_{\text{mom}}\)</th><th>结果</th></tr></thead>
+  <tbody>
+    <tr><td>等温</td><td>变（仅 \(V\) 项）</td><td>不变（\(U\) 不变）</td><td>\(\Delta S=nR\ln(V_2/V_1)\)</td></tr>
+    <tr><td>等容</td><td>不变（\(V\) 不变）</td><td>变（\(U\) 项）</td><td>\(\Delta S=nC_V\ln(T_2/T_1)\)</td></tr>
+    <tr><td>等压</td><td>变（\(V\) 项）</td><td>变（\(U\) 项）</td><td>\(\Delta S=nC_P\ln(T_2/T_1)\)（互补）</td></tr>
+    <tr><td>可逆绝热</td><td>变（\(V\) 涨）</td><td>变（\(U\) 跌）</td><td>\(\Delta S=0\)（两项相消）</td></tr>
+  </tbody>
+</table>
+
+<p>最有趣的是<strong>可逆绝热</strong>：\(TV^{\gamma-1}=\)const 强制 \(nC_V\ln(T_2/T_1)+nR\ln(V_2/V_1)=0\)——位置项的<em>增加</em>恰好被动量项的<em>减少</em>抵消（气体膨胀获得位置态，但冷却失去动量态）。这是"等熵"在统计意义上的最干净诠释。</p>
+
+<!-- ======================================================== -->
+
+<h2>§7 cell 大小 \(Q\) 不重要 + Sackur–Tetrode</h2>
+
+<p>注意 \(Q\) 只在 \(S\) 的<em>常数偏移</em>里出现：</p>
+
+$$ S_{\text{pos}}(V)=nR\ln V-3nR\ln Q+\text{const}. $$
+
+<p>差分中 \(-3nR\ln Q\) 同时出现在 \(S(V_2)\) 和 \(S(V_1)\) 里，相消：</p>
+
+$$ \Delta S_{\text{pos}}=nR\ln(V_2/V_1)\quad\text{(独立于 }Q\text{)}. $$
+
+<p>所以 PHYS 4B 关心的 \(\Delta S\) 都没问题。但是<em>绝对熵</em> \(S\) 是 \(Q\) 依赖的——这件事在统计力学里由 Sackur–Tetrode 公式解决：</p>
+
+<div class="box insight">
+  <p class="box-title">Sackur–Tetrode 公式（PHYS 140A 才完整推）</p>
+  <p>量子力学把 \(Q^3\) 钉死为 \(h^3\)（每个 Planck 体积一个相空间 cell），还要把不可区分粒子用 \(N!\) 修正（Gibbs 因子）。完整结果：</p>
+  $$ S=nR\ln\!\left[\dfrac{V}{nN_A}\left(\dfrac{4\pi m U}{3nN_A h^2}\right)^{3/2}\right]+\dfrac{5}{2}nR. $$
+  <p>对 PHYS 4B 这条公式不需要记——但要明白：</p>
+  <ul>
+    <li>\(\ln\) 的结构与 \(nC_V\ln T+nR\ln V\) 相同（差分给同一公式）；</li>
+    <li>\(+5/2\,nR\) 是固定的"绝对熵基线"；</li>
+    <li>\(Q^3\to h^3\) 让 \(S\) 有了一个客观的零点（不再像经典那样可漂移）。</li>
+  </ul>
+</div>
+
+<!-- ======================================================== -->
+
+<h2>§8 Worked Examples</h2>
+
+<div class="example">
+  <h4>Example A (★): 自由膨胀的 Boltzmann 视角</h4>
+  <p class="source">Lec 10.1 配套</p>
+  <p class="problem-statement">理想气体在绝热刚性箱里做自由膨胀，体积由 \(V_1\) 变 \(V_2=2V_1\)。从微观计数角度算 \(\Delta S\) 并核对 Clausius 结果。</p>
+
+  <div class="solution-step"><strong>Step 1：动量项不变。</strong>自由膨胀 \(Q=0, W=0\Rightarrow\Delta U=0\Rightarrow T_2=T_1\)。所以 \(S_{\text{mom}}\) 不变（动量空间的等能面没变）。</div>
+
+  <div class="solution-step"><strong>Step 2：位置项变。</strong>每个分子可占的 cell 数从 \(V_1/Q^3\) 加倍到 \(V_2/Q^3=2V_1/Q^3\)。所以
+  $$ \dfrac{\Omega_{\text{pos},2}}{\Omega_{\text{pos},1}}=\left(\dfrac{V_2/Q^3}{V_1/Q^3}\right)^N=2^N. $$</div>
+
+  <div class="solution-step"><strong>Step 3：熵差。</strong>
+  $$ \Delta S=k_B\ln(\Omega_2/\Omega_1)=k_B\ln 2^N=Nk_B\ln 2=nR\ln 2. $$
+  对 1 mol，\(\Delta S=8.314\cdot 0.693\approx 5.76\) J/K，与 File 14 Example A 完全一致 ✓。</div>
+
+  <div class="answer-box">\(\Delta S=nR\ln 2\)。微观解释：体积加倍 \(\Rightarrow\) 每个分子能去的 cell 数加倍 \(\Rightarrow\) 总微观态数乘 \(2^N\) \(\Rightarrow\) 熵增 \(Nk_B\ln 2=nR\ln 2\)。</div>
+</div>
+
+<div class="example">
+  <h4>Example B (★★): 双室混合熵</h4>
+  <p class="source">Shankar §24.4 类型题</p>
+  <p class="problem-statement">两个相同体积 \(V\) 的箱子，左边装 \(N\) 个 A 分子、右边装 \(N\) 个 B 分子（两种不同气体），打开隔板让它们混合。所有分子温度相同，膨胀后总体积 \(2V\)。求混合熵 \(\Delta S_{\text{mix}}\)。</p>
+
+  <div class="solution-step"><strong>Step 1：分别考虑两种气体。</strong>A 气体的可逆替代过程是<em>等温膨胀</em>从体积 \(V\) 到 \(2V\)（B 分子对 A 来说是透明的）。同理 B 从 \(V\) 到 \(2V\)。</div>
+
+  <div class="solution-step"><strong>Step 2：每种气体的熵增。</strong>
+  $$ \Delta S_A=Nk_B\ln(2V/V)=Nk_B\ln 2=nR\ln 2, $$
+  $$ \Delta S_B=Nk_B\ln 2=nR\ln 2. $$</div>
+
+  <div class="solution-step"><strong>Step 3：混合总熵。</strong>$$ \Delta S_{\text{mix}}=\Delta S_A+\Delta S_B=2nR\ln 2. $$ 这是 Gibbs 混合熵的最简单情形。微观解释：每个 A 分子的位置态加倍，每个 B 也是，独立加倍 \(\Rightarrow\) 总微观态 \(\times 2^{2N}\Rightarrow\ln=2N\ln 2\)。</div>
+
+  <div class="box warning" style="margin-top:.5rem">
+    <p class="box-title">Gibbs 佯谬</p>
+    <p>如果两边装<em>相同</em>气体（都是 A），打开隔板后宏观看起来什么也没变。那混合熵应该是 0 吗？经典统计会给出 \(2nR\ln 2\)（错！）。<strong>Gibbs 佯谬</strong>的解决要用量子的不可区分粒子统计（\(N!\) 因子）——这是 PHYS 140A 的内容。PHYS 4B 只需知道两种<em>不同</em>气体的混合熵是 \(2nR\ln 2\)（每种独立加倍体积），相同气体没有混合熵。</p>
+  </div>
+
+  <div class="answer-box">\(\Delta S_{\text{mix}}=2nR\ln 2\)（两种不同气体各自体积加倍，独立贡献）。</div>
+</div>
+
+<div class="example">
+  <h4>Example C (★★): 等温压缩 \(\Delta S\) 的微观解释</h4>
+  <p class="source">概念巩固题</p>
+  <p class="problem-statement">1 mol 理想气体在 \(T=300\) K 下从 \(V_1=4\) L 等温<em>压缩</em>到 \(V_2=1\) L。从位置态计数角度看，为什么 \(\Delta S<0\)？这违反第二定律吗？</p>
+
+  <div class="solution-step"><strong>Step 1：宏观结果。</strong>
+  $$ \Delta S_{\text{gas}}=nR\ln(1/4)=8.314\cdot(-1.386)\approx-11.5\text{ J/K}<0. $$</div>
+
+  <div class="solution-step"><strong>Step 2：微观解释。</strong>体积缩到 \(1/4\Rightarrow\) 每个分子能占的 cell 数缩到 \(1/4\Rightarrow\) 总位置态数变成原来的 \((1/4)^N=4^{-N}\Rightarrow\ln=-N\ln 4=-2N\ln 2\)。系统的微观态数<em>减少</em>，所以 \(\Delta S_{\text{gas}}<0\)。</div>
+
+  <div class="solution-step"><strong>Step 3：第二定律检查。</strong>等温压缩需要外界做功 \(W=-nRT\ln(V_2/V_1)=nRT\ln 4\approx 3460\) J，全部转为热放给热库（\(Q=W\)）。热库（\(T=300\) K）熵增：
+  $$ \Delta S_{\text{res}}=+Q/T=+3460/300\approx+11.5\text{ J/K}, $$
+  $$ \Delta S_{\text{universe}}=-11.5+11.5=0\text{ ✓（可逆）}. $$
+  系统熵减<em>不</em>违反第二定律——它由环境（热库）的熵增<em>恰好补偿</em>。</div>
+
+  <div class="answer-box">系统熵减 \(\Delta S_{\text{gas}}=-nR\ln 4\approx-11.5\) J/K；微观即位置态从 \(\Omega_1\) 减到 \(\Omega_1/4^N\)。可逆等温压缩 \(\Delta S_{\text{universe}}=0\)；不可逆等温压缩 \(\Delta S_{\text{universe}}>0\)。</div>
+</div>
+
+<!-- ======================================================== -->
+
+<h2>§9 Self-check</h2>
+
+<div class="self-check">
+  <p class="question">Q1. 为什么 Boltzmann 熵 \(S=k_B\ln\Omega\) 用<em>对数</em>而不是 \(\Omega\) 本身？给两个独立的论证。</p>
+  <details><summary>查看答案</summary>
+  <p><strong>论证 1（可加性）：</strong>两个独立子系统的总微观态数 \(\Omega_{12}=\Omega_1\Omega_2\)（独立选择 \(\Rightarrow\) 乘）。但宏观熵的<em>可加性</em>要求 \(S_{12}=S_1+S_2\)（不可加性会让"两块石头的熵"变成奇怪的"乘"，不符合实验）。把"乘"变成"加"的<em>唯一</em>连续函数（到差一个常数）就是对数。</p>
+  <p><strong>论证 2（数量级）：</strong>真实 \(\Omega\sim 10^{10^{23}}\) 是天文数字，没法直接做运算（连存它都不行）。\(\ln\Omega\sim 10^{23}\) 是可处理的尺度，乘上 \(k_B\sim 10^{-23}\) 后给出 J/K 量级的熵。</p>
+  </details>
+</div>
+
+<div class="self-check">
+  <p class="question">Q2. cell 大小 \(Q\) 是任意的。这意味着 \(S\) 本身没有客观值吗？</p>
+  <details><summary>查看答案</summary>
+  <p>经典力学里<strong>对</strong>——\(S\) 的绝对值由 \(Q\) 决定，所以是任意的（相差一常数）。但 \(\Delta S\) 不依赖 \(Q\)，所以所有<em>可观测</em>的预测都不受影响。</p>
+  <p>量子力学给 \(Q\) 一个客观值：\(Q^3=h^3\)（一个 Planck 体积对应一个相空间 cell）。加上 \(N!\) 因子（不可区分粒子）就得 Sackur–Tetrode 公式，给绝对熵一个客观值。但这超出 PHYS 4B 范围。</p>
+  </details>
+</div>
+
+<div class="self-check">
+  <p class="question">Q3. 动量空间为什么是 \((3N{-}1)\) 维球面，不是 \(3N\) 维球？区别在哪？</p>
+  <details><summary>查看答案</summary>
+  <p>\(N\) 个分子的总动量空间是 \(3N\) 维（\(N\) 个三维矢量）。<em>但</em>有<strong>一个</strong>约束方程 \(\sum p_i^2=2mU\)，所以允许的微观态<em>不是</em>整个 \(3N\) 维球的内部，而是它的<strong>边界</strong>——\((3N{-}1)\) 维球面。</p>
+  <p>球的体积 \(\propto R^{3N}\)，球面的"面积" \(\propto R^{3N-1}\)。两者都给 \(\propto U^{\sim 3N/2}\) 的相同标度，所以最终结果一样——但严格说，固定能量 \(U\) 的微观态躺在球面而非球内。</p>
+  </details>
+</div>
+
+<div class="self-check">
+  <p class="question">Q4. 自由膨胀 \(\Delta S=nR\ln 2\) 的微观解释是"每个分子的位置态加倍"。但如果你<em>恰好</em>看到所有分子又自发回到原来的一半体积——这违反 Boltzmann 熵吗？</p>
+  <details><summary>查看答案</summary>
+  <p>不违反——\(S=k_B\ln\Omega\) 是<em>统计</em>定义，第二定律是<em>概率</em>定律。"所有分子自发回到一半体积"的概率是 \(2^{-N}\)。对 \(N=10^{23}\)，这是 \(2^{-10^{23}}\approx 10^{-3\times 10^{22}}\)，比宇宙寿命乘以宇宙原子数都小得多得多得多——<em>原则上</em>能发生，<em>实际上</em>从不发生。</p>
+  <p>这是 Boltzmann 视角和 Clausius 视角的最大差别：Clausius 说"\(\Delta S\geq 0\) 严格成立"；Boltzmann 说"\(\Delta S<0\) 在统计上几乎不可能但不严格禁止"。在热力学极限 \(N\to\infty\) 下，两者完全等价。</p>
+  </details>
+</div>
+
+<div class="self-check">
+  <p class="question">Q5. 可逆绝热里 \(\Delta S=0\)，但温度降、体积涨。从位置/动量分解看，怎么解释 \(\Delta S=0\)？</p>
+  <details><summary>查看答案</summary>
+  <p>可逆绝热 \(\Rightarrow PV^\gamma=\)const \(\Rightarrow TV^{\gamma-1}=\)const \(\Rightarrow nC_V\ln(T_2/T_1)+nR\ln(V_2/V_1)=0\)。也就是说：</p>
+  <ul>
+    <li>体积增大 \(\Rightarrow\) 位置态变多 \(\Rightarrow S_{\text{pos}}\uparrow\)；</li>
+    <li>温度降低 \(\Rightarrow\) 内能 \(U\) 减少 \(\Rightarrow\) 动量空间球面缩小 \(\Rightarrow S_{\text{mom}}\downarrow\)；</li>
+    <li>两者<em>恰好相消</em>——所以总微观态数 \(\Omega=\Omega_{\text{pos}}\Omega_{\text{mom}}\) 不变。</li>
+  </ul>
+  <p>等熵 = 微观态总数守恒——这是统计视角下最干净的诠释。</p>
+  </details>
+</div>
+
+<!-- ======================================================== -->
+
+<h2>§10 公式速查表</h2>
+
+<table class="formula-table">
+  <thead><tr><th>主题</th><th>公式</th><th>备注</th></tr></thead>
+  <tbody>
+    <tr><td>Boltzmann</td><td>\(S=k_B\ln\Omega\)</td><td>\(\Omega\) = 微观态数</td></tr>
+    <tr><td>位置计数</td><td>\(\Omega_{\text{pos}}=(V/Q^3)^N\)</td><td>独立粒子，分立 cell</td></tr>
+    <tr><td>位置熵</td><td>\(S_{\text{pos}}=nR\ln(V/Q^3)\)</td><td>差分独立于 \(Q\)</td></tr>
+    <tr><td>动量计数（球面）</td><td>\(\Omega_{\text{mom}}\propto U^{3N/2}\)</td><td>\((3N{-}1)\)-球面面积</td></tr>
+    <tr><td>动量熵</td><td>\(S_{\text{mom}}=(3/2)nR\ln U=nC_V\ln T\)</td><td>单原子用等分定理</td></tr>
+    <tr><td>合成（Boltzmann）</td><td>\(S=nC_V\ln T+nR\ln V+\text{const}\)</td><td>独立性 \(\Rightarrow\) 加和</td></tr>
+    <tr><td>差分（回到 Clausius）</td><td>\(\Delta S=nC_V\ln(T_2/T_1)+nR\ln(V_2/V_1)\)</td><td>与 File 14 主公式一致</td></tr>
+    <tr><td>宇宙熵分解</td><td>\(\Delta S_{\text{univ}}=\Delta S_{\text{sys}}+\Delta S_{\text{surr}}\)</td><td>循环：\(\Delta S_{\text{sys}}=0\)</td></tr>
+    <tr><td>热库熵</td><td>\(\Delta S_{\text{res}}=-Q_{\text{sys}}/T_{\text{res}}\)</td><td>\(T_{\text{res}}\) 不变</td></tr>
+    <tr><td>Gibbs 混合熵</td><td>\(\Delta S_{\text{mix}}=2nR\ln 2\)</td><td>两种<em>不同</em>气体等体积混合</td></tr>
+    <tr><td>Sackur–Tetrode</td><td>\(Q^3\to h^3\) + \(N!\) 修正</td><td>PHYS 140A 完整</td></tr>
+  </tbody>
+</table>
+
+<!-- ======================================================== -->
+
+<h2>§11 术语</h2>
+
+<dl>
+  <dt>Boltzmann 熵 (Boltzmann entropy)</dt>
+  <dd>\(S=k_B\ln\Omega\)——熵作为微观态数的对数。1877 年 Boltzmann 提出，1900 年代由 Einstein, Planck 等推广。</dd>
+
+  <dt>微观态 (microstate)</dt>
+  <dd>系统所有粒子位置和动量的完整规定 \(\{(\vec r_i,\vec p_i)\}\)。对应单个相空间点。</dd>
+
+  <dt>宏观态 (macrostate)</dt>
+  <dd>少量宏观变量的描述，如 \((U, V, N)\) 或 \((T, V, N)\)。每个宏观态对应大量微观态。</dd>
+
+  <dt>微观态数 (multiplicity) \(\Omega\)</dt>
+  <dd>给定宏观态对应的微观态总数。典型 \(\Omega\sim 10^{10^{23}}\)，所以才用 \(\ln\)。</dd>
+
+  <dt>位置/动量分解</dt>
+  <dd>独立的位置和动量计数 \(\Omega=\Omega_{\text{pos}}\cdot\Omega_{\text{mom}}\) \(\Rightarrow S=S_{\text{pos}}+S_{\text{mom}}\)。理想气体的 Boltzmann 推导核心。</dd>
+
+  <dt>cell 大小 \(Q\)</dt>
+  <dd>把位置/动量空间分立化的小尺度。经典任意，量子由 Planck 常数定（\(Q^3\to h^3\)）。\(\Delta S\) 中无关。</dd>
+
+  <dt>Sackur–Tetrode 公式</dt>
+  <dd>\(S=nR\ln[(V/(nN_A))(4\pi mU/(3nN_Ah^2))^{3/2}]+5/2\,nR\)——单原子理想气体的客观绝对熵，含 \(h\) 和 \(N!\) 量子修正。</dd>
+
+  <dt>Gibbs 混合熵 (mixing entropy)</dt>
+  <dd>两种<em>不同</em>理想气体等体积、等 \(T\) 混合产生的熵 \(\Delta S=2nR\ln 2\)。两种<em>相同</em>气体没有混合熵（Gibbs 佯谬，由不可区分粒子统计解决）。</dd>
+
+  <dt>等分定理（统计版）</dt>
+  <dd>每个二次自由度贡献 \(\tfrac12 kT\) 平均能量——保证 \(U=(f/2)NkT\Rightarrow\ln U=\ln T+\)const，使 \(S_{\text{mom}}=(3/2)nR\ln U=nC_V\ln T\) 成立。</dd>
+
+  <dt>热力学极限 (thermodynamic limit)</dt>
+  <dd>\(N\to\infty\)，\(V\to\infty\)，\(N/V=\)const 的极限。在此极限下 Boltzmann \(\Delta S\geq 0\) 的"概率说法"变成 Clausius 的"严格不等式"。</dd>
+</dl>
+
+<p class="back-link" style="margin-top:2rem"><a href="index.html">← 回到复习总目录</a> · <a href="14_entropy_macroscopic.html">← 宏观熵</a></p>
+
+</main>
+
+<!-- ======================================================== -->
+<!-- Widget JS -->
+
+<script>
+(function(){
+  // Boltzmann microstate box widget
+  const bzCanvas = document.getElementById('bz-canvas');
+  const bzCtx = bzCanvas.getContext('2d');
+  // reference state (for ΔS computation)
+  const N_ref = 2, V_ref = 4;
+  function updBZ(){
+    const N = +document.getElementById('bz-N').value;
+    const V = +document.getElementById('bz-V').value;
+    document.getElementById('bz-Nr').textContent = N;
+    document.getElementById('bz-Vr').textContent = V;
+    // draw the box: 8 cells across, V/Q^3 = number of cells; show first up to 100
+    const W = bzCanvas.width, H = bzCanvas.height;
+    bzCtx.clearRect(0,0,W,H);
+    // draw grid of V cells (in a tidy layout). Pick rows/cols to fit V.
+    const cols = Math.ceil(Math.sqrt(V * (W/H)));
+    const rows = Math.ceil(V/cols);
+    const cellW = (W-40)/cols, cellH = (H-30)/rows;
+    // background cells
+    bzCtx.strokeStyle = '#cbd5e1';
+    bzCtx.lineWidth = 0.8;
+    for (let i=0;i<V;i++){
+      const r = Math.floor(i/cols), c = i % cols;
+      const x = 20 + c*cellW, y = 15 + r*cellH;
+      bzCtx.strokeRect(x, y, cellW, cellH);
+    }
+    // place N particles in random cells (deterministic seed for reproducibility)
+    // simple LCG with seed = N*7 + V*13
+    let seed = (N*7 + V*13) % 2147483647;
+    const rand = () => { seed = (seed*1664525 + 1013904223) % 2147483647; return seed/2147483647; };
+    bzCtx.fillStyle = '#dc2626';
+    for (let i=0;i<N;i++){
+      const cell = Math.floor(rand() * V);
+      const r = Math.floor(cell/cols), c = cell % cols;
+      const x = 20 + c*cellW + cellW/2 + (rand()-0.5)*cellW*0.4;
+      const y = 15 + r*cellH + cellH/2 + (rand()-0.5)*cellH*0.4;
+      bzCtx.beginPath();
+      bzCtx.arc(x, y, Math.max(3, Math.min(5, cellW*0.15)), 0, 2*Math.PI);
+      bzCtx.fill();
+    }
+    // top label
+    bzCtx.font = '12px serif'; bzCtx.fillStyle = '#475569';
+    bzCtx.fillText('V/Q³ = '+V+' cells; N = '+N+' particles', 20, 10);
+
+    // compute
+    // log Omega = N * log V (in nats)
+    const lnOmega = N * Math.log(V);
+    const lnOmegaRef = N_ref * Math.log(V_ref);
+    // S_pos for 1 mole-equivalent (use N k_B = nR; here show in units of k_B per particle, i.e. N*ln(V))
+    // Express S_pos / k_B = N * ln(V/Q^3); for display purpose treat Q=1
+    const S_kB = N * Math.log(V); // dimensionless entropy / k_B
+    const Sref_kB = N_ref * Math.log(V_ref);
+    // ΔS (per molecule * N) compared to ref
+    const dS_kB = S_kB - Sref_kB;
+
+    const fmtSci = (x) => {
+      if (Math.abs(x) < 100 && Math.abs(x) > 0.001) return x.toFixed(2);
+      const e = Math.floor(Math.log10(Math.abs(x)));
+      const m = x / Math.pow(10, e);
+      return m.toFixed(2) + '×10^' + e;
+    };
+    const Omega = Math.exp(lnOmega);
+    const OmegaStr = lnOmega > 30 ? '~10^'+Math.round(lnOmega/Math.log(10)) : fmtSci(Omega);
+
+    document.getElementById('bz-out').innerHTML =
+      'Ω_pos = (V/Q³)^N = ' + V + '^' + N + ' = <strong>' + OmegaStr + '</strong><br>'
+      + 'ln Ω = N·ln(V/Q³) = <strong>' + lnOmega.toFixed(2) + ' nats</strong><br>'
+      + 'S_pos / k_B = N·ln(V/Q³) = <strong>' + S_kB.toFixed(2) + '</strong>（每个分子贡献 ln V = ' + Math.log(V).toFixed(2) + '）<br>'
+      + 'ΔS / k_B vs 参考态 (N='+N_ref+', V='+V_ref+'): <strong>' + (dS_kB>=0?'+':'') + dS_kB.toFixed(2) + '</strong>';
+  }
+  ['bz-N','bz-V'].forEach(id=>document.getElementById(id).addEventListener('input',updBZ));
+  updBZ();
+})();
+</script>
+
+</body>
+</html>

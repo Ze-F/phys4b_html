@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>04 · 声波微观推导 — PHYS 4B 复习</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="theme.js"></script>
+  <script>
+    MathJax = {
+      tex: { inlineMath: [['\\(', '\\)']], displayMath: [['$$', '$$']] },
+      svg: { fontCache: 'global' }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" async></script>
+</head>
+<body>
+
+<header class="site-header">
+  <a class="home-link" href="index.html">← PHYS 4B 复习</a>
+  <nav>
+    <a href="03_3d_waves_sound.html">← 3D 波 + 声强</a>
+    <a href="05_interference_doppler.html">干涉、衍射、Doppler →</a>
+  </nav>
+</header>
+
+<main class="container">
+
+<div class="topic-header">
+  <h1>04 · 声波的微观推导</h1>
+  <p class="meta">Lec 3.1 尾 + 3.2 + 3.3 · Shankar §19.1–19.3</p>
+  <p class="blurb">第 03 讲我们把 \(v=\sqrt{B/\rho}\) 和 \(I=p_0^2/(2\rho v)\) 当公式直接用了。这一讲<strong>从 F=ma 出发</strong>把它们推出来：把空气视为可压缩流体，引入分子位移 \(S(x,t)\)，得到两条本构关系，组合成声波动方程。沿途还会看到压强 \(p\)、分子速度 \(\partial_t S\)、密度扰动 \(\Delta\rho\) 与位移 \(S\) 之间精确的相位关系——这是理解声学一切高级话题的基础。</p>
+</div>
+
+<!-- ======================================================== -->
+
+<div class="box key-result">
+  <p class="box-title">一页速览</p>
+  <ul>
+    <li><strong>本构</strong>：\(p=-B\,\partial S/\partial x\)（压缩 ↔ 高压）。</li>
+    <li><strong>线性 Euler</strong>：\(-\partial p/\partial x=\rho_0\,\partial^2 S/\partial t^2\)。</li>
+    <li><strong>声波方程</strong>：\(\partial^2 S/\partial t^2=(B/\rho_0)\,\partial^2 S/\partial x^2\)，\(v=\sqrt{B/\rho_0}\)。</li>
+    <li><strong>简谐解</strong>：\(S=S_0\sin(kx-\omega t)\)；\(p=-BS_0 k\cos(kx-\omega t)\)；\(\partial_t S=-\omega S_0\cos(kx-\omega t)\)。</li>
+    <li><strong>相位关系</strong>：\(p\) 与 \(\partial_t S\) <strong>同相位</strong>，<strong>都比 \(S\) 滞后 90°</strong>；\(\Delta\rho\) 与 \(p\) 同相位。</li>
+    <li><strong>声学阻抗</strong>：\(Z=\rho_0 v\)，连接 \(p\) 与速度 \(v_{\text{molec}}\)：\(p_0=Z\cdot \omega S_0\)。</li>
+    <li><strong>强度</strong>：\(I=\tfrac12\rho_0 v\omega^2 S_0^2=p_0^2/(2\rho_0 v)=p_0^2/(2Z)\)。</li>
+    <li><strong>固体纵波</strong>：\(v=\sqrt{Y/\rho}\)（\(Y\) Young's modulus）；号差：\(\sigma=+Y\,\partial\psi/\partial x\) vs \(p=-B\,\partial S/\partial x\)。</li>
+    <li><strong>Newton vs Laplace</strong>：等温 \(B=P\) 给 Newton 错值；正确是绝热 \(B=\gamma P\)。</li>
+  </ul>
+</div>
+
+<!-- ======================================================== -->
+
+<h2>§1 故事线</h2>
+
+<p>声波就是空气的<strong>纵向压缩-稀疏</strong>：一处分子被推得密，邻处就被拉得稀，密度涨落传播开去。要把这个过程量化，需要两条独立的物理：</p>
+
+<ol>
+  <li><strong>本构关系</strong>（材料怎么响应压缩）：bulk modulus \(B\) 把<em>位移梯度</em>翻译成<em>压强偏移</em>。</li>
+  <li><strong>动力学方程</strong>（流体怎么加速）：压强差给空气块加速度（线性 Euler）。</li>
+</ol>
+
+<p>合并这两条就是声波方程。它的解 \(S(x,t)\) 给出每个微元的位移；其余物理量（压强 \(p\)、密度变化 \(\Delta\rho\)、分子速度 \(\partial_t S\)）都从 \(S\) 派生，<strong>相位关系也由此固定</strong>。</p>
+
+<!-- ======================================================== -->
+
+<h2>§2 本构关系：p = −B ∂S/∂x</h2>
+
+<h3>2.1 ∂S/∂x 的几何意义：应变（strain）</h3>
+
+<p>设空气在原本平衡位置 \(x\) 处的分子，因声波偏移到 \(x+S(x,t)\)。考虑一段流体，原本位于 \(x\) 与 \(x+\Delta x\) 之间。声波到达时，两端各自位移：</p>
+
+<ul>
+  <li>左面（原 \(x\)）现在在 \(x+S(x,t)\)</li>
+  <li>右面（原 \(x+\Delta x\)）现在在 \((x+\Delta x)+S(x+\Delta x,t)\)</li>
+</ul>
+
+<p>这段流体的<strong>新长度</strong>是两面之差：</p>
+<p>$$ L_{\text{new}} = \Delta x + \bigl[S(x+\Delta x,t)-S(x,t)\bigr] \approx \Delta x\!\left[1+\frac{\partial S}{\partial x}\right]. $$</p>
+
+<p>所以<strong>长度变化的相对比例</strong>：</p>
+<p>$$ \frac{\delta L}{L} = \frac{L_{\text{new}}-\Delta x}{\Delta x} = \frac{\partial S}{\partial x}. $$</p>
+
+<p>横截面 \(A\) 固定，体积 \(\propto\) 长度：</p>
+<p>$$ \boxed{\;\frac{\delta V}{V} = \frac{\delta L}{L} = \frac{\partial S}{\partial x}\;.\;}\tag{2.0}$$</p>
+
+<p>这个量在固体力学里叫<strong>正应变</strong> (normal strain) \(\varepsilon\)——单位长度被拉长 / 压缩了多少，无量纲。</p>
+
+<h4>符号怎么读</h4>
+
+<table class="formula-table">
+  <thead><tr><th>\(\partial S/\partial x\)</th><th>物理</th><th>后果</th></tr></thead>
+  <tbody>
+    <tr><td>\(>0\)</td><td>右端位移比左端大 → 流体被<strong>拉伸</strong></td><td>体积↑、密度↓、压强↓（"稀疏"）</td></tr>
+    <tr><td>\(<0\)</td><td>右端位移比左端小（或更靠左）→ 流体被<strong>压缩</strong></td><td>体积↓、密度↑、压强↑（"压缩"）</td></tr>
+    <tr><td>\(=0\)</td><td>整段一齐平移</td><td>没有挤压，压强不变</td></tr>
+  </tbody>
+</table>
+
+<div class="box remark">
+  <p class="box-title">直觉：把 S(x,t) 当成"位移曲线"看斜率</p>
+  <p>固定时刻 \(t\)，把 \(S\) 对 \(x\) 画一条曲线。这条曲线的<strong>斜率</strong>（即 \(\partial S/\partial x\)）告诉你那一段流体被<em>拉</em>多紧 / <em>压</em>多狠：</p>
+  <ul>
+    <li>斜率正（\(S\) 在升）= 后面的分子推得更远 = 这一段被拉长</li>
+    <li>斜率负（\(S\) 在降）= 后面的分子反而靠近 = 这一段被压缩</li>
+  </ul>
+</div>
+
+<h3>2.2 从应变到压强：用 Bulk modulus 翻译</h3>
+
+<p>Bulk modulus 定义 \(B\equiv -V\,\partial P/\partial V\)（详见 03 §5.3 / 06 §3）。线性化下：</p>
+
+<p>$$ p\equiv \delta P = -B\cdot \frac{\delta V}{V} = -B\,\frac{\partial S}{\partial x}. $$</p>
+
+<p>得到声学本构关系：</p>
+
+<p>$$ \boxed{\;p=-B\,\frac{\partial S}{\partial x}\;.\;}\tag{2.1}$$</p>
+
+<p>负号串起来读："被压缩"（\(\partial S/\partial x<0\)）"对应高压"（\(p>0\)）；"被拉伸"（\(\partial S/\partial x>0\)）"对应低压"（\(p<0\)）。</p>
+
+<div class="box remark">
+  <p class="box-title">类比：Hooke 定律的连续版本</p>
+  <p>(2.1) 是弹簧 \(F=-kx\) 的连续介质版：每"单位长度"上压强偏离平衡的程度正比于<em>应变</em>（位移梯度）。\(B\) 扮演劲度的角色。固体里类似的是 \(\sigma=Y\varepsilon\)（正号，因为应力和应变方向规约不同）；流体没有剪切弹性，只对体积压缩有响应，所以用 \(B\) 而非 \(Y\)。这种"连续 Hooke"是所有线性弹性理论的起点。</p>
+</div>
+
+<!-- ======================================================== -->
+
+<h2>§3 动力学：线性化 Euler 方程</h2>
+
+<h3>3.1 受力：从 Taylor 展开来</h3>
+
+<p>取 \(x\) 与 \(x+dx\) 之间的一薄片气体（截面积 \(A\)）。两面各受周围气体的压强：</p>
+<ul>
+  <li>左面（在 \(x\)）：周围气体把薄片往<em>右</em>推，力 \(=p(x)\,A\)。</li>
+  <li>右面（在 \(x+dx\)）：周围气体把薄片往<em>左</em>推，力 \(=p(x+dx)\,A\)。</li>
+</ul>
+
+<p>净力（取右为正）：</p>
+<p>$$ F_{\text{net}} = p(x)A - p(x+dx)A = -\bigl[p(x+dx)-p(x)\bigr]\,A. $$</p>
+
+<p>把 \(p(x+dx)\) Taylor 展开 \(\approx p(x)+(\partial p/\partial x)\,dx\)，得</p>
+<p>$$ F_{\text{net}}\approx -\frac{\partial p}{\partial x}\,A\,dx. $$</p>
+
+<p><strong>负号的物理意义</strong>：如果 \(p\) 沿 \(x\) 增加（\(\partial p/\partial x>0\)），右边压强大，把薄片往左推；如果 \(p\) 沿 \(x\) 减小，左边压强大，把薄片往右推。<strong>压强梯度永远把流体从高压推向低压</strong>——这就是 \(-\nabla p\) 的来源。</p>
+
+<h3>3.2 质量与"线性化"：为什么可以用 ρ₀ 替代 ρ？</h3>
+
+<p>薄片质量 \(m=\rho\,A\,dx\)，但声波里 \(\rho\) 是<em>波动</em>的：</p>
+<p>$$ \rho(x,t)=\rho_0+\Delta\rho(x,t), $$</p>
+
+<p>其中 \(\rho_0\)（如 1.225 kg/m³）是无声波时的均匀平衡密度，\(\Delta\rho\) 是声波扰动（对 60 dB 谈话声 \(\sim 10^{-7}\) kg/m³，比 \(\rho_0\) 小 7 个数量级）。严格代入 Newton 第二定律：</p>
+
+<p>$$ (\rho_0+\Delta\rho)\,A\,dx\cdot \frac{\partial^2 S}{\partial t^2} = -\frac{\partial p}{\partial x}\,A\,dx. $$</p>
+
+<p>展开左边：</p>
+<p>$$ \rho_0\,\frac{\partial^2 S}{\partial t^2} \;+\; \underbrace{\Delta\rho\cdot \frac{\partial^2 S}{\partial t^2}}_{\text{二阶小量}} = -\frac{\partial p}{\partial x}. $$</p>
+
+<p>关键洞察：\(\Delta\rho\) 与 \(\partial^2 S/\partial t^2\) <strong>都是声波激发的小量</strong>（一阶量）；它们的乘积是<strong>二阶小量</strong>。"线性化" = 保留所有<em>一阶</em>项，丢掉<em>二阶及以上</em>。剩下：</p>
+
+<p>$$ \boxed{\;-\frac{\partial p}{\partial x}=\rho_0\,\frac{\partial^2 S}{\partial t^2}\;.\;}\tag{3.1}$$</p>
+
+<div class="box insight">
+  <p class="box-title">"线性化"是物理里的通用技巧</p>
+  <p>本质是 Taylor 展开后只保留一阶。流程：</p>
+  <ol>
+    <li><strong>找平衡态</strong>：扰动为零时系统的状态。这里：均匀静止气体 \(\rho=\rho_0\)、\(p=P_0\)、\(\vec v=0\)。</li>
+    <li><strong>加小扰动</strong>：每个量 = 平衡值 + 小量。\(\rho=\rho_0+\Delta\rho\)，\(p=P_0+\delta p\)，\(\vec v=\partial_t S\) 等都是小量 \(O(\epsilon)\)。</li>
+    <li><strong>代入完整方程</strong>，按 \(\epsilon\) 阶数排序。</li>
+    <li><strong>保留 \(O(\epsilon)\) 项，丢 \(O(\epsilon^2)\) 项</strong>。</li>
+  </ol>
+  <p>线性化得到的方程<em>恰好是线性的</em>——这是它的标志性后果。所以线性叠加（"两个声波加起来还是声波"）对小振幅严格成立，但对大振幅（激波）失败。这个流程在 SHM 的小角近似（\(\sin\theta\approx\theta\)）、流体大气模型、电路小信号分析等处都重复出现。</p>
+</div>
+
+<h3>3.3 与完整 Euler 方程的对比</h3>
+
+<p>无黏流体的完整 Euler 方程：</p>
+<p>$$ \rho\!\left(\frac{\partial \vec v}{\partial t}+\vec v\cdot\nabla\vec v\right) = -\nabla p+\text{外力}. $$</p>
+
+<p>声学小扰动下做线性化：</p>
+<ul>
+  <li>\(\rho\to\rho_0\)（丢 \(\Delta\rho\cdot\partial_t v\) 二阶项）；</li>
+  <li>\(\vec v\cdot\nabla\vec v\)：两个小量乘积，<strong>二阶</strong>，丢；这正是<em>非线性对流项</em>，激波形成的根源；</li>
+  <li>外力：常重力，与平衡静压互消，对声波不贡献。</li>
+</ul>
+
+<p>剩下：</p>
+<p>$$ \rho_0\,\frac{\partial \vec v}{\partial t} = -\nabla p. $$</p>
+
+<p>1D 版本，用 \(v=\partial_t S\)（速度 = 位移的时间导数）：</p>
+<p>$$ \rho_0\,\frac{\partial^2 S}{\partial t^2} = -\frac{\partial p}{\partial x}\quad\Longleftrightarrow\quad (3.1)\;\checkmark $$</p>
+
+<div class="box remark">
+  <p class="box-title">什么时候线性化失效？</p>
+  <p>当 \(\Delta\rho/\rho_0\) 或 \(p_0/P_{\text{atm}}\) 接近 \(O(1)\)（即 \(p_0\) 接近 \(P_{\text{atm}}\)），二阶项不再可以忽略。这时 \(\vec v\cdot\nabla\vec v\) 项让方程变成 Burgers 类型，可能产生<strong>不连续解（激波）</strong>——压强阶跃、波形变陡。这就是 03 §6 提到的"声压上限 \(\sim 191\) dB"边界：超过这条线，线性声学失效，必须用非线性流体力学（Rankine–Hugoniot 关系）描述。</p>
+</div>
+
+<!-- ======================================================== -->
+
+<h2>§4 合成：声波方程</h2>
+
+<p>把 (2.1) 代入 (3.1)：</p>
+
+<p>$$ -\frac{\partial}{\partial x}\!\left(-B\frac{\partial S}{\partial x}\right)=\rho_0\frac{\partial^2 S}{\partial t^2}
+   \;\Longrightarrow\;
+   \boxed{\;\frac{\partial^2 S}{\partial t^2}=\frac{B}{\rho_0}\frac{\partial^2 S}{\partial x^2}\;.\;}\tag{4.1}$$</p>
+
+<p>波速：</p>
+
+<p>$$ \boxed{\;v=\sqrt{B/\rho_0}\;.\;}\tag{4.2}$$</p>
+
+<p>这就是 03 节使用的声速公式的来源——从微观运动方程严格推出。</p>
+
+<details class="more-detail">
+  <summary>展开：p 也满足同一个波动方程</summary>
+  <p>(2.1) 给 \(p=-B\,\partial_x S\)。两边对 \(x\) 求导：\(\partial_x p=-B\,\partial_x^2 S\)。再代入 (3.1)：
+  \(\partial_x^2 p=-(\rho_0/B)\,\partial_t^2 (\partial_x p)\)... 让我用更直接的路：
+  把 \(\partial_t\) 与 \(\partial_x\) 在 \(S\) 满足的波动方程上反复作用，可以推出 \(p\) 与 \(\partial_t S\) 等等都满足 (4.1)。所以 <strong>所有相关变量满足同一个波动方程，只是相位/系数不同</strong>。这是线性偏微分方程的普遍特征。</p>
+</details>
+
+<!-- ======================================================== -->
+
+<h2>§5 简谐解与相位关系</h2>
+
+<h3>5.1 解的形式</h3>
+
+<p>取右行简谐解：</p>
+
+<p>$$ S(x,t)=S_0\sin(kx-\omega t),\qquad \omega=vk. \tag{5.1}$$</p>
+
+<p>其余物理量从此派生：</p>
+
+<table class="formula-table">
+  <tbody>
+    <tr><th>位移</th><td>\(S=S_0\sin(kx-\omega t)\)</td></tr>
+    <tr><th>分子速度</th><td>\(\partial_t S=-\omega S_0\cos(kx-\omega t)\)</td></tr>
+    <tr><th>位移梯度</th><td>\(\partial_x S=k S_0\cos(kx-\omega t)\)</td></tr>
+    <tr><th>压强扰动</th><td>\(p=-B\partial_x S=-Bk S_0\cos(kx-\omega t)\)</td></tr>
+    <tr><th>密度扰动</th><td>\(\Delta\rho=-\rho_0\partial_x S=-\rho_0 k S_0\cos(kx-\omega t)\)</td></tr>
+  </tbody>
+</table>
+
+<h3>5.2 相位关系：核心图像</h3>
+
+<p>所有<em>从 S 派生</em>的量都跟 \(S\) 差 90°（导数把 sin 变 cos）。四个量的相位关系：</p>
+
+<ul>
+  <li><strong>S</strong>: \(\sin(kx-\omega t)\) — 取作参考。</li>
+  <li><strong>∂S/∂t</strong>（分子速度）: \(-\omega S_0\cos\) ↔ <strong>滞后 S 90°</strong>（在 S 取过最大值之后达到极大）。</li>
+  <li><strong>p</strong>（压强）: \(-Bk S_0\cos\) ↔ <strong>跟 ∂S/∂t 同号同相</strong>。</li>
+  <li><strong>Δρ</strong>（密度）: \(-\rho_0 k S_0\cos\) ↔ <strong>跟 p 完全同相</strong>。</li>
+</ul>
+
+<div class="box insight">
+  <p class="box-title">物理直觉：高压在哪里？</p>
+  <p>当我们在某点 \(x\) 看到压强极大（高压区），那里发生了什么？由 \(p=-B\,\partial_x S\) 知 \(\partial_x S<0\)，即<em>左边的分子比右边的分子位移更大</em>——左侧分子朝右挤进、右侧分子也向左被推过来——这就是<strong>压缩</strong>。同时 \(\Delta\rho\propto-\partial_x S>0\)，即密度也是峰值（合理：分子挤进来）。两者刻画的是同一个物理事件。</p>
+  <p>位移 \(S\) 在那一刻则<em>恰好在</em>波形的"零交叉处"——分子<em>正在经过</em>平衡位置（位移为零，但速度极大且向右）。所以"高压区"对应<strong>分子速度极大</strong>，而非"分子位置极大"。这个 90° 滞后的关系是声波物理最重要的图像之一。</p>
+</div>
+
+<h3>5.3 用复指数统一</h3>
+
+<p>用复振幅写 \(S=S_0 e^{i(kx-\omega t)}\)，导数变乘法：\(\partial_t\to-i\omega\)，\(\partial_x\to ik\)。所有派生量自动从 \(S\) 通过乘 \(\pm ik\) 或 \(\pm i\omega\) 得到，"\(i\)" 自动给出 90° 相位。这是为什么用复指数处理线性波远比三角函数清爽。</p>
+
+<!-- ======================================================== -->
+
+<h2>§6 声学阻抗 Z = ρv</h2>
+
+<p>把 \(p\) 与分子速度 \(\partial_t S\) 联系起来：从表中取它们的振幅之比，用 \(\omega=vk\) 与 \(v^2=B/\rho_0\)：</p>
+
+<p>$$ \frac{p_0}{|\partial_t S|_{\max}}=\frac{B k S_0}{\omega S_0}=\frac{B k}{\omega}=\frac{B}{v}=\rho_0 v\equiv\boxed{Z}. $$</p>
+
+<p>所以</p>
+
+<p>$$ \boxed{\;p_0=Z\,v_{\text{molec, max}}=Z\,\omega S_0\;,\quad Z=\rho_0 v\;.\;}\tag{6.1}$$</p>
+
+<p>\(Z\) 叫<strong>声学阻抗</strong>，单位 Pa·s/m = kg/(m²·s) = "rayl"。它衡量"在给定分子振动速度下能产生多大压强振幅"——即媒质的"刚性"匹配。</p>
+
+<table class="data-table">
+  <thead><tr><th>媒质</th><th>\(\rho v\) (rayl)</th></tr></thead>
+  <tbody>
+    <tr><td>空气 20°C</td><td>\(\sim 410\)</td></tr>
+    <tr><td>水</td><td>\(\sim 1.5\times 10^6\)</td></tr>
+    <tr><td>软组织（人体）</td><td>\(\sim 1.6\times 10^6\)</td></tr>
+    <tr><td>钢</td><td>\(\sim 4.7\times 10^7\)</td></tr>
+  </tbody>
+</table>
+
+<div class="box remark">
+  <p class="box-title">阻抗匹配与传输效率</p>
+  <p>波从一种媒质进入另一种媒质时，能量传输效率取决于两侧 \(Z\) 的匹配——\(Z_1=Z_2\) 时全透射，\(Z_1\neq Z_2\) 时部分反射。空气 vs 水的 \(Z\) 比 \(\sim 3700\)：空气声波几乎全反射，无法进入水中（这是为什么把头潜入水里就听不见岸上的声音）。医用超声做检查要把<strong>胶</strong>涂在皮肤上：胶的 \(Z\) 接近软组织，避免空气-皮肤界面的高反射。</p>
+</div>
+
+<!-- ======================================================== -->
+
+<h2>§7 声波能量与强度</h2>
+
+<h3>7.1 能量密度</h3>
+
+<p>类比 02 节张紧弦的推导，声波的能量密度（每体积）：</p>
+
+<p>$$ \varepsilon = \tfrac12\rho_0(\partial_t S)^2 + \tfrac12 B(\partial_x S)^2. \tag{7.1}$$</p>
+
+<p><strong>第一项</strong>是<strong>动能密度</strong>：质量密度 \(\rho_0\) × 速度² /2，即 \(\tfrac12\rho_0 v^2\) 的连续版（这里 \(v=\partial_t S\) 是分子速度）。</p>
+
+<p><strong>第二项</strong>是<strong>弹性势能密度</strong>。来源不那么直接，需要展开。</p>
+
+<h4>为什么 \(\tfrac12 B(\partial_x S)^2\) 是势能？三种角度</h4>
+
+<p><strong>角度 1：直接积分"压缩做的功"。</strong>取一段平衡体积 \(V_0\) 的小元素，缓慢把它压到当前应变 \(\varepsilon\equiv\partial S/\partial x\)。当应变从 0 涨到 \(\varepsilon\) 时，瞬时压强扰动随之线性增大：\(p(\varepsilon')=-B\varepsilon'\)。外界做的功 \(W=-\int p\,dV\)；用 \(V=V_0(1+\varepsilon')\)：</p>
+
+<p>$$ W = -\int_0^{\varepsilon} p(\varepsilon')\,V_0\,d\varepsilon' = V_0\int_0^{\varepsilon} B\varepsilon'\,d\varepsilon' = V_0\cdot\tfrac12 B\varepsilon^2. $$</p>
+
+<p>除以 \(V_0\)：\(\text{PE/V}=\tfrac12 B\varepsilon^2 = \tfrac12 B(\partial_x S)^2\) ✓。直觉：压缩越狠（\(|\partial_x S|\) 越大），存储的弹性势能越多，二次方关系。</p>
+
+<p><strong>角度 2：弹簧类比（最快记忆）。</strong></p>
+
+<table class="formula-table">
+  <thead><tr><th></th><th>弹簧</th><th>声波元素（每单位体积）</th></tr></thead>
+  <tbody>
+    <tr><th>"硬度"</th><td>劲度 \(k\)</td><td>bulk modulus \(B\)</td></tr>
+    <tr><th>"偏离平衡"</th><td>位移 \(x\)</td><td>应变 \(\partial S/\partial x\)</td></tr>
+    <tr><th>"势能"</th><td>\(U=\tfrac12 kx^2\)</td><td>\(\tfrac12 B(\partial_x S)^2\)</td></tr>
+  </tbody>
+</table>
+
+<p>形式同构。所有线性弹性系统的 PE 都是<em>"硬度 × 偏离²"的一半</em>——SHM 是离散版（一个 \(x\)），声波是连续版（每点的应变）。</p>
+
+<p><strong>角度 3：能流守恒检验。</strong>(7.1) 的形式必须满足能量连续性方程 \(\partial_t\varepsilon = -\partial_x j\)，其中 \(j\) 是能流。直接计算：</p>
+
+<p>$$ \partial_t\varepsilon = \rho_0(\partial_t S)(\partial_t^2 S) + B(\partial_x S)(\partial_t\partial_x S). $$</p>
+
+<p>用声波方程 \(\rho_0\partial_t^2 S = B\partial_x^2 S\) 把第一项的 \(\partial_t^2 S\) 换掉：</p>
+
+<p>$$ \partial_t\varepsilon = B\bigl[(\partial_t S)(\partial_x^2 S)+(\partial_x S)(\partial_x\partial_t S)\bigr] = B\,\partial_x\!\bigl[(\partial_t S)(\partial_x S)\bigr]. $$</p>
+
+<p>所以能流</p>
+
+<p>$$ j = -B(\partial_t S)(\partial_x S) = p\cdot \partial_t S \quad\text{（因}\,p=-B\partial_x S\text{）}. $$</p>
+
+<p>即"<strong>压强 × 速度</strong>"——和"机械功率 = 力 × 速度"一脉相承。如果 PE 项换成别的形式，这个守恒律就不闭合，所以 (7.1) 的 \(\tfrac12 B(\partial_x S)^2\) 形式是<em>由能量守恒锁定</em>的。</p>
+
+<div class="box remark">
+  <p class="box-title">与张紧弦的对照（02 §5）</p>
+  <table class="formula-table">
+    <tbody>
+      <tr><th></th><th>张紧弦</th><th>声波</th></tr>
+      <tr><th>位移变量</th><td>\(\psi(x,t)\)</td><td>\(S(x,t)\)</td></tr>
+      <tr><th>KE 密度</th><td>\(\tfrac12\mu(\partial_t\psi)^2\)</td><td>\(\tfrac12\rho_0(\partial_t S)^2\)</td></tr>
+      <tr><th>弹性 PE 密度</th><td>\(\tfrac12 T(\partial_x\psi)^2\)</td><td>\(\tfrac12 B(\partial_x S)^2\)</td></tr>
+      <tr><th>"硬度"</th><td>张力 \(T\)</td><td>bulk modulus \(B\)</td></tr>
+      <tr><th>"惯性密度"</th><td>线密度 \(\mu\)</td><td>体密度 \(\rho_0\)</td></tr>
+    </tbody>
+  </table>
+  <p>声波就是把张紧弦的"硬度 + 惯性密度"换了变量，公式骨架完全同构。</p>
+</div>
+
+<h3>7.2 KE = PE 瞬时相等</h3>
+
+<p>代入 \(\partial_t S=-\omega S_0\cos\), \(\partial_x S=kS_0\cos\)：两项都正比于 \(\cos^2\)，且系数 \(\rho_0\omega^2=Bk^2\)（因 \(v^2=B/\rho_0\) 与 \(\omega=vk\) ⇒ \(\omega^2=v^2 k^2=(B/\rho_0)k^2\)）相等。所以</p>
+
+<p>$$ \varepsilon=\rho_0\omega^2 S_0^2\cos^2(kx-\omega t),\quad\bar\varepsilon=\tfrac12\rho_0\omega^2 S_0^2. \tag{7.2}$$</p>
+
+<h3>7.3 强度 I（功率/面积）</h3>
+
+<p>能量以速度 \(v\) 沿 \(x\) 传播，所以单位面积单位时间穿过的能量：</p>
+
+<p>$$ \boxed{\;I=\bar\varepsilon\,v=\tfrac12\rho_0 v\,\omega^2 S_0^2\;.\;}\tag{7.3}$$</p>
+
+<p>用 \(p_0=\rho_0 v\omega S_0\)（即 \(\omega S_0=p_0/(\rho_0 v)\)）化简：</p>
+
+<p>$$ I=\tfrac12\rho_0 v\,(p_0/\rho_0 v)^2=\frac{p_0^2}{2\rho_0 v}=\boxed{\;\frac{p_0^2}{2Z}\;.\;}\tag{7.4}$$</p>
+
+<p>这就是 03 节用过的公式。反解给 \(p_0=\sqrt{2\rho_0 v\,I}=\sqrt{2ZI}\)。</p>
+
+<h4>另一种推导：直接算"压强 × 速度"功率流</h4>
+
+<p>(7.3) 是从能量密度 × 速度推得的。还有一条更<strong>物理</strong>的路径：声波的能流（power per area）就是<em>瞬时</em>压强乘<em>瞬时</em>分子速度——和"机械功率 = 力 × 速度"一脉相承（压强 = 单位面积的力）：</p>
+
+<p>$$ j(x,t) = p(x,t)\cdot \partial_t S(x,t). \tag{7.3'}$$</p>
+
+<p>对简谐右行波 \(p=p_0\cos(kx-\omega t)\) 与 \(\partial_t S = -(p_0/Z)\cos(kx-\omega t)\)（用 \(p_0=Z\omega S_0\) 把分子速度幅度替换成 \(p_0/Z\)），注意两者<strong>同相</strong>（同正号 \(\cos\)，乘起来恒非负——能量真的<em>朝右</em>流，不会反向）：</p>
+
+<p>$$ j = p_0\cos\cdot\frac{p_0}{Z}\cos = \frac{p_0^2}{Z}\cos^2(kx-\omega t). $$</p>
+
+<p>时间平均（\(\langle\cos^2\rangle=1/2\)）：</p>
+
+<p>$$ I = \langle j\rangle = \frac{p_0^2}{2Z} = \frac{p_0^2}{2\rho_0 v}. $$</p>
+
+<p>同样的 (7.4)。两条路径殊途同归——一条<em>从能量密度 × 速度</em>（能量被搬运的图景），一条<em>从功率流 = 力 × 速度</em>（直接做功的图景）——它们必然一致，因为能量守恒方程 \(\partial_t\varepsilon=-\partial_x j\) 把两者绑在一起（详见 04 §7.1 末尾的"角度 3"验证）。</p>
+
+<div class="box remark">
+  <p class="box-title">电学类比：声波就是"声学电路"</p>
+  <p>把 \(p_0\to\) 电压振幅 \(V_0\)、\(Z=\rho v\to\) 电阻 \(R\)、\(I\to\) 平均功率 \(P\)。电阻里平均功率 \(P=V_{\text{rms}}^2/R=V_0^2/(2R)\)。声波 \(I=p_{\text{rms}}^2/Z=p_0^2/(2Z)\) 与之完全同构。\(\rho v\) 就是声波这"电路"的等效电阻——这也是阻抗匹配概念跨学科通用的根源（参 04 §11 Example 的反射/透射讨论）。</p>
+</div>
+
+<!-- ======================================================== -->
+
+<h2>§8 Newton vs Laplace：等温还是绝热？</h2>
+
+<p>Newton 在《原理》(1687) 里推出 \(v=\sqrt{P/\rho}\)（用了等温 \(B_{\text{iso}}=P\)），但实测声速比这<strong>大约高 18%</strong>。整整一个世纪，物理学家解决不了这个差异。</p>
+
+<p>Laplace 1816 年指出：声波频率太高（\(\sim\) kHz），分子周围空气来不及与外界换热——压缩-稀疏过程是<strong>绝热</strong>的，不是等温的。绝热 bulk modulus：</p>
+
+<p>$$ B_{\text{adiab}}=\gamma P,\quad \gamma=c_p/c_v\approx 1.4\text{ for air}. $$</p>
+
+<p>修正后：</p>
+
+<p>$$ v=\sqrt{\gamma P/\rho}\approx 343\text{ m/s at 20°C}, $$</p>
+
+<p>跟实测吻合。这是热力学概念被精确应用到力学问题的典范——也提示我们：<strong>"什么过程"和"什么材料常数"密切相关</strong>。</p>
+
+<details class="more-detail">
+  <summary>展开：判断绝热的条件</summary>
+  <p>绝热成立的条件：声波周期 \(T\) 远短于热扩散到 \(\lambda\) 距离所需的时间 \(t_{\text{thermal}}\sim\lambda^2/D\)（\(D\) 热扩散率）。空气 \(D\sim 2\times 10^{-5}\) m²/s，\(\lambda\sim\) m 量级，给 \(t_{\text{thermal}}\sim 10^4\) s，远大于 \(T\sim 10^{-3}\) s。所以<em>所有可闻声波都是绝热的</em>，包括最高频的超声 (\(T\sim\) μs；\(\lambda\sim\)mm；\(t_{\text{thermal}}\sim 0.05\) s）。极低频地震波 (\(T\sim 10\) s，\(\lambda\sim 30\) km) 才接近等温。</p>
+</details>
+
+<!-- ======================================================== -->
+
+<h2>§9 固体里的声波：Young's modulus 与符号差</h2>
+
+<p>对一根细杆里的<strong>纵向</strong>弹性波，本构是<em>胡克定律</em>而非 bulk modulus：</p>
+
+<p>$$ \sigma = Y\,\frac{\partial \psi}{\partial x},\qquad \text{(拉伸正向应力)} \tag{9.1}$$</p>
+
+<p>其中 \(\sigma\) 是单位面积上的<em>正</em>应力（拉伸为正），\(Y\) 是 Young's modulus。注意符号<strong>不</strong>同于 bulk modulus 公式：</p>
+
+<table class="formula-table">
+  <tbody>
+    <tr><th>流体本构</th><td>\(p=-B\,\partial S/\partial x\) (压缩 → 高压；负号)</td></tr>
+    <tr><th>固体本构</th><td>\(\sigma=+Y\,\partial \psi/\partial x\) (拉伸 → 拉应力；正号)</td></tr>
+  </tbody>
+</table>
+
+<p>符号差来自：流体的"压强"是<em>反</em>正应力（正压把流体往内推；负 σ）；固体的"应力"是按拉伸为正约定。物理是同一回事，只是命名。</p>
+
+<p>固体杆里的纵波速度：</p>
+
+<p>$$ \boxed{\;v_{\text{rod}}=\sqrt{Y/\rho}\;.\;}\tag{9.2}$$</p>
+
+<table class="data-table">
+  <thead><tr><th>材料</th><th>v (m/s)</th></tr></thead>
+  <tbody>
+    <tr><td>空气 (声波)</td><td>343</td></tr>
+    <tr><td>水</td><td>1500</td></tr>
+    <tr><td>木材（沿纤维）</td><td>3000–5000</td></tr>
+    <tr><td>玻璃</td><td>5500</td></tr>
+    <tr><td>钢</td><td>5100–5800</td></tr>
+    <tr><td>金刚石</td><td>~12000</td></tr>
+  </tbody>
+</table>
+
+<div class="box insight">
+  <p class="box-title">为什么固体声速远高于气体？</p>
+  <p>\(v=\sqrt{B/\rho}\)（流体）或 \(\sqrt{Y/\rho}\)（固体杆）。固体的 \(B\) 或 \(Y\) 比气体大约 \(10^4\)–\(10^5\) 倍（分子键比气体分子间相互作用强得多），密度比气体大约 \(10^3\) 倍——所以波速大约 \(\sqrt{10^4/10^3}\sim 3\) 倍以上。直观感觉：固体里相邻分子靠得近且键合强，扰动一处<em>很快</em>把"信号"推给邻居；气体里分子靠互相弹跳传递动量，慢得多。把耳朵贴在铁轨上能比沿空气听到火车声早得多就是这个原因。</p>
+</div>
+
+<!-- ======================================================== -->
+
+<h2>§10 交互：S 与 p 的相位关系</h2>
+
+<div class="box interactive">
+  <p class="box-title">声波里 S, ∂_t S, p 的同时空快照</p>
+  <p>固定 \(t\) 看 \(x\) 上三个量的剖面。注意 \(\partial_t S\) 与 \(p\) 同相（都比 \(S\) 滞后 90°），也都跟密度扰动 \(\Delta\rho\) 同相。换句话说，"高压区"=  "高密区" = "分子速度最大向右处"，而不是"位移最大处"。拖动相位（时间）让波形在屏幕上滚。</p>
+
+  <div class="widget">
+    <canvas id="phase-canvas" width="600" height="320"></canvas>
+    <div class="controls">
+      <div class="control-row">
+        <label>相位 ωt</label>
+        <input type="range" id="phase-t" min="0" max="6.28" step="0.05" value="0" />
+        <span class="readout" id="phase-t-readout"></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ======================================================== -->
+
+<h2>§11 Worked Examples</h2>
+
+<div class="example">
+  <h4>Example：声学阻抗与能量传输 <span style="font-size:.75rem;background:#fef3c7;color:#92400e;padding:.15rem .5rem;border-radius:8px;font-family:-apple-system,sans-serif;font-weight:500">⚠ 课外补充</span></h4>
+  <p class="source">改编自 Shankar §19 例</p>
+
+  <div class="box warning">
+    <p class="box-title">本题用的反射/透射系数公式不在 PHYS 4B 讲课范围内</p>
+    <p>下面用到的 \(R_E, T_E\) 公式没在课堂上推导过（也不在 Quiz 3 范围内）。它们是<strong>声学阻抗概念的自然延伸</strong>：把界面两侧的位移连续 + 压强连续两条边界条件解出，就得到这两式。在 EM、光学、传输线理论里会反复见到同一公式骨架，所以提前知道是有用的——但<em>不必硬记</em>，理解阻抗匹配这个概念即可。完整推导见<a href="#derivation-RT">本例末尾的"补充推导"</a>。</p>
+  </div>
+
+  <p>声波从空气进入水。空气 \(Z_1\approx 410\) rayl，水 \(Z_2\approx 1.5\times 10^6\) rayl。问入射能量有多少透射进入水？</p>
+
+  <div class="solution-step"><strong>反射 / 透射系数</strong>（垂直入射，标量声波）：
+    $$ R_E=\!\left(\frac{Z_2-Z_1}{Z_2+Z_1}\right)^{\!2},\quad T_E=\frac{4 Z_1 Z_2}{(Z_1+Z_2)^2}. $$
+  </div>
+
+  <div class="solution-step"><strong>代入</strong>：\(Z_2/Z_1\approx 3700\)。
+    $$ R_E=\!\left(\frac{3700-1}{3700+1}\right)^{\!2}\approx 0.999. $$
+    $$ T_E\approx \frac{4\cdot 3700}{3701^2}\approx 0.001. $$
+    <strong>99.9% 反射，0.1% 透射</strong>——空气声几乎不会进入水中。
+  </div>
+
+  <div class="solution-step"><strong>物理意义</strong>：把头潜入水里你听不见岸上的声音，是阻抗严重失配；同样，水下打雷不会让岸上人的耳膜震碎，因为水里的强声反射几乎全到水里去了。要让超声从超声仪进入人体，必须涂"耦合胶"（\(Z\) 与软组织接近），消除空气-皮肤界面的反射损失。</div>
+
+  <details class="more-detail" id="derivation-RT">
+    <summary>展开：R_E, T_E 公式的推导（边界匹配）</summary>
+    <p>设界面在 \(x=0\)。<strong>介质 1</strong> 中有入射波 + 反射波，<strong>介质 2</strong> 中有透射波（用复振幅写）：</p>
+    <p>$$ S_1(x,t) = S_i e^{i(k_1 x-\omega t)} + S_r e^{-i(k_1 x+\omega t)},\quad
+       S_2(x,t) = S_t e^{i(k_2 x-\omega t)}. $$</p>
+    <p><strong>边界条件 1</strong>（位移连续）：\(S_1(0,t)=S_2(0,t)\) ⇒ \(S_i+S_r=S_t\)。</p>
+    <p><strong>边界条件 2</strong>（压强连续）：\(p_1(0,t)=p_2(0,t)\)。用 \(p_0=Z\omega S_0\)，注意反射波方向相反，速度反号 ⇒ 压强项 \(Z_1(S_i-S_r) = Z_2 S_t\)。</p>
+    <p>解这两条线性方程：</p>
+    <p>$$ \frac{S_r}{S_i}=\frac{Z_1-Z_2}{Z_1+Z_2},\qquad \frac{S_t}{S_i}=\frac{2Z_1}{Z_1+Z_2}. $$</p>
+    <p><strong>能量比</strong>（强度 \(\propto Z\cdot |S|^2\)）：</p>
+    <p>$$ R_E=\frac{Z_1|S_r|^2}{Z_1|S_i|^2}=\!\left(\frac{Z_1-Z_2}{Z_1+Z_2}\right)^{\!2}\!\!=\!\left(\frac{Z_2-Z_1}{Z_2+Z_1}\right)^{\!2},\quad
+       T_E=\frac{Z_2|S_t|^2}{Z_1|S_i|^2}=\frac{4Z_1Z_2}{(Z_1+Z_2)^2}. $$</p>
+    <p>核查 \(R_E+T_E=1\)（能量守恒）：
+    $$\frac{(Z_1-Z_2)^2+4Z_1Z_2}{(Z_1+Z_2)^2}=\frac{(Z_1+Z_2)^2}{(Z_1+Z_2)^2}=1.\;\checkmark$$
+    </p>
+    <p>跨学科：电磁波在介质界面、传输线、张紧弦接到不同密度段，都得到同一公式骨架——只是 \(Z\) 的具体形式不同（\(\rho v\) / \(\sqrt{\mu/\epsilon}\) / \(\sqrt{L/C}\) / \(\sqrt{T\mu}\)）。"阻抗匹配"是工程通用语言。</p>
+  </details>
+</div>
+
+<div class="example">
+  <h4>Example：60 dB 谈话声的分子位移</h4>
+  <p class="source">改编自 Shankar §19 例</p>
+  <p>正常说话声 \(\beta=60\) dB，频率 \(f=1\) kHz。空气 \(\rho_0=1.225\) kg/m³, \(v=343\) m/s。问 (a) \(p_0\)？(b) \(S_0\)？(c) 分子瞬时最大速度？</p>
+
+  <div class="solution-step"><strong>(a)</strong> 60 dB → \(I=10^{-6}\) W/m²。
+    $$ p_0=\sqrt{2\rho_0 v I}=\sqrt{2\cdot 1.225\cdot 343\cdot 10^{-6}}\approx 0.029\text{ Pa}. $$
+  </div>
+
+  <div class="solution-step"><strong>(b)</strong> \(S_0=p_0/(\rho_0 v\omega)=p_0/(Z\omega)\)：
+    $$ S_0=\frac{0.029}{410\cdot 2\pi\cdot 1000}\approx 1.1\times 10^{-8}\text{ m}=11\text{ nm}. $$
+    分子位移仅 \(\sim 10\) nm——比可见光波长还短两个数量级！
+  </div>
+
+  <div class="solution-step"><strong>(c)</strong> 分子最大速度 \(v_{\text{max}}=\omega S_0=p_0/Z\)：
+    $$ v_{\text{max}}=0.029/410\approx 7\times 10^{-5}\text{ m/s}=70\,\mu\text{m/s}. $$
+    远远小于空气分子热运动速度 (\(\sim 500\) m/s) 与声速 (343 m/s)——这就是<strong>线性声学</strong>近似的合理性。
+  </div>
+</div>
+
+<div class="example">
+  <h4>Problem (★ harder)：Newton 与 Laplace 之争的数值</h4>
+  <p class="source">改编自 Shankar §19 problem set</p>
+  <p>用<strong>Newton 公式</strong>（等温）\(v=\sqrt{P/\rho}\) 计算 20°C 标准空气的声速；与 Laplace 修正 \(v=\sqrt{\gamma P/\rho}\)（\(\gamma=1.4\)）比较；与实测 343 m/s 比较。Laplace 修正占百分比？</p>
+
+  <div class="solution-step"><strong>Newton</strong>：\(P=1.013\times 10^5\) Pa, \(\rho=1.225\) kg/m³。
+    $$ v_{\text{Newton}}=\sqrt{1.013\times 10^5/1.225}\approx 287.4\text{ m/s}. $$
+    比实测低 \(\sim 16\%\)。
+  </div>
+
+  <div class="solution-step"><strong>Laplace</strong>：\(B_{\text{adiab}}=\gamma P\)：
+    $$ v_{\text{Laplace}}=\sqrt{1.4\cdot 1.013\times 10^5/1.225}\approx 340.0\text{ m/s}. $$
+    比实测仅低 \(\sim 1\%\)（剩下的小差距来自温度修正、湿度等）。
+  </div>
+
+  <div class="solution-step"><strong>修正占比</strong>：\(\sqrt{1.4}\approx 1.183\) → 修正占 \(\sim 18\%\)。这跟 \(\gamma=1.4\) 的"绝热指数"直接相关：Newton 原版没法解释这 18%；Laplace 1816 年用热力学补好了一百多年的悬案。</div>
+
+  <div class="solution-step"><strong>历史教训</strong>：物理跨学科的力量。声学（看似纯力学）需要热力学（绝热过程）才能精确解释。这一类"跨学科耦合"在现代物理里更普遍：粒子物理需要场论 + 群论；凝聚态需要量子力学 + 统计力学；引力波需要广义相对论 + 数值相对论 + 信号处理。</div>
+</div>
+
+<div class="example">
+  <h4>Problem (★★ challenge)：声波在固体里的传播 vs 空气里的传播</h4>
+  <p class="source">改编自 Shankar §19 problem set</p>
+  <p>(a) 钢的 \(Y\approx 2\times 10^{11}\) Pa, \(\rho\approx 7800\) kg/m³。求纵波速度。<br>
+  (b) 把头放在钢轨上，相距 1 km 的人敲击轨道；声音通过空气和钢轨两路传到你耳朵，间隔多久？<br>
+  (c) 钢的 \(Z\approx 4.7\times 10^7\) rayl，空气 \(Z\approx 410\) rayl。计算钢→空气界面的能量透射率。这跟你<em>听到</em>的钢轨声音音量一致吗？</p>
+
+  <div class="solution-step"><strong>(a)</strong> \(v_{\text{steel}}=\sqrt{Y/\rho}=\sqrt{2\times 10^{11}/7800}\approx 5060\) m/s。约空气声速的 15 倍。</div>
+
+  <div class="solution-step"><strong>(b)</strong> 时间差：
+    <ul>
+      <li>钢轨：\(t_1=1000/5060\approx 0.20\) s</li>
+      <li>空气：\(t_2=1000/343\approx 2.92\) s</li>
+      <li>差：\(\Delta t\approx 2.7\) s</li>
+    </ul>
+    所以你听到"咣"两次：先（钢轨里传来的）、后（空气里传来的）。这个观测在 19 世纪就用来精确测量钢/铁等固体的弹性常数。
+  </div>
+
+  <div class="solution-step"><strong>(c)</strong> 钢→空气透射：\(Z_1/Z_2\approx 4.7\times 10^7/410\approx 1.15\times 10^5\)：
+    $$ T_E=\frac{4 Z_1 Z_2}{(Z_1+Z_2)^2}\approx \frac{4 Z_2}{Z_1}\approx 3.5\times 10^{-5}. $$
+    只有 \(0.0035\%\) 的能量从钢轨传到空气，再到你的耳朵。
+  </div>
+
+  <div class="solution-step"><strong>所以为什么还能听到钢轨声？</strong>
+    回想 (b)：你<em>耳朵贴着</em>钢轨。耳道软组织 \(Z\sim 1.6\times 10^6\) rayl，与钢的失配只有 30:1（不是 \(10^5\) 倍），透射率显著高（\(T_E\approx 0.13\)，约 13%）。所以"贴着钢轨"听到的声音确实远响于"几米外空气里"听到的同源声波——这是儿童电影里"贴铁轨听火车"的物理基础。<strong>耳朵贴在物体上的音感更强这条经验规律，本质就是阻抗匹配的提升。</strong>
+  </div>
+</div>
+
+<!-- ======================================================== -->
+
+<h2>§12 Self-check</h2>
+
+<div class="self-check">
+  <p class="question">Q1. 在声波里，"分子速度最大"的位置和"密度最大"的位置一致吗？</p>
+  <details>
+    <summary>查看答案</summary>
+    <p>一致。两者都是 \(\cos\) 形（与 \(S\) 滞后 90°），同相。物理：分子<em>朝压缩区集中</em>的瞬间，那里既密度高、压强高、又是分子速度极大处（速度方向指向高密区中心）。位移 \(S\) 在那一刻为零（分子<em>正在过</em>平衡位置），这与"高密 = 高速 = 高压"形成 90° 错位的图像。</p>
+  </details>
+</div>
+
+<div class="self-check">
+  <p class="question">Q2. 同一个声源，在空气里频率 1 kHz；让它进入水中（不考虑反射），频率变多少？波长变多少？</p>
+  <details>
+    <summary>查看答案</summary>
+    <p>频率<strong>不变</strong>（由声源决定），仍是 1 kHz。波长 \(\lambda=v/f\)：水中 \(v\approx 1500\) m/s，所以 \(\lambda\to 1.5\) m（空气中是 0.34 m）。媒质改变 \(v\) 和 \(\lambda\)，<em>不</em>改变 \(f\)——这是"频率属于源、波长属于媒质"的核心。</p>
+  </details>
+</div>
+
+<div class="self-check">
+  <p class="question">Q3. 一根铁棒和一根铝棒的密度差 3 倍，Young's modulus 差也接近 3 倍（铁 \(Y\sim 2\times 10^{11}\), 铝 \(\sim 7\times 10^{10}\)）。哪根棒里的纵波速度更快？</p>
+  <details>
+    <summary>查看答案</summary>
+    <p>\(v=\sqrt{Y/\rho}\)。铁：\(\sqrt{2\times 10^{11}/7800}\approx 5060\) m/s。铝：\(\sqrt{7\times 10^{10}/2700}\approx 5090\) m/s。<strong>几乎相同</strong>，铝略快。这是为什么音叉、钢琴弦等乐器材料的选择与"密度大"或"硬"无关，而看 \(Y/\rho\) 比值。声速决定了乐器的特征频率，所以这两种金属做的音叉/响铃可以调出相同的音。</p>
+  </details>
+</div>
+
+<div class="self-check">
+  <p class="question">Q4. 阻抗匹配的物理是 \(Z_1=Z_2\) 时全透射。两种媒质 \(\rho v\) 相同的物理直觉是什么？</p>
+  <details>
+    <summary>查看答案</summary>
+    <p>\(Z_1=Z_2\) 意味着两侧媒质给同一压强振幅产生的<em>分子速度</em>相同——所以界面两侧的分子运动可以"无缝衔接"，没有反射。物理上不同的（\(\rho, v\)）组合可以给出同样 \(Z\)：高密度低速度 ↔ 低密度高速度。所以阻抗匹配是<strong>动力学</strong>匹配，而不是单一参量匹配。这跟电路 transmission line 的 \(Z=\sqrt{L/C}\) 同源——任何线性传播媒质都有对应的"阻抗"。</p>
+  </details>
+</div>
+
+<div class="self-check">
+  <p class="question">Q5. 在医学超声成像中，为什么病人皮肤上要涂胶水/凝胶？</p>
+  <details>
+    <summary>查看答案</summary>
+    <p>消除"探头(陶瓷压电材料)–空气–皮肤"两次界面带来的巨大反射损失。陶瓷 \(Z\sim 3\times 10^7\), 空气 \(Z\sim 410\), 皮肤 \(Z\sim 1.6\times 10^6\)。陶瓷-空气透射率 \(\sim 10^{-5}\)，几乎全反射；涂上 \(Z\) 接近软组织的耦合胶，把陶瓷-胶的反射降到约 \(0.5\) 比例（陶瓷-皮肤直接为 \(0.86\)，仍高，但胶有匹配作用且消除空气夹层），就让超声能进入人体。这是声学阻抗匹配的临床应用。</p>
+  </details>
+</div>
+
+<!-- ======================================================== -->
+
+<h2>§13 公式速查表</h2>
+
+<table class="formula-table">
+  <tbody>
+    <tr><th>本构（流体）</th><td>\(p=-B\,\partial S/\partial x\)</td></tr>
+    <tr><th>本构（固体杆）</th><td>\(\sigma=+Y\,\partial \psi/\partial x\)</td></tr>
+    <tr><th>线性化 Euler</th><td>\(-\partial p/\partial x=\rho_0\,\partial^2 S/\partial t^2\)</td></tr>
+    <tr><th>声波方程</th><td>\(\partial^2 S/\partial t^2=(B/\rho_0)\partial^2 S/\partial x^2\)</td></tr>
+    <tr><th>声速（流体）</th><td>\(v=\sqrt{B/\rho_0}\)</td></tr>
+    <tr><th>声速（固体杆）</th><td>\(v=\sqrt{Y/\rho}\)</td></tr>
+    <tr><th>等温 vs 绝热</th><td>等温 \(B=P\)；绝热 \(B=\gamma P\)（声波取此）</td></tr>
+    <tr><th>密度扰动</th><td>\(\Delta\rho=-\rho_0\,\partial S/\partial x\)（与 p 同相）</td></tr>
+    <tr><th>简谐解</th><td>\(S=S_0\sin(kx-\omega t)\)</td></tr>
+    <tr><th>压强振幅</th><td>\(p_0=Bk S_0=\rho_0 v\omega S_0=Z\omega S_0\)</td></tr>
+    <tr><th>声学阻抗</th><td>\(Z=\rho_0 v\)</td></tr>
+    <tr><th>能量密度（平均）</th><td>\(\bar\varepsilon=\tfrac12\rho_0\omega^2 S_0^2\)</td></tr>
+    <tr><th>强度</th><td>\(I=\tfrac12\rho_0 v\omega^2 S_0^2=p_0^2/(2Z)\)</td></tr>
+    <tr><th>反射 / 透射（垂直入射，<em>课外补充</em>）</th><td>\(R_E=[(Z_2-Z_1)/(Z_2+Z_1)]^2\)，\(T_E=4 Z_1 Z_2/(Z_1+Z_2)^2\)；\(R_E+T_E=1\)（推导见 §11 Example）</td></tr>
+    <tr><th>相位关系</th><td>\(p,\,\partial_t S,\,\Delta\rho\) 同相，相对 \(S\) 滞后 90°</td></tr>
+  </tbody>
+</table>
+
+<!-- ======================================================== -->
+
+<div class="glossary">
+  <h2>术语表</h2>
+  <dl>
+    <dt>分子位移 (molecular displacement, S)</dt>
+    <dd>声波中空气分子相对平衡位置的位移。</dd>
+
+    <dt>压强扰动 (pressure perturbation, p)</dt>
+    <dd>瞬时压强相对平衡值的偏离 \(p\equiv P-P_0\)。</dd>
+
+    <dt>密度扰动 (density perturbation, Δρ)</dt>
+    <dd>瞬时密度相对平衡值的偏离；与 p 同相。</dd>
+
+    <dt>线性化 Euler 方程</dt>
+    <dd>\(\nabla p=-\rho_0\,\partial_t \vec v\)；流体加速度的小扰动方程。</dd>
+
+    <dt>应变 (strain, \(\partial S/\partial x\))</dt>
+    <dd>单位长度的相对变化量，无量纲；几何上等于 \(\delta V/V\)。\(>0\) 表示被拉伸（密度↓压强↓），\(<0\) 表示被压缩（密度↑压强↑）。</dd>
+
+    <dt>本构关系 (constitutive relation)</dt>
+    <dd>材料对应变的响应；流体 \(p=-B\,\partial_x S\)，固体 \(\sigma=Y\,\partial_x\psi\)。</dd>
+
+    <dt>声学阻抗 (acoustic impedance, Z)</dt>
+    <dd>\(Z=\rho_0 v\)；连接压强与速度幅度。</dd>
+
+    <dt>阻抗匹配 (impedance matching)</dt>
+    <dd>两侧媒质 \(Z\) 相等时全透射；不匹配产生反射。</dd>
+
+    <dt>反射系数 (reflectivity, R)</dt>
+    <dd>反射能量占入射能量比例；\(R=[(Z_2-Z_1)/(Z_2+Z_1)]^2\)。</dd>
+
+    <dt>Young's modulus (Y)</dt>
+    <dd>固体的纵向应力-应变常数；\(\sigma=Y\,\partial_x\psi\)。</dd>
+
+    <dt>Bulk modulus (B)</dt>
+    <dd>流体或固体的体积压缩刚度；\(B=-V\,\partial P/\partial V\)。</dd>
+
+    <dt>绝热 vs 等温</dt>
+    <dd>声波频率高 ⇒ 绝热（\(B=\gamma P\)）；地震波等极低频 ⇒ 等温（\(B=P\)）。</dd>
+
+    <dt>耦合胶 (coupling gel)</dt>
+    <dd>用于超声仪与皮肤之间的高 Z 凝胶，消除空气-皮肤界面反射。</dd>
+  </dl>
+</div>
+
+<!-- ======================================================== -->
+
+<nav class="page-nav">
+  <a class="nav-prev" href="03_3d_waves_sound.html">3D 波 + 声强</a>
+  <a class="nav-next" href="05_interference_doppler.html">干涉、衍射、Doppler</a>
+</nav>
+
+</main>
+
+<script src="interactive.js"></script>
+<script>
+  markCurrentReviewing('04_sound_microscopic.html');
+
+  // -------- Phase relationship visualization --------
+  (function() {
+    const setup = setupCanvas('phase-canvas', 600, 320);
+    if (!setup) return;
+    const { ctx, w, h } = setup;
+    const padL = 50, padR = 20, padT = 30, padB = 35;
+
+    function draw(omegaT) {
+      ctx.clearRect(0, 0, w, h);
+      drawAxes(ctx, w, h, {
+        padL, padR, padT, padB,
+        xLabel: 'kx', yLabel: '振幅',
+      });
+      const map = makeMap({
+        padL, padR, padT, padB, w, h,
+        xMin: 0, xMax: 4 * Math.PI, yMin: -1.3, yMax: 1.3,
+      });
+
+      // gridlines (zero line)
+      ctx.strokeStyle = '#e7e5e4';
+      ctx.beginPath();
+      ctx.moveTo(padL, map.yToPx(0));
+      ctx.lineTo(w - padR, map.yToPx(0));
+      ctx.stroke();
+
+      // x-ticks at multiples of pi
+      [0, Math.PI, 2*Math.PI, 3*Math.PI, 4*Math.PI].forEach((xv, i) => {
+        const px = map.xToPx(xv);
+        ctx.fillStyle = '#9ca3af';
+        ctx.font = "10px -apple-system, sans-serif";
+        ctx.textAlign = 'center';
+        const lbl = ['0','π','2π','3π','4π'][i];
+        ctx.fillText(lbl, px, h - 20);
+      });
+
+      // S(x,t) = sin(kx - omega t) → S(kx)=sin(kx-omegaT)
+      // dt S = -omega cos(kx - omega t)
+      // p ∝ -cos(kx - omega t)  (same phase as dt S, both = -cos)
+      function plotCurve(fn, color, label, yLine) {
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        const N = 200;
+        for (let i = 0; i <= N; i++) {
+          const xv = 4*Math.PI * (i / N);
+          const yv = fn(xv);
+          const px = map.xToPx(xv), py = map.yToPx(yv);
+          if (i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+        }
+        ctx.stroke();
+        // legend
+        ctx.fillStyle = color;
+        ctx.fillRect(w - 130, yLine, 12, 3);
+        ctx.fillStyle = '#374151';
+        ctx.font = "11px -apple-system, sans-serif";
+        ctx.textAlign = 'left';
+        ctx.fillText(label, w - 113, yLine + 5);
+      }
+
+      plotCurve(x => Math.sin(x - omegaT), '#0f766e', 'S(x,t)', 30);
+      plotCurve(x => -Math.cos(x - omegaT), '#ea580c', 'p(x,t) ∝ ∂_t S ∝ Δρ', 50);
+
+      // Draw a "marker" on each curve at kx = omegaT (the location where the phase equals 0)
+      const xMark = omegaT % (4*Math.PI);
+      ctx.fillStyle = '#0f766e';
+      ctx.beginPath();
+      ctx.arc(map.xToPx(xMark), map.yToPx(0), 4, 0, 2*Math.PI);
+      ctx.fill();
+      // p marker at -cos(0) = -1
+      ctx.fillStyle = '#ea580c';
+      ctx.beginPath();
+      ctx.arc(map.xToPx(xMark), map.yToPx(-1), 4, 0, 2*Math.PI);
+      ctx.fill();
+
+      // annotation
+      ctx.fillStyle = '#6b7280';
+      ctx.font = "11px -apple-system, sans-serif";
+      ctx.textAlign = 'left';
+      ctx.fillText('在波形零穿越处（S=0），p 与 ∂_t S 取极值', padL, 18);
+    }
+
+    bindSlider('phase-t', 'phase-t-readout',
+      v => draw(v),
+      v => v.toFixed(2) + ' rad'
+    );
+  })();
+</script>
+
+</body>
+</html>

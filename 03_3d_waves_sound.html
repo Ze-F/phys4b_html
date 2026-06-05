@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>03 · 3D 波 + 声强 — PHYS 4B 复习</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="theme.js"></script>
+  <script>
+    MathJax = {
+      tex: { inlineMath: [['\\(', '\\)']], displayMath: [['$$', '$$']] },
+      svg: { fontCache: 'global' }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" async></script>
+</head>
+<body>
+
+<header class="site-header">
+  <a class="home-link" href="index.html">← PHYS 4B 复习</a>
+  <nav>
+    <a href="02_wave_propagation.html">← 一维波</a>
+    <a href="04_sound_microscopic.html">声波微观 →</a>
+  </nav>
+</header>
+
+<main class="container">
+
+<div class="topic-header">
+  <h1>03 · 三维波、球面/柱面波与声强</h1>
+  <p class="meta">Lec 2.1 + 4.1 · Shankar §18.5 / §19 + OpenStax 17</p>
+  <p class="blurb">把波动方程从 1D 升级到 3D，最直接的应用是声波在空气中的传播。本节关注三件事：(1) 球面波 \(1/r\) 衰减给出反平方律；(2) dB 标度怎么把覆盖 12 个数量级的声强映射到便于人耳的对数轴；(3) 声波物理上的强度上下限——上至大气压所限的 ~191 dB"激波"边界，下至热噪声底约 \(-24\) dB。</p>
+</div>
+
+<!-- ======================================================== -->
+
+<div class="box key-result">
+  <p class="box-title">一页速览</p>
+  <ul>
+    <li><strong>3D 波动方程</strong>：\(\nabla^2\psi=\dfrac{1}{v^2}\dfrac{\partial^2\psi}{\partial t^2}\)。</li>
+    <li><strong>球面波</strong>：\(\psi=\dfrac{A}{r}\cos(kr-\omega t)\)，振幅按 \(1/r\) 衰减。</li>
+    <li><strong>柱面波</strong>：远场近似 \(\psi\approx\dfrac{A}{\sqrt r}\cos(kr-\omega t)\)。</li>
+    <li><strong>反平方律</strong>：球面波 \(I=P/(4\pi r^2)\)。</li>
+    <li><strong>dB 标度</strong>：\(\beta=10\log_{10}(I/I_0)\)，\(I_0=10^{-12}\) W/m²；距离倍增 → \(-6\) dB。</li>
+    <li><strong>声速</strong>：\(v=\sqrt{B/\rho}\approx 343\) m/s（20°C 空气）。</li>
+    <li><strong>人耳听域</strong>：20 Hz – 20 kHz；痛阈 ≈ 120 dB；正常说话 60 dB。</li>
+    <li><strong>声强物理上限</strong>：\(p_{\max}\le P_{\text{atm}}\Rightarrow I_{\max}\approx 1.2\times 10^7\) W/m² ↔ 191 dB（教科书约定值 194 dB 用 \(p_{\text{rms}}=P_{\text{atm}}\) 给出，不严格可达）。</li>
+  </ul>
+</div>
+
+<!-- ======================================================== -->
+
+<h2>§1 故事线：从 1D 到 3D</h2>
+
+<p>1D 波（弦）有一个空间方向；3D 波（声、光、地震波）有三个。当声源是<em>一个点</em>而不是<em>一根线</em>时，波从源处向四面八方传开，能量像吹起的气球一样被摊薄到不断扩大的球面上——这就是<strong>球面波</strong>。</p>
+
+<p>把这个图像写成方程：3D 波动方程是 1D 方程的自然推广，把 \(\partial_x^2\) 替换成 Laplacian \(\nabla^2\)：</p>
+
+<p>$$ \boxed{\;\nabla^2\psi = \frac{1}{v^2}\frac{\partial^2\psi}{\partial t^2}\;.\;}\tag{1.1}$$</p>
+
+<p>本节从这条方程出发，导出球面/柱面波解，对接到声学测量里使用的 dB 标度，最后讨论声波的物理上下限。</p>
+
+<!-- ======================================================== -->
+
+<h2>§2 球面波</h2>
+
+<h3>2.1 解的形式</h3>
+
+<p>对球对称问题，Laplacian 在球坐标下：</p>
+
+<p>$$ \nabla^2\psi = \frac{1}{r^2}\frac{\partial}{\partial r}\!\left(r^2\frac{\partial\psi}{\partial r}\right). $$</p>
+
+<p>如果令 \(\phi\equiv r\psi\)，则恒等式 \(\nabla^2\psi=\partial_r^2(r\psi)/r=\partial_r^2\phi/r\)。代入波动方程：</p>
+
+<p>$$ \frac{1}{r}\frac{\partial^2(r\psi)}{\partial r^2}=\frac{1}{v^2 r}\frac{\partial^2(r\psi)}{\partial t^2}. $$</p>
+
+<p>消公因子 \(1/r\)，对 \(\phi=r\psi\) 它就是 1D 波动方程！于是普适解 \(\phi=f(r-vt)+g(r+vt)\)，即</p>
+
+<p>$$ \boxed{\;\psi(r,t)=\frac{1}{r}\bigl[f(r-vt)+g(r+vt)\bigr]\;.\;}\tag{2.1}$$</p>
+
+<p>形式：任意波形传播，但<em>振幅按 \(1/r\) 衰减</em>。</p>
+
+<h3>2.2 简谐球面波</h3>
+
+<p>取 \(f\) 为正弦：</p>
+
+<p>$$ \psi(r,t)=\frac{A}{r}\cos(kr-\omega t). $$</p>
+
+<details class="more-detail">
+  <summary>展开：直接验证</summary>
+  <p>计算 \(\nabla^2\psi\)：用 \(\nabla^2\psi=\partial_r^2(r\psi)/r\)。\(r\psi=A\cos(kr-\omega t)\)，\(\partial_r^2(r\psi)=-Ak^2\cos(kr-\omega t)\)。所以 \(\nabla^2\psi=-Ak^2\cos(\cdot)/r\)。
+  时间导：\(\partial_t^2\psi=-A\omega^2\cos(\cdot)/r\)。
+  代入波动方程：\(-Ak^2\cos/r=(1/v^2)(-A\omega^2\cos/r)\)，化简得 \(\omega^2=v^2k^2\) ✓ 色散关系不变。</p>
+</details>
+
+<h3>2.3 强度与反平方律</h3>
+
+<p>声强（intensity）= 单位面积单位时间通过的能量。对各向同性球面波，<strong>所有功率穿过任一以源为中心的球面</strong>。所以：</p>
+
+<p>$$ P_{\text{源}} = I(r)\cdot 4\pi r^2 \;\Longrightarrow\;\boxed{\;I(r)=\frac{P}{4\pi r^2}\;.\;}\tag{2.2}$$</p>
+
+<p>这就是著名的<strong>反平方律</strong>。它跟<em>振幅按 \(1/r\) 衰减</em>是同一回事——能量正比于振幅平方，按 \(1/r^2\) 衰减。源头辐射出的能量被均匀摊到不断扩大的球面上。</p>
+
+<div class="box remark">
+  <p class="box-title">距离倍增 = 强度变四分之一 = 减 6 dB</p>
+  <p>对球面波，\(I\propto 1/r^2\)。\(r\to 2r\) 给 \(I\to I/4\)。换成 dB：\(\Delta\beta=10\log_{10}(1/4)\approx -6\) dB。这就是声学上的<strong>"6 dB 律"</strong>——离声源远一倍，听起来减 6 dB（响度感约减半）。这是消防警报、演唱会音响、广告车喇叭等场合的设计基础。</p>
+</div>
+
+<!-- ======================================================== -->
+
+<h2>§3 柱面波</h2>
+
+<p>线状（无穷长）声源（高速公路上的车流、地铁隧道、燕尾蛛吐丝）发出的波是<strong>柱面波</strong>，能量摊到不断扩大的圆柱表面（周长 \(2\pi r\) × 单位长度）。所以</p>
+
+<p>$$ I_{\text{cyl}}\propto 1/r,\qquad \psi_{\text{cyl}}\propto 1/\sqrt r. $$</p>
+
+<h3>3.1 严格形式：Bessel 函数</h3>
+
+<p>2D 极坐标 Laplacian \(\nabla^2\psi=(1/r)\partial_r(r\partial_r\psi)\)。试 \(\psi=R(r)\cos(\omega t)\) 给 Bessel 微分方程。两类解 \(J_0(kr)\) 与 \(Y_0(kr)\)。物理（远离源处的传播波）选择对应于 Hankel 函数 \(H_0^{(1,2)}(kr)\)，远场行为：</p>
+
+<p>$$ H_0^{(1)}(kr)\sim \sqrt{\frac{2}{\pi kr}}\,e^{i(kr-\pi/4)},\qquad kr\gg 1. $$</p>
+
+<p>近似：</p>
+
+<p>$$ \boxed{\;\psi(r,t)\approx \frac{A}{\sqrt r}\cos(kr-\omega t-\pi/4)\;,\;}\quad \text{(远场柱面波)} \tag{3.1}$$</p>
+
+<p>振幅 \(\propto 1/\sqrt r\)，强度 \(\propto 1/r\)，距离倍增 \(\Delta\beta=-3\) dB。这是为什么沿高速公路噪声的衰减比点状汽笛慢一半（按 dB 算）。</p>
+
+<!-- ======================================================== -->
+
+<h2>§4 dB 标度</h2>
+
+<h3>4.1 定义</h3>
+
+<p>人耳能听到的声强从 \(I_0=10^{-12}\) W/m²（标定听阈）到 \(\sim 1\) W/m²（痛阈）覆盖<strong>12 个数量级</strong>。线性表示完全没法用，所以用对数：</p>
+
+<p>$$ \boxed{\;\beta=10\log_{10}\!\frac{I}{I_0}\,,\quad I_0=10^{-12}\text{ W/m}^2\;.\;}\tag{4.1}$$</p>
+
+<p>单位：dB（decibel = 1/10 bel）。0 dB = \(I_0\) = 听阈；120 dB = 1 W/m² = 痛阈。</p>
+
+<h3>4.2 几个有用的等价</h3>
+
+<table class="formula-table">
+  <tbody>
+    <tr><th>声强变化 ×2</th><td>\(+3\) dB</td></tr>
+    <tr><th>声强变化 ×10</th><td>\(+10\) dB</td></tr>
+    <tr><th>声强变化 ×100</th><td>\(+20\) dB</td></tr>
+    <tr><th>距离倍增（球面波）</th><td>\(-6\) dB</td></tr>
+    <tr><th>距离倍增（柱面波）</th><td>\(-3\) dB</td></tr>
+    <tr><th>响度感觉减半（人耳）</th><td>\(\approx -10\) dB</td></tr>
+  </tbody>
+</table>
+
+<h3>4.3 常见声强参考</h3>
+
+<table class="data-table">
+  <thead>
+    <tr><th>声音</th><th>dB</th><th>I (W/m²)</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>人耳听阈</td><td>0</td><td>\(10^{-12}\)</td></tr>
+    <tr><td>耳语 (1 m)</td><td>30</td><td>\(10^{-9}\)</td></tr>
+    <tr><td>正常说话</td><td>60</td><td>\(10^{-6}\)</td></tr>
+    <tr><td>繁忙街道</td><td>80</td><td>\(10^{-4}\)</td></tr>
+    <tr><td>电锯 (1 m)</td><td>110</td><td>\(0.1\)</td></tr>
+    <tr><td>痛阈 / 耳膜损伤</td><td>120</td><td>\(1\)</td></tr>
+    <tr><td>喷气客机起飞 (50 m)</td><td>140</td><td>\(100\)</td></tr>
+    <tr><td>近距离枪声</td><td>160</td><td>\(10^4\)</td></tr>
+    <tr><td>大气物理上限（严格）</td><td>~191</td><td>\(1.22\times 10^7\)</td></tr>
+  </tbody>
+</table>
+
+<h3>4.4 多源叠加：dB <em>不</em>线性</h3>
+
+<p>常见错误："两个 60 dB 的声源加起来 = 120 dB"。错。强度才线性叠加（不相干）：\(I_{\text{tot}}=2 I_0\Rightarrow \beta_{\text{tot}}=\beta+3\) dB。<strong>两个等强度声源 = +3 dB</strong>，不是翻倍。</p>
+
+<div class="box warning">
+  <p class="box-title">人耳的"响度"≠ 声强</p>
+  <p>人耳的"响度"是<strong>对数感知</strong>。同样响度变化对应同样的 dB 增量，而不是同样的 W/m²。心理物理学规律说：响度感觉<em>减半</em>大约对应 \(-10\) dB（声强减为 1/10），<em>不是</em> \(-3\) dB（强度减半）。这是为什么音响产业普遍用 dB 而不用瓦特。</p>
+</div>
+
+<!-- ======================================================== -->
+
+<h2>§5 声速 v=√(B/ρ)</h2>
+
+<h3>5.1 公式</h3>
+
+<p>声波在空气里的速度（详细推导见 04 节）：</p>
+
+<p>$$ v=\sqrt{\frac{B}{\rho}}, \tag{5.1}$$</p>
+
+<p>其中 \(B\) 是空气的<strong>绝热</strong> bulk modulus（声波频率太高来不及与外界换热，所以是绝热而非等温过程）。理想气体 \(B_{\text{adiabatic}}=\gamma P\)（\(\gamma=c_p/c_v\approx 1.4\) for air）。代入：</p>
+
+<p>$$ v = \sqrt{\frac{\gamma P}{\rho}}=\sqrt{\frac{\gamma R T}{M}}. $$</p>
+
+<p>20°C 空气：\(v\approx 343\) m/s。0°C：\(v\approx 331\) m/s。每升温 1°C，声速增加约 0.6 m/s。</p>
+
+<h3>5.2 氦气音 (helium voice)</h3>
+
+<p>氦的摩尔质量是空气的 \(\sim 1/7\) 倍（4 vs 29 g/mol），\(\gamma\) 同（5/3 vs 7/5，相近）：</p>
+
+<p>$$ \frac{v_{\text{He}}}{v_{\text{air}}}=\sqrt{\frac{29/4\cdot 1.67/1.4}{1}}\approx \sqrt{8.63}\approx 2.94. $$</p>
+
+<p>声速变约 2.9 倍。但人声的<em>声带</em>振动频率不变（决定于声带物理结构），而<em>共鸣腔</em>（口腔/咽腔）的共振频率 \(f_n\propto v\)。共振频率上调 ≈ 2.9 倍，使得声音"听起来"高了大约一个半八度——这就是吸氦气讲话的鸭子声效。</p>
+
+<h3>5.3 声学量之间的桥接关系</h3>
+
+<p>声波里有四个基本振幅参数互相挂钩：分子位移 \(S_0\)、分子速度峰值 \(\omega S_0\)、压强振幅 \(p_0\)、强度 \(I\)。下面是<strong>课程必背</strong>的三组关系（完整推导见 <a href="04_sound_microscopic.html">04 节 §5–§7</a>，这里只总结结论与直觉）：</p>
+
+<div class="box key-result">
+  <p class="box-title">三组桥接公式</p>
+  <p>$$ \boxed{\;\;p_0=Z\,\omega S_0\;,\quad Z\equiv\rho v\;\;}\tag{5.3a}$$</p>
+  <p>$$ \boxed{\;\;I=\tfrac12\rho v\,\omega^2 S_0^2\;\;}\tag{5.3b}$$</p>
+  <p>$$ \boxed{\;\;I=\frac{p_0^2}{2\rho v}=\frac{p_0^2}{2Z}\;\Longleftrightarrow\;p_0=\sqrt{2\rho v\,I}\;\;}\tag{5.3c}$$</p>
+</div>
+
+<p>其中 \(Z=\rho v\) 是<strong>声学阻抗</strong>（acoustic impedance），单位 Pa·s/m（也叫 rayl）。空气 20°C 下 \(Z\approx 1.225\cdot 343\approx 420\) rayl。</p>
+
+<h4>这些公式从哪来？</h4>
+
+<p><strong>(5.3a)</strong> 来自把声波的分子位移 \(S=S_0\sin(kx-\omega t)\) 代入声学本构关系 \(p=-B\,\partial S/\partial x\)（即"压强差由介质压缩产生"）。配合声速定义 \(v^2=B/\rho\) 化简后，压强振幅 \(p_0=Bk S_0=\rho v\cdot \omega S_0\)。直觉：分子<em>速度</em>越大，对邻居挤压越剧烈，压强越高。\(Z=\rho v\) 就是这"速度↔压强"的转换系数。</p>
+
+<div class="box remark">
+  <p class="box-title">B 是什么？体积模量 (bulk modulus)</p>
+  <p>\(B\) 衡量介质"<em>抗压缩</em>的硬度"，定义</p>
+  <p>$$ B \equiv -V\,\frac{\partial P}{\partial V} \quad\text{(单位 Pa)}. $$</p>
+  <p>\(B\) 越大越"硬"（越难压缩）。常见值：</p>
+  <ul>
+    <li>空气（绝热，1 atm）：\(B=\gamma P_{\text{atm}}\approx 1.4\times 10^5\) Pa</li>
+    <li>水：\(B\approx 2.2\times 10^9\) Pa（比空气硬 \(\sim 10^4\) 倍——这是"水不可压缩"近似的来源）</li>
+    <li>钢：\(B\sim 10^{11}\) Pa</li>
+  </ul>
+  <p>由 \(B\) 的定义，体积压缩比例 \(\Delta V/V=\partial S/\partial x\) 直接给压强 \(p=-B\,\partial S/\partial x\)——把流体当"弹性弹簧"，\(B\) 扮演劲度的角色。注意 (5.3a) 最终的 \(Z=\rho v=\sqrt{\rho B}\) 把 \(B\) 与 \(\rho\) 的几何平均挑出来作为"阻抗"。</p>
+  <p><em>详细推导与 Newton/Laplace 的等温 vs 绝热修正：参 <a href="04_sound_microscopic.html">04 §2 + §8</a>；流体不可压缩极限的物理：参 <a href="06_fluid_statics.html">06 §3</a>。</em></p>
+</div>
+
+<p><strong>(5.3b)</strong> 来自能量密度。声波的动能密度 \(\tfrac12\rho(\partial_t S)^2\) 与势能密度 \(\tfrac12 B(\partial_x S)^2\) 在传播波里时刻相等（KE=PE），平均能量密度 \(\bar\varepsilon=\tfrac12\rho\omega^2 S_0^2\)。强度 = 能量密度 × 传播速度：</p>
+<p>$$ I=\bar\varepsilon\cdot v=\tfrac12\rho v\omega^2 S_0^2. $$</p>
+
+<p><strong>(5.3c)</strong> 把 (5.3a) 解出 \(\omega S_0=p_0/(\rho v)\) 代入 (5.3b)：</p>
+<p>$$ I=\tfrac12\rho v\cdot\frac{p_0^2}{(\rho v)^2}=\frac{p_0^2}{2\rho v}. $$</p>
+<p>反解就是 §8 例题里用到的 \(\boxed{p_0=\sqrt{2\rho v I}}\)。</p>
+
+<div class="box remark">
+  <p class="box-title">直觉记忆法</p>
+  <p>把声波类比成简谐振子：每个分子做 SHM，振幅 \(S_0\)、最大速度 \(\omega S_0\)、单位体积平均动能 \(\tfrac12\rho(\omega S_0)^2/2\)（再加同样大小的势能）。\(I\) 就是这个能量密度乘以波速 \(v\)。和电学里 \(P=V^2/R\)（用电压求功率）的结构完全一样：把 \(p_0\) 当电压、\(Z\) 当电阻。</p>
+</div>
+
+<h4>检查：60 dB 谈话声 → \(p_0\)、\(S_0\)、\(\omega S_0\)</h4>
+
+<p>\(I=10^{-6}\) W/m² (60 dB)，\(\rho=1.225\), \(v=343\), \(f=1\) kHz：</p>
+
+<table class="formula-table">
+  <tbody>
+    <tr><th>(5.3c) → \(p_0\)</th>
+        <td>\(\sqrt{2\cdot 1.225\cdot 343\cdot 10^{-6}}\approx 0.029\) Pa</td></tr>
+    <tr><th>(5.3a) → \(\omega S_0\) → \(S_0\)</th>
+        <td>\(\omega S_0=p_0/Z=0.029/420\approx 7\times 10^{-5}\) m/s；\(S_0\approx 1.1\times 10^{-8}\) m \(=11\) nm</td></tr>
+    <tr><th>验算 (5.3b)</th>
+        <td>\(\tfrac12\cdot 1.225\cdot 343\cdot (2\pi\cdot 10^3)^2\cdot (1.1\times 10^{-8})^2\approx 10^{-6}\) W/m² ✓</td></tr>
+  </tbody>
+</table>
+
+<p>三个公式自洽，记住任意一个 + \(Z=\rho v\) 就能推出其他两个。</p>
+
+<!-- ======================================================== -->
+
+<h2>§6 人耳听域与声波的物理上限</h2>
+
+<h3>6.1 听域 20 Hz – 20 kHz</h3>
+
+<p>对应波长（空气中）：</p>
+<ul>
+  <li>20 Hz: \(\lambda=v/f=343/20=17.2\) m（次低音）</li>
+  <li>20 kHz: \(\lambda=343/20000=1.7\) cm（次高音）</li>
+</ul>
+
+<p>人耳听域以下叫次声波 (infrasound)，以上叫超声波 (ultrasound)。鲸鱼在次声段通信（声波传得远）；蝙蝠、海豚在超声段定位（波长短，分辨细节）。</p>
+
+<h3>6.2 痛阈与耳膜损伤：120 dB / 1 W/m² / p₀ ≈ 29 Pa</h3>
+
+<p>120 dB 对应 \(I=1\) W/m²。压强振幅由 §5.3 的 (5.3c) 反解 \(p_0=\sqrt{2\rho v I}\)：</p>
+
+<p>$$ p_0=\sqrt{2\rho v I}=\sqrt{2\cdot 1.225\cdot 343\cdot 1}\approx 29\text{ Pa}. $$</p>
+
+<p>仅约大气压的 \(3\times 10^{-4}\)，但已足以损伤耳膜。</p>
+
+<h3>6.3 物理上限：p₀ ≤ P_atm ⇒ ~191 dB</h3>
+
+<p>声压<em>振幅</em>不能超过大气压（否则在低压相位会出现"负绝对压"，物理上意味着真空裂口/激波）。所以 \(p_{\max}\le P_{\text{atm}}=1.013\times 10^5\) Pa：</p>
+
+<p>$$ I_{\max}=\frac{p_{\max}^2}{2\rho v}=\frac{(1.013\times 10^5)^2}{2\cdot 1.225\cdot 343}\approx 1.22\times 10^7\text{ W/m}^2. $$</p>
+
+<p>对应 dB（用 \(I_0=10^{-12}\) W/m² 标定）：</p>
+
+<p>$$ \beta_{\max}=10\log_{10}(1.22\times 10^{19})\approx 191\text{ dB}. $$</p>
+
+<div class="box remark">
+  <p class="box-title">"194 dB 上限"是哪来的？</p>
+  <p>很多教材引用<strong>194 dB</strong>作为大气声压上限，这来自另一种约定：用<em>有效压强</em> \(p_{\text{rms}}\) 配上 SPL 公式 \(\beta=20\log_{10}(p_{\text{rms}}/p_{\text{ref}})\)（\(p_{\text{ref}}=20\) μPa）。若取 \(p_{\text{rms}}=P_{\text{atm}}\) 而非 \(p_{\max}=P_{\text{atm}}\)，得到 \(\beta\approx 194.1\) dB。但这要求 \(p_{\max}=\sqrt{2}\,P_{\text{atm}}\) — 严格已超出"压强不能为负"的物理约束。所以两种数值都流传：</p>
+  <ul>
+    <li><strong>191 dB</strong>：严格物理上限（\(p_{\max}=P_{\text{atm}}\)，对应 \(I=1.22\times 10^7\) W/m²）；</li>
+    <li><strong>194 dB</strong>：教科书约定值（\(p_{\text{rms}}=P_{\text{atm}}\)，理论上不可达，但常被引用）。</li>
+  </ul>
+  <p>本节使用前者。超过这个上限，"线性声波"失效，进入<strong>激波 (shock wave)</strong> 区——压强不连续阶跃、能量耗散非线性，方程变成 Burgers / Rankine-Hugoniot 那一套。</p>
+</div>
+
+<h3>6.4 物理下限：热噪声 ≈ -24 dB</h3>
+
+<p>空气分子的热布朗运动对耳膜的随机推搡产生本底噪声。由<strong>能量均分定理</strong> (equipartition theorem) 估算的等效压强 RMS 约 \(1.2\) μPa，对应 \(I=p^2/(\rho v)\sim 1.7\times 10^{-15}\) W/m² ≈ \(-28\) dB。教材常引用 \(\sim -23\) 到 \(-24\) dB（取决于带宽与精确常数选择）。这就是为什么人耳的灵敏度被设计在 0 dB 附近——再灵敏也会被自己分子撞击的噪声淹没。</p>
+
+<div class="box insight">
+  <p class="box-title">声波的物理频率范围 vs 听域</p>
+  <p>声波作为<em>压强扰动</em>，物理上能存在的频率范围远比人耳听域宽：</p>
+  <ul>
+    <li>下限：\(f\ge 1/T_{\text{宇宙年龄}}\approx 10^{-17}\) Hz（任何概念上的下限），实际的下限是地震波 \(\sim 10^{-3}\) Hz；</li>
+    <li>上限：当 \(\lambda\) 接近空气分子<strong>平均自由程</strong>（\(\sim 10^{-7}\) m at 1 atm）时，连续介质近似失效，"声波"变成单分子运动；对应 \(f_{\max}\sim v/\lambda_{\min}\sim 10^{10}\) Hz \(\sim 10\) GHz。</li>
+  </ul>
+  <p>人耳的 20 Hz – 20 kHz 是<em>生理</em>限制（耳膜振动模式、神经响应），不是<em>物理</em>限制。蝙蝠超声 (\(\sim 100\) kHz)、医用诊断超声 (1–10 MHz)、超声波清洗 (40 kHz) 都在物理上限以内。</p>
+</div>
+
+<!-- ======================================================== -->
+
+<h2>§7 交互：球面波声强与 dB</h2>
+
+<div class="box interactive">
+  <p class="box-title">距离对声强 / dB 的影响</p>
+  <p>固定一个 1 W 的点状声源（相当于一个工业噪声）。拖动距离滑块看 \(I\) 与 \(\beta\) 怎么变。比较 1 m、10 m、100 m 几个特征距离的对数衰减。</p>
+
+  <div class="widget">
+    <canvas id="dB-canvas" width="600" height="300"></canvas>
+    <div class="controls">
+      <div class="control-row">
+        <label>距离 r</label>
+        <input type="range" id="dB-r" min="0.5" max="500" step="0.5" value="10" />
+        <span class="readout" id="dB-r-readout"></span>
+      </div>
+      <div class="control-row">
+        <label></label>
+        <span style="font-size:.85rem;color:#6b7280">
+          I = <span id="dB-I" style="font-family:Menlo,monospace;color:#0f766e"></span>，
+          β = <span id="dB-beta" style="font-family:Menlo,monospace;color:#0f766e"></span>
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ======================================================== -->
+
+<h2>§8 Worked Examples</h2>
+
+<div class="example">
+  <h4>Example：从 dB 反算声强与压强振幅</h4>
+  <p class="source">改编自 Shankar §19 例</p>
+  <p>正常说话约 60 dB。求 (a) 声强 \(I\)；(b) 压强振幅 \(p_0\)；(c) 它对应空气分子的位移振幅 \(S_0\)（频率取 1 kHz）。</p>
+
+  <div class="solution-step"><strong>(a)</strong> \(\beta=60\) dB：
+    $$ \frac{I}{I_0}=10^{6}\;\Longrightarrow\;I=10^{-12}\cdot 10^{6}=10^{-6}\text{ W/m}^2. $$
+  </div>
+
+  <div class="solution-step"><strong>(b)</strong> \(p_0=\sqrt{2\rho v I}=\sqrt{2\cdot 1.225\cdot 343\cdot 10^{-6}}\approx 0.029\) Pa.
+    远小于大气压 \(10^5\) Pa——线性声学近似（\(p_0\ll P_{\text{atm}}\)）成立。
+  </div>
+
+  <div class="solution-step"><strong>(c)</strong> 由 04 节的关系 \(p_0=\rho v\omega S_0\)（声学阻抗 \(\rho v\)，分子最大速度 \(\omega S_0\)）：
+    $$ S_0 = \frac{p_0}{\rho v\omega}=\frac{0.029}{1.225\cdot 343\cdot 2\pi\cdot 1000}\approx 1.1\times 10^{-8}\text{ m}=11\text{ nm}. $$
+    分子位移仅约 11 纳米——比头发丝直径还小近 1 万倍！但人耳依然能听见。这表明耳朵是个<strong>极端灵敏</strong>的传感器，灵敏度受限于分子热涨落。
+  </div>
+</div>
+
+<div class="example">
+  <h4>Example：两个声源叠加</h4>
+  <p class="source">改编自 OpenStax 17</p>
+  <p>三个独立、不相干声源每个单独都是 70 dB。三个一起开有多少 dB？</p>
+
+  <div class="solution-step"><strong>不相干声源的强度线性相加</strong>：\(I_{\text{tot}}=3 I_1\)。
+    $$ \beta_{\text{tot}}=\beta_1+10\log_{10}(3)\approx 70+4.77\approx 74.8\text{ dB}. $$
+  </div>
+
+  <div class="solution-step"><strong>对比"算术加"误解</strong>：常见错误算成 \(70+70+70=210\) dB——这是把 dB 当成线性单位累加。其实三个噪声只比一个响约 5 dB，听起来略响一点，绝不是 3 倍。这就是为什么大型工厂里加一台机器并不显著提升噪声水平：dB 是<em>对数</em>。</div>
+</div>
+
+<div class="example">
+  <h4>Problem (★ harder)：高速公路边距离 vs 噪声</h4>
+  <p class="source">改编自 OpenStax 17 problem set</p>
+  <p>某高速公路是一条直线噪声源（柱面波）。在距路 50 m 处实测 65 dB。</p>
+  <p>(a) 距路 200 m 处预期 dB？(b) 一个住宅小区噪声标准是 55 dB——按柱面波传播，要离公路多远？(c) 如果把高速公路看成"点声源"（球面波，例如把整段公路作为一个汽笛），同样的距离衰减结果会怎样？</p>
+
+  <div class="solution-step"><strong>(a) 柱面波</strong>：\(I\propto 1/r\)，所以 \(\beta\) 减少 \(10\log_{10}(r/r_0)\)。
+    $$ \Delta\beta=10\log_{10}(200/50)=10\log_{10}(4)=6\text{ dB}. $$
+    距路 200 m 处约 \(65-6=59\) dB。
+  </div>
+
+  <div class="solution-step"><strong>(b)</strong> 要 \(\beta=55\) dB，需要 \(\Delta\beta=10\) dB 的衰减：
+    $$ 10\log_{10}(r/50)=10\;\Longrightarrow\;r/50=10\;\Longrightarrow\;r=500\text{ m}. $$
+    住宅小区最少要离公路 0.5 km。这就是城市规划里"道路缓冲带"的基础。
+  </div>
+
+  <div class="solution-step"><strong>(c) 球面波对比</strong>：\(\Delta\beta=20\log_{10}(r/r_0)\)：
+    <ul>
+      <li>200 m 处：\(\Delta\beta=20\log_{10}(4)\approx 12\) dB → \(65-12=53\) dB（更安静）</li>
+      <li>要降到 55 dB：\(20\log_{10}(r/50)=10\Rightarrow r/50=\sqrt{10}\approx 3.16\Rightarrow r\approx 158\) m。</li>
+    </ul>
+    球面波模型给出小得多的缓冲距离。<strong>真实情况介于二者之间</strong>——公路有边界（不是真无穷长），近场看起来更像柱面，远场（\(r\gg L\)）退化成球面。这是噪声测量与公共政策中需要慎重区分的。
+  </div>
+</div>
+
+<div class="example">
+  <h4>Problem (★★ challenge)：耳膜损伤的物理边界</h4>
+  <p class="source">改编自 Shankar §19 problem set</p>
+  <p>(a) 找出 120 dB 时 \(p_0/P_{\text{atm}}\) 的数值，验证线性声学的合理性。<br>
+  (b) 求让线性声学失效（\(p_0\sim P_{\text{atm}}/10\)）的 dB 数值。<br>
+  (c) 一个汽车气球破裂瞬间（在仪器附近 1 m 处）测得 165 dB——这种强度对应的分子位移振幅 \(S_0\)（取 \(f=1\) kHz）是多少？</p>
+
+  <div class="solution-step"><strong>(a)</strong> 120 dB \(\Rightarrow I=1\) W/m²，\(p_0=\sqrt{2\rho v I}\approx 29\) Pa。
+    $$ \frac{p_0}{P_{\text{atm}}}=\frac{29}{1.013\times 10^5}\approx 2.9\times 10^{-4}. $$
+    线性近似 \(p_0\ll P_{\text{atm}}\) 仍很好——耳膜在这强度下振幅不大但已经无法承受。
+  </div>
+
+  <div class="solution-step"><strong>(b)</strong> 线性失效 \(p_0\sim P_{\text{atm}}/10=10^4\) Pa。
+    $$ I=\frac{p_0^2}{2\rho v}=\frac{10^8}{840}\approx 1.2\times 10^5\text{ W/m}^2.
+       \quad\beta=10\log_{10}(1.2\times 10^{17})\approx 170\text{ dB}. $$
+    超过 170 dB 后线性声学不再适用，必须考虑非线性（激波正在形成）。
+  </div>
+
+  <div class="solution-step"><strong>(c)</strong> 165 dB \(\Rightarrow I=10^{16.5-12}=10^{4.5}\approx 3.16\times 10^4\) W/m²。
+    $$ p_0=\sqrt{2\rho v I}=\sqrt{2\cdot 1.225\cdot 343\cdot 3.16\times 10^4}\approx 5170\text{ Pa}\approx 0.05 \text{ atm}. $$
+    分子位移：\(S_0=p_0/(\rho v\omega)\)：
+    $$ S_0=\frac{5170}{1.225\cdot 343\cdot 2\pi\cdot 1000}\approx 1.96\text{ mm}. $$
+    在气球破裂中心，分子瞬间位移 \(\sim 2\) mm——人眼可见尺度的"风"！这是为什么近距离爆炸的冲击波能直接撕裂物体。
+  </div>
+
+  <div class="solution-step"><strong>注意</strong>：\(\sim 2\) mm 已经对应了<em>线性</em>声学的边缘——分子位移 \(S_0\) 与典型分子间距 \(\sim 3\) nm 相比已大一百万倍，但与波长 (\(v/f\sim 0.34\) m at 1 kHz) 相比仍小，所以"长波长极限"还成立。要是想让线性近似真的失效，得把 \(S_0\) 与 \(\lambda\) 比较的尺度推得更高，进入非线性声学（激波形成）。</div>
+</div>
+
+<!-- ======================================================== -->
+
+<h2>§9 Self-check</h2>
+
+<div class="self-check">
+  <p class="question">Q1. 你站在距音响 5 米处听到 80 dB。如果走到 50 米外，按球面波估计听到多少？</p>
+  <details>
+    <summary>查看答案</summary>
+    <p>距离倍增减 6 dB；这里距离 ×10 = ×2³·²，每倍 \(-6\) 累计 \(-20\) dB。所以听到 60 dB。或直接用 \(\Delta\beta=20\log_{10}(50/5)=20\) dB \(\Rightarrow\) 80 \(-\) 20 = 60 dB。✓ 正常说话强度。</p>
+  </details>
+</div>
+
+<div class="self-check">
+  <p class="question">Q2. 两个相同的扬声器同步发出相干（同频同相）的 70 dB 声波。两声波<em>建设性</em>叠加时合声多少 dB？</p>
+  <details>
+    <summary>查看答案</summary>
+    <p>相干叠加时<strong>振幅</strong>翻倍，<strong>强度</strong>变 4 倍：\(\Delta\beta=10\log_{10}(4)=6\) dB。所以合声 76 dB（不是 73 dB——那是不相干叠加的结果）。这是为什么扬声器阵列、麦克风的相位匹配、音响系统的多路叠加要严肃对待。</p>
+  </details>
+</div>
+
+<div class="self-check">
+  <p class="question">Q3. 喷气客机起飞 130 dB（在 100 m 距离）。一架飞机降到 110 dB 需要多远（球面波）？</p>
+  <details>
+    <summary>查看答案</summary>
+    <p>\(\Delta\beta=20\) dB ⇒ \(20\log_{10}(r/100)=20\Rightarrow r/100=10\Rightarrow r=1000\) m。距离要拉到 1 km 才衰减到 110 dB。这就是为什么机场跑道末端往往有大片缓冲区，而周边居民仍然抱怨噪声。实际还有大气吸收、地面反射、风向风速等修正。</p>
+  </details>
+</div>
+
+<div class="self-check">
+  <p class="question">Q4. 声波在水里 (\(v\approx 1500\) m/s, \(\rho\approx 10^3\) kg/m³) 与在空气中传播。同样压强振幅 \(p_0\)，水中声强是空气中的多少倍？</p>
+  <details>
+    <summary>查看答案</summary>
+    <p>\(I=p_0^2/(2\rho v)\)。水的 \(\rho v\) 比空气大约 \(10^3\cdot 1500/(1.225\cdot 343)\approx 3570\) 倍。所以同 \(p_0\) 下水中声强<em>小</em>得多（小 \(\sim 3570\) 倍 ≈ \(-35\) dB）。反过来，要在水里得到同样<em>声强</em>，需要 \(\sqrt{3570}\approx 60\) 倍的压强振幅——这是为什么水下声呐发射器要做得非常坚固。"声学阻抗" \(\rho v\) 表征的就是这种媒质间的"匹配"。</p>
+  </details>
+</div>
+
+<div class="self-check">
+  <p class="question">Q5. 蝙蝠用 100 kHz 超声波定位。波长大约多少？这跟蝙蝠想"分辨"的目标尺寸 (\(\sim 1\) cm 的小昆虫）相比怎样？</p>
+  <details>
+    <summary>查看答案</summary>
+    <p>\(\lambda=v/f=343/10^5\approx 3.4\) mm。比蝙蝠目标（1 cm 昆虫）<em>小</em>，所以衍射效应不严重，波能"看见"目标的几何细节——这就是蝙蝠用高频的原因（短波长 = 高分辨率）。人耳可听域 (20 kHz 上限对应 \(\lambda=1.7\) cm) 已经无法精细分辨小尺寸细节，所以人类只能听整体声音、不能"看"声音里的小目标。同理：医用超声 1-10 MHz \(\lambda\sim 0.15-1.5\) mm 在水里，刚好够分辨人体内毫米级结构。</p>
+  </details>
+</div>
+
+<!-- ======================================================== -->
+
+<h2>§10 公式速查表</h2>
+
+<table class="formula-table">
+  <tbody>
+    <tr><th>3D 波动方程</th><td>\(\nabla^2\psi=(1/v^2)\partial_t^2\psi\)</td></tr>
+    <tr><th>球面波（精确）</th><td>\(\psi=(A/r)\cos(kr-\omega t)\)</td></tr>
+    <tr><th>柱面波（远场）</th><td>\(\psi\approx (A/\sqrt r)\cos(kr-\omega t)\)</td></tr>
+    <tr><th>球面波反平方律</th><td>\(I=P/(4\pi r^2)\)，距离倍增 \(-6\) dB</td></tr>
+    <tr><th>柱面波</th><td>\(I\propto 1/r\)，距离倍增 \(-3\) dB</td></tr>
+    <tr><th>dB 定义</th><td>\(\beta=10\log_{10}(I/I_0)\)，\(I_0=10^{-12}\) W/m²</td></tr>
+    <tr><th>多源不相干叠加</th><td>\(I_{\text{tot}}=\sum I_i\)；两个等强度源 \(+3\) dB</td></tr>
+    <tr><th>多源相干（同相）叠加</th><td>振幅相加、强度 ×4；\(+6\) dB</td></tr>
+    <tr><th>声速（理想气体）</th><td>\(v=\sqrt{\gamma RT/M}\)；空气 20°C \(\approx 343\) m/s</td></tr>
+    <tr><th>压强振幅 ↔ 强度</th><td>\(I=p_0^2/(2\rho v)\)</td></tr>
+    <tr><th>位移振幅 ↔ 压强振幅</th><td>\(p_0=\rho v\omega S_0\)</td></tr>
+    <tr><th>痛阈</th><td>120 dB ↔ 1 W/m² ↔ \(p_0\approx 29\) Pa</td></tr>
+    <tr><th>大气物理上限</th><td>\(p_{\max}\le P_{\text{atm}}\Rightarrow\) 191 dB ↔ \(1.22\times 10^7\) W/m²（约定值 194 dB 不严格可达）</td></tr>
+    <tr><th>热噪声底</th><td>\(\sim -24\) dB ↔ \(p_0\sim 1.2\) μPa</td></tr>
+    <tr><th>人耳听域</th><td>20 Hz – 20 kHz</td></tr>
+    <tr><th>氦气音</th><td>\(v_{\text{He}}/v_{\text{air}}\approx 2.9\)；共振频率上调约同倍</td></tr>
+  </tbody>
+</table>
+
+<!-- ======================================================== -->
+
+<div class="glossary">
+  <h2>术语表</h2>
+  <dl>
+    <dt>球面波 (spherical wave)</dt>
+    <dd>从点源向各方向传播；振幅 \(\propto 1/r\)，强度 \(\propto 1/r^2\)。</dd>
+
+    <dt>柱面波 (cylindrical wave)</dt>
+    <dd>从无限长线源传播；远场 \(\psi\propto 1/\sqrt r\)，\(I\propto 1/r\)。</dd>
+
+    <dt>反平方律 (inverse-square law)</dt>
+    <dd>球面波强度随距离平方衰减；同样适用于光、引力辐射。</dd>
+
+    <dt>声强 (sound intensity, I)</dt>
+    <dd>单位面积单位时间穿过的能量；单位 W/m²。</dd>
+
+    <dt>分贝 (decibel, dB)</dt>
+    <dd>对数声强标度 \(\beta=10\log_{10}(I/I_0)\)；标定听阈 \(I_0=10^{-12}\) W/m²。</dd>
+
+    <dt>不相干 / 相干叠加 (incoherent / coherent)</dt>
+    <dd>多源相位无关 / 固定关系；前者强度叠加 \(+3\) dB，后者振幅叠加 \(+6\) dB。</dd>
+
+    <dt>声学阻抗 (acoustic impedance, Z)</dt>
+    <dd>\(Z=\rho v\)，连接压强与速度幅度；空气 \(\sim 420\) Pa·s/m。</dd>
+
+    <dt>体积模量 (bulk modulus, B)</dt>
+    <dd>介质抗压缩硬度 \(B\equiv -V\,\partial P/\partial V\)，单位 Pa；空气绝热 \(B=\gamma P\approx 1.4\times 10^5\) Pa，水 \(\sim 2.2\times 10^9\) Pa。声波本构关系 \(p=-B\,\partial S/\partial x\)，声速 \(v=\sqrt{B/\rho}\)。</dd>
+
+    <dt>痛阈 (threshold of pain)</dt>
+    <dd>120 dB 附近，超过即引起耳膜疼痛甚至损伤。</dd>
+
+    <dt>激波 (shock wave)</dt>
+    <dd>声压超过物理上限时形成的压强不连续阶跃；线性声学失效。</dd>
+
+    <dt>次声波 / 超声波 (infrasound / ultrasound)</dt>
+    <dd>低于 20 Hz / 高于 20 kHz 的声波，超出人耳听域但物理上有效。</dd>
+
+    <dt>氦气音效应 (helium voice effect)</dt>
+    <dd>吸氦气说话时声音变高，因为氦中声速快、共鸣腔的共振频率上调。</dd>
+  </dl>
+</div>
+
+<!-- ======================================================== -->
+
+<nav class="page-nav">
+  <a class="nav-prev" href="02_wave_propagation.html">一维波传播</a>
+  <a class="nav-next" href="04_sound_microscopic.html">声波微观推导</a>
+</nav>
+
+</main>
+
+<script src="interactive.js"></script>
+<script>
+  markCurrentReviewing('03_3d_waves_sound.html');
+
+  // -------- Sound intensity vs distance --------
+  (function() {
+    const setup = setupCanvas('dB-canvas', 600, 300);
+    if (!setup) return;
+    const { ctx, w, h } = setup;
+    const P = 1.0; // W (source power)
+    const I0 = 1e-12; // ref intensity
+
+    function draw(r) {
+      ctx.clearRect(0, 0, w, h);
+
+      // Plot beta(r) on log r axis
+      drawAxes(ctx, w, h, {
+        padL: 60, padR: 30, padT: 30, padB: 40,
+        xLabel: '距离 r (m, log scale)',
+        yLabel: 'β (dB)',
+      });
+      const padL = 60, padR = 30, padT = 30, padB = 40;
+      const map = makeMap({
+        padL, padR, padT, padB, w, h,
+        xMin: Math.log10(0.5), xMax: Math.log10(500),
+        yMin: 0, yMax: 130,
+      });
+
+      // gridlines
+      ctx.strokeStyle = '#e7e5e4';
+      [0.5, 1, 2, 5, 10, 20, 50, 100, 200, 500].forEach(rv => {
+        const px = map.xToPx(Math.log10(rv));
+        ctx.beginPath(); ctx.moveTo(px, padT); ctx.lineTo(px, h - padB); ctx.stroke();
+        ctx.fillStyle = '#9ca3af';
+        ctx.font = "10px -apple-system, sans-serif";
+        ctx.textAlign = 'center';
+        ctx.fillText(rv, px, h - 25);
+      });
+      [0, 30, 60, 90, 120].forEach(yv => {
+        const py = map.yToPx(yv);
+        ctx.strokeStyle = '#e7e5e4';
+        ctx.beginPath(); ctx.moveTo(padL, py); ctx.lineTo(w - padR, py); ctx.stroke();
+        ctx.fillStyle = '#9ca3af';
+        ctx.textAlign = 'right';
+        ctx.fillText(yv, padL - 5, py + 3);
+      });
+
+      // beta(r) curve: I = P/(4 pi r^2), beta = 10 log10(I/I0)
+      ctx.strokeStyle = '#0f766e';
+      ctx.lineWidth = 2.5;
+      ctx.beginPath();
+      const rmin = 0.5, rmax = 500;
+      const N = 200;
+      for (let i = 0; i <= N; i++) {
+        const lr = Math.log10(rmin) + (Math.log10(rmax) - Math.log10(rmin)) * (i / N);
+        const rr = Math.pow(10, lr);
+        const I = P / (4 * Math.PI * rr * rr);
+        const beta = 10 * Math.log10(I / I0);
+        const px = map.xToPx(lr), py = map.yToPx(Math.max(0, Math.min(130, beta)));
+        if (i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+      }
+      ctx.stroke();
+
+      // current marker
+      const Ir = P / (4 * Math.PI * r * r);
+      const betar = 10 * Math.log10(Ir / I0);
+      const px = map.xToPx(Math.log10(r));
+      const py = map.yToPx(Math.max(0, Math.min(130, betar)));
+      ctx.fillStyle = '#ea580c';
+      ctx.beginPath(); ctx.arc(px, py, 5, 0, 2*Math.PI); ctx.fill();
+      ctx.strokeStyle = '#ea580c';
+      ctx.setLineDash([3, 3]);
+      ctx.beginPath();
+      ctx.moveTo(px, py); ctx.lineTo(px, h - padB);
+      ctx.moveTo(px, py); ctx.lineTo(padL, py);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      // reference lines (60 = talk, 120 = pain)
+      ctx.strokeStyle = '#fed7aa';
+      ctx.setLineDash([4, 4]);
+      [60, 120].forEach(b => {
+        const ppy = map.yToPx(b);
+        ctx.beginPath(); ctx.moveTo(padL, ppy); ctx.lineTo(w - padR, ppy); ctx.stroke();
+      });
+      ctx.setLineDash([]);
+      ctx.fillStyle = '#9a3412';
+      ctx.font = "10px -apple-system, sans-serif";
+      ctx.textAlign = 'right';
+      ctx.fillText('谈话 60 dB', w - padR - 4, map.yToPx(60) - 3);
+      ctx.fillText('痛阈 120 dB', w - padR - 4, map.yToPx(120) - 3);
+
+      // readouts
+      document.getElementById('dB-I').textContent =
+        Ir < 1e-3 ? Ir.toExponential(2) + ' W/m²' : Ir.toFixed(3) + ' W/m²';
+      document.getElementById('dB-beta').textContent =
+        betar.toFixed(1) + ' dB';
+    }
+
+    bindSlider('dB-r', 'dB-r-readout',
+      v => draw(v),
+      v => v < 10 ? v.toFixed(1) + ' m' : v.toFixed(0) + ' m'
+    );
+  })();
+</script>
+
+</body>
+</html>
