@@ -219,7 +219,44 @@
     <h3 id="p1-ext">📌 扩展：从 \(x(t)\) 还能推出哪些 final 可能考的量</h3>
     <p>欠阻尼自由振动一旦写下
     $$x(t)=A_0\,e^{-\gamma t/2}\cos(\omega' t+\phi),\quad \omega'=\sqrt{\omega_0^2-\gamma^2/4},$$
-    剩下所有物理量都是 <strong>求导（运动学）</strong> 或 <strong>代入（能量/Q）</strong> 两条路。背下下面六条，final 任何"阻尼振子续问"都能搞定。</p>
+    剩下所有物理量都是 <strong>求导（运动学）</strong> 或 <strong>代入（能量/Q）</strong> 两条路。先解决一个本质问题：这个 \(x(t)\) 公式怎么来的、虚数 \(i\sin\) 部分去哪了；然后逐项推。</p>
+
+    <h4>⓪ 从复指数 α 到实数 x(t)：\(i\sin\) 部分被吸收进 φ</h4>
+    <p>特征方程 \(\alpha^2+\gamma\alpha+\omega_0^2=0\) 给出两个复根 \(\alpha_\pm=-\gamma/2\pm i\omega'\)，对应两个线性独立复解：</p>
+    $$z_1(t)=e^{-\gamma t/2}e^{i\omega' t},\quad z_2(t)=e^{-\gamma t/2}e^{-i\omega' t}.$$
+    <p>复通解 \(z(t)=C_1 z_1+C_2 z_2\)，二阶 ODE 必须有两个自由常数（由 \(x(0), \dot x(0)\) 决定）。</p>
+    <p><strong>要 x 是实数</strong>：必须 \(C_2=C_1^*\)（复共轭）。把 \(C_1\) 写成极形式 \(C_1=\tfrac{A_0}{2}e^{i\phi}\)，则 \(C_2=\tfrac{A_0}{2}e^{-i\phi}\)，代入：</p>
+    $$x(t)=\frac{A_0}{2}e^{-\gamma t/2}\bigl[e^{i(\omega' t+\phi)}+e^{-i(\omega' t+\phi)}\bigr]=A_0 e^{-\gamma t/2}\cos(\omega' t+\phi).$$
+    <p>用了欧拉公式 \(e^{i\theta}+e^{-i\theta}=2\cos\theta\)。<strong>sin 部分不是丢了 — 它通过 φ 出现。</strong></p>
+
+    <p><strong>等价的实数写法</strong>（更明显看到 sin/cos）：</p>
+    $$x(t)=e^{-\gamma t/2}\bigl[A\cos(\omega' t)+B\sin(\omega' t)\bigr],$$
+    <p>合并 \(A\cos+B\sin\) 用恒等式：</p>
+    $$A\cos\theta+B\sin\theta=A_0\cos(\theta+\phi),\quad A_0=\sqrt{A^2+B^2},\ \tan\phi=-\frac{B}{A}.$$
+
+    <p>所以 φ 是个"sin/cos 调和参数"：</p>
+    <ul>
+      <li>\(\phi=0\) → 纯 cos（IC：\(\dot x(0)=-\gamma x_0/2\)）</li>
+      <li>\(\phi=\pi/2\) → 纯 sin（IC：\(x(0)=0\)）</li>
+      <li>一般 IC → 两者混合</li>
+    </ul>
+
+    <div class="box warning"><p class="box-title">⚠ 陷阱：别和"驱动取实部"混淆</p>
+      <p><strong>驱动情形</strong>（Hirsch \(z(t)=z_0 e^{i\omega t}\) 写法）：原方程 RHS = \(F_0\cos\omega t\)，数学上临时换成 \(F_0 e^{i\omega t}\) 求复解，<em>最后取 Re</em>。
+      此时 Re(z) 解 cos 驱动方程；Im(z) 解 sin 驱动方程——是两个 <strong>不同物理问题</strong>。因为我们只关心 cos 驱动，Im(z) 与本题无关 → 可"忽略"。</p>
+      <p><strong>自由阻尼情形</strong>（本题）：没有 RHS，两个独立复解 \(z_1, z_2\) <em>都</em> 必须保留。只是 \(C_2=C_1^*\) 让虚部互相抵消，剩下的实数表达里 sin 通过 φ 隐藏出现。<strong>两种"取实部"的逻辑不同，不要套混。</strong></p>
+    </div>
+
+    <h4>⓿ 用初条件钉住 \(A_0\) 和 φ</h4>
+    <p>给 \(x(0)=x_0, \dot x(0)=v_0\)，代入 \(x(t)\) 和 \(\dot x(t)\)：</p>
+    $$x_0=A_0\cos\phi,\quad v_0=-A_0\Bigl[\frac{\gamma}{2}\cos\phi+\omega'\sin\phi\Bigr].$$
+    <p>解出：</p>
+    $$\boxed{A_0=\sqrt{x_0^2+\frac{(v_0+\gamma x_0/2)^2}{\omega'^2}},\qquad \tan\phi=-\frac{v_0+\gamma x_0/2}{\omega' x_0}.}$$
+    <p>验证两个特殊情形：</p>
+    <ul>
+      <li>\(v_0=-\gamma x_0/2\) → φ = 0 → 纯 cos 衰减（速度恰好匹配阻尼率）</li>
+      <li>\(x_0=0\) → \(\tan\phi=\pm\infty\) → \(\phi=\pi/2\) → 纯 sin 形式 \(x=(v_0/\omega')e^{-\gamma t/2}\sin\omega' t\)</li>
+    </ul>
 
     <h4>① 速度 \(v(t)\) — 求一阶导</h4>
     $$v(t)=\dot x=-A_0 e^{-\gamma t/2}\left[\frac{\gamma}{2}\cos(\omega' t+\phi)+\omega'\sin(\omega' t+\phi)\right].$$
@@ -468,7 +505,8 @@
         <tr><td>自由阻尼频率</td><td>\(\omega'=\sqrt{\omega_0^2-\gamma^2/4}\)</td></tr>
         <tr><td>驱动稳态振幅</td><td>\(|z_0|=\dfrac{F_0/m}{\sqrt{(\omega_0^2-\omega^2)^2+\omega^2\gamma^2}}\)</td></tr>
         <tr><td>共振峰频率（位移）</td><td>\(\omega_{\max}=\sqrt{\omega_0^2-\gamma^2/2}\)</td></tr>
-        <tr><td>自由阻尼解</td><td>\(x(t)=A_0 e^{-\gamma t/2}\cos(\omega' t+\phi)\)</td></tr>
+        <tr><td>自由阻尼解</td><td>\(x(t)=A_0 e^{-\gamma t/2}\cos(\omega' t+\phi)\)（φ 吸收 sin 分量）</td></tr>
+        <tr><td>初条件 → A₀, φ</td><td>\(A_0=\sqrt{x_0^2+(v_0+\gamma x_0/2)^2/\omega'^2}\)；\(\tan\phi=-(v_0+\gamma x_0/2)/(\omega' x_0)\)</td></tr>
         <tr><td>自由阻尼速度</td><td>\(v(t)=-A_0\omega_0 e^{-\gamma t/2}\sin(\omega' t+\phi+\delta)\)；\(\tan\delta=\gamma/(2\omega')\)</td></tr>
         <tr><td>能量衰减</td><td>\(E(t)=E_0 e^{-\gamma t}\)；\(dE/dt=-\gamma E\)（振幅衰减 \(e^{-\gamma t/2}\) 的两倍快）</td></tr>
         <tr><td>振幅 / 能量半衰期</td><td>\(t_{1/2}^A=2\ln 2/\gamma\)；\(t_{1/2}^E=\ln 2/\gamma\)</td></tr>
