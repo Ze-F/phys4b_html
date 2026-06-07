@@ -216,6 +216,83 @@
       <p>口诀："共振"应理解为 <em>能量传递最有效</em>，而能量 \(\propto \omega^2|z_0|^2\)。事实上 <em>能量</em> 共振峰恰好在 \(\omega=\omega_0\)，但 <em>位移振幅</em> 共振峰在 \(\omega_{\max}<\omega_0\)。考题问"振幅"时严格用 \(\omega_{\max}\) 公式。</p>
     </div>
 
+    <h3 id="p1-ext">📌 扩展：从 \(x(t)\) 还能推出哪些 final 可能考的量</h3>
+    <p>欠阻尼自由振动一旦写下
+    $$x(t)=A_0\,e^{-\gamma t/2}\cos(\omega' t+\phi),\quad \omega'=\sqrt{\omega_0^2-\gamma^2/4},$$
+    剩下所有物理量都是 <strong>求导（运动学）</strong> 或 <strong>代入（能量/Q）</strong> 两条路。背下下面六条，final 任何"阻尼振子续问"都能搞定。</p>
+
+    <h4>① 速度 \(v(t)\) — 求一阶导</h4>
+    $$v(t)=\dot x=-A_0 e^{-\gamma t/2}\left[\frac{\gamma}{2}\cos(\omega' t+\phi)+\omega'\sin(\omega' t+\phi)\right].$$
+    <p>合并成单一相位：</p>
+    $$\boxed{v(t)=-A_0\,\omega_0\,e^{-\gamma t/2}\sin(\omega' t+\phi+\delta),\quad \tan\delta=\frac{\gamma}{2\omega'}.}$$
+
+    <div class="box insight"><p class="box-title">🪄 关键代数恒等</p>
+      <p>合并 \(\frac{\gamma}{2}\cos+\omega'\sin\) 的振幅系数：</p>
+      $$\sqrt{\frac{\gamma^2}{4}+\omega'^2}=\sqrt{\frac{\gamma^2}{4}+\omega_0^2-\frac{\gamma^2}{4}}=\omega_0.$$
+      <p>所以 \(v_{\max}^{\text{初始}}=A_0\omega_0\)（不是 \(A_0\omega'\)）。这是常错点之一。</p>
+    </div>
+
+    <h4>② 加速度 \(a(t)\) — 反代 ODE 最省事</h4>
+    <p>由方程 \(\ddot x=-\omega_0^2 x-\gamma\dot x\)：</p>
+    $$a(t)=-\omega_0^2 x(t)-\gamma\,v(t).$$
+    <p>不必再求一次导——直接用 \(x\) 和 \(v\) 表达式代入。</p>
+
+    <h4>③ 动能 \(K\) 与势能 \(U\) — 代入定义</h4>
+    $$K(t)=\tfrac12 mv^2=\tfrac12 m A_0^2\omega_0^2\,e^{-\gamma t}\sin^2(\omega' t+\phi+\delta),$$
+    $$U(t)=\tfrac12 kx^2=\tfrac12 m\omega_0^2 A_0^2\,e^{-\gamma t}\cos^2(\omega' t+\phi).$$
+    <p>（用 \(k=m\omega_0^2\)。）轻阻尼时 \(\delta\approx 0\)，sin² 和 cos² 各周期平均到 ½：</p>
+    $$\boxed{E(t)=K+U\approx \tfrac12 m\omega_0^2 A_0^2\,e^{-\gamma t}=E_0\,e^{-\gamma t}.}$$
+
+    <div class="box warning"><p class="box-title">⚠ 陷阱：能量衰减比振幅快两倍</p>
+      <p>振幅按 \(e^{-\gamma t/2}\) 衰减；能量按 \(e^{-\gamma t}\) 衰减。因为 \(E\propto A^2\)，平方让衰减率翻倍。
+      若题目问"半能量时间" vs "半振幅时间"，<strong>记两者差 2 倍</strong>。</p>
+    </div>
+
+    <h4>④ 能量耗散率</h4>
+    <p>对 \(E(t)=E_0 e^{-\gamma t}\) 求导：</p>
+    $$\frac{dE}{dt}=-\gamma E.$$
+    <p>独立验证：阻尼力 \(F_d=-m\gamma v\) 对振子做的瞬时功率 \(P_d=F_d v=-m\gamma v^2=-2\gamma K\)。
+    周期平均 \(\langle K\rangle = E/2\)，所以 \(\langle dE/dt\rangle=-\gamma E\) ✓。</p>
+
+    <h4>⑤ 衰减时间尺度</h4>
+    <table class="formula-table">
+      <thead><tr><th>量</th><th>衰减常数 τ</th><th>半衰期 \(t_{1/2}\)</th><th>本题 (\(\gamma=10\)) 数值</th></tr></thead>
+      <tbody>
+        <tr><td>振幅 \(A(t)\)</td><td>\(2/\gamma\)</td><td>\((2\ln 2)/\gamma\)</td><td>\(t_{1/2}^A\approx 0.139\) s</td></tr>
+        <tr><td>能量 \(E(t)\)</td><td>\(1/\gamma\)</td><td>\((\ln 2)/\gamma\)</td><td>\(t_{1/2}^E\approx 0.069\) s</td></tr>
+      </tbody>
+    </table>
+
+    <h4>⑥ 品质因子 Q</h4>
+    $$Q\equiv\omega_0\cdot\frac{\text{stored }E}{\text{power dissipated}}=\frac{\omega_0}{\gamma}.$$
+    <p>物理：Q ≈ π × (能量降到 1/e 之前完成的振荡圈数)。本题 \(Q=10/10=1\)，<strong>极重阻尼</strong>，所以振幅大概只能维持 1 个周期。</p>
+
+    <h4>⑦ 对数衰减率（实验反推 γ）</h4>
+    <p>相邻两峰的振幅比：</p>
+    $$\frac{x_n}{x_{n+1}}=e^{\gamma T'/2},\quad T'=\frac{2\pi}{\omega'}.$$
+    <p>取对数：</p>
+    $$\delta_{\log}=\ln\frac{x_n}{x_{n+1}}=\frac{\gamma\pi}{\omega'}.$$
+    <p>实测连续 10 个峰幅，反推 γ 用此公式。本题 \(\delta_{\log}=10\pi/8.66\approx 3.63\)，即每过一个周期振幅跌为 \(e^{-3.63}\approx 2.6\%\)（一周期就几乎完了）。</p>
+
+    <h4>⑧ 驱动稳态下：相位差 + 平均功率</h4>
+    <p>驱动 \(F=F_0\cos\omega t\)，稳态 \(x(t)=|z_0|\cos(\omega t-\delta_d)\)，其中</p>
+    $$\tan\delta_d=\frac{\omega\gamma}{\omega_0^2-\omega^2}.$$
+    <p>驱动力做的 <strong>平均功率</strong>（= 稳态时耗散的功率）：</p>
+    $$\langle P_{\text{drive}}\rangle=\tfrac12 F_0\,\omega|z_0|\sin\delta_d=\tfrac12 m\gamma\,\omega^2|z_0|^2.$$
+    <p>共振峰（位移最大）在 \(\omega_{\max}=\sqrt{\omega_0^2-\gamma^2/2}\)；功率峰（能量传递最有效）恰好在 \(\omega=\omega_0\)——两个不同峰，最大功率传递不在最大振幅处。</p>
+
+    <div class="box key-result"><p class="box-title">应试模板</p>
+      <p>任何"阻尼振子续问"按下面顺序套：</p>
+      <ol>
+        <li>写下 \(x(t)=A_0 e^{-\gamma t/2}\cos(\omega' t+\phi)\)。</li>
+        <li>需要 \(v\) → 求导；需要 \(a\) → 用 ODE 反代。</li>
+        <li>需要能量 → 代入 \(\tfrac12 mv^2,\tfrac12 m\omega_0^2 x^2\)，平均到 \(E_0 e^{-\gamma t}\)。</li>
+        <li>需要时间 → 振幅按 \(e^{-\gamma t/2}\)、能量按 \(e^{-\gamma t}\)。</li>
+        <li>需要"品质" → \(Q=\omega_0/\gamma\)。</li>
+        <li>需要驱动功率 → \(\langle P\rangle=\tfrac12 m\gamma\omega^2|z_0|^2\)，在 \(\omega=\omega_0\) 处最大。</li>
+      </ol>
+    </div>
+
     <p><a href="01_shm.html">→ 详细背景：SHM topic page</a></p>
 
     <!-- ============ PROBLEM 2 ============ -->
@@ -391,6 +468,14 @@
         <tr><td>自由阻尼频率</td><td>\(\omega'=\sqrt{\omega_0^2-\gamma^2/4}\)</td></tr>
         <tr><td>驱动稳态振幅</td><td>\(|z_0|=\dfrac{F_0/m}{\sqrt{(\omega_0^2-\omega^2)^2+\omega^2\gamma^2}}\)</td></tr>
         <tr><td>共振峰频率（位移）</td><td>\(\omega_{\max}=\sqrt{\omega_0^2-\gamma^2/2}\)</td></tr>
+        <tr><td>自由阻尼解</td><td>\(x(t)=A_0 e^{-\gamma t/2}\cos(\omega' t+\phi)\)</td></tr>
+        <tr><td>自由阻尼速度</td><td>\(v(t)=-A_0\omega_0 e^{-\gamma t/2}\sin(\omega' t+\phi+\delta)\)；\(\tan\delta=\gamma/(2\omega')\)</td></tr>
+        <tr><td>能量衰减</td><td>\(E(t)=E_0 e^{-\gamma t}\)；\(dE/dt=-\gamma E\)（振幅衰减 \(e^{-\gamma t/2}\) 的两倍快）</td></tr>
+        <tr><td>振幅 / 能量半衰期</td><td>\(t_{1/2}^A=2\ln 2/\gamma\)；\(t_{1/2}^E=\ln 2/\gamma\)</td></tr>
+        <tr><td>品质因子</td><td>\(Q=\omega_0/\gamma\)</td></tr>
+        <tr><td>对数衰减率</td><td>\(\delta_{\log}=\gamma\pi/\omega'\)</td></tr>
+        <tr><td>驱动稳态相位</td><td>\(\tan\delta_d=\omega\gamma/(\omega_0^2-\omega^2)\)</td></tr>
+        <tr><td>驱动平均功率</td><td>\(\langle P\rangle=\tfrac12 m\gamma\omega^2|z_0|^2\)，峰在 \(\omega=\omega_0\)</td></tr>
         <tr><td>行波</td><td>\(\psi=A\cos(kx-\omega t)\)，\(k=2\pi/\lambda\)，\(\omega=2\pi f\)</td></tr>
         <tr><td>弦上波速</td><td>\(v=\sqrt{T/\mu}\)，\(\mu=m/L\)</td></tr>
         <tr><td>最大横向速度</td><td>\(v_s^{\max}=A\omega\)（≠ Av）</td></tr>
@@ -403,9 +488,11 @@
 
     <!-- ============ COMMON PITFALLS RECAP ============ -->
     <h2 id="pitfalls">陷阱汇总</h2>
-    <div class="box warning"><p class="box-title">本卷 6 大易错点</p>
+    <div class="box warning"><p class="box-title">本卷 8 大易错点</p>
       <ol>
-        <li><strong>三个频率别混淆</strong>：\(\omega_0\)、\(\omega'=\sqrt{\omega_0^2-\gamma^2/4}\)、\(\omega_{\max}=\sqrt{\omega_0^2-\gamma^2/2}\)。共振峰在 \(\omega_{\max}\) 而非 \(\omega_0\)。</li>
+        <li><strong>三个频率别混淆</strong>：\(\omega_0\)、\(\omega'=\sqrt{\omega_0^2-\gamma^2/4}\)、\(\omega_{\max}=\sqrt{\omega_0^2-\gamma^2/2}\)。位移共振峰在 \(\omega_{\max}\) 而非 \(\omega_0\)；功率共振峰在 \(\omega_0\)。</li>
+        <li><strong>振幅 vs 能量衰减率差 2 倍</strong>：振幅 \(e^{-\gamma t/2}\)，能量 \(e^{-\gamma t}\)。\(t_{1/2}^A=2\, t_{1/2}^E\)。</li>
+        <li><strong>初始速度峰值 \(=A_0\omega_0\) 不是 \(A_0\omega'\)</strong>：合并 sin/cos 时根号内 γ²/4 项被抵消。</li>
         <li><strong>\(v_s^{\max}=A\omega\) ≠ \(Av\)</strong>：粒子横向速度 vs 波相速，不要互换。</li>
         <li><strong>线密度 \(\mu=m/L\)</strong> 用总质量/总长，与波长 \(\lambda\) 无关。</li>
         <li><strong>位移 \(A\to A/2\) 相位差 \(\pi/3\)</strong>，对应 \(\Delta x=\lambda/6\)（\(\cos(\pi/3)=1/2\)）。</li>
