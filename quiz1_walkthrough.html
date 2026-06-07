@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quiz 1 详细 Walkthrough — 振动与波</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="theme.js"></script>
+  <script>
+    MathJax = {
+      tex: { inlineMath: [['\\(','\\)']], displayMath: [['$','$']] },
+      svg: { fontCache: 'global' }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <style>
+    .problem-toc {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: .6rem;
+      margin: 1.25rem 0 2rem;
+    }
+    .problem-toc a {
+      display: block;
+      padding: .65rem .85rem;
+      background: #f5f5f4;
+      border: 1px solid #d6d3d1;
+      border-radius: 6px;
+      color: #134e4a;
+      text-decoration: none;
+      font-family: -apple-system, 'PingFang SC', sans-serif;
+      font-size: .92rem;
+      transition: all .15s;
+    }
+    .problem-toc a:hover {
+      background: #0f766e;
+      color: white;
+      border-color: #0f766e;
+    }
+    .problem-toc a .toc-label {
+      display: block;
+      font-weight: 600;
+      font-size: 1rem;
+      margin-bottom: .15rem;
+    }
+    .problem-toc a .toc-topic {
+      font-size: .8rem;
+      color: #6b7280;
+    }
+    .problem-toc a:hover .toc-topic { color: #d1fae5; }
+
+    .problem-statement {
+      background: #f5f5f4;
+      border-left: 3px solid #6b7280;
+      padding: .85rem 1.1rem;
+      margin: 1rem 0;
+      font-style: italic;
+      color: #374151;
+      border-radius: 0 4px 4px 0;
+    }
+    .problem-statement strong { font-style: normal; color: #1f2937; }
+    .problem-statement::before {
+      content: '题目：';
+      font-style: normal;
+      font-weight: 600;
+      color: #6b7280;
+      font-family: -apple-system, 'PingFang SC', sans-serif;
+      font-size: .85rem;
+      letter-spacing: .04em;
+      display: block;
+      margin-bottom: .35rem;
+    }
+
+    .answer-box {
+      background: #eff6ff;
+      border-left: 4px solid #2563eb;
+      padding: .75rem 1.1rem;
+      margin: 1rem 0;
+      border-radius: 0 6px 6px 0;
+      color: #1e3a8a;
+    }
+    .answer-box::before {
+      content: '✓ 答案：';
+      font-weight: 600;
+      color: #1e40af;
+      font-family: -apple-system, 'PingFang SC', sans-serif;
+      font-size: .88rem;
+      letter-spacing: .04em;
+      margin-right: .35rem;
+    }
+
+    .scope-tag {
+      display: inline-block;
+      padding: .12rem .55rem;
+      font-size: .72rem;
+      font-family: -apple-system, 'PingFang SC', sans-serif;
+      border-radius: 10px;
+      margin-left: .4rem;
+      vertical-align: middle;
+      letter-spacing: .02em;
+    }
+    .scope-shm    { background: #fef3c7; color: #78350f; }
+    .scope-wave   { background: #dbeafe; color: #1e3a8a; }
+    .scope-string { background: #d1fae5; color: #065f46; }
+
+    .back-link {
+      font-family: -apple-system, 'PingFang SC', sans-serif;
+      font-size: .9rem;
+      margin: 1rem 0;
+    }
+    .back-link a { color: #0f766e; text-decoration: none; }
+    .back-link a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <a class="home-link" href="index.html">← PHYS 4B 复习</a>
+    <nav>
+      <a href="01_shm.html">SHM</a>
+      <a href="02_wave_propagation.html">一维波</a>
+      <a href="index.html">总目录</a>
+    </nav>
+  </header>
+
+  <main class="container">
+
+    <div class="topic-header">
+      <h1>Quiz 1 详细 Walkthrough</h1>
+      <p class="meta">2026 春 · 阻尼 / 驱动振子 · 弦上行波 · 驻波 · 波功率 · Shankar Ch.17–18</p>
+      <p class="blurb">逐题讲解版，配陷阱标注。复习路径：先扫"一页速览" → 按 problem 顺序通读 → 看红色陷阱框 → 末尾公式速查。</p>
+    </div>
+
+    <div class="back-link">
+      <a href="index.html">← 返回总目录</a> ·
+      <a href="quiz2_walkthrough.html">Quiz 2 walkthrough →</a>
+    </div>
+
+    <div class="box key-result">
+      <p class="box-title">一页速览</p>
+      <ul style="margin:.2rem 0">
+        <li><strong>P1 阻尼/驱动振子.</strong> 三个频率别混淆：固有 \(\omega_0\)、阻尼 \(\omega'=\sqrt{\omega_0^2-\gamma^2/4}\)、最大振幅驱动频率 \(\omega_{\max}=\sqrt{\omega_0^2-\gamma^2/2}\)。共振峰不在 \(\omega_0\)。</li>
+        <li><strong>P2 弦上行波.</strong> \(v=\sqrt{T/\mu}\) 给张力；最大横向速度 \(v_s^{\max}=A\omega\) (不是 \(Av\))；相位差与距离换算 \(\Delta\phi=k\Delta x\)。</li>
+        <li><strong>P3 吉他弦驻波.</strong> 第 \(n\) 谐波频率 \(f_n=nf_1\)，节点位置 \(x_m=mL/n\) (\(m=0,1,\dots,n\))，内部节点数 = \(n-1\)。</li>
+        <li><strong>P4 健身绳功率.</strong> \(P=\tfrac12\mu A^2\omega^2 v\)；若同时固定 \(\lambda\) 和改变 \(\omega\)，则 \(v\) 必须变 → 张力必须变。频率加倍而 λ 不变 ⟹ P 增 8 倍，不是 4 倍。</li>
+      </ul>
+    </div>
+
+    <div class="problem-toc">
+      <a href="#p1"><span class="toc-label">Problem 1</span><span class="toc-topic">阻尼 / 驱动振子四问</span></a>
+      <a href="#p2"><span class="toc-label">Problem 2</span><span class="toc-topic">弦上行波 T, f, v_s, 相位</span></a>
+      <a href="#p3"><span class="toc-label">Problem 3</span><span class="toc-topic">驻波谐波 / 节点 / 弹奏点</span></a>
+      <a href="#p4"><span class="toc-label">Problem 4</span><span class="toc-topic">波功率与频率加倍</span></a>
+    </div>
+
+    <!-- ============ PROBLEM 1 ============ -->
+    <h2 id="p1">Problem 1 — 阻尼振子 + 驱动共振 <span class="scope-tag scope-shm">SHM · Lec 1.1</span></h2>
+
+    <div class="problem-statement">
+      质量 \(m=1\) kg，固有角频率 \(\omega_0=10\) rad/s，阻尼系数 \(\gamma=10\) s\(^{-1}\)，驱动力幅 \(F_0=10\) N。
+      <br/><strong>(a)</strong> 撤去驱动时，自由阻尼振动的角频率为多少？
+      <br/><strong>(b)</strong> 以 \(\omega=\omega_0\) 驱动，稳态振幅多少？
+      <br/><strong>(c)</strong> 以 \(\omega=\omega'\)（自由阻尼频率）驱动，稳态振幅多少？
+      <br/><strong>(d)</strong> 调节 \(\omega\) 使稳态振幅最大，此时 \(\omega=?\)，最大振幅多少？
+    </div>
+
+    <h3>(a) 自由阻尼频率 \(\omega'\)</h3>
+    <p>无驱动方程 \(\ddot x+\gamma\dot x+\omega_0^2 x=0\)。尝试解 \(x=e^{\alpha t}\)，特征方程 \(\alpha^2+\gamma\alpha+\omega_0^2=0\)，</p>
+    $$\alpha = -\frac{\gamma}{2}\pm\sqrt{\frac{\gamma^2}{4}-\omega_0^2}.$$
+    <p>当 \(\gamma^2/4<\omega_0^2\)（欠阻尼，本题 \(25<100\) 满足），平方根虚数化，振荡部分的频率即</p>
+    <div class="box key-result"><p class="box-title">阻尼频率公式</p>
+      $$\omega'=\sqrt{\omega_0^2-\frac{\gamma^2}{4}}=\sqrt{100-25}=\sqrt{75}=5\sqrt 3\approx 8.66\ \text{rad/s}.$$
+    </div>
+
+    <div class="box warning">
+      <p class="box-title">⚠ 陷阱 1：\(\omega'\ne\omega_0\)</p>
+      <p>很多人在压力下直接写 \(\omega_0=10\) 当答案。阻尼存在时振子振得"慢"了一点；这里 \(\gamma=\omega_0\) 是相当大的阻尼，差出 13% 来。<strong>记忆口诀</strong>：阻尼让振荡变慢，所以 \(\omega'<\omega_0\)；公式里减去 \(\gamma^2/4\)。</p>
+    </div>
+
+    <h3>(b)(c)(d) 驱动振幅 \(|z_0|\)</h3>
+    <p>稳态解 \(x(t)=\text{Re}(z_0e^{i\omega t})\)，其中</p>
+    $$z_0=\frac{F_0/m}{-\omega^2+i\omega\gamma+\omega_0^2}\quad\Longrightarrow\quad |z_0|=\frac{F_0/m}{\sqrt{(\omega_0^2-\omega^2)^2+\omega^2\gamma^2}}.$$
+    <p>带入 \(F_0/m=10\)：</p>
+
+    <h4>(b) \(\omega=\omega_0=10\)</h4>
+    <p>第一项 \((\omega_0^2-\omega^2)^2=0\)，第二项 \(\omega^2\gamma^2=100\cdot 100=10^4\)。所以</p>
+    $$|z_0|=\frac{10}{\sqrt{10^4}}=\frac{10}{100}=0.1\ \text{m} = 10\ \text{cm}.$$
+
+    <h4>(c) \(\omega=\omega'=\sqrt{75}\)</h4>
+    <p>\((\omega_0^2-\omega^2)^2 = (100-75)^2=625\)，\(\omega^2\gamma^2=75\cdot100=7500\)。所以</p>
+    $$|z_0|=\frac{10}{\sqrt{625+7500}}=\frac{10}{\sqrt{8125}}=\frac{10}{90.14}\approx 0.1109\ \text{m}\approx 11.09\ \text{cm}.$$
+
+    <h4>(d) 最大振幅</h4>
+    <p>记 \(D(\omega)=(\omega_0^2-\omega^2)^2+\omega^2\gamma^2\)。对 \(\omega^2\) 求导（让 \(u=\omega^2\) 简化）：</p>
+    $$\frac{dD}{du}=2(u-\omega_0^2)(1)+\gamma^2 = 0 \quad\Longrightarrow\quad u=\omega_{\max}^2=\omega_0^2-\frac{\gamma^2}{2}.$$
+    <p>带入：\(\omega_{\max}^2=100-50=50\)，\(\omega_{\max}=\sqrt{50}\approx 7.07\) rad/s。最大振幅：</p>
+    $$D_{\min}=(100-50)^2+50\cdot100=2500+5000=7500,$$
+    $$|z_0|_{\max}=\frac{10}{\sqrt{7500}}=\frac{10}{86.60}\approx 0.1155\ \text{m}\approx 11.55\ \text{cm}.$$
+
+    <div class="box warning">
+      <p class="box-title">⚠ 陷阱 2：三个频率全不一样</p>
+      <p>本题最容易混的就是把"共振"和 "\(\omega_0\) 驱动"等同。三个频率的关系：</p>
+      <ul>
+        <li>固有频率：\(\omega_0=10\)</li>
+        <li>自由阻尼频率：\(\omega'=\sqrt{\omega_0^2-\gamma^2/4}=8.66\)</li>
+        <li>共振峰（最大振幅）驱动频率：\(\omega_{\max}=\sqrt{\omega_0^2-\gamma^2/2}=7.07\)</li>
+      </ul>
+      <p>三者递减，差距越大说明阻尼越强。当 \(\gamma\to 0\)，三者趋于相等。</p>
+    </div>
+
+    <div class="answer-box">
+      (a) \(\omega'=5\sqrt 3\approx 8.66\) rad/s · (b) 10 cm · (c) 11.09 cm · (d) \(\omega_{\max}=\sqrt{50}\approx 7.07\) rad/s，振幅 \(\approx\) 11.55 cm
+    </div>
+
+    <div class="box insight"><p class="box-title">物理直觉</p>
+      <p>注意 (b)、(c)、(d) 三个振幅都接近 0.11 m，相对差异不超过 5%。这是因为阻尼比 \(\gamma/\omega_0=1\) 时共振峰很"宽"——任何接近 \(\omega_0\) 量级的驱动频率都给出相近振幅。如果题目改成 \(\gamma=0.1\)，那 (b)(c)(d) 三个值将极接近，但比较起来 \(\omega_{\max}\) 给出的振幅会显著最大。</p>
+      <p>口诀："共振"应理解为 <em>能量传递最有效</em>，而能量 \(\propto \omega^2|z_0|^2\)。事实上 <em>能量</em> 共振峰恰好在 \(\omega=\omega_0\)，但 <em>位移振幅</em> 共振峰在 \(\omega_{\max}<\omega_0\)。考题问"振幅"时严格用 \(\omega_{\max}\) 公式。</p>
+    </div>
+
+    <p><a href="01_shm.html">→ 详细背景：SHM topic page</a></p>
+
+    <!-- ============ PROBLEM 2 ============ -->
+    <h2 id="p2">Problem 2 — 弦上行波 <span class="scope-tag scope-wave">Wave · Lec 1.2</span></h2>
+
+    <div class="problem-statement">
+      一根弦总质量 \(m=0.5\) kg、总长 \(L=10\) m。其上一列行波，振幅 \(A=10\) cm、波长 \(\lambda=1.2\) m、波速 \(v=20\) m/s。
+      <br/><strong>(a)</strong> 求张力 \(T\)。
+      <br/><strong>(b)</strong> 求频率 \(f\)。
+      <br/><strong>(c)</strong> 求介质粒子最大横向速度 \(v_s^{\max}\)。
+      <br/><strong>(d)</strong> 在某时刻，某点 \(x_1\) 处粒子位移为 \(A\)（最大正向）；最近的另一点 \(x_2\)，位移为 \(A/2\)（正方向）。求 \(|x_2-x_1|\)。
+    </div>
+
+    <h3>(a) 张力 \(T\)</h3>
+    <p>弦上行波的相速：\(v=\sqrt{T/\mu}\)，其中线密度 \(\mu=m/L=0.5/10=0.05\) kg/m。所以</p>
+    $$T=\mu v^2 = 0.05\cdot 400 = 20\ \text{N}.$$
+
+    <div class="box warning">
+      <p class="box-title">⚠ 陷阱：\(\mu\) 用总线密度</p>
+      <p>线密度是 <em>总质量 / 总长</em>，与波长无关。学生有时会错用 "\(m/\lambda\)"。</p>
+    </div>
+
+    <h3>(b) 频率 \(f\)</h3>
+    $$f=\frac{v}{\lambda}=\frac{20}{1.2}\approx 16.67\ \text{Hz}.$$
+    <p>对应 \(\omega=2\pi f\approx 104.7\) rad/s，\(k=2\pi/\lambda\approx 5.24\) rad/m。</p>
+
+    <h3>(c) 最大横向速度 \(v_s^{\max}\)</h3>
+    <p>行波 \(\psi(x,t)=A\cos(kx-\omega t)\)，横向速度 \(\dot\psi = A\omega\sin(kx-\omega t)\)，所以</p>
+    $$v_s^{\max} = A\omega = 0.1\cdot 2\pi\cdot 16.67 \approx 10.47\ \text{m/s}.$$
+
+    <div class="box warning">
+      <p class="box-title">⚠ 陷阱：\(v_s^{\max}\ne Av\)，也不是 \(v\)</p>
+      <p>四种速度都要分清：
+        <ul>
+          <li><strong>相速 \(v\)</strong>：波形向前传的速度，本题 20 m/s。属于"波"的速度。</li>
+          <li><strong>横向速度 \(\dot\psi\)</strong>：单个介质粒子上下抖动的速度，最大值 \(A\omega\)。属于"介质"的速度。</li>
+          <li>\(v_s^{\max}=A\omega\approx 10.47\) m/s，本题与 \(v\) 同量级但小于它。</li>
+          <li>注意 \(v=\omega/k\)，所以 \(A\omega = Akv\)。<strong>Aω 不等于 Av</strong>，除非 \(k=1\)。</li>
+        </ul>
+      </p>
+      <p>背景：能量在波中以相速 \(v\) 传播；但能量密度 \(\propto (Aω)^2\) 由横向速度决定。两者不可混。</p>
+    </div>
+
+    <h3>(d) 相位差对应的距离</h3>
+    <p>"位移为 \(A\)" 对应 \(\cos\phi_1=1\) → \(\phi_1=0\)；
+    "位移为 \(A/2\)" 对应 \(\cos\phi_2=1/2\) → \(\phi_2=\pi/3\)（取最近的正解）。</p>
+    <p>同一时刻的相位差只来自 \(kx\)：\(\Delta\phi=k\Delta x\)，所以</p>
+    $$\Delta x = \frac{\Delta\phi}{k}=\frac{\pi/3}{2\pi/\lambda}=\frac{\lambda}{6}=\frac{1.2}{6}=0.2\ \text{m} = 20\ \text{cm}.$$
+
+    <div class="box warning">
+      <p class="box-title">⚠ 陷阱：\(\cos(\pi/3)=1/2\)，不是 \(\cos(\pi/6)\)</p>
+      <p>\(\cos(\pi/6)=\sqrt 3/2\)，\(\cos(\pi/3)=1/2\)。考场常被这两个反过来写。
+      也可用正弦版本：\(\sin(\pi/2)=1\)，\(\sin(\pi/6)=1/2\)，相位差仍是 \(\pi/3\)。</p>
+    </div>
+
+    <div class="answer-box">
+      (a) \(T=20\) N · (b) \(f\approx 16.67\) Hz · (c) \(v_s^{\max}\approx 10.47\) m/s · (d) \(\Delta x=\lambda/6=20\) cm
+    </div>
+
+    <p><a href="02_wave_propagation.html">→ 详细背景：一维波传播 topic page</a></p>
+
+    <!-- ============ PROBLEM 3 ============ -->
+    <h2 id="p3">Problem 3 — 吉他弦驻波 <span class="scope-tag scope-string">Standing · Lec 1.3</span></h2>
+
+    <div class="problem-statement">
+      一根弦，张力 \(T=105.3\) N，线密度 \(\mu=5\times 10^{-4}\) kg/m，两端固定。基频（最低自然频率）为 \(f_1=300\) Hz。
+      <br/><strong>(a)</strong> 求弦长 \(L\)。
+      <br/><strong>(b)</strong> 吹奏出频率 \(f=2700\) Hz 的音，这是第几谐波？该谐波有几个内部节点？
+      <br/><strong>(c)</strong> 要让这条弦在第 (b) 部分给出的谐波模式下振动而其他模式被抑制，你可以用手指轻触哪些位置？
+    </div>
+
+    <h3>(a) 弦长 \(L\)</h3>
+    <p>波速 \(v=\sqrt{T/\mu}=\sqrt{105.3/5\times 10^{-4}}=\sqrt{210600}\approx 458.9\) m/s。</p>
+    <p>两端固定，基频 \(f_1=v/(2L)\)，所以</p>
+    $$L=\frac{v}{2f_1}=\frac{458.9}{600}\approx 0.765\ \text{m}=76.5\ \text{cm}.$$
+
+    <div class="box warning">
+      <p class="box-title">⚠ 陷阱：两端固定的 \(f_n\) 是 \(nv/2L\)，不是 \((2n+1)v/4L\)</p>
+      <p>后者是 <em>一端开口、一端固定</em> 的开管/单端弦。本题"吉他弦"两端都固定。</p>
+    </div>
+
+    <h3>(b) 谐波数与节点数</h3>
+    <p>对于两端固定的弦，频率序列 \(f_n=nf_1\)，\(n=1,2,3,\dots\)。所以</p>
+    $$n=\frac{2700}{300}=9\quad\Longrightarrow\quad \text{第 9 谐波}.$$
+    <p>第 \(n\) 谐波的位移函数为 \(\psi=A\sin(n\pi x/L)\sin(\omega_n t)\)。在 \(x\in[0,L]\) 上 \(\sin\) 共 \(n\) 个半波，节点（位移恒为零的点）在 \(x_m=mL/n\)，\(m=0,1,\dots,n\)。
+    总共 \(n+1\) 个节点，其中 \(m=0,n\) 是两端，所以 <strong>内部节点数 \(=n-1=8\)</strong>。</p>
+
+    <div class="box warning">
+      <p class="box-title">⚠ 陷阱：9 谐波 8 内部节点（不是 9）</p>
+      <p>"第 \(n\) 谐波有 \(n\) 个反节点 / \(n-1\) 个内部节点"。两端的固定点本身就是节点，但通常不被算作"内部"。
+      画一下：第 1 谐波（基频）= 半个波 = 0 个内部节点；第 2 谐波 = 1 个；第 9 谐波 = 8 个。</p>
+    </div>
+
+    <h3>(c) 触弦位置：节点处</h3>
+    <p>第 9 谐波的节点在</p>
+    $$x_m=\frac{m L}{9}=\frac{m\cdot 76.5}{9}\ \text{cm},\quad m=1,2,\dots,8.$$
+    <p>即 \(\{8.5, 17, 25.5, 34, 42.5, 51, 59.5, 68\}\) cm（从一端起算）。</p>
+    <p>原理：第 9 谐波在这些点本来就不动，手指轻触不影响它；而 <em>其他</em> 谐波（如第 5 谐波）在这些点位移非零，被手指迫使为零，从而被抑制（除非它的节点恰好与第 9 谐波的某个节点重合）。</p>
+
+    <div class="box insight"><p class="box-title">物理直觉 — Harmonics on a guitar</p>
+      <p>真实的吉他手法 "natural harmonic"：轻触品丝（fret）以上的某点而后拨弦。
+      触在 \(L/n\) 处（\(n\) = 整数）能选出 \(n\) 倍频；触在 \(L/2\)（中点）选出第 2 谐波（八度），触在 \(L/3\) 选出第 3 谐波（八度 + 五度），等等。
+      本题 \(L/9\) 处对应 9 倍频泛音 — 一个非常"清亮"的高频音。</p>
+    </div>
+
+    <div class="answer-box">
+      (a) \(L\approx 76.5\) cm · (b) 第 9 谐波，8 个内部节点 · (c) 触在 \(x=mL/9=8.5m\) cm 处（\(m=1,...,8\)）
+    </div>
+
+    <p><a href="02_wave_propagation.html">→ 详细背景：一维波传播（含驻波）topic page</a></p>
+
+    <!-- ============ PROBLEM 4 ============ -->
+    <h2 id="p4">Problem 4 — 健身绳波功率 <span class="scope-tag scope-wave">Power · Lec 1.3</span></h2>
+
+    <div class="problem-statement">
+      一个人甩动一根健身绳产生行波，线密度 \(\mu=0.8\) kg/m，振幅 \(A=10\) cm，波长 \(\lambda=4\) m，输出平均功率 \(P=0.632\) W。
+      <br/><strong>(a)</strong> 求频率 \(f\)。
+      <br/><strong>(b)</strong> 如果让频率 <em>加倍</em> 同时保持波长 \(\lambda\) 不变，张力如何变？功率如何变？
+    </div>
+
+    <h3>(a) 频率 \(f\)</h3>
+    <p>平均功率 \(P=\bar u\, v\)，其中 \(\bar u=\tfrac12\mu A^2\omega^2\) 是单位长度平均能量密度。用 \(v=\omega/k=\omega\lambda/(2\pi)\)：</p>
+    $$P=\frac{1}{2}\mu A^2\omega^2\cdot\frac{\omega\lambda}{2\pi}=\frac{\mu A^2\omega^3\lambda}{4\pi}.$$
+    <p>解出 \(\omega^3\)：</p>
+    $$\omega^3=\frac{4\pi P}{\mu A^2\lambda}=\frac{4\pi(0.632)}{0.8\cdot 0.01\cdot 4}=\frac{7.94}{0.032}\approx 248.2.$$
+    $$\omega\approx 6.286\ \text{rad/s}\quad\Longrightarrow\quad f=\frac{\omega}{2\pi}\approx 1\ \text{Hz}.$$
+
+    <h3>(b) 加倍 \(\omega\)、保持 \(\lambda\)：定量分析</h3>
+    <p>关键：弦上波速由 \(v=\omega/k=\omega\lambda/(2\pi)\) 决定（运动学），同时 \(v=\sqrt{T/\mu}\) 决定（动力学）。两者必须一致，所以 <strong>固定 \(\lambda\) 改变 \(\omega\) ⟹ \(v\) 改变 ⟹ \(T\) 必须改变</strong>。</p>
+
+    <div class="box warning">
+      <p class="box-title">⚠ 陷阱：固定 λ + 加倍 ω 不是"无代价"操作</p>
+      <p>如果题目说"频率加倍"而 <strong>张力不变</strong>，那 \(v=\sqrt{T/\mu}\) 不变，所以 \(\lambda=v/f\) 必须减半。
+      如果题目说"频率加倍而 \(\lambda\) 不变"（本题），那必须改张力才能让 \(v\) 加倍。两种情境下 \(P\) 的变化因子不同：
+        <ul>
+          <li>张力不变（\(v\) 不变，\(\lambda\) 减半）：\(P\propto \omega^2 v\) → ×4</li>
+          <li>波长不变（\(v\) 加倍，\(T\) ×4）：\(P\propto \omega^2 v\) → ×8</li>
+        </ul>
+      <strong>读题要看清固定的是什么。</strong></p>
+    </div>
+
+    <p>本题（固定 \(\lambda\)）：</p>
+    <ul>
+      <li>\(v=\omega\lambda/(2\pi)\) → \(v\) <strong>加倍</strong>。</li>
+      <li>\(T=\mu v^2\) → \(T\) <strong>变 4 倍</strong>。</li>
+      <li>\(P=\tfrac12\mu A^2\omega^2 v\) → 因子 \((2)^2\cdot(2)=8\)，<strong>P 变 8 倍</strong> ≈ 5.06 W。</li>
+    </ul>
+
+    <div class="answer-box">
+      (a) \(f\approx 1\) Hz · (b) 张力变 4 倍；功率变 8 倍
+    </div>
+
+    <div class="box insight"><p class="box-title">公式拆解 — P 的三种缩放写法</p>
+      $$P=\tfrac12\mu A^2\omega^2 v = \tfrac12\mu A^2\omega^3/k = \tfrac12 A^2\omega^2\sqrt{T\mu}.$$
+      <p>三种等价写法对应三种"自然变量"：
+        <ul>
+          <li>给 \(\omega, v\)：用第一种。</li>
+          <li>给 \(\omega, k\)（或 \(\omega, \lambda\)）：用第二种。</li>
+          <li>给 \(\omega, T\)（\(\mu\) 已知）：用第三种。</li>
+        </ul>
+      考场上不要"自动"用第一种就完事——先看哪个变量被题目固定。
+      </p>
+    </div>
+
+    <p><a href="02_wave_propagation.html">→ 详细背景：波功率推导 topic page</a></p>
+
+    <!-- ============ FORMULA TABLE ============ -->
+    <h2 id="formula">公式速查表</h2>
+    <table class="formula-table">
+      <thead><tr><th>主题</th><th>公式</th></tr></thead>
+      <tbody>
+        <tr><td>阻尼振子方程</td><td>\(\ddot x+\gamma\dot x+\omega_0^2 x=0\)</td></tr>
+        <tr><td>自由阻尼频率</td><td>\(\omega'=\sqrt{\omega_0^2-\gamma^2/4}\)</td></tr>
+        <tr><td>驱动稳态振幅</td><td>\(|z_0|=\dfrac{F_0/m}{\sqrt{(\omega_0^2-\omega^2)^2+\omega^2\gamma^2}}\)</td></tr>
+        <tr><td>共振峰频率（位移）</td><td>\(\omega_{\max}=\sqrt{\omega_0^2-\gamma^2/2}\)</td></tr>
+        <tr><td>行波</td><td>\(\psi=A\cos(kx-\omega t)\)，\(k=2\pi/\lambda\)，\(\omega=2\pi f\)</td></tr>
+        <tr><td>弦上波速</td><td>\(v=\sqrt{T/\mu}\)，\(\mu=m/L\)</td></tr>
+        <tr><td>最大横向速度</td><td>\(v_s^{\max}=A\omega\)（≠ Av）</td></tr>
+        <tr><td>同时刻相位差</td><td>\(\Delta\phi=k\Delta x\)；位移 A→A/2 对应 \(\Delta\phi=\pi/3\)，\(\Delta x=\lambda/6\)</td></tr>
+        <tr><td>驻波（两端固定）</td><td>\(f_n=nv/2L\)，节点 \(x_m=mL/n\)，内部节点数 \(n-1\)</td></tr>
+        <tr><td>波平均能量密度</td><td>\(\bar u=\tfrac12\mu A^2\omega^2\)</td></tr>
+        <tr><td>波功率</td><td>\(P=\bar u v=\tfrac12\mu A^2\omega^2 v=\dfrac{\mu A^2\omega^3\lambda}{4\pi}\)</td></tr>
+      </tbody>
+    </table>
+
+    <!-- ============ COMMON PITFALLS RECAP ============ -->
+    <h2 id="pitfalls">陷阱汇总</h2>
+    <div class="box warning"><p class="box-title">本卷 6 大易错点</p>
+      <ol>
+        <li><strong>三个频率别混淆</strong>：\(\omega_0\)、\(\omega'=\sqrt{\omega_0^2-\gamma^2/4}\)、\(\omega_{\max}=\sqrt{\omega_0^2-\gamma^2/2}\)。共振峰在 \(\omega_{\max}\) 而非 \(\omega_0\)。</li>
+        <li><strong>\(v_s^{\max}=A\omega\) ≠ \(Av\)</strong>：粒子横向速度 vs 波相速，不要互换。</li>
+        <li><strong>线密度 \(\mu=m/L\)</strong> 用总质量/总长，与波长 \(\lambda\) 无关。</li>
+        <li><strong>位移 \(A\to A/2\) 相位差 \(\pi/3\)</strong>，对应 \(\Delta x=\lambda/6\)（\(\cos(\pi/3)=1/2\)）。</li>
+        <li><strong>两端固定 \(f_n=nv/2L\)</strong>，不是 \((2n+1)v/4L\)。第 \(n\) 谐波有 \(n-1\) 个内部节点。</li>
+        <li><strong>"频率加倍且 \(\lambda\) 不变"\(\Rightarrow v\)、\(T\) 都得变</strong>。\(P\propto \omega^2 v\) 给出 ×8 而非 ×4。先识别哪个量被固定。</li>
+      </ol>
+    </div>
+
+    <!-- ============ NAV ============ -->
+    <nav class="page-nav">
+      <a class="nav-prev" href="index.html">总目录</a>
+      <a class="nav-next" href="quiz2_walkthrough.html">Quiz 2 walkthrough</a>
+    </nav>
+
+  </main>
+</body>
+</html>

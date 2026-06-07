@@ -23,6 +23,9 @@
       <p class="blurb">按物理主题（而非讲次）组织的复习材料。点击 tile 进入对应主题；点击右下角小标签切换状态（未开始 → 阅读中 → 已复习）。进度保存在浏览器 localStorage 里，关掉页面也不会丢。</p>
     </div>
 
+    <div class="section-label">🔥 Final 冲刺：Quiz 1–5 完整 Walkthrough</div>
+    <div class="tile-grid" id="walkthrough-tiles"></div>
+
     <div class="section-label">Quiz 5 题集 — Shankar Ch.23–24 + OpenStax 熵题</div>
     <div class="tile-grid" id="quiz5-tiles"></div>
 
@@ -55,6 +58,13 @@
 
   <script src="interactive.js"></script>
   <script>
+    const walkthroughs = [
+      { num: 'Q1', slug: 'wt1', title: 'Quiz 1 Walkthrough', meta: '阻尼/驱动振子 · 弦上行波 · 驻波 · 功率', file: 'quiz1_walkthrough.html' },
+      { num: 'Q2', slug: 'wt2', title: 'Quiz 2 Walkthrough', meta: '双源干涉 · Doppler · 声波 s/p/Δρ · 气压计', file: 'quiz2_walkthrough.html' },
+      { num: 'Q3', slug: 'wt3', title: 'Quiz 3 Walkthrough', meta: 'Archimedes · Bernoulli · 大气 · 冰水', file: 'quiz3_walkthrough.html' },
+      { num: 'Q4', slug: 'wt4', title: 'Quiz 4 Walkthrough', meta: '绝热 · MB分布 · 循环 · 房屋热传导', file: 'quiz4_walkthrough.html' },
+      { num: 'Q5', slug: 'wt5', title: 'Quiz 5 Walkthrough', meta: '多源热机 · 矿弹熵 · 冰水熵 · 房屋熵', file: 'quiz5_walkthrough.html' },
+    ];
     const quiz3 = [
       { num: 'Q3', slug: 'solutions', title: 'Quiz 3 真题解答', meta: '2026 春 4 道题完整解答', file: 'quiz3_solutions.html' },
       { num: 'Q3', slug: 'problems',  title: 'Shankar 习题集',  meta: '10.1–10.20 + 11.1–11.7 共 27 题', file: 'quiz3_problems.html' },
@@ -99,7 +109,21 @@
       `;
     }
 
+    function renderWalkthroughTile(t) {
+      const status = (getProgress()[t.file] || {}).status || 'todo';
+      return `
+        <a class="tile" href="${t.file}" style="background:linear-gradient(135deg,#fef3c7 0%,white 60%);border-color:#fcd34d">
+          <div class="tile-num" style="color:#b45309">${t.num}</div>
+          <div class="tile-title">${t.title}</div>
+          <div class="tile-meta">${t.meta}</div>
+          <span class="tile-status ${status}" data-file="${t.file}">${statusLabel(status)}</span>
+        </a>
+      `;
+    }
+
     function renderTiles() {
+      document.getElementById('walkthrough-tiles').innerHTML =
+        walkthroughs.map(t => renderWalkthroughTile(t)).join('');
       document.getElementById('quiz5-tiles').innerHTML =
         quiz5.map(t => renderQuizTile(t)).join('');
       document.getElementById('quiz4-tiles').innerHTML =

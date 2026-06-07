@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quiz 3 详细 Walkthrough — Archimedes, Bernoulli, 大气, 热量</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="theme.js"></script>
+  <script>
+    MathJax = {
+      tex: { inlineMath: [['\\(','\\)']], displayMath: [['$','$']] },
+      svg: { fontCache: 'global' }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <style>
+    .problem-toc {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: .6rem;
+      margin: 1.25rem 0 2rem;
+    }
+    .problem-toc a {
+      display: block;
+      padding: .65rem .85rem;
+      background: #f5f5f4;
+      border: 1px solid #d6d3d1;
+      border-radius: 6px;
+      color: #134e4a;
+      text-decoration: none;
+      font-family: -apple-system, 'PingFang SC', sans-serif;
+      font-size: .92rem;
+      transition: all .15s;
+    }
+    .problem-toc a:hover { background: #0f766e; color: white; border-color: #0f766e; }
+    .problem-toc a .toc-label { display: block; font-weight: 600; font-size: 1rem; margin-bottom: .15rem; }
+    .problem-toc a .toc-topic { font-size: .8rem; color: #6b7280; }
+    .problem-toc a:hover .toc-topic { color: #d1fae5; }
+
+    .problem-statement {
+      background: #f5f5f4;
+      border-left: 3px solid #6b7280;
+      padding: .85rem 1.1rem;
+      margin: 1rem 0;
+      font-style: italic;
+      color: #374151;
+      border-radius: 0 4px 4px 0;
+    }
+    .problem-statement strong { font-style: normal; color: #1f2937; }
+    .problem-statement::before {
+      content: '题目：';
+      font-style: normal;
+      font-weight: 600;
+      color: #6b7280;
+      font-family: -apple-system, 'PingFang SC', sans-serif;
+      font-size: .85rem;
+      letter-spacing: .04em;
+      display: block;
+      margin-bottom: .35rem;
+    }
+
+    .answer-box {
+      background: #eff6ff;
+      border-left: 4px solid #2563eb;
+      padding: .75rem 1.1rem;
+      margin: 1rem 0;
+      border-radius: 0 6px 6px 0;
+      color: #1e3a8a;
+    }
+    .answer-box::before {
+      content: '✓ 答案：';
+      font-weight: 600;
+      color: #1e40af;
+      font-family: -apple-system, 'PingFang SC', sans-serif;
+      font-size: .88rem;
+      letter-spacing: .04em;
+      margin-right: .35rem;
+    }
+
+    .scope-tag {
+      display: inline-block;
+      padding: .12rem .55rem;
+      font-size: .72rem;
+      font-family: -apple-system, 'PingFang SC', sans-serif;
+      border-radius: 10px;
+      margin-left: .4rem;
+      vertical-align: middle;
+      letter-spacing: .02em;
+    }
+    .scope-arch     { background: #dbeafe; color: #1e3a8a; }
+    .scope-bern     { background: #d1fae5; color: #065f46; }
+    .scope-atmos    { background: #fce7f3; color: #831843; }
+    .scope-heat     { background: #fef3c7; color: #78350f; }
+
+    .back-link {
+      font-family: -apple-system, 'PingFang SC', sans-serif;
+      font-size: .9rem;
+      margin: 1rem 0;
+    }
+    .back-link a { color: #0f766e; text-decoration: none; }
+    .back-link a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <a class="home-link" href="index.html">← PHYS 4B 复习</a>
+    <nav>
+      <a href="06_fluid_statics.html">静力</a>
+      <a href="07_fluid_dynamics.html">动力</a>
+      <a href="08_real_fluids_heat.html">真实+热</a>
+    </nav>
+  </header>
+
+  <main class="container">
+
+    <div class="topic-header">
+      <h1>Quiz 3 详细 Walkthrough</h1>
+      <p class="meta">2026 春 · Archimedes · Bernoulli · 等温大气 · 比热与潜热 · Shankar Ch.20–21</p>
+      <p class="blurb">流体 + 热学综合卷。最容易翻车的一卷因为题面短、变量多、单位混（cal vs J、cm vs m、kg vs g）。逐题讲透并标注每个变量的单位。</p>
+    </div>
+
+    <div class="back-link">
+      <a href="quiz2_walkthrough.html">← Quiz 2</a> ·
+      <a href="index.html">总目录</a> ·
+      <a href="quiz4_walkthrough.html">Quiz 4 →</a>
+    </div>
+
+    <div class="box key-result">
+      <p class="box-title">一页速览</p>
+      <ul style="margin:.2rem 0">
+        <li><strong>P1 球漂浮 + 鸟.</strong> Archimedes 平衡两次：无鸟 \(0.5\rho_w V = \rho V\)；加鸟 \(0.55\rho_w V = \rho V+m_b\)。两式相减得 \(V\)，进而 \(\rho\)、\(R\)。系绳：\(T=(\rho_w-\rho)Vg\)（不依赖深度）。</li>
+        <li><strong>P2 灌溉 Bernoulli.</strong> 沿主管 Bernoulli 给上端 \(P_2\)；小孔出射用同一 Bernoulli 但终态 \(P=P_{\text{atm}}\)；保持流量需要 \(N_2 d_2^2 v_2 = N_1 d_1^2 v_1\)。</li>
+        <li><strong>P3 氦气球.</strong> 浮力 = \(\rho_{\text{air}} V g\)；载重 = (\(\rho_{\text{He}}V\) + gear + 乘客)。<strong>刚性球</strong>飞到 \(\rho_{\text{air}}(h)\) 降到使浮力 = 总重，用等温大气 \(\rho=\rho_0 e^{-h/H}\)；<strong>柔性球</strong> 浮力 = 常数 (因 V∝1/P 而 ρ∝P)，永远不平衡 → 飞到无穷高。</li>
+        <li><strong>P4 冰 + 水混合.</strong> 三步：(i) 冰升温至 0°C 吸 \(m_i c_i\cdot 20\)；(ii) 冰融化吸 \(m_i L\)；(iii) 看剩余水能否提供足够热量。比较 (i)+(ii) 与水从 10°C 降到 0°C 的释放量决定终态。</li>
+      </ul>
+    </div>
+
+    <div class="problem-toc">
+      <a href="#p1"><span class="toc-label">Problem 1</span><span class="toc-topic">球漂浮 + 鸟 / 系绳</span></a>
+      <a href="#p2"><span class="toc-label">Problem 2</span><span class="toc-topic">灌溉管 Bernoulli</span></a>
+      <a href="#p3"><span class="toc-label">Problem 3</span><span class="toc-topic">氦气球升高度</span></a>
+      <a href="#p4"><span class="toc-label">Problem 4</span><span class="toc-topic">冰水混合终态</span></a>
+    </div>
+
+    <!-- ============ PROBLEM 1 ============ -->
+    <h2 id="p1">Problem 1 — 漂浮球 + 鸟 <span class="scope-tag scope-arch">Archimedes</span></h2>
+
+    <div class="problem-statement">
+      球漂浮在水池中，50% 体积浸入水中。一只 \(m_b=26.2\) g 的鸟落上去，平衡后 55% 体积浸入。
+      <br/><strong>(a)</strong> 球的密度（g/cm³）？
+      <br/><strong>(b)</strong> 球的半径（cm）？
+      <br/><strong>(c)</strong> 把球（无鸟）拴在池底绳上，球中心位于水面下 1 m。绳的张力（N）？
+    </div>
+
+    <h3>(a) 球密度 \(\rho\)</h3>
+    <p>无鸟平衡：浮力 = 球重</p>
+    $$\rho_w\cdot 0.5 V\cdot g = \rho V\cdot g\quad\Longrightarrow\quad \rho=0.5\,\rho_w=0.5\ \text{g/cm}^3=500\ \text{kg/m}^3.$$
+
+    <h3>(b) 球半径 \(R\)</h3>
+    <p>加鸟平衡：</p>
+    $$\rho_w\cdot 0.55 V\cdot g = (\rho V+m_b)g.$$
+    <p>从中解 \(V\)：</p>
+    $$(0.55\rho_w-\rho)V = m_b\quad\Longrightarrow\quad V=\frac{m_b}{0.55\rho_w-\rho}.$$
+    <p>代入 \(\rho_w=1\) g/cm³，\(\rho=0.5\) g/cm³：</p>
+    $$V=\frac{26.2}{0.55-0.5}=\frac{26.2}{0.05}=524\ \text{cm}^3.$$
+    <p>球体积 \(V=\frac{4}{3}\pi R^3\) → </p>
+    $$R=\left(\frac{3V}{4\pi}\right)^{1/3}=\left(\frac{3\cdot 524}{4\pi}\right)^{1/3}=\left(\frac{1572}{12.566}\right)^{1/3}=125.07^{1/3}\approx 5\ \text{cm}.$$
+
+    <div class="box warning"><p class="box-title">⚠ 陷阱：单位混合 (g vs kg, cm vs m)</p>
+      <p>用 g/cm³ 时 \(m_b\) 必须用 g、\(V\) 必须用 cm³。如果用 SI 单位（kg, m³），\(m_b=0.0262\) kg、\(\rho_w=1000\) kg/m³，结果 \(V=5.24\times 10^{-4}\) m³，\(R\) 同样得 0.05 m = 5 cm。
+      <strong>整套计算坚持一套单位</strong>，不要中途切换。</p>
+    </div>
+
+    <h3>(c) 系绳张力</h3>
+    <p>球完全浸没（"水面下 1 m"远超 \(R\)）。球力平衡：浮力 = 球重 + 张力。</p>
+    $$T=(\rho_w-\rho)Vg = 0.5\cdot 10^3\cdot 5.24\times 10^{-4}\cdot 9.81\approx 2.57\ \text{N}.$$
+
+    <div class="box warning"><p class="box-title">⚠ 陷阱：张力不依赖深度</p>
+      <p>静水中浮力只依赖 <em>排开液体体积</em>，与水深无关（只要完全浸没）。"1 m 深" 是诱饵——不要用 \(P=\rho g h\) 算什么"水压力"。</p>
+      <p>原理：球被均匀压强场包围，净力 = 排开液体重量。水越深，球上下表面压差不变（因为它的高度不变），所以浮力不变。</p>
+    </div>
+
+    <div class="answer-box">
+      (a) \(\rho=0.5\) g/cm³ · (b) \(R=5\) cm · (c) \(T\approx 2.57\) N
+    </div>
+
+    <p><a href="06_fluid_statics.html">→ 详细背景：流体静力 (Archimedes)</a></p>
+
+    <!-- ============ PROBLEM 2 ============ -->
+    <h2 id="p2">Problem 2 — 灌溉管 Bernoulli <span class="scope-tag scope-bern">Bernoulli</span></h2>
+
+    <div class="problem-statement">
+      下层花坛管 \(d_1=2\) cm，绝对压强 \(P_1=145000\) Pa，流速 \(v_1=3\) m/s。
+      管子升到 2.5 m 高的上层花坛，那里管径 \(d_2=4\) cm。\(P_{\text{atm}}=101325\) Pa，\(\rho=1000\) kg/m³。
+      <br/><strong>(a)</strong> 上层管内绝对压强 \(P_2\)？
+      <br/><strong>(b)</strong> 下层 0.75 mm 孔 / 上层 0.5 mm 孔的出射速度 \(v_{\text{jet}}\)？
+      <br/><strong>(c)</strong> 下层 10 个孔，上层需要多少孔才保持等流量？
+    </div>
+
+    <h3>(a) 上层管压强 \(P_2\)</h3>
+    <p>连续性：\(A_1 v_1=A_2 v_2\)，截面比 \(d_2^2/d_1^2=4\) → </p>
+    $$v_2=v_1\cdot\frac{d_1^2}{d_2^2}=3\cdot\frac{1}{4}=0.75\ \text{m/s}.$$
+    <p>Bernoulli（沿主管，1 → 2）：</p>
+    $$P_1+\tfrac12\rho v_1^2 = P_2+\tfrac12\rho v_2^2+\rho g h.$$
+    $$P_2 = P_1+\tfrac12\rho(v_1^2-v_2^2)-\rho g h.$$
+    <p>计算：\(\tfrac12\cdot 1000\cdot(9-0.5625)=\tfrac12\cdot 1000\cdot 8.4375=4219\) Pa；\(\rho g h=1000\cdot 9.81\cdot 2.5=24525\) Pa。</p>
+    $$P_2=145000+4219-24525=124694\ \text{Pa}\approx 124700\ \text{Pa}.$$
+
+    <h3>(b) 孔出射速度</h3>
+    <p>沿一条流线，从主管某点（速度 \(v_i\)、压强 \(P_i\)）到孔的出射处（压强 \(P_{\text{atm}}\)、速度 \(v_{\text{jet}}\)，同高度）：</p>
+    $$P_i+\tfrac12\rho v_i^2 = P_{\text{atm}}+\tfrac12\rho v_{\text{jet}}^2.$$
+    $$v_{\text{jet}}=\sqrt{\frac{2(P_i-P_{\text{atm}})}{\rho}+v_i^2}.$$
+
+    <h4>下层孔（\(P_1=145000\), \(v_1=3\)）</h4>
+    $$v_{\text{jet},1}=\sqrt{\frac{2(43675)}{1000}+9}=\sqrt{87.35+9}=\sqrt{96.35}\approx 9.8\ \text{m/s}.$$
+
+    <h4>上层孔（\(P_2=124700\), \(v_2=0.75\)）</h4>
+    $$v_{\text{jet},2}=\sqrt{\frac{2(23375)}{1000}+0.5625}=\sqrt{46.75+0.56}=\sqrt{47.31}\approx 6.88\ \text{m/s}\approx 6.9\ \text{m/s}.$$
+
+    <div class="box warning"><p class="box-title">⚠ 陷阱：小孔的"内部速度"是主管速度，不是 0</p>
+      <p>题目提示"小孔不影响主管压强"。这里 Bernoulli 用的是 <em>同一条流线上的两点</em>：管内（速度 \(v_i\) 主管流速、压强 \(P_i\)）→ 孔出口（速度 \(v_{\text{jet}}\)、压强 \(P_{\text{atm}}\)）。
+      不要把"主管速度"和 Torricelli 大水池模型的"\(v\approx 0\)"混淆。本题孔小但管内流速可观，必须保留 \(v_i^2\) 项。</p>
+    </div>
+
+    <h3>(c) 上层孔数</h3>
+    <p>同体积流速：每孔单位时间体积 \(=A_{\text{hole}}\cdot v_{\text{jet}}=\frac{\pi}{4}d_{\text{hole}}^2 v_{\text{jet}}\)。要</p>
+    $$N_2\,d_{h_2}^2\,v_{\text{jet},2}=N_1\,d_{h_1}^2\,v_{\text{jet},1},$$
+    $$N_2=N_1\cdot\left(\frac{d_{h_1}}{d_{h_2}}\right)^2\cdot\frac{v_{\text{jet},1}}{v_{\text{jet},2}}=10\cdot\left(\frac{0.75}{0.5}\right)^2\cdot\frac{9.8}{6.9}=10\cdot 2.25\cdot 1.42\approx 32.$$
+
+    <div class="answer-box">
+      (a) \(P_2\approx 124700\) Pa · (b) \(v_{\text{jet},1}\approx 9.8\) m/s, \(v_{\text{jet},2}\approx 6.9\) m/s · (c) \(N_2\approx 32\) 个孔
+    </div>
+
+    <p><a href="07_fluid_dynamics.html">→ 详细背景：Bernoulli 与流体动力学</a></p>
+
+    <!-- ============ PROBLEM 3 ============ -->
+    <h2 id="p3">Problem 3 — 氦气球升高度 <span class="scope-tag scope-atmos">Atmosphere</span></h2>
+
+    <div class="problem-statement">
+      氦气球（刚性壁）体积 \(V=559\) m³，氦气密度 \(\rho_{\text{He}}=0.1664\) kg/m³，篮筐 + 装备质量 100 kg。每位乘客 80 kg。
+      <br/>大气：\(P_{\text{atm}}=101325\) Pa、海平面 \(\rho_0=1.204\) kg/m³、\(T=20°\)C 处处恒定（可用等温大气）。
+      <br/><strong>(a)</strong> 最多载几位乘客？
+      <br/><strong>(b)</strong> 少载 1 位，最大飞行高度？
+      <br/><strong>(c)</strong> 加分：如果壁是柔性（内外压相等、PV = const），结果如何？
+    </div>
+
+    <h3>(a) 最大乘客数</h3>
+    <p>海平面浮力：\(F_b=\rho_0 V g=1.204\cdot 559\cdot g=673\,g\) N（用 \(g\) 抵消方便）。
+    总重：\(W=(\rho_{\text{He}}V+100+80n)g=(93+100+80n)g=(193+80n)g\)。
+    起飞条件 \(F_b\ge W\)：</p>
+    $$673\ge 193+80n\quad\Longrightarrow\quad n\le\frac{480}{80}=6.$$
+    <p>所以 <strong>最多 6 位</strong>。</p>
+
+    <div class="box warning"><p class="box-title">⚠ 陷阱：He 占据的体积不能"白拿"</p>
+      <p>"载重"必须包括 He 的质量 \(\rho_{\text{He}}V\)。许多学生写 \(F_b=\rho_0 Vg\)，载重 = 100+80n，忘了 He 也是有重量的——这会高估约 93 kg 的载重能力。</p>
+    </div>
+
+    <h3>(b) 5 乘客时的最大高度</h3>
+    <p>载客 \(n=5\)，总载重 \(=100+400=500\) kg。He 质量 = 93 kg。在高度 \(h\) 处空气密度 \(\rho(h)\) 必须满足 <strong>净力为零</strong>：</p>
+    $$(\rho(h)-\rho_{\text{He}})V = 500\ \text{kg}.$$
+    $$\rho(h)=\rho_{\text{He}}+\frac{500}{V}=0.1664+\frac{500}{559}=0.1664+0.8944=1.061\ \text{kg/m}^3.$$
+    <p>等温大气 \(\rho(h)=\rho_0 e^{-h/H}\)，\(H=8581\) m：</p>
+    $$\frac{\rho(h)}{\rho_0}=\frac{1.061}{1.204}=0.881\quad\Longrightarrow\quad h=H\ln\frac{1}{0.881}=8581\cdot 0.1267\approx 1087\ \text{m}\approx 1080\ \text{m}.$$
+
+    <div class="box insight"><p class="box-title">直觉验证</p>
+      <p>5 名乘客已经接近最大载客 6 的一半挂载，气球升力余量很小，所以高度不会太高。\(\sim 1$ km 是合理的玩具气球高度（专业热气球可飞 6-10 km）。</p>
+    </div>
+
+    <h3>(c) 柔性气球加分</h3>
+    <p>柔性壁：\(P_{\text{inside}}=P_{\text{outside}}=P(h)\)。等温 \(PV=\) const → \(V(h)\propto 1/P(h)\)，氦气总质量 \(m_{\text{He}}=\rho_{\text{He}}V\) 守恒 → \(\rho_{\text{He}}(h)\propto P(h)\)。</p>
+    <p>同样地 \(\rho_{\text{air}}(h)\propto P(h)\)（等温大气）。所以 <strong>浮力</strong>：</p>
+    $$F_b = \rho_{\text{air}}(h) V(h) g = \rho_{\text{air}}(h)\cdot\frac{V_0 P_0}{P(h)}\cdot g = \rho_0 V_0\cdot\frac{P(h)/P_0\cdot P_0/P(h)}{1}\cdot g = \rho_0 V_0 g.$$
+    <p>即浮力 <strong>与高度无关</strong>！同样地，氦气总重 \(\rho_{\text{He}}(h)V(h) = \rho_{\text{He,0}}V_0\) 也守恒。所以净升力 = const，<strong>气球永远加速上升，理论上飞到无穷高</strong>。</p>
+
+    <div class="box warning"><p class="box-title">⚠ 陷阱：实际气球会破</p>
+      <p>柔性气球随高度上升 V 必须增大。实际橡胶弹性极限会破裂——所以"理论无穷高"是数学结论。这也解释为什么探空气球都设计成 <em>会破</em>：到设定高度炸开释放载荷，避免飞往外太空。</p>
+    </div>
+
+    <div class="answer-box">
+      (a) 6 位乘客 · (b) \(h\approx 1080\) m · (c) 柔性壁时浮力 = 重力比恒定 → 升到无穷高
+    </div>
+
+    <p><a href="06_fluid_statics.html">→ 详细背景：等温大气</a></p>
+
+    <!-- ============ PROBLEM 4 ============ -->
+    <h2 id="p4">Problem 4 — 冰水混合终态 <span class="scope-tag scope-heat">Heat / Phase</span></h2>
+
+    <div class="problem-statement">
+      使用 cal/kcal 单位、°C 温度。
+      <br/><strong>(a)</strong> 1 kg 冰 (-20°C) + 2 kg 水 (10°C)。求终态（各相质量）和温度。
+      <br/><strong>(b)</strong> 同上，但冰只有 0.1 kg。
+      <br/>提示：\(c_{\text{ice}}=0.5\) kcal/(kg·°C)，\(c_{\text{water}}=1\) kcal/(kg·°C)，\(L_f=80\) kcal/kg。
+    </div>
+
+    <h3>(a) 1 kg 冰 + 2 kg 水</h3>
+
+    <h4>第 1 步：冰从 -20°C 升到 0°C 需吸热</h4>
+    $$Q_1=m_i c_i\Delta T=1\cdot 0.5\cdot 20=10\ \text{kcal}.$$
+
+    <h4>第 2 步：水从 10°C 降到 0°C 释放热</h4>
+    $$Q_{\text{avail}}=m_w c_w\Delta T=2\cdot 1\cdot 10=20\ \text{kcal}.$$
+
+    <p>剩余热量：\(20-10=10\) kcal，可用于融化冰。</p>
+
+    <h4>第 3 步：冰融化需 \(m L_f=1\cdot 80=80\) kcal</h4>
+    <p>只能融化部分：\(\Delta m=10/80=0.125\) kg。</p>
+    <p>终态：冰 \(1-0.125=0.875\) kg、水 \(2+0.125=2.125\) kg，温度 0°C。</p>
+
+    <div class="box warning"><p class="box-title">⚠ 陷阱：先判定终态是否在相变上</p>
+      <p>不要直接列 \(m_i c_i(T_f-T_i)+m_w c_w(T_f-T_w)+m_i L_f=0\) 解 \(T_f\)，因为这隐含假设 "冰全部融化、终态 T > 0°C"。如果错误，\(T_f\) 会落到不可能的区间（如负温度，或负的"已融化质量"）。
+      正确步骤：先比较 \(Q_1+m_i L_f\)（冰全融化所需）和 \(Q_{\text{avail}}\)（水降到 0°C 释放）。本题 90 kcal > 20 kcal，说明 <strong>冰不会全部融化</strong>，终态 0°C 混合。</p>
+    </div>
+
+    <h3>(b) 0.1 kg 冰 + 2 kg 水</h3>
+
+    <h4>第 1 步：冰升到 0°C：\(Q_1=0.1\cdot 0.5\cdot 20=1\) kcal</h4>
+    <h4>第 2 步：冰全融化：\(Q_2=0.1\cdot 80=8\) kcal</h4>
+    <p>冰全部变成 0°C 的水需要 \(Q_1+Q_2=9\) kcal。</p>
+    <h4>第 3 步：水（含已融化的）再升 / 降到 \(T_f\)</h4>
+    <p>水降 10 → \(T_f\)：释放 \(Q_3=2\cdot 1\cdot(10-T_f)\) kcal；已融化的"新水"升 0 → \(T_f\)：吸 \(Q_4=0.1\cdot 1\cdot T_f\) kcal。</p>
+    <p>能量守恒：\(Q_1+Q_2+Q_4=Q_3\)：</p>
+    $$1+8+0.1 T_f=2(10-T_f).$$
+    $$9+0.1 T_f=20-2 T_f\quad\Longrightarrow\quad 2.1 T_f=11\quad\Longrightarrow\quad T_f\approx 5.24°\text{C}.$$
+    <p>需验证 \(T_f>0\)，否则前提"冰全融化"错——本题 5.24 > 0 ✓。</p>
+
+    <div class="answer-box">
+      (a) 0.875 kg 冰 + 2.125 kg 水，均在 0°C · (b) 全部 2.1 kg 水（冰全融化），\(T_f\approx 5.24°\)C
+    </div>
+
+    <div class="box insight"><p class="box-title">终态判定算法（背下来！）</p>
+      <ol>
+        <li>"边界 1"：把冷物升到相变温度 + 完全相变所需总热 \(Q_{\text{cold-needed}}\)。</li>
+        <li>"边界 2"：把热物降到相变温度释放热 \(Q_{\text{hot-avail}}\)。</li>
+        <li>若 \(Q_{\text{hot-avail}}<Q_1\)（升冷物到 0 都不够）：终态 \(T<0\)°C，全冰状态。</li>
+        <li>若 \(Q_1\le Q_{\text{hot-avail}}<Q_1+m_iL_f\)（部分融化）：终态 0°C 混合，融化质量 \(\Delta m=(Q_{\text{avail}}-Q_1)/L_f\)。</li>
+        <li>若 \(Q_{\text{hot-avail}}>Q_1+m_iL_f\)（全融化还有余热）：终态全水，列剩余能量方程解 \(T_f>0\)。</li>
+      </ol>
+    </div>
+
+    <p><a href="08_real_fluids_heat.html">→ 详细背景：热学入门 (Ch.21)</a></p>
+
+    <!-- ============ FORMULA TABLE ============ -->
+    <h2 id="formula">公式速查表</h2>
+    <table class="formula-table">
+      <thead><tr><th>主题</th><th>公式</th></tr></thead>
+      <tbody>
+        <tr><td>Archimedes</td><td>\(F_b=\rho_{\text{fluid}}V_{\text{disp}}g\)；不依赖深度</td></tr>
+        <tr><td>系绳张力</td><td>\(T=(\rho_{\text{fluid}}-\rho)Vg\)（向下绳，完全浸没）</td></tr>
+        <tr><td>球体积</td><td>\(V=\tfrac43\pi R^3 \Rightarrow R=(3V/4\pi)^{1/3}\)</td></tr>
+        <tr><td>连续性</td><td>\(A_1 v_1 = A_2 v_2\)</td></tr>
+        <tr><td>Bernoulli</td><td>\(P+\tfrac12\rho v^2+\rho g h = \text{const}\)（沿一条流线）</td></tr>
+        <tr><td>小孔出射</td><td>\(v_{\text{jet}}=\sqrt{2(P-P_{\text{atm}})/\rho+v_{\text{inside}}^2}\)</td></tr>
+        <tr><td>等温大气</td><td>\(\rho(h)=\rho_0 e^{-h/H}\)，\(H=8581\) m（20°C）</td></tr>
+        <tr><td>气球平衡条件</td><td>\((\rho_{\text{air}}-\rho_{\text{He}})V = m_{\text{load}}+m_{\text{gear}}\)</td></tr>
+        <tr><td>感热</td><td>\(\Delta Q=mc\Delta T\)</td></tr>
+        <tr><td>潜热</td><td>\(Q=mL\)；\(L_{f,\text{ice→water}}=80\) kcal/kg、\(L_{v,\text{water→vap}}=540\) kcal/kg</td></tr>
+        <tr><td>比热</td><td>\(c_{\text{ice}}=0.5\)、\(c_{\text{water}}=1\) kcal/(kg·°C)</td></tr>
+      </tbody>
+    </table>
+
+    <!-- ============ PITFALLS RECAP ============ -->
+    <h2 id="pitfalls">陷阱汇总</h2>
+    <div class="box warning"><p class="box-title">本卷 8 大易错点</p>
+      <ol>
+        <li><strong>载浮力问题</strong>：总重要算上 He / 球本身的质量。</li>
+        <li><strong>张力 / 深度无关</strong>：浸没物的浮力公式不依赖 h。</li>
+        <li><strong>g/cm³ 与 kg/m³</strong>：整套题坚持一套单位。</li>
+        <li><strong>小孔 Bernoulli</strong> 内部速度用主管流速，不是 0（除非主管截面 ≫ 孔截面）。</li>
+        <li><strong>等温大气</strong>：刚性 vs 柔性气球的结论天差地别（柔性 → 浮力恒定，不能"飘平衡"）。</li>
+        <li><strong>相变问题</strong>：先比较"全融化所需"vs"水降到 0°C 释放"，决定终态类型，再列方程。</li>
+        <li><strong>\(c_{\text{ice}}\ne c_{\text{water}}\)</strong>：冰的比热是水的一半 (0.5 kcal/kg/°C)。</li>
+        <li><strong>cal vs J</strong>：考题用 cal 单位时，所有热量用 cal/kcal，不要中途换 SI（除非明确要求）。</li>
+      </ol>
+    </div>
+
+    <nav class="page-nav">
+      <a class="nav-prev" href="quiz2_walkthrough.html">Quiz 2</a>
+      <a class="nav-next" href="quiz4_walkthrough.html">Quiz 4 walkthrough</a>
+    </nav>
+
+  </main>
+</body>
+</html>

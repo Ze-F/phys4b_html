@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quiz 5 详细 Walkthrough — 多源循环、矿弹熵、冰水熵、房屋熵</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="theme.js"></script>
+  <script>
+    MathJax = {
+      tex: { inlineMath: [['\\(','\\)']], displayMath: [['$','$']] },
+      svg: { fontCache: 'global' }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <style>
+    .problem-toc { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: .6rem; margin: 1.25rem 0 2rem; }
+    .problem-toc a { display: block; padding: .65rem .85rem; background: #f5f5f4; border: 1px solid #d6d3d1; border-radius: 6px; color: #134e4a; text-decoration: none; font-family: -apple-system, 'PingFang SC', sans-serif; font-size: .92rem; transition: all .15s; }
+    .problem-toc a:hover { background: #0f766e; color: white; border-color: #0f766e; }
+    .problem-toc a .toc-label { display: block; font-weight: 600; font-size: 1rem; margin-bottom: .15rem; }
+    .problem-toc a .toc-topic { font-size: .8rem; color: #6b7280; }
+    .problem-toc a:hover .toc-topic { color: #d1fae5; }
+
+    .problem-statement { background: #f5f5f4; border-left: 3px solid #6b7280; padding: .85rem 1.1rem; margin: 1rem 0; font-style: italic; color: #374151; border-radius: 0 4px 4px 0; }
+    .problem-statement strong { font-style: normal; color: #1f2937; }
+    .problem-statement::before { content: '题目：'; font-style: normal; font-weight: 600; color: #6b7280; font-family: -apple-system, 'PingFang SC', sans-serif; font-size: .85rem; letter-spacing: .04em; display: block; margin-bottom: .35rem; }
+
+    .answer-box { background: #eff6ff; border-left: 4px solid #2563eb; padding: .75rem 1.1rem; margin: 1rem 0; border-radius: 0 6px 6px 0; color: #1e3a8a; }
+    .answer-box::before { content: '✓ 答案：'; font-weight: 600; color: #1e40af; font-family: -apple-system, 'PingFang SC', sans-serif; font-size: .88rem; letter-spacing: .04em; margin-right: .35rem; }
+
+    .scope-tag { display: inline-block; padding: .12rem .55rem; font-size: .72rem; font-family: -apple-system, 'PingFang SC', sans-serif; border-radius: 10px; margin-left: .4rem; vertical-align: middle; letter-spacing: .02em; }
+    .scope-engine { background: #fce7f3; color: #831843; }
+    .scope-bomb { background: #fef3c7; color: #78350f; }
+    .scope-phase { background: #dbeafe; color: #1e3a8a; }
+    .scope-house { background: #d1fae5; color: #065f46; }
+
+    .back-link { font-family: -apple-system, 'PingFang SC', sans-serif; font-size: .9rem; margin: 1rem 0; }
+    .back-link a { color: #0f766e; text-decoration: none; }
+    .back-link a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <a class="home-link" href="index.html">← PHYS 4B 复习</a>
+    <nav>
+      <a href="13_carnot_second_law.html">Carnot</a>
+      <a href="14_entropy_macroscopic.html">宏观熵</a>
+      <a href="15_boltzmann_statistical.html">统计熵</a>
+    </nav>
+  </header>
+
+  <main class="container">
+
+    <div class="topic-header">
+      <h1>Quiz 5 详细 Walkthrough</h1>
+      <p class="meta">2026 春 · 熵与第二定律 · Shankar Ch.23–24 · 期末前最后一卷</p>
+      <p class="blurb">熵 = state function。三句心法：(i) ΔS 沿 <em>任何可逆路径</em> 计算，与实际不可逆路径无关；(ii) 储热源 ΔS = ±Q/T_reservoir，温度用储热源的 T；(iii) ΔS_universe ≥ 0，等号仅当全过程可逆。</p>
+    </div>
+
+    <div class="back-link">
+      <a href="quiz4_walkthrough.html">← Quiz 4</a> ·
+      <a href="index.html">总目录</a>
+    </div>
+
+    <div class="box key-result">
+      <p class="box-title">一页速览</p>
+      <ul style="margin:.2rem 0">
+        <li><strong>P1 三源热机.</strong> 可逆 ⟺ ΔS_univ = 0，给最大 W；不可逆给 ΔS_univ > 0。能量守恒 \(W=Q_{\text{abs}}-Q_{\text{rel}}\) + 熵守恒一起解三个未知 \((Q_3,W,\eta)\)。</li>
+        <li><strong>P2 矿弹.</strong> 第一阶段：等容 + 全部内能增加 ΔU=Q ⟹ T' ; ΔS_gas = nC_v ln(T'/T)。
+        第二阶段：等温等外压（不是可逆）膨胀，做功 \(W=P(V'-V)=nR(T'-T)\)；用可逆路径 ΔS_gas = nR ln(V'/V) = R ln(T'/T)。</li>
+        <li><strong>P3 冰 + 水.</strong> 平衡温 给定 ⟹ 反解 T_i；熵分三段算（融化 \(mL/T\) + 新水升温 \(mc\ln(T_f/0)\) + 原水降温 \(Mc\ln(T_f/T_i)\)），单位换 J/K (cal→J)。</li>
+        <li><strong>P4 房屋熵.</strong> 房屋稳态 → ΔS_house = 0；外界吸 Q 给 ΔS_out = Q/T_out。瞬态降温阶段两者都要算。"下限"参数：友人作复杂热源时，所有外部不确定贡献 ≥ 0，所以 ΔS_univ ≥ ΔS_out。</li>
+      </ul>
+    </div>
+
+    <div class="problem-toc">
+      <a href="#p1"><span class="toc-label">Problem 1</span><span class="toc-topic">三源循环最大功</span></a>
+      <a href="#p2"><span class="toc-label">Problem 2</span><span class="toc-topic">爆弹 + 膨胀双段</span></a>
+      <a href="#p3"><span class="toc-label">Problem 3</span><span class="toc-topic">冰 + 水熵</span></a>
+      <a href="#p4"><span class="toc-label">Problem 4</span><span class="toc-topic">房屋宇宙熵</span></a>
+    </div>
+
+    <!-- ============ PROBLEM 1 ============ -->
+    <h2 id="p1">Problem 1 — 三源热机 <span class="scope-tag scope-engine">Cycle / ΔS_univ</span></h2>
+
+    <div class="problem-statement">
+      循环系统每循环吸 300 J（来自 300 K 储库）、吸 50 J（来自 100 K 储库）、释放 Q（到 200 K 储库）。
+      <br/><strong>(a)</strong> 最大每循环做功 W 是多少？
+      <br/><strong>(b)</strong> 作为热机，效率 η？
+      <br/><strong>(c)</strong> 若改为吸 20 J（来自 100 K）+ 300 J（来自 300 K），却仍输出 (a) 中的 W。可能吗？用能量和熵论证。
+    </div>
+
+    <h3>(a) 最大 W：可逆情形</h3>
+    <p>关键：循环 ΔU = 0、ΔS_system = 0（state function 回到初态）。所以宇宙熵全部来自三个储库：</p>
+    $$\Delta S_{\text{univ}}=-\frac{Q_{300}}{300}-\frac{Q_{100}}{100}+\frac{Q_{200}}{200}.$$
+    <p>（符号：储库放热进系统时储库失熵，记 -Q/T；储库吸热加熵，记 +Q/T。）</p>
+    <p>最大 W ⟺ 最少 Q 释放到 200K ⟺ ΔS_univ = 0（可逆极限）：</p>
+    $$-\frac{300}{300}-\frac{50}{100}+\frac{Q_{200}}{200}=0\quad\Longrightarrow\quad Q_{200}=200\cdot 1.5=300\ \text{J}.$$
+    <p>能量守恒：W = 入 - 出 = (300+50) - 300 = <strong>50 J</strong>。</p>
+
+    <div class="box warning"><p class="box-title">⚠ 陷阱：用 ΔS_univ ≥ 0，等号给 <em>最大</em> 做功</p>
+      <p>第二定律要求 ΔS_univ ≥ 0。<strong>越接近 0，越接近可逆，越接近最大做功</strong>。这是热机优化的基本逻辑。
+      若你写成"ΔS_univ ≤ 0 给最大功"，那是反了——这种方向给的是"physically impossible"。</p>
+    </div>
+
+    <h3>(b) 效率 η</h3>
+    <p>η = W / Q_absorbed。系统吸热 = 300 + 50 = 350 J（两个储库都给系统供热）。</p>
+    $$\eta=\frac{50}{350}=\frac{1}{7}\approx 0.143=14.3\%.$$
+
+    <div class="box warning"><p class="box-title">⚠ 陷阱：分母用 <em>总吸热</em> 不是其中之一</p>
+      <p>有两个源同时供热，分母应 = 全部吸入的热（即 350 J），不是其中某一个（300 J 或 50 J）。
+      η = W / Q_abs 的定义中 Q_abs 是 <em>系统吸入的总热</em>。</p>
+    </div>
+
+    <h3>(c) 改为 20 J + 300 J 时</h3>
+
+    <h4>能量论证</h4>
+    <p>给定 W = 50 J（不变），输入 = 300 + 20 = 320 J，输出 = 输入 - W = 320 - 50 = 270 J 到 200 K 储库。</p>
+
+    <h4>熵论证</h4>
+    $$\Delta S_{\text{univ}}=-\frac{300}{300}-\frac{20}{100}+\frac{270}{200}=-1-0.2+1.35=+0.15\ \text{J/K}.$$
+    <p>ΔS_univ > 0 ⟹ 符合第二定律 ⟹ <strong>物理上可能</strong>。</p>
+    <p>结论：这种情形下循环 <strong>不可逆</strong>（如果可逆 ΔS_univ 应该 = 0）。物理上：减少了 30 J 来自冷源 100 K 的供热，却没补偿能输出更多功，多出的"能量缺口"反映在更多 Q 释放到 200 K 储库上，产生熵增。</p>
+
+    <div class="box insight"><p class="box-title">"可逆" = "理想效率"</p>
+      <p>对比 (a) 与 (c)：相同的 W、相同的 300K 输入热，但 (c) 少吸 30 J 来自 100 K，多排 30 J 到 200 K。
+      ΔS_univ 多了 30·(1/200 - 1/100) = 30·(-1/200) = -0.15 J/K... 等等，让我重算。
+      实际上：(c) 比 (a) 多排 270-300 = -30 J（少排 30 J） + 少吸 30 J 来自 100 K。
+      变化量 ΔS 比 (a) 增加：少排到 200K ⟹ -30/200 = -0.15；少吸 100K ⟹ +30/100 = +0.30。
+      所以 (c) 比 (a) 多 +0.15 J/K，0+0.15=0.15 J/K ✓</p>
+    </div>
+
+    <div class="answer-box">
+      (a) W_max = 50 J (Q_200 = 300 J 释放) · (b) η = 1/7 ≈ 14.3% · (c) 物理上可能 (ΔS_univ = +0.15 J/K > 0)；循环 <strong>不可逆</strong>
+    </div>
+
+    <p><a href="13_carnot_second_law.html">→ 详细背景：Carnot 与第二定律</a></p>
+
+    <!-- ============ PROBLEM 2 ============ -->
+    <h2 id="p2">Problem 2 — 矿弹爆炸 + 等外压膨胀 <span class="scope-tag scope-bomb">Bomb + Isothermal</span></h2>
+
+    <div class="problem-statement">
+      1 mol 空气在汽缸内，活塞，初平衡 T = 273 K（内外压相等）。
+      <br/><strong>(a)</strong> 隔热绝缘 + 活塞夹死。微型炸弹爆炸释放 1000 J 热。新温 T' = ?
+      <br/><strong>(b)</strong> (a) 中气体熵变 ΔS (J/K)？
+      <br/><strong>(c)</strong> 接下来汽缸接触温度为 T' 的储库，同时松开夹具。气体抵抗外压膨胀到新平衡。求 ΔS_gas、ΔS_universe (J/K)？
+    </div>
+
+    <p><strong>预备：空气 = 双原子，C_v = 5R/2 = 20.775 J/(mol·K)，C_p = 7R/2 = 29.085 J/(mol·K)。</strong></p>
+
+    <h3>(a) 新温度 T'</h3>
+    <p>等容 + 绝热（除了爆弹这个内热源）：W = 0，ΔU = Q_bomb = 1000 J。</p>
+    $$\Delta U=n C_v\Delta T\quad\Longrightarrow\quad \Delta T=\frac{1000}{1\cdot(5/2)\cdot 8.31}=\frac{1000}{20.775}\approx 48.13\ \text{K}.$$
+    $$T'=273+48.13\approx 321.13\ \text{K}.$$
+
+    <div class="box warning"><p class="box-title">⚠ 陷阱：空气 = 双原子，C_v = 5R/2</p>
+      <p>Quiz 5 公式表明确给"diatomic c_v = 5/2 R"。<strong>空气主要是 N₂、O₂ 都是双原子</strong>。
+      用单原子 3/2 R 会让 T' 跳到 354 K，错。</p>
+    </div>
+
+    <h3>(b) ΔS_gas (等容升温)</h3>
+    <p>用恒容版熵公式（V₂ = V₁ 时第二项消失）：</p>
+    $$\Delta S=n C_v\ln\frac{T'}{T}=1\cdot\frac{5}{2}\cdot 8.31\cdot\ln\frac{321.13}{273}=20.775\cdot\ln 1.176=20.775\cdot 0.1626\approx 3.38\ \text{J/K}.$$
+
+    <div class="box insight"><p class="box-title">为什么 ΔS_gas > 0？</p>
+      <p>气体温度升高 → 微观态数量 Ω 增加（动量空间球壳半径 ∝ √U 变大），所以 S = k ln Ω 上升。
+      虽然 Q 来自"内部"（炸弹），但热能注入仍是熵的来源，等于 Q = nC_v ΔT 在 T 域上的 ∫dQ_rev/T = nC_v ln(T'/T)。
+      <strong>这是 "internal Q" 还是 "external Q" 不影响 ΔS_gas</strong>——因为熵是 state function，初终态决定。</p>
+    </div>
+
+    <h3>(c) 等外压膨胀</h3>
+    <p>初态（c 段开始时）：T = T'，V = V₁，P_int = nRT'/V₁。
+    末态：T = T'（接触 T' 储库），活塞自由，P_int = P_ext = P_atm = nRT/V₁（注意 P_atm = 初始 a 段前的内压，= nRT/V₁ 即 273 K 时的内压）。</p>
+
+    <h4>新体积</h4>
+    <p>P_atm = nRT/V₁ = nRT'/V₁'，所以</p>
+    $$V_1'=V_1\cdot\frac{T'}{T}=V_1\cdot\frac{321.13}{273}\approx 1.176\,V_1.$$
+
+    <h4>ΔS_gas — 用 state function 沿可逆等温路径</h4>
+    <p>初终态都在 T = T'，所以 ΔU = 0，膨胀 V₁ → V₁'：</p>
+    $$\Delta S_{\text{gas}}=nR\ln\frac{V_1'}{V_1}=R\ln\frac{T'}{T}=8.31\cdot 0.1626\approx 1.35\ \text{J/K}.$$
+
+    <div class="box warning"><p class="box-title">⚠ 陷阱：实际过程不可逆，但 ΔS_gas 计算用可逆路径</p>
+      <p>实际：活塞松开瞬间 P_int = nRT'/V₁ > P_atm，气体快速冲出对外做功，<em>非</em>准静态。
+      但 ΔS 是 state function ⟹ 与路径无关 ⟹ 用任何 <em>可逆</em> 路径计算 ΔS 都给出同样的答案。
+      <strong>最简单的可逆路径</strong>：等温（T' 储库）准静态膨胀。沿它 dS = δQ_rev/T = (PdV)/T = nR dV/V，积分给上面那个公式。</p>
+    </div>
+
+    <h4>Q 实际值 & ΔS_reservoir</h4>
+    <p>实际过程（非可逆等外压膨胀）：</p>
+    <ul>
+      <li>ΔU = 0（等温）</li>
+      <li>W_gas = P_ext · (V₁' - V₁) = P_atm · V₁(T'/T - 1) = nRT(T'/T - 1) = nR(T' - T) = 8.31·48.13 ≈ 400 J</li>
+      <li>Q（从储库给气体）= ΔU + W = 0 + 400 = 400 J</li>
+    </ul>
+
+    <p>储库失热 400 J，温度 T' = 321 K（可视为大储库不变）：</p>
+    $$\Delta S_{\text{reservoir}}=-\frac{Q}{T'}=-\frac{400}{321.13}\approx -1.246\ \text{J/K}.$$
+
+    <p>宇宙：</p>
+    $$\Delta S_{\text{univ}}=\Delta S_{\text{gas}}+\Delta S_{\text{reservoir}}=1.35-1.25\approx 0.10\ \text{J/K}.$$
+
+    <p>ΔS_univ > 0 ⟹ 这是不可逆过程 ✓（验证：活塞瞬间释放，气体非准静态冲出，确实不可逆）。</p>
+
+    <div class="box insight"><p class="box-title">熵会计三栏表</p>
+      <table class="formula-table" style="margin: .5rem 0;">
+        <thead><tr><th>实体</th><th>实际能量</th><th>熵变</th></tr></thead>
+        <tbody>
+          <tr><td>Gas</td><td>ΔU=0, 收 Q=400J, 做 W=400J</td><td>+1.35 J/K（沿可逆等温）</td></tr>
+          <tr><td>Reservoir (T'=321K)</td><td>失 Q=400 J</td><td>-1.25 J/K（可逆假设储库够大）</td></tr>
+          <tr><td>Universe</td><td>—</td><td>+0.10 J/K (irreversible)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="answer-box">
+      (a) T' ≈ 321.13 K · (b) ΔS_gas ≈ 3.38 J/K · (c) ΔS_gas ≈ 1.35 J/K, ΔS_univ ≈ 0.10 J/K
+    </div>
+
+    <p><a href="14_entropy_macroscopic.html">→ 详细背景：宏观熵与可逆路径</a></p>
+
+    <!-- ============ PROBLEM 3 ============ -->
+    <h2 id="p3">Problem 3 — 冰 + 水 熵 <span class="scope-tag scope-phase">Phase change</span></h2>
+
+    <div class="problem-statement">
+      1 kg 冰 (0°C) 投入装 10 L (= 10 kg) 水的桶。平衡后温度 = 20°C。
+      <br/><strong>(a)</strong> 水的初始温度 (°C)？
+      <br/><strong>(b)</strong> 宇宙熵变 (J/K)？
+    </div>
+
+    <h3>(a) 反解水的初温</h3>
+    <p>能量守恒（用 kcal）：</p>
+    <ul>
+      <li>冰融化：吸 \(Q_1 = m_i L_f = 1\cdot 80 = 80\) kcal</li>
+      <li>新水从 0°C 升到 20°C：吸 \(Q_2 = 1\cdot 1\cdot 20 = 20\) kcal</li>
+      <li>原水从 T_i 降到 20°C：放 \(Q_3 = 10\cdot 1\cdot(T_i-20)\) kcal</li>
+    </ul>
+    <p>守恒：Q₁ + Q₂ = Q₃ → 100 = 10(T_i - 20) → \(T_i = 30°\text{C}\)。</p>
+
+    <h3>(b) 宇宙熵变</h3>
+    <p>三步全部用绝对温度 K，比热和潜热换成 J/K 单位。\(1\ \text{cal}=4.184\) J，\(c_w=4184\) J/(kg·K)，\(L_f=80\cdot 4184=334720\) J/kg。</p>
+
+    <h4>第 1 步：冰融化 (T = 273 K 恒定)</h4>
+    $$\Delta S_1=\frac{m_i L_f}{T_{\text{melt}}}=\frac{1\cdot 334720}{273}\approx 1226\ \text{J/K}.$$
+
+    <h4>第 2 步：新水从 273 K 升到 293 K</h4>
+    <p>沿可逆加热路径（与外部 0→20°C 一系列 T 储库可逆接触）：</p>
+    $$\Delta S_2=m c_w\ln\frac{T_f}{T_i}=1\cdot 4184\cdot\ln\frac{293}{273}=4184\cdot 0.07076\approx 296\ \text{J/K}.$$
+
+    <h4>第 3 步：原水从 303 K 降到 293 K</h4>
+    $$\Delta S_3=M c_w\ln\frac{T_f}{T_i}=10\cdot 4184\cdot\ln\frac{293}{303}=41840\cdot(-0.03356)\approx -1404\ \text{J/K}.$$
+
+    <h4>合计</h4>
+    $$\Delta S_{\text{univ}}=\Delta S_1+\Delta S_2+\Delta S_3=1226+296-1404\approx 118\ \text{J/K}.$$
+    <p>正值 ✓（自发的热混合过程必定 ΔS_univ > 0）。</p>
+
+    <div class="box warning"><p class="box-title">⚠ 陷阱：T 必须用 Kelvin 单位</p>
+      <p>S = ∫dQ/T 中的 T 是 <strong>绝对温度</strong>，必须用 K 不能用 °C。
+      若用 °C：0°C = 0 → \(\Delta S_1 = mL_f/0\) → 无穷大（错）。
+      "ΔT 用 °C/K 数值相等"只适用于 \(\kappa A\Delta T/L\) 这类 ΔT 公式，不适用于 1/T 的积分。</p>
+    </div>
+
+    <div class="box warning"><p class="box-title">⚠ 陷阱：可逆路径不等于"实际接触一个储库"</p>
+      <p>实际过程：1 kg 冰直接接触 30°C 水，瞬间没有"温度梯度无穷小的可逆接触"。
+      但 ΔS 是 state function，<strong>初终态决定</strong>。计算时假装"沿可逆路径"用 ln(T_f/T_i) 公式即可。
+      若题目改问"具体过程的 Q/T 积分"，答案不同——因为该积分 ≤ ΔS。但本题问 ΔS 直接，用公式。</p>
+    </div>
+
+    <h3>验证：单位与数量级</h3>
+    <p>融化吸热 ≈ 334720 J，主导熵 ΔS₁。原水冷却释放熵主导 ΔS₃。两个绝对值都 ~1300 J/K，差出来才是宇宙增熵 ≈ 116 J/K（约 10% 量级，合理）。</p>
+
+    <div class="answer-box">
+      (a) T_i = 30°C · (b) ΔS_univ ≈ 118 J/K (or ~116 J/K with rounding)
+    </div>
+
+    <p><a href="08_real_fluids_heat.html">→ 详细背景：相变与熵</a></p>
+
+    <!-- ============ PROBLEM 4 ============ -->
+    <h2 id="p4">Problem 4 — 房屋宇宙熵 <span class="scope-tag scope-house">House ΔS</span></h2>
+
+    <div class="problem-statement">
+      Q4 P4 的房屋问题延续。加热器电源 3333 J/s 维持房间 25°C（外 -25°C）。
+      <br/><strong>(a)</strong> 1 小时宇宙熵变？
+      <br/><strong>(b)</strong> 加热器坏掉，21 分钟内温度跌到 20°C。期间宇宙熵变？(近似流出 ≈ 3333 J/s 不变)
+      <br/><strong>(c)</strong> 31 朋友到达，发热 3200 J/s，室温稳定 23°C。每小时宇宙熵变下限？
+      <br/>提示：熵是 state function。
+    </div>
+
+    <p><strong>关键温度</strong>：T_out = -25°C = 248 K（恒定）。室内为 25°C = 298 K (a)；20→25°C 之间 (b)；23°C = 296 K (c)。</p>
+
+    <h3>(a) 稳态加热 1 小时</h3>
+    <p>稳态：T_house 不变 → ΔS_house = 0（state function，初终态相同）。
+    电力来自插座：电能 → 热能 → 流出。电网不发热产 entropy 这部分不需要算（也无法算）。
+    外界吸收 Q = 3333·3600 = 1.2×10⁷ J 在 T_out = 248 K：</p>
+    $$\Delta S_{\text{out}}=\frac{Q}{T_{\text{out}}}=\frac{1.2\times 10^7}{248}\approx 48387\ \text{J/K}\approx 4.84\times 10^4\ \text{J/K}.$$
+    $$\Delta S_{\text{univ}}=\Delta S_{\text{house}}+\Delta S_{\text{out}}\approx 4.84\times 10^4\ \text{J/K}.$$
+
+    <div class="box warning"><p class="box-title">⚠ 陷阱：稳态 ⟹ ΔS_house = 0，不要算成 nC_v·something</p>
+      <p>稳态意味着 <strong>初终态完全相同</strong>（同 T、同 V、同 P、同分子分布）。熵作为 state function 自然不变。
+      电热器把 1.2×10⁷ J 的电能（高品质能量）转为 1.2×10⁷ J 的低温热能（低品质能量），这就是宇宙增熵的来源。</p>
+    </div>
+
+    <h3>(b) 加热器坏掉 21 分钟，T 从 25°C 跌到 20°C</h3>
+    <p>近似 Q̇ 不变 = 3333 J/s（室内 T 变化小）：</p>
+    <p>21 分钟 = 1260 s。Q 流出 = 3333·1260 = 4.20×10⁶ J 到外储库 (248 K)。</p>
+    $$\Delta S_{\text{out}}=\frac{4.20\times 10^6}{248}\approx 16935\ \text{J/K}.$$
+
+    <p>室内：从 298 K 降到 293 K。空气作为系统，n = PV/RT = 40918 mol（用初态 T = 298 K），C_v = 5/2·R：</p>
+    <p>但要用 nC_v 还是 Q/ΔT？两个略不同（前者 850000 J/K，后者 840000 J/K）。题目暗示用"3333 J/s 的近似 + 5 K 跌幅"，所以用 Q/ΔT：</p>
+    $$C=\frac{Q}{\Delta T}=\frac{4.20\times 10^6}{5}=8.4\times 10^5\ \text{J/K}.$$
+    $$\Delta S_{\text{house}}=C\ln\frac{T_f}{T_i}=8.4\times 10^5\cdot\ln\frac{293}{298}=8.4\times 10^5\cdot(-0.01693)\approx -14216\ \text{J/K}.$$
+
+    $$\Delta S_{\text{univ}}=\Delta S_{\text{house}}+\Delta S_{\text{out}}\approx -14216+16935\approx 2719\ \text{J/K}.$$
+
+    <p>正值（不可逆热传导）。</p>
+
+    <div class="box insight"><p class="box-title">对比 (a) 与 (b)</p>
+      <p>(a) 稳态运行 1 小时 ΔS_univ ≈ 48,387 J/K——大量电能持续转热外排，整体熵增很大。
+      (b) 21 分钟瞬态 ΔS_univ ≈ 2,719 J/K——室内损失自身的 14216 J/K（变冷），但外界获得 16935 J/K，差额是不可逆部分。
+      若房屋能"完全可逆"地把内部 5K 温降转为热到外界，理论上 ΔS_univ 应该 = 0；但热传导本质不可逆 → 永远有差额。</p>
+    </div>
+
+    <h3>(c) 朋友们 + 稳态 23°C 一小时下限</h3>
+    <p>稳态 23°C：</p>
+    <ul>
+      <li>Q̇_out = κA·ΔT/L = 0.1·200·(23-(-25))/0.3 = 0.1·200·48/0.3 = 3200 J/s</li>
+      <li>友人 + 自己发热 = 3200 J/s ✓ 平衡</li>
+    </ul>
+
+    <p>1 小时输出热量 Q = 3200·3600 = 1.152×10⁷ J 到外储库。</p>
+    $$\Delta S_{\text{out}}=\frac{1.152\times 10^7}{248}\approx 46452\ \text{J/K}.$$
+
+    <p>室内 + 友人 + 食物 + 代谢链 = 复杂系统。但稳态意味着 <strong>室内气体熵不变</strong>，ΔS_house = 0。
+    友人 + 食物 + 代谢的总熵变 ≥ 0（任何"内部"不可逆过程都增熵）：</p>
+    $$\Delta S_{\text{univ}}=\underbrace{\Delta S_{\text{house}}}_{=0}+\Delta S_{\text{out}}+\underbrace{\Delta S_{\text{ppl+metabolism}}}_{\ge 0}\ge \Delta S_{\text{out}}.$$
+    $$\boxed{\Delta S_{\text{univ}}\ge 4.65\times 10^4\ \text{J/K}.}$$
+
+    <div class="box warning"><p class="box-title">⚠ 陷阱："下限"语义</p>
+      <p>题目要 lower bound，意思是 ΔS_univ 不可能 <em>低于</em> 这个值。
+      理论上 ΔS_ppl 可能很大（实际代谢有大量熵增）但 <strong>至少 ≥ 0</strong>。所以保守下限 = 仅 ΔS_out 这部分（其余视为 ≥ 0）。
+      若题目问"上限"或"精确值"，需要更多生物 / 食物链信息。</p>
+    </div>
+
+    <div class="box insight"><p class="box-title">对比 (a) 与 (c)</p>
+      <p>(a) 电热源稳态 1 小时：48387 J/K；(c) 朋友热源稳态 1 小时：≥ 46452 J/K。两者非常接近因为流出功率仅差 4%（3333 vs 3200）。
+      区别：(a) 的电源转化是单一不可逆步骤（电→热）；(c) 涉及食物 → 化学能 → 代谢 → 热能 的多步代谢链，每一步都增熵——所以 (c) 真实 ΔS_univ 应该 <em>显著</em> 大于这个下限。</p>
+    </div>
+
+    <div class="answer-box">
+      (a) ≈ 4.84 × 10⁴ J/K · (b) ≈ 2700 J/K · (c) ≥ 4.65 × 10⁴ J/K
+    </div>
+
+    <p><a href="14_entropy_macroscopic.html">→ 详细背景：宇宙熵与不可逆性</a></p>
+
+    <!-- ============ FORMULA TABLE ============ -->
+    <h2 id="formula">公式速查表</h2>
+    <table class="formula-table">
+      <thead><tr><th>主题</th><th>公式</th></tr></thead>
+      <tbody>
+        <tr><td>第二定律</td><td>ΔS_universe ≥ 0；等号 ⟺ 全过程可逆</td></tr>
+        <tr><td>储库熵变</td><td>\(\Delta S=\pm Q/T_{\text{reservoir}}\)；流入 + 流出 -</td></tr>
+        <tr><td>State function</td><td>沿任何可逆路径计算 ΔS_system；实际过程可不可逆无关</td></tr>
+        <tr><td>理想气体熵</td><td>\(\Delta S=nR\ln(V_2/V_1)+nC_V\ln(T_2/T_1)\)</td></tr>
+        <tr><td>等容 ΔS</td><td>\(nC_V\ln(T_2/T_1)\)</td></tr>
+        <tr><td>等温 ΔS</td><td>\(nR\ln(V_2/V_1)\)</td></tr>
+        <tr><td>等压 ΔS</td><td>\(nC_P\ln(T_2/T_1)\)（用 V/T = const 代入）</td></tr>
+        <tr><td>液体加热</td><td>\(\Delta S=mc\ln(T_2/T_1)\)；T 用 K！</td></tr>
+        <tr><td>相变 (T_phase 恒定)</td><td>\(\Delta S=mL/T_{\text{phase}}\)</td></tr>
+        <tr><td>循环熵 / 多源热机</td><td>ΔS_system = 0；ΔS_univ = Σ ±Q_i/T_i；可逆给 W_max</td></tr>
+        <tr><td>稳态系统</td><td>ΔS_system = 0；熵增全在外部储库</td></tr>
+        <tr><td>下限 (lower bound)</td><td>不可知部分 ≥ 0 ⟹ ΔS_univ ≥ 已知正部分</td></tr>
+        <tr><td>双原子空气 C_v / C_p</td><td>5R/2, 7R/2 (室温)</td></tr>
+      </tbody>
+    </table>
+
+    <!-- ============ PITFALLS RECAP ============ -->
+    <h2 id="pitfalls">陷阱汇总</h2>
+    <div class="box warning"><p class="box-title">本卷 8 大易错点</p>
+      <ol>
+        <li>T 在 dS=δQ/T 必须用 <strong>Kelvin</strong>；用 °C 会爆炸（除零）。</li>
+        <li>循环系统 ΔS_system = 0（state function 回到初态），熵增全在储库。</li>
+        <li>"可逆路径"是为了计算 ΔS 的数学工具；实际过程不可逆不影响计算。</li>
+        <li>多源热机：ΔS_univ ≥ 0，等号给最大功；不等号给现实不可逆运行。</li>
+        <li>η = W / Q_<strong>abs</strong>，分母用总吸入热（多个源都算）。</li>
+        <li>空气是双原子，c_v = 5R/2 不是 3R/2。</li>
+        <li>稳态系统 ΔS = 0：电源稳定加热的房间熵不变（初终态相同）。</li>
+        <li>"下限"问题：把不确定的内部贡献视为 ≥ 0，给保守估计。</li>
+      </ol>
+    </div>
+
+    <nav class="page-nav">
+      <a class="nav-prev" href="quiz4_walkthrough.html">Quiz 4</a>
+      <a class="nav-next" href="index.html">回到总目录</a>
+    </nav>
+
+  </main>
+</body>
+</html>

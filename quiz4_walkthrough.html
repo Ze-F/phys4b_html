@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quiz 4 详细 Walkthrough — 绝热、MB分布、循环、热传导</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="theme.js"></script>
+  <script>
+    MathJax = {
+      tex: { inlineMath: [['\\(','\\)']], displayMath: [['$','$']] },
+      svg: { fontCache: 'global' }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <style>
+    .problem-toc { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: .6rem; margin: 1.25rem 0 2rem; }
+    .problem-toc a { display: block; padding: .65rem .85rem; background: #f5f5f4; border: 1px solid #d6d3d1; border-radius: 6px; color: #134e4a; text-decoration: none; font-family: -apple-system, 'PingFang SC', sans-serif; font-size: .92rem; transition: all .15s; }
+    .problem-toc a:hover { background: #0f766e; color: white; border-color: #0f766e; }
+    .problem-toc a .toc-label { display: block; font-weight: 600; font-size: 1rem; margin-bottom: .15rem; }
+    .problem-toc a .toc-topic { font-size: .8rem; color: #6b7280; }
+    .problem-toc a:hover .toc-topic { color: #d1fae5; }
+
+    .problem-statement { background: #f5f5f4; border-left: 3px solid #6b7280; padding: .85rem 1.1rem; margin: 1rem 0; font-style: italic; color: #374151; border-radius: 0 4px 4px 0; }
+    .problem-statement strong { font-style: normal; color: #1f2937; }
+    .problem-statement::before { content: '题目：'; font-style: normal; font-weight: 600; color: #6b7280; font-family: -apple-system, 'PingFang SC', sans-serif; font-size: .85rem; letter-spacing: .04em; display: block; margin-bottom: .35rem; }
+
+    .answer-box { background: #eff6ff; border-left: 4px solid #2563eb; padding: .75rem 1.1rem; margin: 1rem 0; border-radius: 0 6px 6px 0; color: #1e3a8a; }
+    .answer-box::before { content: '✓ 答案：'; font-weight: 600; color: #1e40af; font-family: -apple-system, 'PingFang SC', sans-serif; font-size: .88rem; letter-spacing: .04em; margin-right: .35rem; }
+
+    .scope-tag { display: inline-block; padding: .12rem .55rem; font-size: .72rem; font-family: -apple-system, 'PingFang SC', sans-serif; border-radius: 10px; margin-left: .4rem; vertical-align: middle; letter-spacing: .02em; }
+    .scope-adia { background: #fef3c7; color: #78350f; }
+    .scope-mb { background: #dbeafe; color: #1e3a8a; }
+    .scope-cycle { background: #fce7f3; color: #831843; }
+    .scope-cond { background: #d1fae5; color: #065f46; }
+
+    .back-link { font-family: -apple-system, 'PingFang SC', sans-serif; font-size: .9rem; margin: 1rem 0; }
+    .back-link a { color: #0f766e; text-decoration: none; }
+    .back-link a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <a class="home-link" href="index.html">← PHYS 4B 复习</a>
+    <nav>
+      <a href="09_kinetic_theory.html">动理论</a>
+      <a href="10_maxwell_boltzmann.html">MB</a>
+      <a href="12_processes_cycles.html">过程循环</a>
+    </nav>
+  </header>
+
+  <main class="container">
+
+    <div class="topic-header">
+      <h1>Quiz 4 详细 Walkthrough</h1>
+      <p class="meta">2026 春 · 绝热压缩 · MB 速度分布 · 三角形循环 · 房屋热传导 · Shankar Ch.22</p>
+      <p class="blurb">第一定律应用集大成。要点：绝热 \(PV^\gamma\) vs 等温 \(PV\) vs 等容 / 等压；MB 速度分量 \(f(v_x)\) 与速率 \(g(v)\) 的区别；热传导 dQ/dt 给出的指数冷却 / 热容定时间常数 τ。</p>
+    </div>
+
+    <div class="back-link">
+      <a href="quiz3_walkthrough.html">← Quiz 3</a> ·
+      <a href="index.html">总目录</a> ·
+      <a href="quiz5_walkthrough.html">Quiz 5 →</a>
+    </div>
+
+    <div class="box key-result">
+      <p class="box-title">一页速览</p>
+      <ul style="margin:.2rem 0">
+        <li><strong>P1 绝热压缩.</strong> 活塞 + 重物使 P 从 P_atm 变为 P_atm + mg/A；用 \(PV^\gamma\)=const 算 V 比 → 高度跌幅；\(TV^{\gamma-1}\)=const 算 T₂。(c) 等压加热回原 V，温度按 V/T = const → T₃ = T₂·V₁/V₂。</li>
+        <li><strong>P2 He MB at 100K.</strong> v_x 区间用 1D 高斯 \(f(v_x)\propto e^{-mv_x^2/2kT}\)；速率区间用 3D 分布 \(g(v)\propto v^2 e^{-mv^2/2kT}\)。两者指数项一样，前置因子不同（这是 (a)(b) 答案不同的原因）。</li>
+        <li><strong>P3 三角形循环.</strong> 1→2 直线 P-V 上：W = 梯形面积 = \(\tfrac12(P_1+P_2)(V_2-V_1)\)。等容 Q = ΔU，等温 Q = W。从给的 Q_{23} 反推 nRT₁，再算每一段的 Q、W。</li>
+        <li><strong>P4 房屋热传导.</strong> 静态 dQ/dt = κAΔT/L；动态：m_air·c_v·dT/dt = -κAΔT/L → 指数衰减，τ = CL/(κA)，C = nC_V 是空气总热容。</li>
+      </ul>
+    </div>
+
+    <div class="problem-toc">
+      <a href="#p1"><span class="toc-label">Problem 1</span><span class="toc-topic">活塞 + 重物绝热</span></a>
+      <a href="#p2"><span class="toc-label">Problem 2</span><span class="toc-topic">He MB at 100K</span></a>
+      <a href="#p3"><span class="toc-label">Problem 3</span><span class="toc-topic">三角形循环 Q/W/ΔU</span></a>
+      <a href="#p4"><span class="toc-label">Problem 4</span><span class="toc-topic">房屋 / 暖气 / 朋友</span></a>
+    </div>
+
+    <!-- ============ PROBLEM 1 ============ -->
+    <h2 id="p1">Problem 1 — 活塞 + 重物绝热压缩 <span class="scope-tag scope-adia">Adiabatic</span></h2>
+
+    <div class="problem-statement">
+      汽缸活塞截面 \(A=0.04\) m²，内含单原子理想气体，初始 \(T_1=273\) K，\(P_1=P_{\text{atm}}=101325\) Pa。放 \(m=14\) kg 重物到活塞上慢慢压下，过程绝热。
+      <br/><strong>(a)</strong> 高度下降百分比？
+      <br/><strong>(b)</strong> 下降后温度？
+      <br/><strong>(c)</strong> 保持重物，加热让活塞回到原位，最终温度？
+    </div>
+
+    <h3>(a) 高度下降百分比</h3>
+    <p>新压强（活塞自身重忽略，慢压维持力平衡）：</p>
+    $$P_2=P_1+\frac{mg}{A}=101325+\frac{14\cdot 9.81}{0.04}=101325+3433.5=104758.5\ \text{Pa}.$$
+    <p>绝热单原子 γ=5/3，\(PV^\gamma=\) const → \(V_2/V_1=(P_1/P_2)^{1/\gamma}=(P_1/P_2)^{3/5}\)：</p>
+    $$\frac{V_2}{V_1}=\left(\frac{101325}{104758.5}\right)^{0.6}=(0.9672)^{0.6}\approx 0.980.$$
+    <p>截面恒定 → \(\Delta h/h_1=1-V_2/V_1\)。<strong>高度下降约 2%</strong>。</p>
+
+    <div class="box warning"><p class="box-title">⚠ 陷阱：γ 在指数位置易写错</p>
+      <p>\(PV^\gamma=\) const ⟹ \(V/V_0=(P_0/P)^{1/\gamma}\)。"对压强"用 \(1/\gamma\) 不是 \(\gamma\)。单原子 \(1/\gamma=3/5=0.6\)。</p>
+      <p>常见错误：写成 \(V_2/V_1=(P_1/P_2)^{5/3}=(0.9672)^{1.67}=0.946\)，与正确答案 0.980 相差 4 倍以上的高度差。</p>
+    </div>
+
+    <h3>(b) 末态温度 T₂</h3>
+    <p>\(TV^{\gamma-1}=\) const → \(T_2/T_1=(V_1/V_2)^{\gamma-1}=(V_1/V_2)^{2/3}\)：</p>
+    $$\frac{T_2}{T_1}=\left(\frac{1}{0.980}\right)^{2/3}=(1.0204)^{0.667}\approx 1.0135.$$
+    $$T_2=273\cdot 1.0135\approx 276.7\ \text{K}.$$
+
+    <div class="box insight"><p class="box-title">物理直觉</p>
+      <p>绝热压缩升温——活塞对气体做功，气体内能 U 增加 → T 升高（因为 U=U(T) 对理想气体）。日常版：自行车打气筒一摁，筒身发热。</p>
+      <p>本题只升温 ~3.7 K 因为压缩比很小（V 只跌 2%）。柴油机压缩比 ~20:1，T 从 300 K 跳到 ~1000 K，自燃柴油。</p>
+    </div>
+
+    <h3>(c) 等压加热回到 V₁，求 T₃</h3>
+    <p>从状态 2 (V₂, T₂, P₂) 等压加热到 (V₁, T₃, P₂)。等压 → V/T = const：</p>
+    $$\frac{T_3}{T_2}=\frac{V_1}{V_2}=\frac{1}{0.980}=1.0204\quad\Longrightarrow\quad T_3=276.7\cdot 1.0204\approx 282.4\ \text{K}.$$
+    <p>直接验证：PV=nRT。状态 1：\(P_1 V_1=nR\cdot 273\)；状态 3：\(P_2 V_1=nR T_3\)。除一下：</p>
+    $$T_3=273\cdot\frac{P_2}{P_1}=273\cdot 1.0339\approx 282.3\ \text{K}.\ \checkmark$$
+
+    <div class="answer-box">
+      (a) ~2.0% 高度下降 · (b) \(T_2\approx 276.7\) K · (c) \(T_3\approx 282.3\) K
+    </div>
+
+    <p><a href="12_processes_cycles.html">→ 详细背景：四种基本过程</a></p>
+
+    <!-- ============ PROBLEM 2 ============ -->
+    <h2 id="p2">Problem 2 — He 在 100 K 的 MB 分布 <span class="scope-tag scope-mb">MB</span></h2>
+
+    <div class="problem-statement">
+      He（M=4 g/mol）在 100 K。
+      <br/><strong>(a)</strong> \(v_x\in[499,501]\) m/s 的原子有 1000 个。\(v_y\in[799,801]\) m/s 的原子有多少？
+      <br/><strong>(b)</strong> 速率 \(v\in[499,501]\) m/s 的原子有 \(N_1\) 个。速率 \(v\in[799,801]\) 的原子有多少（用 \(N_1\) 表示）？
+      <br/><strong>(c)</strong> 用 (a) 推算容器中总原子数 N。
+    </div>
+
+    <p>先算 \(m/(2kT)\)。He 单原子质量 \(m=M/N_A=4\times 10^{-3}/6.02\times 10^{23}=6.64\times 10^{-27}\) kg；</p>
+    $$\frac{m}{2kT}=\frac{6.64\times 10^{-27}}{2\cdot 1.38\times 10^{-23}\cdot 100}=2.405\times 10^{-6}\ \text{s}^2/\text{m}^2.$$
+
+    <h3>(a) 速度分量比较 — 用 \(f(v_x)\)</h3>
+    <p>1D MB 分量：\(f(v_x)=\sqrt{m/(2\pi kT)}\,e^{-m v_x^2/(2kT)}\)。区间宽度都是 2 m/s，所以</p>
+    $$\frac{N(v_y\in 799\text{–}801)}{N(v_x\in 499\text{–}501)}=\frac{f(800)}{f(500)}=e^{-\frac{m}{2kT}(800^2-500^2)}.$$
+    $$\text{指数} = -2.405\times 10^{-6}\cdot(640000-250000)=-2.405\times 10^{-6}\cdot 390000=-0.938.$$
+    $$\text{比值} = e^{-0.938}\approx 0.391.$$
+    <p>所以 <strong>原子数 ≈ 1000 × 0.391 = 391</strong>。</p>
+
+    <h3>(b) 速率比较 — 用 \(g(v)\)</h3>
+    <p>3D 速率分布：\(g(v)=4\pi v^2\,(m/2\pi kT)^{3/2}\,e^{-mv^2/(2kT)}\)。比例：</p>
+    $$\frac{g(800)}{g(500)}=\left(\frac{800}{500}\right)^2 e^{-\frac{m}{2kT}(800^2-500^2)}=(1.6)^2\cdot e^{-0.938}=2.56\cdot 0.391\approx 1.00.$$
+    <p>所以 <strong>原子数 ≈ \(N_1\)</strong>（两个速率区间几乎一样人多）。</p>
+
+    <div class="box insight"><p class="box-title">为什么 v_x 和 v 的答案差这么大？</p>
+      <p>v_x = 800 m/s 比 v_x = 500 m/s 距离 0 远得多——Gaussian 指数衰减狠。但速率 v 还乘了 \(v^2\) 这个 phase-space 因子（4π v² 是球壳面积）。
+      v = 800 比 v = 500 的 \(v^2\) 因子大 \((1.6)^2=2.56\) 倍，恰好抵消了指数衰减 \(e^{-0.94}\approx 0.39\)，乘积约 1.0。
+      物理图像：v_x 一维分布在 0 附近峰值；速率 v 三维"球壳"分布峰值在 v_0 = √(2kT/m) 附近。He 100K 的 \(v_0=\sqrt{2/m\cdot 2kT/2}\)：</p>
+      $$v_0=\sqrt{\frac{2kT}{m}}=\sqrt{\frac{2\cdot 1.38\times 10^{-23}\cdot 100}{6.64\times 10^{-27}}}=\sqrt{4.156\times 10^{5}}\approx 645\ \text{m/s}.$$
+      <p>500 和 800 都距 \(v_0\) 不远，所以 \(g\) 在两点几乎相等。</p>
+    </div>
+
+    <h3>(c) 总原子数 N</h3>
+    <p>由 (a)：\(N(v_x\in 499\text{–}501) = N\cdot f(500)\cdot\Delta v_x\)，其中 \(\Delta v_x=2\) m/s。</p>
+    $$f(500)=\sqrt{\frac{m}{2\pi kT}}\,e^{-m\cdot 500^2/(2kT)}.$$
+    <p>计算前置因子：\(m/(2\pi kT)=2.405\times 10^{-6}/\pi=7.655\times 10^{-7}\)，开方得 \(8.749\times 10^{-4}\) s/m。</p>
+    <p>指数：\(-2.405\times 10^{-6}\cdot 500^2=-0.601\)，\(e^{-0.601}=0.548\)。</p>
+    $$f(500)=8.749\times 10^{-4}\cdot 0.548=4.79\times 10^{-4}\ \text{s/m}.$$
+    $$N=\frac{1000}{f(500)\cdot 2}=\frac{1000}{4.79\times 10^{-4}\cdot 2}=\frac{1000}{9.58\times 10^{-4}}\approx 1.04\times 10^{6}.$$
+
+    <div class="box warning"><p class="box-title">⚠ 陷阱：\(f(v_x)\) 是 <em>密度</em>，得乘上区间宽度</p>
+      <p>概率密度的积分才是概率。\(f(v_x)\) 单位是 s/m（per m/s），乘上 \(\Delta v_x\)=2 m/s 给出"位于这 2 m/s 区间的概率"。然后乘上总数 N 给出"原子数"。
+      漏掉 \(\Delta v_x=2\) 会让 N 偏小一倍（变成 5.2×10⁵）。</p>
+    </div>
+
+    <div class="answer-box">
+      (a) 391 atoms · (b) ≈ \(N_1\) (比值约 1.00) · (c) \(N\approx 1.04\times 10^6\) atoms
+    </div>
+
+    <p><a href="10_maxwell_boltzmann.html">→ 详细背景：Maxwell-Boltzmann 分布</a></p>
+
+    <!-- ============ PROBLEM 3 ============ -->
+    <h2 id="p3">Problem 3 — 三角形循环 <span class="scope-tag scope-cycle">Cycle</span></h2>
+
+    <div class="problem-statement">
+      单原子理想气体，初态 (T₁, P₁, V₁)。
+      <br/>1 → 2：沿 P-V 平面直线，终态 (2P₁, 2V₁)。
+      <br/>2 → 3：等容降到 T₁，过程释放 45 J 热。
+      <br/>3 → 1：等温收缩回到初态。
+      <br/><strong>(a)</strong> 求 T₂（用 T₁ 表示）。
+      <br/><strong>(b)</strong> 等温段 (3→1) 吸/放热量？(J)
+      <br/><strong>(c)</strong> 直线段 (1→2) 吸/放热量？(J)
+      <br/><strong>(d)</strong> 加分：循环包围面积？(J)
+    </div>
+
+    <h3>预备：找到 nRT₁</h3>
+    <p>(a) 由 PV=nRT：\(T_2/T_1=(P_2 V_2)/(P_1 V_1)=4\) → <strong>T₂=4T₁</strong>。</p>
+    <p>状态 3：等容 (V=2V₁) 降温到 T₁。由 PV=nRT：\(P_3=nRT_1/(2V_1)=P_1/2\)。</p>
+
+    <h4>2→3 等容</h4>
+    <p>W₂₃ = 0（等容）。ΔU₂₃ = (3/2)nR(T₃-T₂) = (3/2)nR(T₁-4T₁) = -(9/2)nRT₁。
+    所以 Q₂₃ = ΔU₂₃ = -(9/2)nRT₁。
+    题目给 Q₂₃ = -45 J（释放 45 J）：</p>
+    $$-\frac{9}{2}nRT_1=-45\quad\Longrightarrow\quad nRT_1=10\ \text{J}.$$
+    <p>记住这个数，后面要反复用。</p>
+
+    <h3>(b) 等温段 Q₃₁</h3>
+    <p>等温：ΔU = 0，所以 Q₃₁ = W₃₁。等温压缩 V₃=2V₁ → V₁：</p>
+    $$W_{31}=\int_{V_3}^{V_1}P\,dV=nRT_1\ln\frac{V_1}{V_3}=nRT_1\ln\frac{1}{2}=-10\ln 2\approx -6.93\ \text{J}.$$
+    <p><strong>Q₃₁ ≈ -6.93 J（释放）</strong>。</p>
+
+    <h3>(c) 直线段 Q₁₂</h3>
+    <p>P-V 平面直线段的功 = 梯形面积：</p>
+    $$W_{12}=\frac{1}{2}(P_1+P_2)(V_2-V_1)=\frac{1}{2}(P_1+2P_1)(V_1)=\frac{3}{2}P_1V_1=\frac{3}{2}nRT_1=15\ \text{J}.$$
+    <p>ΔU₁₂ = (3/2)nR(T₂-T₁) = (3/2)nR·3T₁ = (9/2)nRT₁ = 45 J。</p>
+    $$Q_{12}=\Delta U_{12}+W_{12}=45+15=60\ \text{J}\ \text{(吸热)}.$$
+
+    <div class="box warning"><p class="box-title">⚠ 陷阱：直线段的 W 是 <em>梯形</em> 面积，不是 PΔV 也不是 \(\bar P\Delta V\) 用错平均</p>
+      <p>P-V 平面 P 是 V 的线性函数 P(V) = aV+b，所以 \(\int P\,dV\) 严格等于上下底 P 平均乘宽度 ΔV——也就是梯形面积公式 \(\tfrac12(P_1+P_2)(V_2-V_1)\)。
+      不要套用 "等压 W=PΔV"（这只在 P 恒定时成立），也不要试图用绝热公式 \(W=(P_1V_1-P_2V_2)/(\gamma-1)\)（那是 \(PV^\gamma=\) const 路径专用）。</p>
+    </div>
+
+    <h3>(d) 加分：循环净功 = 围成面积</h3>
+    <p>循环 1 → 2 → 3 → 1：</p>
+    <ul>
+      <li>W₁₂ = 15 J</li>
+      <li>W₂₃ = 0（等容）</li>
+      <li>W₃₁ = -6.93 J（等温压缩）</li>
+    </ul>
+    $$W_{\text{cycle}} = 15 + 0 - 6.93 = 8.07\ \text{J}.$$
+    <p>循环走顺时针（V 从 V₁ 上升再下降回，1→2 上升，2→3 等容，3→1 等温压回），net W > 0，确实是热机方向。</p>
+
+    <div class="box insight"><p class="box-title">能量审计快速检查</p>
+      <p>循环 ΔU = 0（回到初态）。所以 \(Q_{\text{cycle}}=W_{\text{cycle}}\)。
+      \(Q_{\text{cycle}}=Q_{12}+Q_{23}+Q_{31}=60-45-6.93=8.07\) J ✓ 与 W_cycle 一致。
+      这种 "Q 之和 = W 之和" 的交叉验证应该养成习惯——能立刻发现某段算错。</p>
+    </div>
+
+    <div class="answer-box">
+      (a) T₂ = 4T₁ · (b) Q₃₁ ≈ -6.93 J (释放) · (c) Q₁₂ = 60 J (吸热) · (d) 面积 ≈ 8.07 J
+    </div>
+
+    <p><a href="12_processes_cycles.html">→ 详细背景：循环与第一定律</a></p>
+
+    <!-- ============ PROBLEM 4 ============ -->
+    <h2 id="p4">Problem 4 — 房屋热传导 + 朋友们 <span class="scope-tag scope-cond">Conduction</span></h2>
+
+    <div class="problem-statement">
+      房屋 V=1000 m³，空气在大气压下。墙壁完美绝热，但屋顶面积 200 m²、厚 30 cm、κ=0.1 W/(m·K)。外面 -25°C，内 25°C，加热器维持内温。空气 \(C_v=(5/2)R\)。
+      <br/><strong>(a)</strong> 加热器功率？(J/hr)
+      <br/><strong>(b)</strong> 加热器坏掉，内温降到 20°C 大概需多久？
+      <br/><strong>(c)</strong> 朋友们到了，内温稳定在 23°C。来了多少朋友？(每人 100 W)
+      <br/><strong>(d)</strong> 加分：无朋友来时，多久降到 0°C？(分钟)
+    </div>
+
+    <h3>(a) 加热器功率</h3>
+    <p>Fourier 定律：</p>
+    $$\frac{dQ}{dt}=\kappa\frac{A\,\Delta T}{L}=\frac{0.1\cdot 200\cdot 50}{0.3}=\frac{1000}{0.3}\approx 3333\ \text{J/s}.$$
+    <p>每小时：\(3333\cdot 3600=1.2\times 10^7\) J/hr。</p>
+
+    <div class="box warning"><p class="box-title">⚠ 陷阱：ΔT 用 50 K 而不是 50°C</p>
+      <p>K 和 °C <em>温差</em> 数值上相等，所以 \(\Delta T=25-(-25)=50\) K (或 °C) 都对。<em>绝对温度</em> 时才要换 (T = θ + 273)。
+      本题里 ΔT 用 50 K 没问题，但若题目里出现"绝对温度"、"理想气体 PV=NkT"则必须用 K。下面 (b) 步会用到。</p>
+    </div>
+
+    <h3>(b) 加热器坏掉，降到 20°C 用多久</h3>
+    <p>空气总摩尔数（用 25°C = 298 K）：</p>
+    $$n=\frac{P V}{RT}=\frac{101325\cdot 1000}{8.31\cdot 298}=\frac{1.013\times 10^8}{2476}\approx 40915\ \text{mol}.$$
+    <p>空气总热容（恒容近似，因为屋子是固定体积容器）：</p>
+    $$C=nC_v=40915\cdot\frac{5}{2}\cdot 8.31\approx 850000\ \text{J/K}.$$
+
+    <h4>快算法（线性近似）</h4>
+    <p>从 25°C 跌到 20°C 只跌 5 K（10% 的 ΔT），所以 dQ/dt 几乎不变 ≈ 3333 J/s。需要释放的能量 \(Q=C\cdot 5=4.25\times 10^6\) J。</p>
+    $$t=\frac{Q}{dQ/dt}=\frac{4.25\times 10^6}{3333}\approx 1275\ \text{s}=21.3\ \text{min}.$$
+
+    <h4>精确算法（指数衰减）</h4>
+    <p>动态方程：\(C\frac{dT}{dt}=-\frac{\kappa A}{L}(T-T_{\text{out}})\)。设 \(\theta=T-T_{\text{out}}\)：</p>
+    $$\frac{d\theta}{dt}=-\frac{\theta}{\tau},\quad \tau=\frac{CL}{\kappa A}=\frac{850000\cdot 0.3}{0.1\cdot 200}=12750\ \text{s}.$$
+    $$\theta(t)=\theta_0 e^{-t/\tau}.$$
+    <p>初始 θ₀ = 50 K，目标 θ = 45 K：</p>
+    $$t=\tau\ln\frac{50}{45}=12750\cdot 0.1054\approx 1344\ \text{s}=22.4\ \text{min}.$$
+    <p>两个方法在 10% 之内一致——题目说"approximately within 10%" → 两个答案都合格。</p>
+
+    <div class="box insight"><p class="box-title">RC 类比</p>
+      <p>这个微分方程的形式与 RC 电路完全相同：θ ↔ V（电压差），κA/L ↔ 1/R（"热导"），C ↔ C（"热容"）。时间常数 τ=RC。
+      所以"房屋时间常数 τ ≈ 3.5 小时"可以直觉理解为"每过 3.5 小时温差降到原来的 1/e ≈ 37%"。</p>
+    </div>
+
+    <h3>(c) 稳态 23°C 时朋友数</h3>
+    <p>稳态：输入功率 = 输出功率。输出（外漏）：</p>
+    $$\frac{dQ}{dt}=\frac{0.1\cdot 200\cdot 48}{0.3}=3200\ \text{J/s}.$$
+    <p>每人输入 100 W。设总人数 \(N_{\text{ppl}}\)：</p>
+    $$100\,N_{\text{ppl}}=3200\quad\Longrightarrow\quad N_{\text{ppl}}=32.$$
+    <p>你也算一个人。<strong>朋友 = 31 位</strong>（你 + 31 个朋友 = 32 人）。</p>
+
+    <div class="box warning"><p class="box-title">⚠ 陷阱：把"你"也算进去</p>
+      <p>题目说"how many friends came"—— friends 不包括你。但 (d) 说"ignore your own 100W" 是反过来明示 <em>你</em> 也会发热。所以本题 (c) 里 32 个总热源 = 你 + 31 朋友。</p>
+      <p>如果不读 (d) 这个 hint，可能误填 32 → 算成 32 个朋友。这是出题人故意设的陷阱。</p>
+    </div>
+
+    <h3>(d) 加分：无朋友时降到 0°C 用多久</h3>
+    <p>θ₀ = 50 K（坏的瞬间），目标 θ = 25 K（0 - (-25)）：</p>
+    $$t=\tau\ln\frac{50}{25}=12750\cdot\ln 2=12750\cdot 0.693\approx 8838\ \text{s}\approx 147\ \text{min}.$$
+
+    <div class="answer-box">
+      (a) ~1.2 × 10⁷ J/hr · (b) 21~22 min (~1300 s) · (c) 31 朋友 (你 + 31 = 32) · (d) ~147 min
+    </div>
+
+    <p><a href="08_real_fluids_heat.html">→ 详细背景：热传导 Fourier 定律</a></p>
+
+    <!-- ============ FORMULA TABLE ============ -->
+    <h2 id="formula">公式速查表</h2>
+    <table class="formula-table">
+      <thead><tr><th>主题</th><th>公式</th></tr></thead>
+      <tbody>
+        <tr><td>绝热 PV / TV</td><td>\(PV^\gamma=\) const, \(TV^{\gamma-1}=\) const；γ_mono=5/3</td></tr>
+        <tr><td>绝热 V 比</td><td>\(V_2/V_1=(P_1/P_2)^{1/\gamma}\)</td></tr>
+        <tr><td>等压 V/T</td><td>\(V_2/V_1=T_2/T_1\)</td></tr>
+        <tr><td>1D MB</td><td>\(f(v_x)=\sqrt{m/(2\pi kT)}\,e^{-mv_x^2/(2kT)}\)</td></tr>
+        <tr><td>3D 速率 MB</td><td>\(g(v)=4\pi v^2(m/2\pi kT)^{3/2}e^{-mv^2/(2kT)}\)</td></tr>
+        <tr><td>原子数 = N·f·Δv</td><td>\(\Delta N=N\cdot f(v_x)\cdot\Delta v_x\) 同样地 \(g(v)\cdot\Delta v\)</td></tr>
+        <tr><td>直线 P-V 功</td><td>\(W=\tfrac12(P_1+P_2)(V_2-V_1)\)</td></tr>
+        <tr><td>等温功</td><td>\(W=nRT\ln(V_2/V_1)\)；ΔU=0；Q=W</td></tr>
+        <tr><td>等容</td><td>W=0；Q=ΔU=nC_v ΔT</td></tr>
+        <tr><td>循环</td><td>ΔU=0；Q_{cycle}=W_{cycle}=Area</td></tr>
+        <tr><td>Fourier 定律</td><td>\(dQ/dt=\kappa A\Delta T/L\)</td></tr>
+        <tr><td>房屋指数冷却</td><td>\(\theta(t)=\theta_0 e^{-t/\tau}\)，\(\tau=CL/(\kappa A)\)</td></tr>
+        <tr><td>空气热容</td><td>\(C=n C_v\)，\(n=PV/RT\)</td></tr>
+      </tbody>
+    </table>
+
+    <!-- ============ PITFALLS RECAP ============ -->
+    <h2 id="pitfalls">陷阱汇总</h2>
+    <div class="box warning"><p class="box-title">本卷 8 大易错点</p>
+      <ol>
+        <li>绝热 V 比指数是 \(1/\gamma\) 不是 \(\gamma\)。</li>
+        <li>γ 单原子 5/3，双原子 7/5（室温）。本题用 5/3。</li>
+        <li>MB 速度分量 \(f(v_x)\) ≠ 速率 \(g(v)\)；后者多个 \(v^2\) 球壳因子。</li>
+        <li>概率密度乘 Δv 才是原子数；漏 Δv 是高频错误。</li>
+        <li>直线段 P-V 用梯形面积公式，不要套等压 PΔV。</li>
+        <li>循环 ΔU=0 → Q_total = W_total，可做交叉验证。</li>
+        <li>Fourier 定律 ΔT 用绝对差，K 和 °C 数值相等。</li>
+        <li>"How many friends" 别忘把自己也算热源。</li>
+      </ol>
+    </div>
+
+    <nav class="page-nav">
+      <a class="nav-prev" href="quiz3_walkthrough.html">Quiz 3</a>
+      <a class="nav-next" href="quiz5_walkthrough.html">Quiz 5 walkthrough</a>
+    </nav>
+
+  </main>
+</body>
+</html>

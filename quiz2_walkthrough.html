@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quiz 2 详细 Walkthrough — 干涉、Doppler、声波、气压计</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="theme.js"></script>
+  <script>
+    MathJax = {
+      tex: { inlineMath: [['\\(','\\)']], displayMath: [['$','$']] },
+      svg: { fontCache: 'global' }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <style>
+    .problem-toc {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: .6rem;
+      margin: 1.25rem 0 2rem;
+    }
+    .problem-toc a {
+      display: block;
+      padding: .65rem .85rem;
+      background: #f5f5f4;
+      border: 1px solid #d6d3d1;
+      border-radius: 6px;
+      color: #134e4a;
+      text-decoration: none;
+      font-family: -apple-system, 'PingFang SC', sans-serif;
+      font-size: .92rem;
+      transition: all .15s;
+    }
+    .problem-toc a:hover {
+      background: #0f766e;
+      color: white;
+      border-color: #0f766e;
+    }
+    .problem-toc a .toc-label {
+      display: block;
+      font-weight: 600;
+      font-size: 1rem;
+      margin-bottom: .15rem;
+    }
+    .problem-toc a .toc-topic {
+      font-size: .8rem;
+      color: #6b7280;
+    }
+    .problem-toc a:hover .toc-topic { color: #d1fae5; }
+
+    .problem-statement {
+      background: #f5f5f4;
+      border-left: 3px solid #6b7280;
+      padding: .85rem 1.1rem;
+      margin: 1rem 0;
+      font-style: italic;
+      color: #374151;
+      border-radius: 0 4px 4px 0;
+    }
+    .problem-statement strong { font-style: normal; color: #1f2937; }
+    .problem-statement::before {
+      content: '题目：';
+      font-style: normal;
+      font-weight: 600;
+      color: #6b7280;
+      font-family: -apple-system, 'PingFang SC', sans-serif;
+      font-size: .85rem;
+      letter-spacing: .04em;
+      display: block;
+      margin-bottom: .35rem;
+    }
+
+    .answer-box {
+      background: #eff6ff;
+      border-left: 4px solid #2563eb;
+      padding: .75rem 1.1rem;
+      margin: 1rem 0;
+      border-radius: 0 6px 6px 0;
+      color: #1e3a8a;
+    }
+    .answer-box::before {
+      content: '✓ 答案：';
+      font-weight: 600;
+      color: #1e40af;
+      font-family: -apple-system, 'PingFang SC', sans-serif;
+      font-size: .88rem;
+      letter-spacing: .04em;
+      margin-right: .35rem;
+    }
+
+    .scope-tag {
+      display: inline-block;
+      padding: .12rem .55rem;
+      font-size: .72rem;
+      font-family: -apple-system, 'PingFang SC', sans-serif;
+      border-radius: 10px;
+      margin-left: .4rem;
+      vertical-align: middle;
+      letter-spacing: .02em;
+    }
+    .scope-interf { background: #dbeafe; color: #1e3a8a; }
+    .scope-doppler { background: #fce7f3; color: #831843; }
+    .scope-sound { background: #d1fae5; color: #065f46; }
+    .scope-fluid { background: #fef3c7; color: #78350f; }
+
+    .back-link {
+      font-family: -apple-system, 'PingFang SC', sans-serif;
+      font-size: .9rem;
+      margin: 1rem 0;
+    }
+    .back-link a { color: #0f766e; text-decoration: none; }
+    .back-link a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <a class="home-link" href="index.html">← PHYS 4B 复习</a>
+    <nav>
+      <a href="05_interference_doppler.html">干涉/Doppler</a>
+      <a href="04_sound_microscopic.html">声波微观</a>
+      <a href="06_fluid_statics.html">流体静力</a>
+    </nav>
+  </header>
+
+  <main class="container">
+
+    <div class="topic-header">
+      <h1>Quiz 2 详细 Walkthrough</h1>
+      <p class="meta">2026 春 · 双源干涉 · Doppler · 声波 s/p/Δρ · 气压计 · Shankar Ch.18–20</p>
+      <p class="blurb">考点跨度最大的一卷：从波动学末尾的干涉、Doppler，到声波微观三参数关系，再到 Ch.20 流体静力的气压计。每题都含至少一个"看似简单实则要小心"的子问。</p>
+    </div>
+
+    <div class="back-link">
+      <a href="quiz1_walkthrough.html">← Quiz 1</a> ·
+      <a href="index.html">总目录</a> ·
+      <a href="quiz3_walkthrough.html">Quiz 3 →</a>
+    </div>
+
+    <div class="box key-result">
+      <p class="box-title">一页速览</p>
+      <ul style="margin:.2rem 0">
+        <li><strong>P1 双源干涉.</strong> 沿连线方向相消条件 \(r_2-r_1=\lambda/2\)；横向走时强度跌为 \(1/r^2\) 衰减；远场再走时用小角近似 \(d\sin\theta=(n+1/2)\lambda\)。</li>
+        <li><strong>P2 旋转圆盘 Doppler.</strong> 圆盘边缘切线速度 \(u=\omega R\)；只有 <em>径向</em> 速度分量进入 Doppler 公式；某时刻 A 接近你时 B 必远离 → 两个频率永远配对出现，除非两源恰好沿切线（监测周期 = 半圈周期）。</li>
+        <li><strong>P3 声波 s/p/Δρ.</strong> 三者满足 \(p=-B\partial s/\partial x\)，\(\Delta\rho=-\rho_0\partial s/\partial x\)。所以 \(p_{\max}=Bk\,s_{\max}\)，\(\Delta\rho_{\max}/\rho_0=k\,s_{\max}=p_{\max}/B\)。</li>
+        <li><strong>P4 气压计.</strong> Torricelli 真空时 \(\rho gh=P_{\text{atm}}\)；管内残气时 \(P_{\text{gas}}+\rho gh=P_{\text{atm}}\)；残气压强按 PV = const 缩放。</li>
+      </ul>
+    </div>
+
+    <div class="problem-toc">
+      <a href="#p1"><span class="toc-label">Problem 1</span><span class="toc-topic">N-S 双源相消 / 强度比</span></a>
+      <a href="#p2"><span class="toc-label">Problem 2</span><span class="toc-topic">旋转 Doppler / 拍频</span></a>
+      <a href="#p3"><span class="toc-label">Problem 3</span><span class="toc-topic">声波 λ, f, Δρ, 相位</span></a>
+      <a href="#p4"><span class="toc-label">Problem 4</span><span class="toc-topic">气压计 + 残气</span></a>
+    </div>
+
+    <!-- ============ PROBLEM 1 ============ -->
+    <h2 id="p1">Problem 1 — 双声源干涉 <span class="scope-tag scope-interf">Interference</span></h2>
+
+    <div class="problem-statement">
+      两个相干声源沿 N-S 方向相距 10 m，同相位发声，频率 100 Hz，声速 343 m/s。
+      <br/><strong>(a)</strong> 从两源中点出发，沿 N-S 方向走多远到第一个相消点？
+      <br/><strong>(b)</strong> 回到中点，沿东方向走 100 m。这里的声强与中点强度之比？
+      <br/><strong>(c)</strong> 从新位置（东 100 m）继续向北走多远到第一个相消点？
+      <br/><strong>(d)</strong> 加分：如果两源相位差 \(\pi/2\)，重做 (a)。
+    </div>
+
+    <p>首先计算波长：\(\lambda=v/f=343/100=3.43\) m。</p>
+
+    <h3>(a) 沿连线方向走</h3>
+    <p>把两源标为 S\(_1\)（北）、S\(_2\)（南），间距 \(D=10\) m，中点为 \(O\)。从中点沿 N 方向走距离 \(x\)：到 S\(_1\) 的距离 \(r_1=D/2-x\)，到 S\(_2\) 的距离 \(r_2=D/2+x\)。所以</p>
+    $$r_2-r_1=2x.$$
+    <p>同相源相消条件：\(\Delta r = (n+1/2)\lambda\)，取最小 \(n=0\)，\(\Delta r=\lambda/2\)。</p>
+    $$2x=\frac{\lambda}{2}\quad\Longrightarrow\quad x=\frac{\lambda}{4}=\frac{3.43}{4}\approx 0.858\ \text{m}.$$
+
+    <div class="box warning"><p class="box-title">⚠ 陷阱：连线方向 \(\Delta r=2x\)，不是 \(x\)</p>
+      <p>因为沿连线走，<em>同时</em> 远离一个源、接近另一个源，相对路径差是 \(2x\)。如果题目改成"垂直连线"方向走，那 \(\Delta r\) 公式要重推（用勾股 + 远场近似）。</p>
+    </div>
+
+    <h3>(b) 东 100 m 处强度比</h3>
+    <p>东 100 m 远 ≫ 间距 10 m，所以两源到你的距离几乎相等，相位差 ≈ 0，是 <strong>极大</strong> 干涉处。
+    干涉条件：振幅相加 \(A_{\text{total}}\approx 2A\)，强度 \(I_{\text{total}}\approx 4 I_{\text{single}}\)。</p>
+    <p>但每个源的强度本身被距离衰减：</p>
+    <ul>
+      <li>在中点 \(O\)：每个源距离 \(r=5\) m，单源强度 \(I_O^{(1)}\propto 1/25\)。两源同相加，总强度 \(I_O=4\cdot I_O^{(1)}\propto 4/25\)。</li>
+      <li>在东 100 m：每个源距离 \(r=\sqrt{100^2+5^2}\approx 100.125\) m，单源强度 \(\propto 1/100.125^2\approx 1/10025\)。同相加，总强度 \(\propto 4/10025\)。</li>
+    </ul>
+    $$\frac{I_E}{I_O}=\frac{4/10025}{4/25}=\frac{25}{10025}\approx 0.0025.$$
+
+    <div class="box warning"><p class="box-title">⚠ 陷阱：要同时考虑 1/r² 衰减 和 干涉系数</p>
+      <p>很多人只算了 \((5/100)^2=0.0025\) 就交卷——巧合答案对了，因为中点和东 100 m 都是极大干涉，"干涉系数 4"两边抵消。
+      如果题目问的是"中点 vs 第一个相消点"，结果会完全不同：相消处强度 ≈ 0，比值无穷小，与 \(r\) 几乎无关。</p>
+      <p>策略：始终写成 \(I=(\text{干涉因子})\times(\text{单源强度})\)。</p>
+    </div>
+
+    <h3>(c) 从东 100 m 向北走</h3>
+    <p>这里是经典的"远场双源干涉" / Fraunhofer 区。<strong>小角近似</strong>：把两源看作 Young 双缝，间距 \(d=10\) m，屏幕距离 \(D=100\) m。
+    第一相消条件 \(d\sin\theta=\lambda/2\)（同相源、最小级次 \(n=0\)）。屏幕上位置 \(x=D\tan\theta\approx D\sin\theta\)：</p>
+    $$x=D\sin\theta=D\cdot\frac{\lambda}{2d}=\frac{100\cdot 3.43}{2\cdot 10}=\frac{343}{20}\approx 17.15\ \text{m}.$$
+
+    <div class="box warning"><p class="box-title">⚠ 陷阱：小角近似前先验证</p>
+      <p>\(\tan\theta=17.15/100\approx 0.17\)，\(\theta\approx 9.7°\)，\(\sin\theta\approx 0.169\)。\(\sin\theta\approx\tan\theta\) 的误差小于 1%，近似有效。
+      如果计算出 \(x>D\)（或 \(x\) 与 \(D\) 同量级），就要用严格的 \(\sqrt{x^2+D^2}\) 计算路径差，不能用小角近似。</p>
+    </div>
+
+    <h3>(d) 相位差 π/2 时重做 (a)</h3>
+    <p>两源初始相位差 \(\pi/2\)。要相消需要 <em>总</em> 相位差为 \(\pi\)，所以传播路径差贡献的相位差应为 \(\pi - \pi/2=\pi/2\)。即</p>
+    $$k\Delta r=\frac{\pi}{2}\quad\Longrightarrow\quad \Delta r=\frac{\lambda}{4}.$$
+    <p>仍然 \(\Delta r=2x\)：</p>
+    $$x=\frac{\lambda}{8}=\frac{3.43}{8}\approx 0.43\ \text{m}.$$
+
+    <div class="answer-box">
+      (a) \(x\approx 0.858\) m · (b) \(I_E/I_O\approx 0.0025\) · (c) \(x\approx 17.15\) m · (d) \(x\approx 0.43\) m
+    </div>
+
+    <p><a href="05_interference_doppler.html">→ 详细背景：干涉、衍射、Doppler topic page</a></p>
+
+    <!-- ============ PROBLEM 2 ============ -->
+    <h2 id="p2">Problem 2 — 旋转圆盘双声源 <span class="scope-tag scope-doppler">Doppler</span></h2>
+
+    <div class="problem-statement">
+      半径 \(R=0.3275\) m 的圆盘水平放置，你站在 100 m 外（同平面）。圆盘直径两端各装一个声源 A、B。A 频率 1000 Hz，B 未知。圆盘以 0.5 rev/s 旋转。声速 343 m/s。
+      <br/><strong>(a)</strong> 仅 A 开启：你听到什么？给出频率范围和 5% 以上的强度变化。
+      <br/><strong>(b)</strong> A、B 都开启。每 2 秒你只听到一个频率。给出可能的频率值以及对应的 B 源频率。
+      <br/><strong>(c)</strong> 在 (b) 描述的单频瞬间之后 1 秒，你听到什么？
+    </div>
+
+    <p>关键准备：圆盘边缘切线速度 \(u=\omega R=2\pi f_{\text{rot}}\cdot R=2\pi\cdot 0.5\cdot 0.3275=\pi\cdot 0.3275\approx 1.029\) m/s。</p>
+
+    <div class="box warning"><p class="box-title">⚠ 陷阱：只有"沿声源-观察者方向"的速度分量才进 Doppler 公式</p>
+      <p>圆盘上 A 点做圆周运动，速度方向时刻变化。当 A 在最靠近你的位置（圆盘"前"侧），它的切线速度恰好垂直于视线 → 径向分量 = 0 → 没 Doppler 偏移，听到 1000 Hz。
+      当 A 在最靠近 / 远离你方向的"侧面"，径向速度最大 \(\pm u\) → 最大 Doppler 偏移。
+      因为 \(D=100\) m ≫ \(R\)，整个圆盘对你可看作几乎正对面，"侧面"指圆盘上左右两个 90° 位置。</p>
+    </div>
+
+    <h3>(a) 只开 A</h3>
+    <p>A 在圆周上转一圈，径向速度从 \(+u\)（朝你）→ 0 → \(-u\)（背离）→ 0 → \(+u\) 循环。Doppler 公式（动源、静观察者）：</p>
+    $$f'_{\text{接近}}=\frac{f_A}{1-u/v}=\frac{1000}{1-1.029/343}=\frac{1000}{0.997}\approx 1003.0\ \text{Hz},$$
+    $$f'_{\text{远离}}=\frac{f_A}{1+u/v}=\frac{1000}{1+1.029/343}=\frac{1000}{1.003}\approx 997.0\ \text{Hz}.$$
+    <p>所以听到的频率在 <strong>997 → 1003 Hz</strong> 之间连续变化，周期 = 圆盘旋转周期 \(T=2\) s。</p>
+
+    <h4>强度变化检查</h4>
+    <p>强度按 \(1/r^2\) 衰减，\(r\) 在 \(100\pm R\)（前后两侧时）和 \(\sqrt{100^2+R^2}\approx 100.0005\) m（两侧时）之间。极值比：</p>
+    $$\frac{I_{\max}}{I_{\min}}=\left(\frac{100.3275}{99.6725}\right)^2\approx 1.013\approx 1.3\%.$$
+    <p>远小于 5%，<strong>强度变化察觉不到</strong>。</p>
+
+    <h3>(b) 双源时单频条件</h3>
+    <p>A、B 在直径两端，所以一个朝你时另一个一定背着你。要听到 <strong>单一</strong> 频率，必须 \(f'_A=f'_B\)。两种情况：</p>
+
+    <h4>情况 (i)：A 最接近、B 最远离</h4>
+    <p>此时 \(f'_A=f_A/(1-u/v)=1003.0\) Hz（接近偏移）；要 \(f'_B\) 等于这个值，B 远离时 \(f'_B=f_B/(1+u/v)\)。所以</p>
+    $$f_B=f'_B(1+u/v)=1003.0\cdot 1.003=1006.0\ \text{Hz}.$$
+
+    <h4>情况 (ii)：A 最远离、B 最接近</h4>
+    <p>\(f'_A=997.0\) Hz；要 \(f'_B=997.0\)，B 接近时 \(f'_B=f_B/(1-u/v)\)：</p>
+    $$f_B=f'_B(1-u/v)=997.0\cdot 0.997=994.0\ \text{Hz}.$$
+
+    <p>"每 2 秒"对应每一次圆盘旋转完成时这两种瞬间重现。</p>
+
+    <h3>(c) 1 秒后</h3>
+    <p>1 秒 = 旋转周期的 1/2 = 半圈。A 和 B 角色互换：</p>
+
+    <h4>情况 (i)（\(f_B=1006\) Hz）</h4>
+    <p>半圈后 A 远离、B 接近：</p>
+    <ul>
+      <li>\(f'_A=997.0\) Hz</li>
+      <li>\(f'_B=1006/(1-u/v)\approx 1006\cdot 1.003\approx 1009.0\) Hz</li>
+      <li>两个不同频率 → 听到 <strong>拍频 \(\Delta f=12\) Hz</strong>。</li>
+    </ul>
+
+    <h4>情况 (ii)（\(f_B=994\) Hz）</h4>
+    <p>半圈后 A 接近、B 远离：</p>
+    <ul>
+      <li>\(f'_A=1003.0\) Hz</li>
+      <li>\(f'_B=994/(1+u/v)\approx 994\cdot 0.997\approx 991.0\) Hz</li>
+      <li>拍频 \(\Delta f=12\) Hz。</li>
+    </ul>
+
+    <div class="box warning"><p class="box-title">⚠ 陷阱：拍频 = 两频率之差的 <em>绝对值</em></p>
+      <p>声学中常用的"包络周期"频率定义为 \(|f_1-f_2|\)；如果有教材用 \(|f_1-f_2|/2\)，那是包络半波频率。本课 / Shankar 用前者。本题两种情况都给出 12 Hz。</p>
+    </div>
+
+    <div class="answer-box">
+      (a) 997 ↔ 1003 Hz 周期 2s 变化；强度变化 ≈ 1.3% < 5% 听不出 · (b) 单频可能为 1003 Hz（\(f_B=1006\)）或 997 Hz（\(f_B=994\)） · (c) 两种情况都听到 12 Hz 拍频
+    </div>
+
+    <p><a href="05_interference_doppler.html">→ 详细背景：Doppler topic page</a></p>
+
+    <!-- ============ PROBLEM 3 ============ -->
+    <h2 id="p3">Problem 3 — 声波 s, p, Δρ 关系 <span class="scope-tag scope-sound">Sound</span></h2>
+
+    <div class="problem-statement">
+      空气中（\(v=343\) m/s，\(\rho_0=1.2\) kg/m³）一列声波，最大位移 \(s_{\max}=10^{-7}\) m，最大超压 \(p_{\max}=0.2\) Pa。
+      <br/><strong>(a)</strong> 求波长和频率。
+      <br/><strong>(b)</strong> 求最大密度涨落与平均密度之比 \(\Delta\rho_{\max}/\rho_0\)。
+      <br/><strong>(c)</strong> 波从左向右传播，某 \((x,t)\) 点位移最大（向左）。距此最近的最大超压点在哪里？
+    </div>
+
+    <h3>(a) 波长与频率</h3>
+    <p>取行波 \(s(x,t)=s_{\max}\sin(kx-\omega t)\)。压强偏移 \(p=-B\partial s/\partial x=-Bk s_{\max}\cos(kx-\omega t)\)，所以</p>
+    $$p_{\max}=Bk\,s_{\max}=B\frac{2\pi}{\lambda}s_{\max}.$$
+    <p>利用 \(B=v^2\rho_0\)（由 \(v=\sqrt{B/\rho}\) 反推）：</p>
+    $$p_{\max}=v^2\rho_0\frac{2\pi}{\lambda}s_{\max}\quad\Longrightarrow\quad \lambda=\frac{2\pi v^2\rho_0 s_{\max}}{p_{\max}}.$$
+    <p>代入：</p>
+    $$\lambda=\frac{2\pi\cdot 343^2\cdot 1.2\cdot 10^{-7}}{0.2}=\frac{2\pi\cdot 117649\cdot 1.2\cdot 10^{-7}}{0.2}\approx 0.443\ \text{m}\approx 0.44\ \text{m}.$$
+    $$f=\frac{v}{\lambda}=\frac{343}{0.443}\approx 774\ \text{Hz}.$$
+
+    <div class="box warning"><p class="box-title">⚠ 陷阱：\(B\) 在公式表里没直接给空气的 B 值就用 \(v^2\rho_0\)</p>
+      <p>公式表给 \(B_{\text{air}}=1.42\times 10^5\) Pa 是冗余信息（\(v^2\rho_0=343^2\cdot 1.2\approx 1.41\times 10^5\) Pa 一致）。
+      考场上要么用给出的 B，要么用 \(v^2\rho_0\)；两者基本相同，不要中途换公式。</p>
+    </div>
+
+    <h3>(b) 密度涨落比</h3>
+    <p>由 \(\Delta\rho=-\rho_0\partial s/\partial x\)：</p>
+    $$\Delta\rho_{\max}=\rho_0 k\,s_{\max}=\rho_0\frac{2\pi}{\lambda}s_{\max}.$$
+    <p>带入 \(\lambda=0.443\) m, \(s_{\max}=10^{-7}\) m：</p>
+    $$\frac{\Delta\rho_{\max}}{\rho_0}=\frac{2\pi\cdot 10^{-7}}{0.443}\approx 1.42\times 10^{-6}.$$
+
+    <div class="box insight"><p class="box-title">三参数的紧密关系</p>
+      <p>由 \(p=-B\partial s/\partial x\) 和 \(\Delta\rho=-\rho_0\partial s/\partial x\)：</p>
+      $$\frac{p}{\Delta\rho}=\frac{B}{\rho_0}=v^2.$$
+      <p>所以 \(\Delta\rho/\rho_0 = p/B\)。带入数值 \(0.2/(1.42\times 10^5)\approx 1.41\times 10^{-6}\)，与 (b) 一致。
+      这是一个 <strong>不需要先求 λ</strong> 的"捷径"——考试时间紧时直接用 \(\Delta\rho_{\max}/\rho_0=p_{\max}/B\)。</p>
+    </div>
+
+    <h3>(c) 最近的最大超压点</h3>
+    <p>取 \(s(x,t)=s_{\max}\sin(kx-\omega t)\)。"位移最大向左" → \(s=-s_{\max}\) → \(\sin(kx-\omega t)=-1\) → \(kx-\omega t=-\pi/2\)（mod \(2\pi\)）。</p>
+    <p>压强 \(p=-Bks_{\max}\cos(kx-\omega t)\)。"压强最大" → \(\cos(kx-\omega t)=-1\)（让 \(p>0\) 取最大）→ \(kx-\omega t=\pi\)（mod \(2\pi\)）。</p>
+    <p>相位差 \(\Delta\phi=\pi-(-\pi/2)=3\pi/2\)，或者沿 \(-x\) 方向 \(\Delta\phi=-\pi/2\)。最近的：\(|\Delta\phi|=\pi/2\)。</p>
+    $$|\Delta x|=\frac{\pi/2}{k}=\frac{\pi/2}{2\pi/\lambda}=\frac{\lambda}{4}=\frac{0.443}{4}\approx 0.11\ \text{m}.$$
+    <p>方向：因为 \(kx-\omega t=\pi\) 比起 \(-\pi/2\) 更大（往 \(+x\) 走 \(\Delta\phi=+3\pi/2\)），或往 \(-x\) 走 \(\Delta\phi=-\pi/2\)，<strong>最近的最大超压点在原位置的右侧 λ/4 处</strong>。
+    （注意：题目说"波从左向右传"是给方向参考，但最大超压点的空间位置只由 \(s\) 的导数定义，与传播方向无关。）</p>
+
+    <div class="box warning"><p class="box-title">⚠ 陷阱：\(s\) 和 \(p\) 相位差 90°</p>
+      <p>位移最大处压强为零；压强最大处位移为零。这是声波最重要的相位关系，对应空间相差 \(\lambda/4\)。
+      在压缩波形图上一目了然：最压缩的地方分子已经"挤拢"了，没有进一步位移空间。</p>
+    </div>
+
+    <div class="answer-box">
+      (a) \(\lambda\approx 0.44\) m, \(f\approx 774\) Hz · (b) \(\Delta\rho_{\max}/\rho_0\approx 1.43\times 10^{-6}\) · (c) 右侧 \(\lambda/4\approx 0.11\) m
+    </div>
+
+    <p><a href="04_sound_microscopic.html">→ 详细背景：声波微观推导 topic page</a></p>
+
+    <!-- ============ PROBLEM 4 ============ -->
+    <h2 id="p4">Problem 4 — 自制气压计 <span class="scope-tag scope-fluid">Fluid Statics</span></h2>
+
+    <div class="problem-statement">
+      用密度 \(\rho=10329\) kg/m³ 的液体和长 130 cm 的玻璃管做气压计。\(P_{\text{atm}}=101325\) Pa。
+      <br/><strong>(a)</strong> 灌满液体、用手指堵住、倒过来、垂直插入 10 cm 进液体罐里（120 cm 管在液面上方）。液柱高度多少？
+      <br/><strong>(b)</strong> 同样实验，但管子上方留长度 \(\ell\) 的空气。现在液柱高度是 (a) 的 90%。求 \(\ell\)。
+      <br/><strong>(c)</strong> (a)(b) 两种情况下，液柱顶部内侧管壁所受液体压强各是多少？
+      <br/><strong>(d)</strong> 加分：再将管子下推 10 cm，液柱高度增加、减少还是不变？
+    </div>
+
+    <h3>(a) 完美真空 Torricelli</h3>
+    <p>管子完全装满液体倒立 → 顶部 <strong>真空</strong>（忽略液体蒸汽压）。在液面 inside-tube 处与液面 outside-tube 处取同一水平面（液体连通）：</p>
+    $$P_{\text{top,inside}}+\rho g h = P_{\text{atm}},$$
+    <p>其中 \(P_{\text{top}}=0\)。所以</p>
+    $$h=\frac{P_{\text{atm}}}{\rho g}=\frac{101325}{10329\cdot 9.81}\approx 1.00\ \text{m}=100\ \text{cm}.$$
+
+    <div class="box insight"><p class="box-title">为什么选这种密度？</p>
+      <p>\(\rho=10329\) kg/m³ 不是水银（13546）、不是水（1000）——是个量身定做的"恰好给出 100 cm 液柱"的虚构液体。考场上可以从 \(h\) 反推液体密度，校验。</p>
+    </div>
+
+    <h3>(b) 残气 + 90% 高度</h3>
+    <p>新液柱 \(h'=0.9\cdot 100=90\) cm。剩下 \(120-90=30\) cm 是管顶空气段，称之为 \(\ell'\)。
+    现在管顶残气提供压强 \(P_{\text{gas}}\)，平衡方程：</p>
+    $$P_{\text{gas}}+\rho g h' = P_{\text{atm}}.$$
+    <p>用 \(\rho g\cdot 1\text{m}=P_{\text{atm}}\)，所以 \(\rho g\cdot 0.9\text{m}=0.9 P_{\text{atm}}\)：</p>
+    $$P_{\text{gas}}=0.1 P_{\text{atm}}.$$
+    <p>原始（未倒置前）这段气体在管顶占长度 \(\ell\)（题目设），压强为 \(P_{\text{atm}}\)。倒置后压强 \(0.1 P_{\text{atm}}\) 占长度 \(\ell'=30\) cm。等温 \(PV=\) const，管截面恒定：</p>
+    $$\ell\cdot P_{\text{atm}}=\ell'\cdot 0.1 P_{\text{atm}}\quad\Longrightarrow\quad \ell=0.1\cdot 30=3\ \text{cm}.$$
+
+    <div class="box warning"><p class="box-title">⚠ 陷阱：先确定 "残气 V" 是倒置后还是倒置前</p>
+      <p>等温 \(PV=\) const 是对 <strong>同一团气体</strong> 不同状态的关系。
+      原始状态：管底部封口前夕，气体在管顶长度 \(\ell\)，压强 = 大气压（与外界连通时）。
+      末态：倒置且液柱稳定后，气体在管顶长度 \(\ell'=30\) cm，压强 \(0.1 P_{\text{atm}}\)（被液柱"拉"住）。
+      混淆 \(\ell\) 和 \(\ell'\) 是最常见错误。本题答案是 \(\ell=3\) cm（原始气柱长度）。</p>
+    </div>
+
+    <h3>(c) 液柱顶部侧壁压强</h3>
+    <p>液体在液柱顶处与气体（或真空）平衡。侧壁压强 = 液体在该深度的压强 = 顶部气压。</p>
+    <ul>
+      <li>(a) 顶部是真空：<strong>0 Pa</strong>。</li>
+      <li>(b) 顶部是残气 \(0.1 P_{\text{atm}}\)：<strong>≈ 10132.5 Pa</strong>。</li>
+    </ul>
+
+    <div class="box warning"><p class="box-title">⚠ 陷阱：压强是 <em>标量</em>，方向无关</p>
+      <p>静态液体内某一点的压强在所有方向上都相等（Pascal 第一观察）。所以"侧壁压强" = "上方压强" = "下方压强（再加 \(\rho g\Delta h\)）"。在液柱最顶端，没有上方液体，所以压强 = 顶部气体压强。</p>
+    </div>
+
+    <h3>(d) 推下 10 cm 时液柱如何变化</h3>
+
+    <h4>(a) 情况：真空顶</h4>
+    <p>真空顶能"无成本"地维持 100 cm 液柱（\(\rho g h=P_{\text{atm}}\) 自动满足）。管子下推后，液面到管顶的距离 = 110 cm > 100 cm，所以液柱仍然 100 cm，<strong>不变</strong>。顶部真空段长度从 20 cm 变成 30 cm。</p>
+
+    <h4>(b) 情况：残气顶</h4>
+    <p>管下推后总管内长度（液面以上）从 120 cm 变成 110 cm。设新液柱高 \(h''\)，新气柱 \(\ell''=110-h''\)，新气压 \(P''\)。
+    平衡：\(P''+\rho g h''=P_{\text{atm}}\)，\(PV\) 守恒：\(\ell\cdot P_{\text{atm}}=\ell''\cdot P''\)，即 \(3\cdot 101325=\ell''\cdot P''\)。</p>
+    <p>因为气柱被"压缩"了（管短了 10 cm），气压 <strong>增大</strong>，所以 \(\rho g h''\) 必须 <strong>减小</strong>，即 <strong>液柱高度减小</strong>。</p>
+
+    <div class="answer-box">
+      (a) \(h=100\) cm · (b) \(\ell=3\) cm · (c) (a) 0 Pa；(b) ≈ 10132.5 Pa · (d) (a) 不变；(b) 减小
+    </div>
+
+    <p><a href="06_fluid_statics.html">→ 详细背景：流体静力学 topic page</a></p>
+
+    <!-- ============ FORMULA TABLE ============ -->
+    <h2 id="formula">公式速查表</h2>
+    <table class="formula-table">
+      <thead><tr><th>主题</th><th>公式</th></tr></thead>
+      <tbody>
+        <tr><td>同相双源相消</td><td>\(\Delta r=(n+1/2)\lambda\)；沿连线走时 \(\Delta r=2x\)</td></tr>
+        <tr><td>相位差 \(\Delta\phi_0\) 的双源相消</td><td>\(k\Delta r+\Delta\phi_0=(2n+1)\pi\)</td></tr>
+        <tr><td>远场角度</td><td>\(d\sin\theta=(n+1/2)\lambda\)；小角 \(x\approx D\sin\theta\)</td></tr>
+        <tr><td>Doppler（动源）</td><td>\(f'=f/(1-u_S/v)\) 接近 + 号反之</td></tr>
+        <tr><td>Doppler（动观察者）</td><td>\(f'=f(1\pm u_O/v)\)</td></tr>
+        <tr><td>径向投影</td><td>圆周运动只有沿视线分量进 Doppler</td></tr>
+        <tr><td>拍频</td><td>\(f_{\text{beat}}=|f_1-f_2|\)</td></tr>
+        <tr><td>声波三参数关系</td><td>\(p_{\max}=Bks_{\max}\)；\(\Delta\rho_{\max}=\rho_0 ks_{\max}\)；\(\Delta\rho_{\max}/\rho_0=p_{\max}/B\)</td></tr>
+        <tr><td>s 与 p 相位差</td><td>90°，对应空间 \(\lambda/4\)</td></tr>
+        <tr><td>声速</td><td>\(v=\sqrt{B/\rho_0}\)；空气 \(B\approx 1.42\times 10^5\) Pa</td></tr>
+        <tr><td>气压计 Torricelli</td><td>\(\rho g h=P_{\text{atm}}\)（真空顶）；\(P_{\text{gas}}+\rho g h=P_{\text{atm}}\)（有残气）</td></tr>
+        <tr><td>等温 PV</td><td>\(P_1 V_1=P_2 V_2\)（同一团气体，T 同）</td></tr>
+      </tbody>
+    </table>
+
+    <!-- ============ COMMON PITFALLS RECAP ============ -->
+    <h2 id="pitfalls">陷阱汇总</h2>
+    <div class="box warning"><p class="box-title">本卷 8 大易错点</p>
+      <ol>
+        <li>沿双源连线 \(\Delta r=2x\)；垂直方向要重推（远场用 \(d\sin\theta\)）。</li>
+        <li>双源强度 = 干涉因子 × 1/r²，两个效应都要算。</li>
+        <li>小角近似 \(\sin\theta\approx\tan\theta\) 在 \(<10°\) 时可用，要先验证。</li>
+        <li>Doppler 公式中的 u 是 <strong>径向</strong> 分量；圆周运动时大部分时刻径向分量小于切线速度 \(u=\omega R\)。</li>
+        <li>拍频 \(f_{\text{beat}}=|f_1-f_2|\)（本课约定）。</li>
+        <li>\(s\) 和 \(p\) 相位差 90°，空间相差 \(\lambda/4\)（p 由 \(s\) 的空间导数得来）。</li>
+        <li>"等温 PV" 守恒指 <strong>同一团气体</strong> 两个状态；\(\ell\) 与 \(\ell'\) 别混。</li>
+        <li>压强是标量，"侧壁压强" = 同一深度任意方向的压强。</li>
+      </ol>
+    </div>
+
+    <!-- ============ NAV ============ -->
+    <nav class="page-nav">
+      <a class="nav-prev" href="quiz1_walkthrough.html">Quiz 1</a>
+      <a class="nav-next" href="quiz3_walkthrough.html">Quiz 3 walkthrough</a>
+    </nav>
+
+  </main>
+</body>
+</html>
