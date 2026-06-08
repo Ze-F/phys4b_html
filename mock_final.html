@@ -182,7 +182,7 @@
 
     <div class="topic-header">
       <h1>🧪 PHYS 4B 模拟 Final 自测</h1>
-      <p class="meta">15 题（Part A + B + C）· 覆盖 Ch.16–24 全部主题 · ~135 分钟（分 3 批做完）</p>
+      <p class="meta">16 题（Part A + B + C，C 含 6 题）· 覆盖 Ch.16–24 全部主题 · ~140 分钟（分 3 批做完）</p>
       <p class="blurb">blend：Q1–Q5 变形 + Shankar 经典 + final 新增公式针对题 + quiz 没考过的标准题。每题含可折叠"提示"（卡住时打开）和"完整解答"（做完后核对）。<strong>Part A</strong>（P1–P5）final 新信号；<strong>Part B</strong>（P6–P10）quiz 没考过的中等题型；<strong>Part C</strong>（P11–P15）跨章节综合 + Gibbs 佯谬等深度题。</p>
     </div>
 
@@ -808,6 +808,7 @@
         <li><strong>P13 钢棒声速 + 热膨胀</strong> [★★★]：声波 \(v=\sqrt{Y/\rho}\) 与热膨胀 \(\alpha\) 的跨章节联动</li>
         <li><strong>P14 Carnot 冰箱 / 热泵</strong> [★★]：COP 的两种定义 \(\kappa_{\text{ref}}=T_c/\Delta T\)、\(\kappa_{\text{HP}}=T_h/\Delta T\)</li>
         <li><strong>P15 Gibbs 混合熵 + 同性气体佯谬</strong> [★★]：He+Ar vs He+He 的 ΔS 跳变，indistinguishability 的物理</li>
+        <li><strong>P16 Young 双缝（声学版）</strong> [★★]：\(d\sin\theta=n\lambda\) 经典屏幕条纹间距 + 小角近似有效区检验 + 异相版本</li>
       </ul>
     </div>
 
@@ -817,6 +818,7 @@
       <a href="#p13"><span class="toc-label">Problem 13</span><span class="toc-topic">钢棒声速 + 热膨胀 [★★★]</span></a>
       <a href="#p14"><span class="toc-label">Problem 14</span><span class="toc-topic">Carnot 冰箱 / 热泵 [★★]</span></a>
       <a href="#p15"><span class="toc-label">Problem 15</span><span class="toc-topic">Gibbs 混合熵 [★★]</span></a>
+      <a href="#p16"><span class="toc-label">Problem 16</span><span class="toc-topic">Young 双缝 [★★]</span></a>
     </div>
 
     <!-- ============ PROBLEM 11 ============ -->
@@ -1157,6 +1159,97 @@
 
     <div class="answer-box">
       (a) T = T₀，每种气体占 2V₀，总 P = P₀ 不变 · (b) \(\Delta S_{\text{univ}}=2R\ln 2\approx 11.5\) J/K · (c) ΔS = 0 · (d) 量子粒子身份是离散的（identical or not），所以 ΔS 必然跳变；Sackur-Tetrode 的 N! 修正是关键
+    </div>
+
+    <!-- ============ PROBLEM 16 ============ -->
+    <h2 id="p16">Problem 16 — Young 双缝（声学版） <span class="scope-tag scope-wave">Interference</span> <span class="diff">★★ · 9 min</span></h2>
+
+    <div class="problem-statement">
+      两个相干扬声器同相、同振幅，发射 \(f=2000\) Hz 声波（\(v=343\) m/s）。扬声器间距 \(d=1.0\) m。一条平行于扬声器连线的"屏幕"距离扬声器 \(D=5.0\) m，麦克风沿屏幕方向移动。
+      <br/><strong>(a)</strong> 波长 \(\lambda\)？
+      <br/><strong>(b)</strong> 中心附近的条纹间距 \(y\)（小角近似 \(\sin\theta\approx\tan\theta\)）？
+      <br/><strong>(c)</strong> 求第 3 级（n=3）极大的 <strong>精确</strong> 角度和屏幕上位置。与"小角推算"对比。
+      <br/><strong>(d)</strong> 屏幕一侧最多能观察到第几级极大？两侧总共多少个极大？
+      <br/><strong>(e)</strong> 现在让一个扬声器额外移相 π（变成异相）。中心位置是极大还是极小？图样如何移动？
+    </div>
+
+    <details class="hint-box">
+      <summary>💡 提示</summary>
+      <ul>
+        <li>同相双源极大条件 \(d\sin\theta=n\lambda\)，\(n=0,\pm 1,\pm 2,...\)</li>
+        <li>小角近似 \(\sin\theta\approx\tan\theta=y/D\) → 条纹间距 \(y=D\lambda/d\)</li>
+        <li>(c) 精确算 sin、再用 tan 求位置：\(y_n=D\tan\theta_n\)，注意 \(\sin\ne\tan\)</li>
+        <li>(d) 物理约束 \(|\sin\theta|\le 1\) → \(n_{\max}=\lfloor d/\lambda\rfloor\)</li>
+        <li>(e) 异相 π → 极大条件变为 \(d\sin\theta=(n+\tfrac12)\lambda\)，原来的极大变成极小（图样整体移动半个条纹）</li>
+      </ul>
+    </details>
+
+    <details class="sol-box">
+      <summary>📝 完整解答</summary>
+
+      <h4>(a) 波长</h4>
+      $$\lambda=\frac{v}{f}=\frac{343}{2000}\approx 0.1715\ \text{m}.$$
+
+      <h4>(b) 条纹间距（小角近似）</h4>
+      <p>极大角度：\(\sin\theta_n=n\lambda/d\)。相邻极大间距：</p>
+      $$\Delta(\sin\theta)=\frac{\lambda}{d}.$$
+      <p>小角 \(\sin\theta\approx\tan\theta=y/D\)：</p>
+      $$y=\frac{D\lambda}{d}=\frac{5\cdot 0.1715}{1.0}\approx 0.858\ \text{m}.$$
+      <p>第一级极大：\(\sin\theta_1=0.1715\) → \(\theta_1\approx 9.87°\)，确实小角，近似有效。</p>
+
+      <h4>(c) 第 3 级极大（精确）</h4>
+      <p>\(\sin\theta_3=3\lambda/d=3\cdot 0.1715=0.5146\) → \(\theta_3=\arcsin(0.5146)\approx 30.97°\)。</p>
+      <p>精确位置：</p>
+      $$y_3^{\text{exact}}=D\tan\theta_3=5\cdot\tan(30.97°)=5\cdot 0.6004\approx 3.00\ \text{m}.$$
+      <p>小角推算：\(y_3^{\text{small}}=3 y_1=3\cdot 0.858\approx 2.57\) m。</p>
+      <p><strong>差异</strong>：精确 3.00 m vs 近似 2.57 m，<strong>偏差 17%</strong>。原因：\(\theta_3=31°\) 时 \(\sin\) 和 \(\tan\) 不再几乎相等：</p>
+      $$\sin 31°=0.515,\quad \tan 31°=0.601.$$
+      <p>所以 <strong>高阶极大不能用小角近似</strong>，必须先精确算 sinθ 再用 tan 求位置。</p>
+
+      <div class="box warning">
+        <p class="box-title">⚠ 陷阱：小角近似的"安全区"</p>
+        <p>当 \(\sin\theta\le 0.2\)（θ ≤ 11.5°）时，\(\sin\theta\approx\tan\theta\) 偏差 &lt; 2%，可用小角近似。
+        当 \(\sin\theta\ge 0.3\) 时偏差超过 5%。本题 \(d/\lambda=5.83\)，所以 \(\sin\theta_1=0.17\) 小角 ✓，但 \(\sin\theta_3=0.51\) 小角 ✗。</p>
+        <p>记忆口诀：<strong>大角必精算，小角才线性</strong>。考试时若题目问中心附近的"条纹间距"，用 \(y=D\lambda/d\) 速算；若问 nth 极大具体位置且 n 较大，老老实实算 \(\arcsin(n\lambda/d)\) 再 tan。</p>
+      </div>
+
+      <h4>(d) 最大可观察级次</h4>
+      $$|\sin\theta_n|=n\lambda/d\le 1\quad\Longrightarrow\quad n_{\max}=\Bigl\lfloor\frac{d}{\lambda}\Bigr\rfloor=\Bigl\lfloor\frac{1.0}{0.1715}\Bigr\rfloor=\lfloor 5.83\rfloor=5.$$
+      <p>所以两侧各能看到 n = 1, 2, 3, 4, 5 共 5 个；加上中央 n = 0：</p>
+      $$\text{总极大数}=2\cdot 5+1=11\ \text{个}.$$
+      <p>注意 n=5 的 \(\sin\theta_5=0.858\) → \(\theta_5=59.1°\)，已经接近 90°（极大几乎沿扬声器连线方向，不在常规屏幕上而是侧面）。</p>
+
+      <h4>(e) 异相 π 的图样</h4>
+      <p>两源初相位差 π → 总相位差 \(=k\,\Delta r+\pi\)。极大条件 \(k\Delta r+\pi=2n\pi\) → \(\Delta r=(n-\tfrac12)\lambda\)：</p>
+      $$d\sin\theta=(n-\tfrac12)\lambda,\quad n=0,\pm 1,\pm 2,...$$
+      <p>或等价地 \(d\sin\theta=(m+\tfrac12)\lambda\)（m 是整数）。</p>
+      <ul>
+        <li>中心 θ = 0：\(\Delta r=0\)，总相位差 = π → <strong>极小</strong>（之前是极大）。</li>
+        <li>原来的第一个极小位置（\(d\sin\theta=\lambda/2\)）变成 <strong>极大</strong>。</li>
+      </ul>
+      <p>新的"第一个极大"位置：\(\sin\theta=\lambda/(2d)=0.0858\) → θ ≈ 4.92°，屏幕位置 \(y\approx D\tan\theta\approx 0.43\) m。</p>
+      <p><strong>整个图样向上/下移动了半个条纹间距</strong>（\(y/2=0.43\) m）。极大极小互换。</p>
+
+      <div class="box insight">
+        <p class="box-title">类比光学 Young's experiment</p>
+        <p>光学双缝：</p>
+        <ul>
+          <li>缝间距 d ~ 0.1 mm，波长 λ ~ 500 nm → \(d/\lambda\sim 200\) → 几百个条纹</li>
+          <li>屏幕距离 D ~ 1 m → 条纹间距 \(y=D\lambda/d\sim 5\) mm，肉眼清晰可见</li>
+          <li>小角近似几乎完美（高阶时 \(\sin\theta\) 仍然 ~0.001）</li>
+        </ul>
+        <p>声学双缝：</p>
+        <ul>
+          <li>"缝"间距 ~ m，λ ~ 0.1 m → \(d/\lambda\sim 10\) → 只有十几个极大</li>
+          <li>D ~ m → 条纹间距 ~ 1 m，可走过去测</li>
+          <li>高阶时小角失效，需精算</li>
+        </ul>
+        <p>同一公式 \(d\sin\theta=n\lambda\)，两个尺度天差地别——这就是"波长 / 设备尺寸"无量纲比的威力。</p>
+      </div>
+    </details>
+
+    <div class="answer-box">
+      (a) \(\lambda\approx 0.172\) m · (b) 条纹间距 \(y\approx 0.858\) m · (c) \(\theta_3\approx 31°\)，精确位置 \(y_3\approx 3.00\) m（vs 小角推算 2.57 m，偏 17%）· (d) 5 阶 / 两侧 11 个极大 · (e) 异相 π → 中心变极小，图样整体移半个条纹
     </div>
 
     <!-- ============ FINAL TIPS ============ -->
