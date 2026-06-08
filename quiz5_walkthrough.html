@@ -103,6 +103,38 @@
       若你写成"ΔS_univ ≤ 0 给最大功"，那是反了——这种方向给的是"physically impossible"。</p>
     </div>
 
+    <div class="box warning"><p class="box-title">⚠ 陷阱（高频）：用 Q-加权算术平均温度套 Carnot 是错的</p>
+      <p>常见错误想法："把两个热源合成等效温度 \(T_{\text{avg}}=\frac{Q_1 T_1+Q_2 T_2}{Q_1+Q_2}\)，然后用 Carnot \(\eta=1-T_c/T_{\text{avg}}\)。"</p>
+      <p>代入：</p>
+      $$T_{\text{avg}}=\frac{300\cdot 300+50\cdot 100}{350}\approx 271.4\ \text{K},\quad\eta=1-\frac{200}{271.4}\approx 26.3\%,$$
+      $$W_{\text{错}}=350\cdot 0.263\approx 92\ \text{J}.$$
+      <p>真值是 50 J，<strong>偏高 84%</strong>！</p>
+
+      <p><strong>错因（数学）</strong>：Carnot 公式 \(\eta=1-T_c/T_h\) 的来源是熵守恒 \(Q_h/T_h=Q_c/T_c\)，T 在 <em>分母</em>。
+      多储库合成等效温度，正确做法是对 <strong>1/T 做 Q-加权算术平均</strong>，等价于 T 的 <strong>调和平均</strong>：</p>
+      $$\frac{1}{T_{\text{eff}}}=\frac{\sum_i Q_i/T_i}{\sum_i Q_i}=\frac{300/300+50/100}{350}=\frac{1.5}{350}\quad\Longrightarrow\quad T_{\text{eff}}\approx 233.3\ \text{K}.$$
+      $$\eta=1-\frac{200}{233.3}=\frac{1}{7},\quad W=\frac{350}{7}=50\ \text{J}.\ \checkmark$$
+      <p>由 AM-HM 不等式，<strong>算术平均 ≥ 调和平均</strong>，所以算术法永远高估 η 和 W。
+      记忆口诀：<em>"温度进熵公式是倒数，所以平均要按倒数加权"</em>。</p>
+    </div>
+
+    <div class="box insight"><p class="box-title">深层物理图像：把循环拆成"引擎 + 热泵"</p>
+      <p>本题 100 K 储库 <strong>低于</strong> "冷"储库 200 K，意味着从 100 K 吸热再排到 200 K 是反方向（冷→热），这是 <strong>热泵</strong> 行为，需要消耗功。所以本题真正的物理几何：</p>
+      <ul>
+        <li><strong>引擎 A</strong>（300 K → 200 K，可逆）：吸 \(Q_1=300\) J 于 300 K，按 Carnot \(q_1=Q_1\cdot 200/300=200\) J 释于 200 K，<strong>输出</strong> \(W_A=100\) J</li>
+        <li><strong>热泵 B</strong>（100 K → 200 K，反向 Carnot）：吸 \(Q_2=50\) J 于 100 K，释 \(q_2=Q_2\cdot 200/100=100\) J 于 200 K，<strong>输入</strong> \(W_B=q_2-Q_2=50\) J</li>
+        <li>200 K 储库总接收 \(q_1+q_2=300\) J ✓</li>
+        <li><strong>净功</strong> \(W=W_A-W_B=100-50=50\) J ✓</li>
+      </ul>
+      <p>用 50 J 功把 50 J 从 100 K"抬"到 200 K，剩下 50 J 是 net engine output。<strong>把 300 K 和 100 K 合成"平均热源"等同于把引擎和热泵融合，几何上不成立。</strong></p>
+    </div>
+
+    <div class="box key-result"><p class="box-title">通用算法（≥ 3 储库 / 温度排布不寻常时永远适用）</p>
+      <p>遇到多储库循环 <strong>不要试图套 Carnot 简化版</strong>。直接列两个守恒律：</p>
+      $$\underbrace{\sum_i\frac{-Q_i^{\text{in}}}{T_i}+\frac{Q_{\text{out}}}{T_{\text{out}}}=0}_{\text{熵守恒（可逆）}}\quad+\quad\underbrace{W=\sum_i Q_i^{\text{in}}-Q_{\text{out}}}_{\text{能量守恒}}.$$
+      <p>两条方程解两个未知数 \((Q_{\text{out}}, W)\)，<strong>对任意温度排布、任意方向都对</strong>——包括有储库低于"冷"端、有多个并列热源、有等温段嵌套等等。</p>
+    </div>
+
     <h3>(b) 效率 η</h3>
     <p>η = W / Q_absorbed。系统吸热 = 300 + 50 = 350 J（两个储库都给系统供热）。</p>
     $$\eta=\frac{50}{350}=\frac{1}{7}\approx 0.143=14.3\%.$$
@@ -367,6 +399,8 @@
         <tr><td>液体加热</td><td>\(\Delta S=mc\ln(T_2/T_1)\)；T 用 K！</td></tr>
         <tr><td>相变 (T_phase 恒定)</td><td>\(\Delta S=mL/T_{\text{phase}}\)</td></tr>
         <tr><td>循环熵 / 多源热机</td><td>ΔS_system = 0；ΔS_univ = Σ ±Q_i/T_i；可逆给 W_max</td></tr>
+        <tr><td>等效热源 T_eff（多源）</td><td>\(1/T_{\text{eff}}=\sum Q_i/T_i / \sum Q_i\)（调和平均，<strong>不</strong>是算术平均）</td></tr>
+        <tr><td>多源算法（通用）</td><td>列 ΔS_univ = 0 + 能量守恒，解两个未知数；不要套 2-储库 Carnot</td></tr>
         <tr><td>稳态系统</td><td>ΔS_system = 0；熵增全在外部储库</td></tr>
         <tr><td>下限 (lower bound)</td><td>不可知部分 ≥ 0 ⟹ ΔS_univ ≥ 已知正部分</td></tr>
         <tr><td>双原子空气 C_v / C_p</td><td>5R/2, 7R/2 (室温)</td></tr>
@@ -375,12 +409,13 @@
 
     <!-- ============ PITFALLS RECAP ============ -->
     <h2 id="pitfalls">陷阱汇总</h2>
-    <div class="box warning"><p class="box-title">本卷 8 大易错点</p>
+    <div class="box warning"><p class="box-title">本卷 9 大易错点</p>
       <ol>
         <li>T 在 dS=δQ/T 必须用 <strong>Kelvin</strong>；用 °C 会爆炸（除零）。</li>
         <li>循环系统 ΔS_system = 0（state function 回到初态），熵增全在储库。</li>
         <li>"可逆路径"是为了计算 ΔS 的数学工具；实际过程不可逆不影响计算。</li>
         <li>多源热机：ΔS_univ ≥ 0，等号给最大功；不等号给现实不可逆运行。</li>
+        <li><strong>多储库循环不能套 2 储库 Carnot 简化版！</strong>错用 Q-加权算术 T_avg 会高估 W（本题偏 84%）。正确：直接列 ΔS_univ=0 + 能量守恒。</li>
         <li>η = W / Q_<strong>abs</strong>，分母用总吸入热（多个源都算）。</li>
         <li>空气是双原子，c_v = 5R/2 不是 3R/2。</li>
         <li>稳态系统 ΔS = 0：电源稳定加热的房间熵不变（初终态相同）。</li>
