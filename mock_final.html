@@ -182,8 +182,8 @@
 
     <div class="topic-header">
       <h1>🧪 PHYS 4B 模拟 Final 自测</h1>
-      <p class="meta">10 题（Part A + Part B）· 覆盖 Ch.16–24 全部主题 · ~90 分钟（分两批做完）</p>
-      <p class="blurb">blend：Q1–Q5 变形 + Shankar 经典题型 + final 新增公式针对题 + quizz 没考过的标准题。每题含可折叠"提示"（卡住时打开）和"完整解答"（做完后核对）。建议先关掉解答盲做。<strong>Part A</strong>（P1–P5）侧重 final 公式表的新信号；<strong>Part B</strong>（P6–P10）覆盖 quiz 没涉及的标准题型（Venturi / 声强 / 复合墙 / Otto / MB 积分）。</p>
+      <p class="meta">15 题（Part A + B + C）· 覆盖 Ch.16–24 全部主题 · ~135 分钟（分 3 批做完）</p>
+      <p class="blurb">blend：Q1–Q5 变形 + Shankar 经典 + final 新增公式针对题 + quiz 没考过的标准题。每题含可折叠"提示"（卡住时打开）和"完整解答"（做完后核对）。<strong>Part A</strong>（P1–P5）final 新信号；<strong>Part B</strong>（P6–P10）quiz 没考过的中等题型；<strong>Part C</strong>（P11–P15）跨章节综合 + Gibbs 佯谬等深度题。</p>
     </div>
 
     <div class="back-link">
@@ -193,7 +193,7 @@
 
     <div class="timer-banner">
       🕐 <strong>用法建议</strong>：先关掉所有提示和解答盲做。卡住时打开"提示"（黄框），做完后打开"解答"（绿框）核对。
-      <br/>计时建议：<strong>Part A 45 min + Part B 45 min</strong>，赶时间可挑每 Part 重点 3 道。Part A 偏 final 新信号；Part B 偏 quiz 没考过的标准题型。
+      <br/>计时建议：<strong>Part A 45 + B 45 + C 45 = ~135 min</strong>，赶时间可挑每 Part 重点 3 道。
     </div>
 
     <div class="box key-result">
@@ -795,6 +795,368 @@
 
     <div class="answer-box">
       (a) \(v_0\approx 1117\), \(\bar v\approx 1260\), \(v_{\text{rms}}\approx 1368\) m/s · (b) ⟨v_x⟩=0, ⟨v_x²⟩=kT/m · (c) ⟨v²⟩=3kT/m, \(v_{\text{rms}}=\sqrt{3kT/m}\) ✓ · (d) g(v_rms)/g(v₀) = (3/2)e^(-1/2) ≈ 0.91
+    </div>
+
+    <!-- ============ PART C ============ -->
+    <h2 id="part-c" style="border-top: 3px double #0f766e; padding-top: 1.5rem; margin-top: 4rem;">📚 Part C — 综合 + 深度 5 题（~45 min）</h2>
+
+    <div class="box key-result">
+      <p class="box-title">Part C 一页速览（跨章节综合 + 深度题）</p>
+      <ul style="margin:.2rem 0">
+        <li><strong>P11 单缝衍射 + 频率扫描</strong> [★★]：从声音透过门窥探 \(a\sin\theta=n\lambda\)，低 vs 高频对比</li>
+        <li><strong>P12 空气分子的平均自由程</strong> [★★]：n₀、ℓ、⟨v⟩、τ、d_i 五个尺度一站搞清</li>
+        <li><strong>P13 钢棒声速 + 热膨胀</strong> [★★★]：声波 \(v=\sqrt{Y/\rho}\) 与热膨胀 \(\alpha\) 的跨章节联动</li>
+        <li><strong>P14 Carnot 冰箱 / 热泵</strong> [★★]：COP 的两种定义 \(\kappa_{\text{ref}}=T_c/\Delta T\)、\(\kappa_{\text{HP}}=T_h/\Delta T\)</li>
+        <li><strong>P15 Gibbs 混合熵 + 同性气体佯谬</strong> [★★]：He+Ar vs He+He 的 ΔS 跳变，indistinguishability 的物理</li>
+      </ul>
+    </div>
+
+    <div class="problem-toc">
+      <a href="#p11"><span class="toc-label">Problem 11</span><span class="toc-topic">单缝衍射 [★★]</span></a>
+      <a href="#p12"><span class="toc-label">Problem 12</span><span class="toc-topic">平均自由程 [★★]</span></a>
+      <a href="#p13"><span class="toc-label">Problem 13</span><span class="toc-topic">钢棒声速 + 热膨胀 [★★★]</span></a>
+      <a href="#p14"><span class="toc-label">Problem 14</span><span class="toc-topic">Carnot 冰箱 / 热泵 [★★]</span></a>
+      <a href="#p15"><span class="toc-label">Problem 15</span><span class="toc-topic">Gibbs 混合熵 [★★]</span></a>
+    </div>
+
+    <!-- ============ PROBLEM 11 ============ -->
+    <h2 id="p11">Problem 11 — 单缝衍射 + 低/高频对比 <span class="scope-tag scope-wave">Diffraction</span> <span class="diff">★★ · 9 min</span></h2>
+
+    <div class="problem-statement">
+      声音通过一扇宽 \(a=0.8\) m 的门口传出去。空气声速 \(v=343\) m/s。
+      <br/><strong>(a)</strong> 频率 \(f_1=400\) Hz 时的波长 \(\lambda_1\)？
+      <br/><strong>(b)</strong> 求 \(f_1\) 衍射图样的前 3 个最小（零点）的角度。注意若 \(\sin\theta>1\) 则该最小不存在。
+      <br/><strong>(c)</strong> 频率提到 \(f_2=4000\) Hz 时，前 3 个最小的角度是多少？
+      <br/><strong>(d)</strong> 用 (b)(c) 对比解释为什么墙外只能听到隔壁屋内说话的低频部分，听不到清晰的辅音（高频）。
+    </div>
+
+    <details class="hint-box">
+      <summary>💡 提示</summary>
+      <ul>
+        <li>单缝衍射最小条件 \(a\sin\theta=n\lambda\)，\(n=1,2,3,...\)</li>
+        <li>当 \(\lambda>a\)，\(\sin\theta=n\lambda/a>1\)，第一个最小都不存在 → 衍射图样是"全方向均匀辐射"，几乎没有指向性</li>
+        <li>\(\lambda\ll a\) 时，最小角度 \(\theta\approx n\lambda/a\) 都很小 → 强指向性</li>
+        <li>语音中元音多在 100–800 Hz（低频），辅音多在 2–8 kHz（高频）</li>
+      </ul>
+    </details>
+
+    <details class="sol-box">
+      <summary>📝 完整解答</summary>
+
+      <h4>(a) 低频波长</h4>
+      $$\lambda_1=\frac{v}{f_1}=\frac{343}{400}\approx 0.858\ \text{m}.$$
+      <p>波长 <strong>大于门宽</strong> 0.8 m！</p>
+
+      <h4>(b) 低频衍射零点</h4>
+      <p>\(\sin\theta=n\lambda_1/a=n\cdot 0.858/0.8=1.072\cdot n\)。</p>
+      <ul>
+        <li>\(n=1\)：\(\sin\theta=1.072>1\) → <strong>不存在</strong>。</li>
+        <li>\(n=2, 3\)：更不存在。</li>
+      </ul>
+      <p>结论：低频声音在门口 <strong>没有衍射零点</strong> → 中心主峰宽到覆盖整个 180° → 声音 <strong>近似全方向辐射</strong>，墙外任何方向都能听到。</p>
+
+      <h4>(c) 高频衍射零点</h4>
+      $$\lambda_2=\frac{343}{4000}\approx 0.0858\ \text{m}.$$
+      <p>\(\sin\theta=n\cdot 0.0858/0.8=0.107\cdot n\)。</p>
+      <table class="formula-table">
+        <thead><tr><th>n</th><th>sin θ</th><th>θ</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>0.107</td><td>≈ 6.2°</td></tr>
+          <tr><td>2</td><td>0.214</td><td>≈ 12.4°</td></tr>
+          <tr><td>3</td><td>0.321</td><td>≈ 18.7°</td></tr>
+        </tbody>
+      </table>
+      <p>高频中心主峰半角宽（从 0 到第一最小）≈ 6°，<strong>强指向性</strong>——只有正对门口的窄锥角里能听到清晰高频。</p>
+
+      <h4>(d) 物理解释</h4>
+      <p>低频（元音、低音）λ ~ 1 m 与门宽相近 → <strong>强衍射，全方向</strong>，从门口"漏出去"散到墙外各处。</p>
+      <p>高频（辅音 s/sh/k 等）λ ~ 8 cm ≪ 门宽 → <strong>弱衍射，强指向性</strong>，只能沿"门-说话者"连线方向直射出去。</p>
+      <p>所以墙外只能听到低频"嗡嗡"声而失去高频辅音 → <strong>听不清说什么、只知道有人在说话</strong>。这是隔音设计的原理之一（也是为什么相隔一道墙时唱歌还是能听到节奏但听不清歌词）。</p>
+
+      <div class="box insight">
+        <p class="box-title">和光学双缝/单缝实验的对比</p>
+        <p>同样的 \(a\sin\theta=n\lambda\) 公式：</p>
+        <ul>
+          <li>光学：\(\lambda\sim 500\) nm，缝 \(a\sim 100\) μm → \(\lambda/a\sim 5\times 10^{-3}\) → 强指向性，第一零点 ≈ 0.3°</li>
+          <li>声学（高频）：\(\lambda\sim 8\) cm，门 \(a\sim 0.8\) m → \(\lambda/a\sim 0.1\) → 中等指向性，第一零点 ≈ 6°</li>
+          <li>声学（低频）：\(\lambda\sim 1\) m，门 \(a\sim 0.8\) m → \(\lambda/a>1\) → 几乎无指向性</li>
+        </ul>
+        <p>本质：<strong>波长 / 障碍尺度</strong> 这个无量纲比决定衍射强弱。比例越大衍射越显著。</p>
+      </div>
+    </details>
+
+    <div class="answer-box">
+      (a) \(\lambda_1\approx 0.86\) m > a · (b) 低频无任何衍射零点（全向辐射）· (c) 高频前 3 零点 ≈ 6.2°, 12.4°, 18.7° · (d) 低频强衍射 → 全方向；高频弱衍射 → 指向性，损失辅音
+    </div>
+
+    <!-- ============ PROBLEM 12 ============ -->
+    <h2 id="p12">Problem 12 — 空气分子的五个尺度 <span class="scope-tag scope-entropy">KT</span> <span class="diff">★★ · 10 min</span></h2>
+
+    <div class="problem-statement">
+      空气在 STP（\(P=101325\) Pa, \(T=273\) K）。分子有效直径 \(d\approx 3\times 10^{-10}\) m，平均质量 \(m\approx 4.81\times 10^{-26}\) kg（N₂/O₂ 加权）。
+      <br/><strong>(a)</strong> 数密度 \(n_0=N/V\)？
+      <br/><strong>(b)</strong> 平均自由程 \(\ell\)？
+      <br/><strong>(c)</strong> 平均速率 \(\bar v\)？
+      <br/><strong>(d)</strong> 平均碰撞时间 \(\tau=\ell/\bar v\) 与碰撞频率 \(1/\tau\)？
+      <br/><strong>(e)</strong> 分子平均间距 \(d_i=n_0^{-1/3}\)？比较 \(d, d_i, \ell\) 三个长度尺度。
+    </div>
+
+    <details class="hint-box">
+      <summary>💡 提示</summary>
+      <ul>
+        <li>用 \(P=n_0 kT\) 求 \(n_0\)。</li>
+        <li>\(\ell=1/(\sqrt 2\,\pi d^2 n_0)\)（√2 来自相对速度修正）。</li>
+        <li>\(\bar v=\sqrt{8kT/(\pi m)}\)。</li>
+        <li>\(d_i\) 是"立方网格"间距估计：\(n_0\cdot d_i^3=1\)。</li>
+        <li>预期 \(d\ll d_i\ll \ell\)（稀薄气体特征）。</li>
+      </ul>
+    </details>
+
+    <details class="sol-box">
+      <summary>📝 完整解答</summary>
+
+      <h4>(a) 数密度</h4>
+      $$n_0=\frac{P}{kT}=\frac{101325}{1.38\times 10^{-23}\cdot 273}=\frac{101325}{3.767\times 10^{-21}}\approx 2.69\times 10^{25}\ /\text{m}^3.$$
+      <p>Loschmidt 数 \(\approx 2.7\times 10^{25}\) /m³，记下来 STP 这个值很有用。</p>
+
+      <h4>(b) 平均自由程</h4>
+      $$\ell=\frac{1}{\sqrt 2\,\pi d^2 n_0}=\frac{1}{1.414\cdot \pi\cdot 9\times 10^{-20}\cdot 2.69\times 10^{25}}=\frac{1}{1.076\times 10^{7}}\approx 9.3\times 10^{-8}\ \text{m}=93\ \text{nm}.$$
+
+      <h4>(c) 平均速率</h4>
+      $$\bar v=\sqrt{\frac{8kT}{\pi m}}=\sqrt{\frac{8\cdot 1.38\times 10^{-23}\cdot 273}{\pi\cdot 4.81\times 10^{-26}}}=\sqrt{1.995\times 10^{5}}\approx 447\ \text{m/s}.$$
+      <p>近乎声速 343 m/s 的 1.3 倍——声波的传播速率不会超过气体分子的平均速率（因为声音就是分子之间碰撞传递的）。</p>
+
+      <h4>(d) 碰撞时间</h4>
+      $$\tau=\frac{\ell}{\bar v}=\frac{9.3\times 10^{-8}}{447}\approx 2.08\times 10^{-10}\ \text{s}\approx 0.21\ \text{ns}.$$
+      $$\text{碰撞频率}=\frac{1}{\tau}\approx 4.8\times 10^{9}\ /\text{s}.$$
+      <p>每个分子每秒碰撞约 50 亿次。</p>
+
+      <h4>(e) 分子间距与三尺度对比</h4>
+      $$d_i=n_0^{-1/3}=(2.69\times 10^{25})^{-1/3}=(3.72\times 10^{-26})^{1/3}\approx 3.34\times 10^{-9}\ \text{m}=3.3\ \text{nm}.$$
+
+      <table class="formula-table">
+        <thead><tr><th>尺度</th><th>数值 (nm)</th><th>物理</th></tr></thead>
+        <tbody>
+          <tr><td>分子直径 d</td><td>0.3</td><td>分子本身</td></tr>
+          <tr><td>平均间距 d_i</td><td>3.3</td><td>邻近分子距离</td></tr>
+          <tr><td>平均自由程 ℓ</td><td>93</td><td>两次碰撞之间走的距离</td></tr>
+        </tbody>
+      </table>
+
+      <p><strong>关键不等式</strong> \(d\ll d_i\ll \ell\)（约 10 倍间隔三个数量级）。</p>
+      <p>这意味着：
+        <ul>
+          <li>分子占据空间的体积分数 \(\sim (d/d_i)^3\sim 10^{-3}\)——气体高度稀薄。</li>
+          <li>\(\ell/d_i\sim 30\)——分子飞行很远才撞下一个，"看不到"周围的邻居，<strong>看到的不是最近的而是更远的</strong>。</li>
+          <li>Knudsen 数 \(\mathrm{Kn}=\ell/L\)（L 是容器/障碍尺度），在常压宏观容器中 \(\ell/L\sim 10^{-7}\) → 标准流体；在 nano-fluidic 或高真空中可达 1 以上 → 自由分子流。</li>
+        </ul>
+      </p>
+    </details>
+
+    <div class="answer-box">
+      (a) \(n_0\approx 2.69\times 10^{25}\) /m³ · (b) ℓ ≈ 93 nm · (c) \(\bar v\approx 447\) m/s · (d) τ ≈ 0.21 ns，5×10⁹ 碰撞/秒 · (e) d_i ≈ 3.3 nm；\(d:d_i:\ell\approx 1:10:300\)
+    </div>
+
+    <!-- ============ PROBLEM 13 ============ -->
+    <h2 id="p13">Problem 13 — 钢棒声速与热膨胀 <span class="scope-tag scope-adia">Solid wave</span> <span class="diff">★★★ · 12 min</span></h2>
+
+    <div class="problem-statement">
+      钢棒长 \(L_0=2.00\) m，温度 \(T_0=20°\)C。已知 Young's modulus \(Y=200\) GPa，密度 \(\rho_0=7850\) kg/m³，线性热膨胀系数 \(\alpha=1.2\times 10^{-5}\) /K。
+      <br/><strong>(a)</strong> 室温下钢棒中的纵向声速 \(v_0\)？
+      <br/><strong>(b)</strong> 一个声脉冲穿越棒长所需时间？
+      <br/><strong>(c)</strong> 棒加热到 \(T_1=100°\)C 后的新长度 \(L_1\)？(假设自由膨胀，无应力)
+      <br/><strong>(d)</strong> 由于体积变化质量守恒 → 新密度。Y 假设温度独立。新声速 \(v_1\) 与原 \(v_0\) 比值？(Hint：固体体积膨胀系数 \(\beta=3\alpha\))
+    </div>
+
+    <details class="hint-box">
+      <summary>💡 提示</summary>
+      <ul>
+        <li>固体内纵波速度 \(v=\sqrt{Y/\rho}\)（与气体声速 \(\sqrt{B/\rho}\) 同形式，Y 取代 B）</li>
+        <li>线性膨胀 \(\Delta L/L_0=\alpha\Delta T\)；各向同性固体的体积膨胀 \(\Delta V/V_0=3\alpha\Delta T\)</li>
+        <li>质量守恒 \(\rho_0 V_0=\rho_1 V_1\) → \(\rho_1\approx \rho_0(1-3\alpha\Delta T)\) (\(3\alpha\Delta T\ll 1\))</li>
+        <li>对小量做 Taylor：\(v_1/v_0=\sqrt{\rho_0/\rho_1}\approx 1+\tfrac32\alpha\Delta T\)</li>
+      </ul>
+    </details>
+
+    <details class="sol-box">
+      <summary>📝 完整解答</summary>
+
+      <h4>(a) 初始声速</h4>
+      $$v_0=\sqrt{\frac{Y}{\rho_0}}=\sqrt{\frac{2\times 10^{11}}{7850}}=\sqrt{2.548\times 10^{7}}\approx 5048\ \text{m/s}.$$
+      <p>钢中声速 ≈ 5050 m/s，是空气中声速的 ~15 倍。这就是为什么用钢轨"听"火车比直接听空气要早。</p>
+
+      <h4>(b) 脉冲传输时间</h4>
+      $$t=\frac{L_0}{v_0}=\frac{2.00}{5048}\approx 3.96\times 10^{-4}\ \text{s}=0.40\ \text{ms}.$$
+
+      <h4>(c) 加热后长度</h4>
+      <p>\(\Delta T=100-20=80\) K。</p>
+      $$\Delta L=\alpha L_0\Delta T=1.2\times 10^{-5}\cdot 2.00\cdot 80=1.92\times 10^{-3}\ \text{m}=1.92\ \text{mm}.$$
+      $$L_1=2.0019\ \text{m}.$$
+
+      <h4>(d) 新密度与新声速</h4>
+      <p>体积比 \(V_1/V_0=1+3\alpha\Delta T=1+3\cdot 1.2\times 10^{-5}\cdot 80=1+2.88\times 10^{-3}=1.00288\)。</p>
+      <p>质量守恒 → 密度比：</p>
+      $$\frac{\rho_1}{\rho_0}=\frac{V_0}{V_1}=\frac{1}{1.00288}\approx 0.99713.$$
+      $$\rho_1=7850\cdot 0.99713\approx 7827.5\ \text{kg/m}^3.$$
+      <p>新声速：</p>
+      $$\frac{v_1}{v_0}=\sqrt{\frac{\rho_0}{\rho_1}}=\sqrt{1.00288}\approx 1.00144.$$
+      $$v_1=v_0\cdot 1.00144\approx 5055\ \text{m/s}.$$
+      <p>声速升高 ≈ 0.14%，<strong>非常小</strong>。这与气体声速对温度的敏感性（\(v\propto\sqrt T\)）形成鲜明对比：</p>
+      <ul>
+        <li>气体：80 K 升温（从 293 K 到 373 K）→ \(v\propto\sqrt T\) → \(\Delta v/v=\tfrac12\Delta T/T=80/(2\cdot 293)\approx 13.7\%\)</li>
+        <li>固体：80 K 升温 → 声速变化 ≈ 0.14%（主要来自密度变化，Y 几乎不变）</li>
+      </ul>
+      <p><strong>原因</strong>：气体中分子热运动速率直接决定声速；固体中 Y 由原子键强度决定，热膨胀只是密度的微扰。</p>
+
+      <div class="box insight">
+        <p class="box-title">实际中 Y 的温度依赖更重要</p>
+        <p>本题假设 Y 与 T 无关，得到 0.14% 变化。实际钢的 Y 在 100°C 时已下降约 1%，所以 v 反而稍降。但题目仅要求"由密度变化"，所以用密度近似是正确的简化。</p>
+      </div>
+    </details>
+
+    <div class="answer-box">
+      (a) \(v_0\approx 5048\) m/s · (b) ~0.40 ms · (c) \(L_1\approx 2.0019\) m · (d) \(v_1\approx 5055\) m/s（仅升 0.14%，远小于气体声速的温度敏感性）
+    </div>
+
+    <!-- ============ PROBLEM 14 ============ -->
+    <h2 id="p14">Problem 14 — Carnot 冰箱 / 热泵 <span class="scope-tag scope-adia">COP</span> <span class="diff">★★ · 8 min</span></h2>
+
+    <div class="problem-statement">
+      一台 Carnot 冰箱运行在冷藏室 \(T_c=-10°\)C 和厨房 \(T_h=25°\)C 之间。
+      <br/><strong>(a)</strong> Carnot COP \(\kappa_{\text{ref}}\)？
+      <br/><strong>(b)</strong> 要从冷藏室取出 \(Q_c=1000\) J 的热量，需要输入多少功？
+      <br/><strong>(c)</strong> 同时排到厨房多少热量？
+      <br/><strong>(d)</strong> 现在反向操作，把它当作"热泵"给厨房供暖（输出 Q_h 到 \(T_h\)）。COP \(\kappa_{\text{HP}}\) 与 \(\kappa_{\text{ref}}\) 的关系？
+    </div>
+
+    <details class="hint-box">
+      <summary>💡 提示</summary>
+      <ul>
+        <li>所有 T 用 Kelvin：\(T_c=263\) K，\(T_h=298\) K，\(\Delta T=35\) K</li>
+        <li>Carnot 冰箱 COP：\(\kappa_{\text{ref}}=T_c/(T_h-T_c)\)</li>
+        <li>Carnot 热泵 COP：\(\kappa_{\text{HP}}=T_h/(T_h-T_c)\)</li>
+        <li>能量守恒：\(Q_h=Q_c+W\)（冰箱视角）</li>
+        <li>两个 COP 总满足 \(\kappa_{\text{HP}}=\kappa_{\text{ref}}+1\)（自己想想为什么）</li>
+      </ul>
+    </details>
+
+    <details class="sol-box">
+      <summary>📝 完整解答</summary>
+
+      <h4>(a) 冰箱 COP</h4>
+      $$\kappa_{\text{ref}}=\frac{T_c}{T_h-T_c}=\frac{263}{35}\approx 7.51.$$
+      <p>意思：每输入 1 J 功，可以从冷藏室搬出 7.5 J 热。</p>
+
+      <h4>(b) 输入功</h4>
+      $$W=\frac{Q_c}{\kappa_{\text{ref}}}=\frac{1000}{7.51}\approx 133\ \text{J}.$$
+
+      <h4>(c) 排到厨房热量</h4>
+      <p>能量守恒：\(Q_h=Q_c+W=1000+133=1133\) J。</p>
+      <p>双重验证：可逆 Carnot 满足 \(Q_h/T_h=Q_c/T_c\)，所以 \(Q_h=Q_c\cdot T_h/T_c=1000\cdot 298/263=1133\) J ✓</p>
+
+      <h4>(d) 热泵 COP 与冰箱 COP 的关系</h4>
+      $$\kappa_{\text{HP}}=\frac{Q_h}{W}=\frac{Q_c+W}{W}=\frac{Q_c}{W}+1=\kappa_{\text{ref}}+1.$$
+      $$\kappa_{\text{HP}}=7.51+1=8.51.$$
+      <p>直接验证：\(\kappa_{\text{HP}}=T_h/(T_h-T_c)=298/35=8.51\) ✓</p>
+
+      <div class="box insight">
+        <p class="box-title">物理直觉 — 热泵 vs 直接电阻加热</p>
+        <p>普通电阻加热器：1 J 电能 → 1 J 热（效率 100%，COP = 1）。</p>
+        <p>同温差下热泵：1 J 电能 → 8.5 J 热（COP = 8.5），多出来的 7.5 J 来自<em>从户外抽热</em>。</p>
+        <p>所以即使不考虑环保，热泵也比电阻加热<strong>便宜 8.5 倍</strong>。这就是空气源热泵广泛取代电阻加热的物理基础。当然实际 COP 受到压缩机摩擦、传热温差等不可逆性的限制，常见家用热泵 COP ≈ 3–4，仍然远好于 1。</p>
+      </div>
+
+      <div class="box warning">
+        <p class="box-title">⚠ 陷阱：分母方向</p>
+        <p>\(\kappa_{\text{ref}}\) 的分子是 \(T_c\)（"我想要的"——从冷端取热），\(\kappa_{\text{HP}}\) 的分子是 \(T_h\)（"我想要的"——给热端供热）。
+        <strong>口诀</strong>："想要什么放分子，温差永远在分母"。</p>
+      </div>
+    </details>
+
+    <div class="answer-box">
+      (a) \(\kappa_{\text{ref}}\approx 7.51\) · (b) W ≈ 133 J · (c) \(Q_h\approx 1133\) J · (d) \(\kappa_{\text{HP}}=\kappa_{\text{ref}}+1\approx 8.51\)
+    </div>
+
+    <!-- ============ PROBLEM 15 ============ -->
+    <h2 id="p15">Problem 15 — Gibbs 混合熵与佯谬 <span class="scope-tag scope-entropy">Mixing</span> <span class="diff">★★ · 9 min</span></h2>
+
+    <div class="problem-statement">
+      两个相同体积 \(V_0\) 的容器 A 和 B 用阀门连接，绝热。初态：
+      <br/>· A 中含 1 mol He；B 中含 1 mol Ar；两边都在 \(T_0\)、\(P_0\)。
+      <br/>打开阀门，两气体自由扩散直到平衡。
+      <br/><strong>(a)</strong> 末态的 T、P、V？(两气体分别占多少 V？)
+      <br/><strong>(b)</strong> 宇宙熵变 \(\Delta S_{\text{univ}}\)？
+      <br/><strong>(c)</strong> 重新做同样实验，但 A 和 B 中都装 1 mol He（同种气体）。打开阀门，\(\Delta S_{\text{univ}}\)？
+      <br/><strong>(d)</strong> (b) ≠ 0 而 (c) = 0：这是 <strong>Gibbs 佯谬</strong>。物理解释？
+    </div>
+
+    <details class="hint-box">
+      <summary>💡 提示</summary>
+      <ul>
+        <li>自由扩散对理想气体是等温（\(U=U(T)\)）。绝热 → Q=0，但不可逆。</li>
+        <li>每种气体最终占据全部 \(2V_0\)。各自分压满足 Dalton's law。</li>
+        <li>计算 \(\Delta S\) 用 state function：沿可逆等温膨胀路径 V₀ → 2V₀。\(\Delta S=nR\ln(V_f/V_i)\)。</li>
+        <li>同种气体扩散时 → 末态与初态在微观上"无区别"（每个分子的所有可能状态都已经存在），所以 ΔS = 0。</li>
+        <li>这是统计力学要求 <strong>identical particles</strong> 不可区分的核心物理。</li>
+      </ul>
+    </details>
+
+    <details class="sol-box">
+      <summary>📝 完整解答</summary>
+
+      <h4>(a) 末态</h4>
+      <p>自由扩散 → \(W=0\)（向真空），绝热 → \(Q=0\)，所以 \(\Delta U=0\) → \(T\) 不变 = \(T_0\)。</p>
+      <p>每种气体占据 \(2V_0\) 体积；分压用 \(P_iV=n_iRT\)：</p>
+      $$P_{\text{He}}=P_{\text{Ar}}=\frac{1\cdot R T_0}{2V_0}=\frac{P_0}{2},$$
+      <p>（因为初始 \(P_0=RT_0/V_0\)）。Dalton's law: \(P_{\text{tot}}=P_{\text{He}}+P_{\text{Ar}}=P_0\)，<strong>总压不变</strong>。</p>
+
+      <h4>(b) ΔS_univ（不同气体）</h4>
+      <p>沿可逆等温膨胀路径计算 ΔS：每种气体体积 \(V_0\to 2V_0\)：</p>
+      $$\Delta S_{\text{He}}=nR\ln\frac{2V_0}{V_0}=R\ln 2.$$
+      $$\Delta S_{\text{Ar}}=R\ln 2.$$
+      <p>系统（两气体）总 ΔS：</p>
+      $$\Delta S_{\text{sys}}=2R\ln 2.$$
+      <p>绝热 Q=0 → 储库 ΔS = 0。所以</p>
+      $$\Delta S_{\text{univ}}=2R\ln 2\approx 2\cdot 8.31\cdot 0.693\approx 11.5\ \text{J/K}>0.\ \checkmark$$
+      <p>这是 <strong>不可逆混合熵</strong>，对每 1 mol 每种气体贡献 \(R\ln 2\)。</p>
+
+      <h4>(c) ΔS_univ（同种气体 He+He）</h4>
+      <p>初态：A 中 1 mol He 在 \(V_0\)、B 中 1 mol He 在 \(V_0\)，温度同 \(T_0\)，压强同 \(P_0\)。打开阀门后：总 2 mol He 在 \(2V_0\)、温度 \(T_0\)、压强 \(P_0\)。</p>
+      <p><strong>关键观察</strong>：混合前后每个 He 分子的状态分布完全相同——都是 "\(2V_0\) 体积、\(T_0\) 温度的 He 气体" 的一个分子。<strong>状态没有变化</strong>。</p>
+      <p>从微观态计数 \(\Omega=\Omega(\text{每个分子可能态})^{\text{number of indistinguishable molecules}}\)：</p>
+      <ul>
+        <li>初态：分子被分成 A、B 两组，每组 N_A 个分子被分配到 V_0 → 但因为分子<strong>不可区分</strong>，"A 中是 1 号分子 vs A 中是 2 号分子" 是同一个状态</li>
+        <li>末态：所有 2N_A 分子都在 2V_0 → 还是不可区分</li>
+        <li>因为"每个分子可探索的体积"和"温度分布"完全一致，\(\Omega\) 不变 → \(\Delta S=0\)</li>
+      </ul>
+      <p>所以 <strong>同种气体扩散 ΔS = 0</strong>，过程是可逆的（虽然外观上看起来像"混合"）。</p>
+
+      <h4>(d) Gibbs 佯谬解释</h4>
+      <p>(b) 和 (c) 的差异看起来惊人：</p>
+      <ul>
+        <li>He + Ar 混合 → ΔS = 2R ln 2 ≈ 11.5 J/K</li>
+        <li>He + He 混合 → ΔS = 0</li>
+      </ul>
+      <p>如果你想象"逐渐让 Ar 接近 He"（让原子序数从 18 慢慢降到 2），ΔS 应该<strong>不连续</strong>跳到 0？这就是历史上 Gibbs paradox。</p>
+
+      <p><strong>物理解释（量子化的）</strong>：</p>
+      <ul>
+        <li>两个粒子要么<strong>完全相同</strong>（不可区分，符合 Pauli/玻色统计）要么<strong>完全不同</strong>（可区分），没有中间地带。这是量子力学的核心：粒子身份是离散的（由量子数完全决定），不存在"半个 He 半个 Ar"的粒子。</li>
+          <li>所以 ΔS 从 0 到 2R ln 2 的"跳变"是物理的，不是数学的人造。</li>
+        <li>经典统计力学（Boltzmann 时代）没有 indistinguishability 的概念，所以 Gibbs 看到这个跳变觉得是个佯谬。量子统计（玻色-费米）出现后才算清楚：相同粒子<strong>必然</strong>不可区分，没有连续过渡。</li>
+      </ul>
+
+      <div class="box insight">
+        <p class="box-title">Sackur-Tetrode 公式中的 N!</p>
+        <p>经典理想气体熵公式必须包含 \(1/N!\) 因子（来自 Gibbs 修正）才能让混合熵公式 (c) → 0。
+        Sackur-Tetrode 是这个修正后的完整熵：</p>
+        $$S=Nk\left[\ln\frac{V}{N\lambda_T^3}+\frac{5}{2}\right],$$
+        <p>其中 \(N\) 在分母（不是 \(\ln V\) 而是 \(\ln(V/N)\)）正好让同种气体混合 ΔS = 0。这是统计力学历史上的关键时刻。</p>
+      </div>
+    </details>
+
+    <div class="answer-box">
+      (a) T = T₀，每种气体占 2V₀，总 P = P₀ 不变 · (b) \(\Delta S_{\text{univ}}=2R\ln 2\approx 11.5\) J/K · (c) ΔS = 0 · (d) 量子粒子身份是离散的（identical or not），所以 ΔS 必然跳变；Sackur-Tetrode 的 N! 修正是关键
     </div>
 
     <!-- ============ FINAL TIPS ============ -->
