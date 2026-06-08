@@ -182,7 +182,7 @@
 
     <div class="topic-header">
       <h1>🧪 PHYS 4B 模拟 Final 自测</h1>
-      <p class="meta">20 题（Part A + B + C + D）· 覆盖 Ch.16–24 全部主题 + 公式表无遗漏 · ~170 分钟</p>
+      <p class="meta">22 题（Part A + B + C + D + E）· 覆盖 Ch.16–24 全部主题 + 公式表 100% 覆盖 · ~185 分钟</p>
       <p class="blurb">blend：Q1–Q5 变形 + Shankar 经典 + final 新增公式针对题 + quiz 没考过的标准题。每题含可折叠"提示"（卡住时打开）和"完整解答"（做完后核对）。<strong>Part A</strong>（P1–P5）final 新信号；<strong>Part B</strong>（P6–P10）quiz 没考过的中等题型；<strong>Part C</strong>（P11–P15）跨章节综合 + Gibbs 佯谬等深度题。</p>
     </div>
 
@@ -1559,6 +1559,177 @@
 
     <div class="answer-box">
       (a) 160 kcal ≈ 669 kJ · (b) 1080 kcal ≈ 4520 kJ · (c) 总 1240 kcal；汽化 / 升温 = 6.75 倍 · (d) 升温 5.6 min；汽化 37.7 min
+    </div>
+
+    <!-- ============ PART E ============ -->
+    <h2 id="part-e" style="border-top: 3px double #0f766e; padding-top: 1.5rem; margin-top: 4rem;">📐 Part E — 概念推导补遗 2 题（~15 min）</h2>
+
+    <div class="box key-result">
+      <p class="box-title">Part E 命中点（公式表上的"两段式"关系，需要自己串起来）</p>
+      <ul style="margin:.2rem 0">
+        <li><strong>P21 由 \(dU=TdS-PdV\) 推熵公式</strong> [★★]：联立热力学基本恒等式 + \(PV=NkT\) 复原 \(\Delta S=nR\ln(V_2/V_1)+nC_v\ln(T_2/T_1)\)</li>
+        <li><strong>P22 由 \(F/A=Y\partial\psi/\partial x\) 推固体波动方程</strong> [★★]：从应力-应变本构 + Newton 第二定律导出 \(\partial^2\psi/\partial t^2=(Y/\rho)\partial^2\psi/\partial x^2\)</li>
+      </ul>
+    </div>
+
+    <div class="problem-toc">
+      <a href="#p21"><span class="toc-label">Problem 21</span><span class="toc-topic">熵公式推导 [★★]</span></a>
+      <a href="#p22"><span class="toc-label">Problem 22</span><span class="toc-topic">固体波动方程 [★★]</span></a>
+    </div>
+
+    <!-- ============ PROBLEM 21 ============ -->
+    <h2 id="p21">Problem 21 — 由热力学基本恒等式推熵公式 <span class="scope-tag scope-entropy">Entropy</span> <span class="diff">★★ · 7 min</span></h2>
+
+    <div class="problem-statement">
+      从公式表上的两条关系出发：
+      <br/>· 热力学基本恒等式：\(dU=TdS-PdV\)
+      <br/>· 理想气体状态方程：\(PV=nRT\)
+      <br/>· 理想气体内能：\(dU=nC_v\,dT\)
+      <br/><strong>(a)</strong> 把 \(dU=TdS-PdV\) 改写为 \(dS\) 的表达式。
+      <br/><strong>(b)</strong> 利用 \(dU=nC_v\,dT\) 和 \(PV=nRT\)，把 \(dS\) 写成只依赖 \(dT/T\) 和 \(dV/V\) 的形式。
+      <br/><strong>(c)</strong> 从初态 \((T_1, V_1)\) 积分到末态 \((T_2, V_2)\)，复原公式表上的 \(\Delta S=nR\ln\frac{V_2}{V_1}+nC_v\ln\frac{T_2}{T_1}\)。
+      <br/><strong>(d)</strong> 检验三种极限：等温、等容、可逆绝热。最后一种应给出 \(\Delta S=0\)，请验证。
+    </div>
+
+    <details class="hint-box">
+      <summary>💡 提示</summary>
+      <ul>
+        <li>(a) 解出 \(dS=dU/T+PdV/T\)。</li>
+        <li>(b) \(dU/T=nC_v\,dT/T\)；\(P/T=nR/V\)（由 PV=nRT 直接得）。</li>
+        <li>(c) 两项各自积分：\(\int dT/T=\ln T\)，\(\int dV/V=\ln V\)。</li>
+        <li>(d) 可逆绝热 \(TV^{\gamma-1}=\) const → 取对数微分。用 Mayer 关系 \(C_v(\gamma-1)=R\) 化简。</li>
+      </ul>
+    </details>
+
+    <details class="sol-box">
+      <summary>📝 完整解答</summary>
+
+      <h4>(a) 解出 dS</h4>
+      <p>由 \(dU=TdS-PdV\) 解 \(dS\)：</p>
+      $$dS=\frac{dU}{T}+\frac{P\,dV}{T}.$$
+
+      <h4>(b) 代入理想气体关系</h4>
+      <p>\(dU=nC_v\,dT\) → \(\dfrac{dU}{T}=nC_v\dfrac{dT}{T}\)。</p>
+      <p>\(PV=nRT\) → \(\dfrac{P}{T}=\dfrac{nR}{V}\)。</p>
+      <p>所以</p>
+      $$\boxed{dS=nC_v\frac{dT}{T}+nR\frac{dV}{V}.}$$
+
+      <h4>(c) 积分</h4>
+      <p>两项独立积分：</p>
+      $$\Delta S=\int_{T_1}^{T_2}nC_v\frac{dT}{T}+\int_{V_1}^{V_2}nR\frac{dV}{V}=nC_v\ln\frac{T_2}{T_1}+nR\ln\frac{V_2}{V_1}.\ \checkmark$$
+      <p>这与公式表上的 \(\Delta S\) 公式完全一致。<strong>注意</strong>：这个推导只用了"理想气体" + "可逆路径"，但因为 ΔS 是 state function，<strong>结果对任何过程（可逆或不可逆）都成立</strong>，只要初终态确定。</p>
+
+      <h4>(d) 三个极限验证</h4>
+
+      <p><strong>(i) 等温 \(T_2=T_1\)：</strong> 第一项 = 0：</p>
+      $$\Delta S=nR\ln\frac{V_2}{V_1}.$$
+      <p>验证：等温过程 \(Q=W=nRT\ln(V_2/V_1)\)，\(\Delta S=Q/T=nR\ln(V_2/V_1)\) ✓</p>
+
+      <p><strong>(ii) 等容 \(V_2=V_1\)：</strong> 第二项 = 0：</p>
+      $$\Delta S=nC_v\ln\frac{T_2}{T_1}.$$
+      <p>验证：等容 \(Q=nC_v\Delta T\)，沿可逆路径 \(\Delta S=\int dQ/T=nC_v\int dT/T=nC_v\ln(T_2/T_1)\) ✓</p>
+
+      <p><strong>(iii) 可逆绝热 \(TV^{\gamma-1}=\) const：</strong> 应给出 ΔS = 0。</p>
+      <p>取对数：\(\ln T+(\gamma-1)\ln V=\) const，微分：</p>
+      $$\frac{dT}{T}=-(\gamma-1)\frac{dV}{V}.$$
+      <p>代入 \(dS\)：</p>
+      $$dS=nC_v\cdot[-(\gamma-1)]\frac{dV}{V}+nR\frac{dV}{V}=\frac{dV}{V}\bigl[-nC_v(\gamma-1)+nR\bigr].$$
+      <p>用 Mayer 关系 \(C_v(\gamma-1)=C_v\bigl(\dfrac{C_p}{C_v}-1\bigr)=C_p-C_v=R\)：</p>
+      $$dS=\frac{dV}{V}\bigl[-nR+nR\bigr]=0.\ \checkmark$$
+      <p>所以可逆绝热 ΔS = 0，与"绝热可逆 = 等熵"一致。</p>
+
+      <div class="box insight">
+        <p class="box-title">为什么这条推导很重要</p>
+        <p>很多学生只记得公式 \(\Delta S=nR\ln(V_2/V_1)+nC_v\ln(T_2/T_1)\) 而忘了它从哪里来。从 \(dU=TdS-PdV\) 推出来的过程：</p>
+        <ul>
+          <li>不需要任何"可逆路径"的人为构造——纯代数从微分关系出发</li>
+          <li>立即看出"只对理想气体成立"（用了 \(dU=nC_v dT\) 和 \(P/T=nR/V\)）</li>
+          <li>对非理想气体（如 van der Waals），需要相应改写 dU 和 P 的表达式，得到不同的 ΔS 公式</li>
+        </ul>
+        <p>final 上若考"为什么 ΔS 公式长这样"或"推一遍 ΔS"，这就是标准答案。</p>
+      </div>
+    </details>
+
+    <div class="answer-box">
+      (a) \(dS=dU/T+PdV/T\) · (b) \(dS=nC_v dT/T+nR dV/V\) · (c) \(\Delta S=nC_v\ln(T_2/T_1)+nR\ln(V_2/V_1)\) ✓ · (d) 三个极限都验证通过；可逆绝热 ΔS=0 用 Mayer 关系
+    </div>
+
+    <!-- ============ PROBLEM 22 ============ -->
+    <h2 id="p22">Problem 22 — 由 \(F/A=Y\partial\psi/\partial x\) 推固体波动方程 <span class="scope-tag scope-wave">Wave eqn</span> <span class="diff">★★ · 8 min</span></h2>
+
+    <div class="problem-statement">
+      固体棒沿 x 方向，截面积 \(A\)、密度 \(\rho\)、Young's modulus \(Y\)。点 \(x\) 处的纵向位移 \(\psi(x,t)\)。已知本构关系（应力-应变）：
+      $$\sigma(x,t)\equiv\frac{F(x,t)}{A}=Y\frac{\partial\psi}{\partial x}.$$
+      <br/><strong>(a)</strong> 物理解释：为什么这个本构关系对小变形成立？应变 \(\partial\psi/\partial x\) 是什么？
+      <br/><strong>(b)</strong> 考虑棒上 \(x\) 到 \(x+dx\) 之间的小段。求两端面所受净力。
+      <br/><strong>(c)</strong> 对这小段应用 Newton 第二定律 \(F_{\text{net}}=ma\)。
+      <br/><strong>(d)</strong> 得到 \(\partial^2\psi/\partial t^2=(Y/\rho)\partial^2\psi/\partial x^2\)，识别波速 \(v=\sqrt{Y/\rho}\)。代入钢的数值（\(Y=200\) GPa, \(\rho=7850\) kg/m³）验证。
+    </div>
+
+    <details class="hint-box">
+      <summary>💡 提示</summary>
+      <ul>
+        <li>(a) 类比"杨氏模量在 Hooke 定律下的连续版本"：\(\sigma=Y\epsilon\)，\(\epsilon=\Delta L/L=\partial\psi/\partial x\) 是单位长度的延伸率。</li>
+        <li>(b) 净力来自两端面的应力差：\(F_{\text{net}}=A\sigma(x+dx)-A\sigma(x)=A(\partial\sigma/\partial x)dx\)。</li>
+        <li>(c) 质量 \(=\rho A\,dx\)；加速度 \(=\partial^2\psi/\partial t^2\)。</li>
+        <li>(d) 与公式表上的 \(\partial^2\psi/\partial x^2=(1/v^2)\partial^2\psi/\partial t^2\) 对照。</li>
+      </ul>
+    </details>
+
+    <details class="sol-box">
+      <summary>📝 完整解答</summary>
+
+      <h4>(a) 应力-应变本构</h4>
+      <p>对固体小段长 \(L\)，受力 \(F\) 拉伸 \(\Delta L\)：Hooke 定律给 \(F/A=Y\cdot\Delta L/L\)。
+      连续介质里，把 \(L\) 取无穷小：</p>
+      $$\text{应变 }\epsilon=\lim_{L\to 0}\frac{\Delta L}{L}=\frac{\partial\psi}{\partial x}.$$
+      <p>所以应力 \(\sigma=F/A=Y\partial\psi/\partial x\) ✓。这是 Hooke 定律 \(F=k\Delta L\) 在连续介质中的局部版本，对小变形（线性弹性区）成立。</p>
+
+      <h4>(b) 小段两端的净力</h4>
+      <p>左端 \(x\) 处：应力 \(\sigma(x)\)，方向 +x（左端的"外界"对小段向右拉）。
+      右端 \(x+dx\) 处：应力 \(\sigma(x+dx)\)，方向 +x（右端"外界"对小段向右拉）。
+      但是左端面的法向是 \(-\hat x\)（朝外），所以左端受力 \(-A\sigma(x)\)；右端面法向 \(+\hat x\)，受力 \(+A\sigma(x+dx)\)。</p>
+      <p>净力：</p>
+      $$F_{\text{net}}=A\sigma(x+dx)-A\sigma(x)=A\frac{\partial\sigma}{\partial x}dx=AY\frac{\partial^2\psi}{\partial x^2}dx.$$
+
+      <h4>(c) Newton 第二定律</h4>
+      <p>小段质量 \(=\rho A\,dx\)；加速度 \(=\partial^2\psi/\partial t^2\)。所以</p>
+      $$\rho A\,dx\cdot\frac{\partial^2\psi}{\partial t^2}=A Y\frac{\partial^2\psi}{\partial x^2}dx.$$
+      <p>两边约掉 \(A\,dx\)：</p>
+      $$\rho\frac{\partial^2\psi}{\partial t^2}=Y\frac{\partial^2\psi}{\partial x^2}.$$
+
+      <h4>(d) 波动方程 + 识别波速</h4>
+      $$\boxed{\frac{\partial^2\psi}{\partial t^2}=\frac{Y}{\rho}\frac{\partial^2\psi}{\partial x^2}.}$$
+      <p>与公式表上的标准波动方程 \(\partial^2\psi/\partial x^2=(1/v^2)\partial^2\psi/\partial t^2\) 对照：</p>
+      $$v^2=\frac{Y}{\rho}\quad\Longrightarrow\quad v=\sqrt{Y/\rho}.\ \checkmark$$
+      <p>钢的数值代入：</p>
+      $$v=\sqrt{\frac{2\times 10^{11}}{7850}}=\sqrt{2.548\times 10^{7}}\approx 5048\ \text{m/s}.$$
+      <p>与 MockP13 的结果一致 ✓。</p>
+
+      <div class="box insight">
+        <p class="box-title">三类波速公式的统一结构</p>
+        <table class="formula-table">
+          <thead><tr><th>介质</th><th>波速</th><th>"恢复力" / "惯性"</th></tr></thead>
+          <tbody>
+            <tr><td>弦</td><td>\(v=\sqrt{\tau/\mu}\)</td><td>张力 / 线密度</td></tr>
+            <tr><td>固体棒（纵）</td><td>\(v=\sqrt{Y/\rho}\)</td><td>Young's 模量 / 体密度</td></tr>
+            <tr><td>气体声波</td><td>\(v=\sqrt{B/\rho}\)</td><td>体积模量 / 体密度</td></tr>
+          </tbody>
+        </table>
+        <p><strong>通用形式</strong>：\(v=\sqrt{\text{弹性恢复模量}/\text{惯性量}}\)。每种介质里"恢复力"的形式不同（拉伸 vs 压缩 vs 张力），但"弹性 / 惯性"的根号比这个数学结构总是相同的。这就是波速公式的物理普适性。</p>
+      </div>
+
+      <div class="box warning">
+        <p class="box-title">⚠ 纵波 vs 横波</p>
+        <p>本题推导的是 <strong>纵</strong> 波（沿 x 方向位移、沿 x 方向传播）。
+        固体里还能传 <strong>横</strong> 波（位移垂直传播方向），波速 \(v_t=\sqrt{G/\rho}\)，G 是剪切模量。
+        通常 \(G<Y\)，所以横波比纵波慢（地震波 S 波比 P 波晚到就是这个原因）。
+        Quiz/Final 中 "声波" 默认指 <strong>纵</strong> 波，横波不在范围内。</p>
+      </div>
+    </details>
+
+    <div class="answer-box">
+      (a) ∂ψ/∂x 是单位长度延伸率（连续 Hooke）· (b) \(F_{\text{net}}=AY\partial^2\psi/\partial x^2\,dx\) · (c)(d) \(\partial^2\psi/\partial t^2=(Y/\rho)\partial^2\psi/\partial x^2\) → \(v=\sqrt{Y/\rho}\approx 5050\) m/s 钢
     </div>
 
     <!-- ============ FINAL TIPS ============ -->
