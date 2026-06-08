@@ -182,8 +182,8 @@
 
     <div class="topic-header">
       <h1>🧪 PHYS 4B 模拟 Final 自测</h1>
-      <p class="meta">5 题 · 覆盖 Ch.16–24 · 命中 final 公式表新增信号 · ~45 分钟</p>
-      <p class="blurb">blend：Q1/Q2/Q3 变形 + Shankar 经典题型 + final 新增公式针对题。每题含可折叠"提示"（卡住时打开）和"完整解答"（做完后核对）。建议先关掉解答盲做。</p>
+      <p class="meta">10 题（Part A + Part B）· 覆盖 Ch.16–24 全部主题 · ~90 分钟（分两批做完）</p>
+      <p class="blurb">blend：Q1–Q5 变形 + Shankar 经典题型 + final 新增公式针对题 + quizz 没考过的标准题。每题含可折叠"提示"（卡住时打开）和"完整解答"（做完后核对）。建议先关掉解答盲做。<strong>Part A</strong>（P1–P5）侧重 final 公式表的新信号；<strong>Part B</strong>（P6–P10）覆盖 quiz 没涉及的标准题型（Venturi / 声强 / 复合墙 / Otto / MB 积分）。</p>
     </div>
 
     <div class="back-link">
@@ -192,11 +192,12 @@
     </div>
 
     <div class="timer-banner">
-      🕐 <strong>用法建议</strong>：先关掉所有提示和解答盲做。卡住时打开"提示"（黄框），做完后打开"解答"（绿框）核对。计时建议 45 分钟，赶时间可挑重点 3 道。
+      🕐 <strong>用法建议</strong>：先关掉所有提示和解答盲做。卡住时打开"提示"（黄框），做完后打开"解答"（绿框）核对。
+      <br/>计时建议：<strong>Part A 45 min + Part B 45 min</strong>，赶时间可挑每 Part 重点 3 道。Part A 偏 final 新信号；Part B 偏 quiz 没考过的标准题型。
     </div>
 
     <div class="box key-result">
-      <p class="box-title">一页速览：5 题的命中点</p>
+      <p class="box-title">Part A 一页速览（命中 final 新信号）</p>
       <ul style="margin:.2rem 0">
         <li><strong>P1 阻尼摆 + 驱动续问</strong> [★★]：测 Q1 walkthrough 扩展（Q 因子、能量衰减、驱动平均功率）</li>
         <li><strong>P2 半开管驻波</strong> [★]：final 新加 \(k_n=(n+1/2)\pi/L\) 公式必考</li>
@@ -490,6 +491,310 @@
 
     <div class="answer-box">
       (a) \(S=Nk\ln V+\tfrac{3}{2}Nk\ln U+S_0\) · (b)(c) \(U=\tfrac{3}{2}NkT\) ✓ · (d) \(PV=NkT\) ✓
+    </div>
+
+    <!-- ============ PART B ============ -->
+    <h2 id="part-b" style="border-top: 3px double #0f766e; padding-top: 1.5rem; margin-top: 4rem;">📚 Part B — 进阶 5 题（quiz 没考过的标准题型，~45 min）</h2>
+
+    <div class="box key-result">
+      <p class="box-title">Part B 一页速览（覆盖 quiz 没涉及的标准题型）</p>
+      <ul style="margin:.2rem 0">
+        <li><strong>P6 Venturi 流量计</strong> [★★]：Bernoulli + 连续性的工程应用，含汞管换算与空化条件</li>
+        <li><strong>P7 声强 + dB</strong> [★]：每张公式表都有但 5 卷 quiz 没考过；dB 与 1/r² 衰减</li>
+        <li><strong>P8 复合墙热传导</strong> [★★]：串联热阻，Q4 单层墙的拓展</li>
+        <li><strong>P9 Otto 循环</strong> [★★★]：完整循环分析，与 Carnot 效率上限对比</li>
+        <li><strong>P10 Maxwell-Boltzmann 积分</strong> [★★]：用公式表的高斯积分工具箱算 ⟨v_x²⟩ + g(v) 形状</li>
+      </ul>
+    </div>
+
+    <div class="problem-toc">
+      <a href="#p6"><span class="toc-label">Problem 6</span><span class="toc-topic">Venturi [★★]</span></a>
+      <a href="#p7"><span class="toc-label">Problem 7</span><span class="toc-topic">声强 dB [★]</span></a>
+      <a href="#p8"><span class="toc-label">Problem 8</span><span class="toc-topic">复合墙传导 [★★]</span></a>
+      <a href="#p9"><span class="toc-label">Problem 9</span><span class="toc-topic">Otto 循环 [★★★]</span></a>
+      <a href="#p10"><span class="toc-label">Problem 10</span><span class="toc-topic">MB 积分 [★★]</span></a>
+    </div>
+
+    <!-- ============ PROBLEM 6 ============ -->
+    <h2 id="p6">Problem 6 — Venturi 流量计 <span class="scope-tag" style="background:#dbeafe;color:#1e3a8a">Fluid</span> <span class="diff">★★ · 9 min</span></h2>
+
+    <div class="problem-statement">
+      水平水管，主管直径 \(d_1=10\) cm，收缩为喉口直径 \(d_2=4\) cm。入口处水流速 \(v_1=2\) m/s，绝对压强 \(P_1=200\) kPa。水密度 \(\rho=1000\) kg/m³。
+      <br/><strong>(a)</strong> 喉口流速 \(v_2\)？
+      <br/><strong>(b)</strong> 喉口绝对压强 \(P_2\)？
+      <br/><strong>(c)</strong> 主管和喉口间接 U 型汞管，求两侧汞柱高度差 \(\Delta h\)（cm）？汞密度 \(\rho_{\text{Hg}}=13546\) kg/m³。
+      <br/><strong>(d)</strong> 当 \(v_1\) 增大到多少时，喉口压强降到水的饱和蒸汽压 \(P_v\approx 2.3\) kPa（开始空化 cavitation）？
+    </div>
+
+    <details class="hint-box">
+      <summary>💡 提示</summary>
+      <ul>
+        <li>连续性：\(A_1 v_1=A_2 v_2\)，面积 ∝ d²。</li>
+        <li>Bernoulli 水平段（\(h_1=h_2\)）：\(P_1+\tfrac12\rho v_1^2=P_2+\tfrac12\rho v_2^2\)。</li>
+        <li>U 型汞管测的是绝对压差，\(\Delta P=\rho_{\text{Hg}}g\,\Delta h\)。</li>
+        <li>(d) 当 \(v_1\) 增大，\(v_2\) 跟着按 \((d_1/d_2)^2\) 比例增大，喉口压强单调下降。</li>
+      </ul>
+    </details>
+
+    <details class="sol-box">
+      <summary>📝 完整解答</summary>
+
+      <h4>(a) 喉口流速</h4>
+      $$v_2=v_1\Bigl(\frac{d_1}{d_2}\Bigr)^2=2\cdot\Bigl(\frac{10}{4}\Bigr)^2=2\cdot 6.25=12.5\ \text{m/s}.$$
+
+      <h4>(b) 喉口压强</h4>
+      $$\Delta P=P_1-P_2=\tfrac12\rho(v_2^2-v_1^2)=\tfrac12\cdot 1000\cdot(156.25-4)=\tfrac12\cdot 1000\cdot 152.25=76125\ \text{Pa}.$$
+      $$P_2=200000-76125=123875\ \text{Pa}\approx 124\ \text{kPa}.$$
+
+      <h4>(c) 汞柱高度差</h4>
+      $$\Delta h=\frac{\Delta P}{\rho_{\text{Hg}}\,g}=\frac{76125}{13546\cdot 9.81}=0.573\ \text{m}=57.3\ \text{cm}.$$
+
+      <h4>(d) 空化条件</h4>
+      <p>设新入口流速为 \(v_1'\)，喉口流速 \(v_2'=6.25 v_1'\)。要求 \(P_2'=P_v=2.3\) kPa：</p>
+      $$\Delta P_{\text{crit}}=200-2.3=197.7\ \text{kPa}=197700\ \text{Pa}.$$
+      $$\tfrac12\cdot 1000\cdot(v_2'^2-v_1'^2)=\tfrac12\cdot 1000\cdot(39.0625-1)v_1'^2=19031\,v_1'^2=197700,$$
+      $$v_1'^2=10.39\quad\Longrightarrow\quad v_1'\approx 3.22\ \text{m/s}.$$
+      <p>所以入口流速一旦超过 ~3.2 m/s，喉口就开始产生水蒸气气泡（空化）。这正是水翼船、水泵、心瓣膜等设计的关键约束。</p>
+    </details>
+
+    <div class="answer-box">
+      (a) \(v_2=12.5\) m/s · (b) \(P_2\approx 124\) kPa · (c) \(\Delta h\approx 57.3\) cm · (d) \(v_1'\approx 3.22\) m/s 开始空化
+    </div>
+
+    <!-- ============ PROBLEM 7 ============ -->
+    <h2 id="p7">Problem 7 — 声强与分贝 <span class="scope-tag scope-wave">Sound</span> <span class="diff">★ · 6 min</span></h2>
+
+    <div class="problem-statement">
+      点声源向各向同性发射，功率 \(P_{\text{src}}=1.0\) W。听阈 \(I_0=10^{-12}\) W/m²。
+      <br/><strong>(a)</strong> 距离 \(r=1\) m 处的声强 \(I\) 与分贝水平 \(\beta\)？
+      <br/><strong>(b)</strong> 距离多远，\(\beta\) 降到 60 dB？
+      <br/><strong>(c)</strong> 如果再加一个完全相同的不相干声源放在同一位置，\(\beta\) 增加多少？
+      <br/><strong>(d)</strong> (b) 的距离是 (a) 的多少倍？dB 差与距离比的关系是什么？
+    </div>
+
+    <details class="hint-box">
+      <summary>💡 提示</summary>
+      <ul>
+        <li>点源向 4π 全空间发射，\(I=P_{\text{src}}/(4\pi r^2)\)。</li>
+        <li>分贝定义 \(\beta=10\log_{10}(I/I_0)\)（注意以 10 为底，不是 e）。</li>
+        <li>不相干叠加时强度直接相加（不是振幅相加），\(I_{\text{tot}}=N\cdot I_{\text{single}}\)。</li>
+        <li>距离加倍 → 强度 ÷4 → \(\beta\) 降 6 dB。</li>
+      </ul>
+    </details>
+
+    <details class="sol-box">
+      <summary>📝 完整解答</summary>
+
+      <h4>(a) r=1m 声强和 dB</h4>
+      $$I=\frac{P_{\text{src}}}{4\pi r^2}=\frac{1.0}{4\pi\cdot 1}=0.0796\ \text{W/m}^2.$$
+      $$\beta=10\log_{10}\frac{0.0796}{10^{-12}}=10\log_{10}(7.96\times 10^{10})=10\cdot 10.901\approx 109\ \text{dB}.$$
+      <p>对比：摇滚演唱会 ~110 dB，电锯 ~100 dB。距 1m 处 1W 声源已经是接近损伤听力的水平。</p>
+
+      <h4>(b) 60 dB 处距离</h4>
+      <p>由 \(\beta=60\)：</p>
+      $$I_{60}=I_0\cdot 10^{6}=10^{-6}\ \text{W/m}^2.$$
+      $$r=\sqrt{\frac{P_{\text{src}}}{4\pi I_{60}}}=\sqrt{\frac{1.0}{4\pi\cdot 10^{-6}}}=\sqrt{79577}\approx 282\ \text{m}.$$
+
+      <h4>(c) 两个声源叠加</h4>
+      <p>不相干 → 强度直接加：\(I\to 2I\)。</p>
+      $$\Delta\beta=10\log_{10}\frac{2I}{I}=10\log_{10}2\approx 3\ \text{dB}.$$
+      <p><strong>记忆口诀</strong>：强度翻倍 = +3 dB。10 倍 = +10 dB。100 倍 = +20 dB。</p>
+
+      <h4>(d) 距离比 vs dB 差</h4>
+      $$\frac{r_b}{r_a}=\frac{282}{1}=282.$$
+      <p>dB 差 \(=109-60=49\) dB ⟹ 强度比 \(10^{4.9}\approx 79433\) 倍。
+      因为 \(I\propto 1/r^2\)，距离比 \(=\sqrt{79433}=282\) ✓。</p>
+      <p><strong>关键关系</strong>：距离每增加 10 倍，强度 ÷100，dB 降 20。这是"声音随距离衰减"的标准 rule of thumb（点源 / 自由场近似）。</p>
+    </details>
+
+    <div class="answer-box">
+      (a) \(I\approx 0.08\) W/m², \(\beta\approx 109\) dB · (b) \(r\approx 282\) m · (c) +3 dB · (d) 比值 282 = √(10^4.9)
+    </div>
+
+    <!-- ============ PROBLEM 8 ============ -->
+    <h2 id="p8">Problem 8 — 复合墙热传导 <span class="scope-tag" style="background:#d1fae5;color:#065f46">Heat</span> <span class="diff">★★ · 8 min</span></h2>
+
+    <div class="problem-statement">
+      房屋墙由两层构成（沿热流方向）：内层砖 \(\kappa_b=0.5\) W/(m·K)、厚 \(L_b=20\) cm；外层泡沫绝热 \(\kappa_f=0.04\) W/(m·K)、厚 \(L_f=5\) cm。
+      墙面积 \(A=20\) m²。室内 \(T_{\text{in}}=22°\)C，室外 \(T_{\text{out}}=-8°\)C。
+      <br/><strong>(a)</strong> 稳态热流功率 \(dQ/dt\)？
+      <br/><strong>(b)</strong> 砖-泡沫界面的温度？
+      <br/><strong>(c)</strong> 一天 24 小时损失的能量（J 和 kWh）？
+      <br/><strong>(d)</strong> 若泡沫厚度加倍到 \(L_f=10\) cm，\(dQ/dt\) 降到多少？节省百分比？
+    </div>
+
+    <details class="hint-box">
+      <summary>💡 提示</summary>
+      <ul>
+        <li>串联热阻：定义 \(R_i=L_i/(\kappa_i A)\)，则总 \(R_{\text{tot}}=R_b+R_f\)。</li>
+        <li>稳态 \(dQ/dt=\Delta T/R_{\text{tot}}\)。</li>
+        <li>同一 dQ/dt 通过每一层，所以 \(\Delta T_i=(dQ/dt)\cdot R_i\)，温度差按热阻比分配。</li>
+        <li>电路类比：R = 热阻，ΔT = 电压差，dQ/dt = 电流。</li>
+      </ul>
+    </details>
+
+    <details class="sol-box">
+      <summary>📝 完整解答</summary>
+
+      <h4>(a) 总热流</h4>
+      $$R_b=\frac{L_b}{\kappa_b A}=\frac{0.2}{0.5\cdot 20}=0.02\ \text{K/W},$$
+      $$R_f=\frac{L_f}{\kappa_f A}=\frac{0.05}{0.04\cdot 20}=0.0625\ \text{K/W}.$$
+      $$R_{\text{tot}}=R_b+R_f=0.0825\ \text{K/W}.$$
+      $$\frac{dQ}{dt}=\frac{\Delta T}{R_{\text{tot}}}=\frac{30}{0.0825}\approx 363.6\ \text{W}.$$
+      <p>泡沫只占总厚度 1/5 却贡献了 76% 的热阻（0.0625/0.0825）——这就是高效绝热材料的价值。</p>
+
+      <h4>(b) 界面温度</h4>
+      <p>砖（靠室内一侧）压降：</p>
+      $$\Delta T_b=\frac{dQ}{dt}\cdot R_b=363.6\cdot 0.02=7.27\ \text{K}.$$
+      $$T_{\text{interface}}=T_{\text{in}}-\Delta T_b=22-7.27\approx 14.7°\text{C}.$$
+      <p>校验：泡沫压降 \(\Delta T_f=363.6\cdot 0.0625=22.73\) K。\(T_{\text{out}}=14.7-22.73=-8°\)C ✓</p>
+
+      <h4>(c) 日损失</h4>
+      $$Q_{\text{day}}=363.6\cdot 86400=3.14\times 10^7\ \text{J}=31.4\ \text{MJ}.$$
+      <p>换成 kWh：\(31.4\times 10^6/(3.6\times 10^6)\approx 8.72\) kWh/day。</p>
+      <p>按 ¥0.6/kWh 算约 ¥5.2/day = ¥1900/year（仅这一面墙）。</p>
+
+      <h4>(d) 泡沫加倍</h4>
+      $$R_f^{\text{new}}=\frac{0.10}{0.04\cdot 20}=0.125\ \text{K/W}.$$
+      $$R_{\text{tot}}^{\text{new}}=0.02+0.125=0.145\ \text{K/W}.$$
+      $$\frac{dQ}{dt}^{\text{new}}=\frac{30}{0.145}\approx 207\ \text{W}.$$
+      <p>节省比例：\((363.6-207)/363.6\approx 43\%\)。
+      仅在外层多加 5 cm 泡沫就能省 43% 暖气费——这就是建筑节能的逻辑。</p>
+    </details>
+
+    <div class="answer-box">
+      (a) ~364 W · (b) ~14.7°C · (c) 31.4 MJ/day ≈ 8.72 kWh/day · (d) 207 W，节省 43%
+    </div>
+
+    <!-- ============ PROBLEM 9 ============ -->
+    <h2 id="p9">Problem 9 — Otto 循环 <span class="scope-tag scope-adia">Cycle</span> <span class="diff">★★★ · 12 min</span></h2>
+
+    <div class="problem-statement">
+      Otto 循环（理想汽油机）使用双原子气体 (γ=7/5)，压缩比 \(r=V_{\max}/V_{\min}=8\)。
+      四个过程：(1→2) 绝热压缩；(2→3) 等容加热；(3→4) 绝热膨胀；(4→1) 等容冷却。
+      <br/><strong>(a)</strong> 推导 Otto 效率 η 关于 \(r\) 和 \(\gamma\) 的公式。
+      <br/><strong>(b)</strong> 数值代入计算 \(\eta\)。
+      <br/><strong>(c)</strong> 若起始温度 \(T_1=300\) K，求绝热压缩末态温度 \(T_2\)。
+      <br/><strong>(d)</strong> 若循环最高温度 \(T_3=900\) K，求 \(T_4\) 与对应的 Carnot 上限效率。Otto 与 Carnot 的差异说明什么？
+    </div>
+
+    <details class="hint-box">
+      <summary>💡 提示</summary>
+      <ul>
+        <li>绝热段：\(TV^{\gamma-1}=\) const → \(T_2/T_1=T_3/T_4=r^{\gamma-1}\)。</li>
+        <li>等容段 W=0：\(Q_{\text{in}}=nC_v(T_3-T_2)\)，\(Q_{\text{out}}=nC_v(T_4-T_1)\)。</li>
+        <li>η = 1 - Q_out/Q_in，利用绝热温比化简。</li>
+        <li>Carnot 上限：\(\eta_C=1-T_{\min}/T_{\max}\)，本题 \(T_{\min}=T_1=300\) K，\(T_{\max}=T_3=900\) K。</li>
+      </ul>
+    </details>
+
+    <details class="sol-box">
+      <summary>📝 完整解答</summary>
+
+      <h4>(a) Otto 效率推导</h4>
+      <p>四个温度由两段绝热联系：</p>
+      $$\frac{T_2}{T_1}=r^{\gamma-1},\qquad \frac{T_3}{T_4}=r^{\gamma-1}.$$
+      <p>两式相除：\(T_3/T_2=T_4/T_1\)，即 \(T_3-T_2=(T_2/T_1)(T_4-T_1)\cdot(T_4/T_4)\)...
+      更干净的写法是 \(T_3=T_4 r^{\gamma-1}\) 与 \(T_2=T_1 r^{\gamma-1}\) 相减：</p>
+      $$T_3-T_2=r^{\gamma-1}(T_4-T_1).$$
+      <p>所以</p>
+      $$\eta=1-\frac{Q_{\text{out}}}{Q_{\text{in}}}=1-\frac{T_4-T_1}{T_3-T_2}=1-\frac{T_4-T_1}{r^{\gamma-1}(T_4-T_1)}=\boxed{1-\frac{1}{r^{\gamma-1}}}.$$
+      <p>仅依赖压缩比 \(r\) 和 \(\gamma\)，与具体温度无关！</p>
+
+      <h4>(b) 数值</h4>
+      <p>γ-1 = 2/5 = 0.4。\(8^{0.4}\)：</p>
+      $$\ln 8=2.079,\ \times 0.4=0.832,\ e^{0.832}=2.297.$$
+      $$\eta=1-\frac{1}{2.297}=1-0.4353\approx 0.565=56.5\%.$$
+
+      <h4>(c) 绝热压缩末态</h4>
+      $$T_2=T_1\cdot r^{\gamma-1}=300\cdot 2.297\approx 689\ \text{K}.$$
+
+      <h4>(d) T₄ 与 Carnot 对比</h4>
+      $$T_4=\frac{T_3}{r^{\gamma-1}}=\frac{900}{2.297}\approx 392\ \text{K}.$$
+      <p>Carnot 上限：</p>
+      $$\eta_C=1-\frac{T_{\min}}{T_{\max}}=1-\frac{300}{900}=\frac{2}{3}\approx 66.7\%.$$
+      <p>Otto (56.5%) < Carnot (66.7%)，差距 10 个百分点。<strong>为什么 Otto 不能达到 Carnot？</strong></p>
+      <ul>
+        <li>Carnot 假设吸热全发生在 \(T_{\max}=900\) K（等温段）。</li>
+        <li>Otto 吸热段是 <strong>等容</strong>：T 从 689 K 渐升到 900 K，<strong>平均吸热温度</strong> \(\bar T_h\approx (689+900)/2\approx 794\) K < 900 K。</li>
+        <li>同样地 Otto 排热段 T 从 392 K 渐降到 300 K，平均 \(\bar T_c\approx 346\) K > 300 K。</li>
+        <li>等效 Carnot：\(\eta_{\text{eff}}\approx 1-346/794\approx 56\%\) ≈ Otto ✓</li>
+      </ul>
+      <p><strong>核心物理</strong>：循环效率受最高/最低温度<strong>差</strong>限制（Carnot），但实际循环中"吸热段不在最高 T、排热段不在最低 T"会进一步降低效率。这是所有现实热机普遍现象。</p>
+
+      <div class="box warning">
+        <p class="box-title">⚠ 应试时的小坑</p>
+        <p>"Carnot 上限是 \(1-T_c/T_h\)" 里的 \(T_h\) 必须是 <strong>循环中出现的最高温度</strong>（本题 \(T_3=900\) K），不是绝热压缩刚结束的温度（\(T_2=689\) K）。同理 \(T_c=T_1=300\) K 是最低，不是 \(T_4=392\) K。</p>
+      </div>
+    </details>
+
+    <div class="answer-box">
+      (a) \(\eta=1-r^{-(\gamma-1)}\) · (b) \(\eta\approx 56.5\%\) · (c) \(T_2\approx 689\) K · (d) \(T_4\approx 392\) K，Carnot ≈ 66.7%，差距源自吸/排热段非等温
+    </div>
+
+    <!-- ============ PROBLEM 10 ============ -->
+    <h2 id="p10">Problem 10 — Maxwell-Boltzmann 积分练习 <span class="scope-tag scope-entropy">MB</span> <span class="diff">★★ · 10 min</span></h2>
+
+    <div class="problem-statement">
+      He 气体 \(T=300\) K，\(m=6.64\times 10^{-27}\) kg，\(k=1.38\times 10^{-23}\) J/K。
+      <br/><strong>(a)</strong> 计算三个特征速率 \(v_{\text{rms}},\bar v,v_0\)。
+      <br/><strong>(b)</strong> 用 \(f(v_x)\) 和公式表的高斯积分恒等式，证明 \(\langle v_x\rangle=0\) 并计算 \(\langle v_x^2\rangle\)。
+      <br/><strong>(c)</strong> 由 (b) 推出 \(\langle v^2\rangle\) 和 \(v_{\text{rms}}\)，与 (a) 对照。
+      <br/><strong>(d)</strong> 计算速率分布在两个特征速率处的比值 \(g(v_{\text{rms}})/g(v_0)\)。物理含义？
+    </div>
+
+    <details class="hint-box">
+      <summary>💡 提示</summary>
+      <ul>
+        <li>三特征速率：\(v_{\text{rms}}=\sqrt{3kT/m}\)，\(\bar v=\sqrt{8kT/(\pi m)}\)，\(v_0=\sqrt{2kT/m}\)。</li>
+        <li>公式表的两个高斯积分：\(\int_{-\infty}^\infty e^{-\lambda x^2}dx=\sqrt{\pi/\lambda}\) 和 \(\int_{-\infty}^\infty x^2 e^{-\lambda x^2}dx=\frac{1}{2\lambda}\sqrt{\pi/\lambda}\)（用 \(d/d\lambda\) 求得）。</li>
+        <li>\(\langle v_x\rangle=0\) 由 \(f(v_x)\) 是偶函数 → 奇函数积分为 0。</li>
+        <li>(d) 把 g(v) 的 \(v^2 e^{-\lambda v^2}\) 结构用比值消掉前置常数。</li>
+      </ul>
+    </details>
+
+    <details class="sol-box">
+      <summary>📝 完整解答</summary>
+
+      <h4>(a) 三个特征速率</h4>
+      <p>预算 \(kT/m=1.38\times 10^{-23}\cdot 300/6.64\times 10^{-27}=6.235\times 10^5\) m²/s²。</p>
+      $$v_{\text{rms}}=\sqrt{3\cdot 6.235\times 10^5}=\sqrt{1.871\times 10^6}\approx 1368\ \text{m/s}.$$
+      $$\bar v=v_{\text{rms}}\cdot\sqrt{\frac{8}{3\pi}}=1368\cdot 0.9213\approx 1260\ \text{m/s}.$$
+      $$v_0=v_{\text{rms}}\cdot\sqrt{\frac{2}{3}}=1368\cdot 0.8165\approx 1117\ \text{m/s}.$$
+      <p>顺序：\(v_0<\bar v<v_{\text{rms}}\)（比例 \(\sqrt 2:\sqrt{8/\pi}:\sqrt 3\)），永远成立。</p>
+
+      <h4>(b) ⟨v_x⟩ 和 ⟨v_x²⟩</h4>
+      <p>设 \(\lambda=m/(2kT)\)，\(f(v_x)=\sqrt{\lambda/\pi}\,e^{-\lambda v_x^2}\)。</p>
+      <p>\(\langle v_x\rangle=\int v_x f(v_x)\,dv_x\)：被积函数是奇函数 \(\times\) 偶函数 = 奇函数，对称区间积分为 0 ✓</p>
+      <p>\(\langle v_x^2\rangle\)：</p>
+      $$\langle v_x^2\rangle=\sqrt{\lambda/\pi}\int_{-\infty}^\infty v_x^2 e^{-\lambda v_x^2}dv_x=\sqrt{\lambda/\pi}\cdot\frac{1}{2\lambda}\sqrt{\pi/\lambda}=\frac{1}{2\lambda}=\frac{kT}{m}.$$
+      <p>数值：\(\langle v_x^2\rangle=kT/m=6.235\times 10^5\) m²/s²，对应 RMS\(_x=790\) m/s（一维 RMS 速率）。</p>
+
+      <h4>(c) ⟨v²⟩ 与 v_rms 对照</h4>
+      <p>由各向同性 \(\langle v_x^2\rangle=\langle v_y^2\rangle=\langle v_z^2\rangle\)：</p>
+      $$\langle v^2\rangle=\langle v_x^2\rangle+\langle v_y^2\rangle+\langle v_z^2\rangle=3\cdot\frac{kT}{m}=\frac{3kT}{m}.$$
+      $$v_{\text{rms}}=\sqrt{\langle v^2\rangle}=\sqrt{3kT/m}\approx 1368\ \text{m/s}.\ \checkmark$$
+      <p>与 (a) 完全一致。<strong>这是 \(v_{\text{rms}}=\sqrt{3kT/m}\) 公式的根本来源</strong>：从 MB 高斯出发用积分恒等式两步推出，不需要假设 \(\tfrac12 m\langle v^2\rangle=\tfrac32 kT\) 这条等分定理结论。</p>
+
+      <h4>(d) g(v_rms)/g(v_0)</h4>
+      <p>\(g(v)\propto v^2 e^{-\lambda v^2}\)（前置常数比值时对消）：</p>
+      $$\frac{g(v_{\text{rms}})}{g(v_0)}=\Bigl(\frac{v_{\text{rms}}}{v_0}\Bigr)^2\cdot\exp\Bigl[-\lambda(v_{\text{rms}}^2-v_0^2)\Bigr].$$
+      <p>用 \(v_{\text{rms}}^2/v_0^2=3/2\) 和 \(\lambda(v_{\text{rms}}^2-v_0^2)=\frac{m}{2kT}\cdot\frac{kT}{m}=\frac{1}{2}\)：</p>
+      $$\frac{g(v_{\text{rms}})}{g(v_0)}=\frac{3}{2}\cdot e^{-1/2}=1.5\cdot 0.6065\approx 0.910.$$
+      <p><strong>物理含义</strong>：尽管 \(g(v)\) 的峰值在 \(v_0\)（这就是 \(v_0\) 被叫"most probable speed"的原因），但在比 \(v_0\) 大 22% 的 \(v_{\text{rms}}\) 处 g 只下降了 9%——MB 速率分布在 \(v_0\) 附近是个 <em>宽</em> 峰。这就是为什么 \(v_{\text{rms}}, \bar v, v_0\) 三者数量级相近且 He 原子的 1368 vs 1117 m/s 差距视觉上不大。</p>
+
+      <div class="box insight">
+        <p class="box-title">三特征速率出场场合速查</p>
+        <ul>
+          <li>\(v_0\)（峰值）→ 出现在求"最概率速率"</li>
+          <li>\(\bar v\)（平均）→ 出现在分子流量、碰撞频率、平均自由程时间 \(\tau=\ell/\bar v\)</li>
+          <li>\(v_{\text{rms}}\)（均方根）→ 出现在动能 \(\tfrac12 m\langle v^2\rangle\)、压强 \(P=\tfrac13(N/V)m\langle v^2\rangle\)、声速 \(v_s=\sqrt{\gamma RT/M}\) 比较</li>
+        </ul>
+      </div>
+    </details>
+
+    <div class="answer-box">
+      (a) \(v_0\approx 1117\), \(\bar v\approx 1260\), \(v_{\text{rms}}\approx 1368\) m/s · (b) ⟨v_x⟩=0, ⟨v_x²⟩=kT/m · (c) ⟨v²⟩=3kT/m, \(v_{\text{rms}}=\sqrt{3kT/m}\) ✓ · (d) g(v_rms)/g(v₀) = (3/2)e^(-1/2) ≈ 0.91
     </div>
 
     <!-- ============ FINAL TIPS ============ -->
