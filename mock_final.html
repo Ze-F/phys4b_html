@@ -182,7 +182,7 @@
 
     <div class="topic-header">
       <h1>🧪 PHYS 4B 模拟 Final 自测</h1>
-      <p class="meta">16 题（Part A + B + C，C 含 6 题）· 覆盖 Ch.16–24 全部主题 · ~140 分钟（分 3 批做完）</p>
+      <p class="meta">20 题（Part A + B + C + D）· 覆盖 Ch.16–24 全部主题 + 公式表无遗漏 · ~170 分钟</p>
       <p class="blurb">blend：Q1–Q5 变形 + Shankar 经典 + final 新增公式针对题 + quiz 没考过的标准题。每题含可折叠"提示"（卡住时打开）和"完整解答"（做完后核对）。<strong>Part A</strong>（P1–P5）final 新信号；<strong>Part B</strong>（P6–P10）quiz 没考过的中等题型；<strong>Part C</strong>（P11–P15）跨章节综合 + Gibbs 佯谬等深度题。</p>
     </div>
 
@@ -1250,6 +1250,315 @@
 
     <div class="answer-box">
       (a) \(\lambda\approx 0.172\) m · (b) 条纹间距 \(y\approx 0.858\) m · (c) \(\theta_3\approx 31°\)，精确位置 \(y_3\approx 3.00\) m（vs 小角推算 2.57 m，偏 17%）· (d) 5 阶 / 两侧 11 个极大 · (e) 异相 π → 中心变极小，图样整体移半个条纹
+    </div>
+
+    <!-- ============ PART D ============ -->
+    <h2 id="part-d" style="border-top: 3px double #0f766e; padding-top: 1.5rem; margin-top: 4rem;">🩹 Part D — 公式表盲点填补 4 题（~30 min）</h2>
+
+    <div class="box key-result">
+      <p class="box-title">Part D 命中点（公式表上 quiz/mock 都没考过的具体公式）</p>
+      <ul style="margin:.2rem 0">
+        <li><strong>P17 KT 压强 \(PV=\tfrac13 Nm\langle v^2\rangle\)</strong> [★★]：微观→宏观桥梁公式，从动量传递推导</li>
+        <li><strong>P18 \(I_{\text{av}}=\tfrac12\rho v\omega^2 s_{\max}^2\)</strong> [★]：由声强反推位移振幅与压强振幅</li>
+        <li><strong>P19 Doppler 三方同动</strong> [★★]：用 \(f'=f\frac{v-(\text{O 速度})}{v-(\text{S 速度})}\) 一般公式</li>
+        <li><strong>P20 汽化潜热 \(L_{wv}=540\)</strong> [★]：water → vapor 烧水多步过程</li>
+      </ul>
+    </div>
+
+    <div class="problem-toc">
+      <a href="#p17"><span class="toc-label">Problem 17</span><span class="toc-topic">KT 压强推导 [★★]</span></a>
+      <a href="#p18"><span class="toc-label">Problem 18</span><span class="toc-topic">声强 → s_max [★]</span></a>
+      <a href="#p19"><span class="toc-label">Problem 19</span><span class="toc-topic">三方动 Doppler [★★]</span></a>
+      <a href="#p20"><span class="toc-label">Problem 20</span><span class="toc-topic">烧水汽化 [★]</span></a>
+    </div>
+
+    <!-- ============ PROBLEM 17 ============ -->
+    <h2 id="p17">Problem 17 — KT 压强推导 <span class="scope-tag scope-entropy">KT</span> <span class="diff">★★ · 8 min</span></h2>
+
+    <div class="problem-statement">
+      边长 \(L\) 的立方体容器内含 \(N\) 个质量 \(m\) 的气体分子，绝对温度 \(T\)。容器壁完全弹性。
+      <br/><strong>(a)</strong> 考虑一个分子，速度 \((v_x,v_y,v_z)\)。它每秒撞击 \(x=L\) 壁多少次？每次撞击对壁的冲量？
+      <br/><strong>(b)</strong> 求 N 个分子对 \(x=L\) 壁的平均压强（积分/求和 \(v_x^2\) → \(\langle v_x^2\rangle\)）。
+      <br/><strong>(c)</strong> 用各向同性 \(\langle v_x^2\rangle=\langle v^2\rangle/3\) 化简：得到 \(PV=\tfrac{1}{3}Nm\langle v^2\rangle\)。
+      <br/><strong>(d)</strong> 与 \(PV=NkT\) 联立，给出 \(\tfrac{1}{2}m\langle v^2\rangle\) 与 \(T\) 的关系。这就是动理论的核心公式。
+    </div>
+
+    <details class="hint-box">
+      <summary>💡 提示</summary>
+      <ul>
+        <li>一个分子在 x 方向以 \(v_x\) 来回反弹，往返时间 \(2L/v_x\) → 单位时间撞击次数 \(v_x/(2L)\)。</li>
+        <li>每次撞击壁面冲量大小 \(2m v_x\)（弹性反弹动量翻转）。</li>
+        <li>一个分子贡献的力 = 单位时间冲量 = \(m v_x^2/L\)。</li>
+        <li>总压强 \(P=F_{\text{total}}/A=N\langle m v_x^2\rangle/L\cdot 1/L^2=Nm\langle v_x^2\rangle/V\)。</li>
+        <li>各向同性 \(\langle v_x^2\rangle=\langle v_y^2\rangle=\langle v_z^2\rangle=\langle v^2\rangle/3\)。</li>
+      </ul>
+    </details>
+
+    <details class="sol-box">
+      <summary>📝 完整解答</summary>
+
+      <h4>(a) 单分子撞击</h4>
+      <p>x 方向往返一圈走 \(2L\)，时间 \(\Delta t=2L/v_x\)。单位时间撞击 \(x=L\) 壁次数：</p>
+      $$n_{\text{coll}}=\frac{v_x}{2L}.$$
+      <p>每次弹性反弹：分子 \(v_x\to -v_x\)，动量变化 \(-2mv_x\)。对壁的冲量大小（牛顿第三定律反号）= \(2mv_x\)。</p>
+
+      <h4>(b) N 个分子的总压强</h4>
+      <p>一个分子的平均力（单位时间总冲量）：</p>
+      $$f_1=2mv_x\cdot\frac{v_x}{2L}=\frac{mv_x^2}{L}.$$
+      <p>N 个分子对 \(x=L\) 壁的总力（取平均）：</p>
+      $$F=N\cdot\frac{m\langle v_x^2\rangle}{L}.$$
+      <p>压强 \(=\)力\(/\)面积，壁面积 \(=L^2\)：</p>
+      $$P=\frac{F}{L^2}=\frac{Nm\langle v_x^2\rangle}{L^3}=\frac{Nm\langle v_x^2\rangle}{V}.$$
+
+      <h4>(c) 用各向同性化简</h4>
+      <p>各向同性 \(\langle v_x^2\rangle=\langle v_y^2\rangle=\langle v_z^2\rangle\)。由 \(\langle v^2\rangle=\langle v_x^2\rangle+\langle v_y^2\rangle+\langle v_z^2\rangle=3\langle v_x^2\rangle\)：</p>
+      $$\langle v_x^2\rangle=\frac{1}{3}\langle v^2\rangle.$$
+      <p>带入：</p>
+      $$\boxed{PV=\frac{1}{3}Nm\langle v^2\rangle.}$$
+
+      <h4>(d) 联立 PV=NkT</h4>
+      <p>两式相等：</p>
+      $$NkT=\frac{1}{3}Nm\langle v^2\rangle\quad\Longrightarrow\quad \frac{1}{2}m\langle v^2\rangle=\frac{3}{2}kT.$$
+      <p>这就是 <strong>每个分子的平均平动动能 = (3/2)kT</strong>，单原子理想气体内能 \(U=(3/2)NkT\)。等分定理在 3 平动自由度上的展开。</p>
+
+      <div class="box insight">
+        <p class="box-title">为什么 PV = (1/3) Nm⟨v²⟩ 那么重要？</p>
+        <p>这是 <strong>历史上第一次</strong> 把"温度 T"和"分子动能"建立联系。Boltzmann 之前，T 只是温度计读数；这条公式之后，T 变成了"分子平动动能的度量"。
+        Final 上很容易出"从动理论导出 P 和 T 的关系"作为概念推导题。</p>
+      </div>
+    </details>
+
+    <div class="answer-box">
+      (a) 每秒 \(v_x/(2L)\) 次，每次冲量 \(2mv_x\) · (b) \(P=Nm\langle v_x^2\rangle/V\) · (c) \(PV=\tfrac{1}{3}Nm\langle v^2\rangle\) · (d) \(\tfrac{1}{2}m\langle v^2\rangle=\tfrac{3}{2}kT\)
+    </div>
+
+    <!-- ============ PROBLEM 18 ============ -->
+    <h2 id="p18">Problem 18 — 声强反推位移振幅 <span class="scope-tag scope-wave">Sound</span> <span class="diff">★ · 6 min</span></h2>
+
+    <div class="problem-statement">
+      普通谈话声强约 60 dB，频率取 \(f=1000\) Hz。空气 \(\rho=1.204\) kg/m³，\(v=343\) m/s，\(B=1.42\times 10^5\) Pa，\(I_0=10^{-12}\) W/m²。
+      <br/><strong>(a)</strong> 声强 \(I\)（W/m²）？
+      <br/><strong>(b)</strong> 用 \(I_{\text{av}}=\tfrac{1}{2}\rho v\omega^2 s_{\max}^2\) 反推位移振幅 \(s_{\max}\)。
+      <br/><strong>(c)</strong> 求压强振幅 \(p_{\max}=Bks_{\max}\)。
+      <br/><strong>(d)</strong> 将 \(s_{\max}\) 与氢原子尺寸 \(\sim 10^{-10}\) m 对比，物理直觉？
+    </div>
+
+    <details class="hint-box">
+      <summary>💡 提示</summary>
+      <ul>
+        <li>由 \(\beta\) 解 \(I\)：\(I=I_0\cdot 10^{\beta/10}\)。</li>
+        <li>从 \(I_{\text{av}}\) 公式解 \(s_{\max}\)：\(s_{\max}=\sqrt{2 I/(\rho v\omega^2)}\)。</li>
+        <li>\(\omega=2\pi f\)，\(k=\omega/v=2\pi f/v\)。</li>
+        <li>\(p_{\max}\) 也可以用 \(p_{\max}=\sqrt{2\rho v I}\)（消去 \(s_{\max}\)）做交叉验证。</li>
+      </ul>
+    </details>
+
+    <details class="sol-box">
+      <summary>📝 完整解答</summary>
+
+      <h4>(a) 声强</h4>
+      <p>60 dB → \(I/I_0=10^{60/10}=10^6\)：</p>
+      $$I=10^{-12}\cdot 10^6=10^{-6}\ \text{W/m}^2.$$
+
+      <h4>(b) 位移振幅</h4>
+      $$\omega=2\pi\cdot 1000=6283\ \text{rad/s}.$$
+      $$s_{\max}=\sqrt{\frac{2I}{\rho v\omega^2}}=\sqrt{\frac{2\cdot 10^{-6}}{1.204\cdot 343\cdot 6283^2}}=\sqrt{\frac{2\times 10^{-6}}{1.629\times 10^{10}}}=\sqrt{1.228\times 10^{-16}}\approx 1.11\times 10^{-8}\ \text{m}.$$
+      <p>即 \(s_{\max}\approx 11\) nm。</p>
+
+      <h4>(c) 压强振幅</h4>
+      $$k=\frac{\omega}{v}=\frac{6283}{343}=18.32\ \text{rad/m}.$$
+      $$p_{\max}=Bks_{\max}=1.42\times 10^5\cdot 18.32\cdot 1.11\times 10^{-8}=0.0289\ \text{Pa}\approx 29\ \text{mPa}.$$
+      <p>验证（不用 \(s_{\max}\)）：\(p_{\max}=\sqrt{2\rho v I}=\sqrt{2\cdot 1.204\cdot 343\cdot 10^{-6}}=\sqrt{8.26\times 10^{-4}}\approx 0.0287\) Pa ✓</p>
+
+      <h4>(d) 与原子尺寸对比</h4>
+      <ul>
+        <li>\(s_{\max}=1.1\times 10^{-8}\) m = 11 nm</li>
+        <li>氢原子直径 \(\sim 10^{-10}\) m = 0.1 nm</li>
+        <li>比率：\(s_{\max}/d_{\text{atom}}\sim 100\)</li>
+      </ul>
+      <p>所以普通谈话引起空气分子位移 ≈ 110 个原子直径。<strong>非常小但可测</strong>——这就是麦克风（机械→电信号转换）能感受到的振动级别。</p>
+      <p>另一个对比：</p>
+      <ul>
+        <li>\(p_{\max}=0.03\) Pa 与大气压 \(10^5\) Pa 比，相对涨落 \(3\times 10^{-7}\)</li>
+        <li>耳膜面积 ~0.5 cm² → 推力涨落 ~1.5 μN，足以让耳朵的纤毛细胞响应</li>
+      </ul>
+      <p>这就是为什么声波振幅那么小却能感受到——人耳是<strong>动力学放大器</strong>，把 nm 级的空气位移放大成可以辨识的神经信号。</p>
+
+      <div class="box insight">
+        <p class="box-title">两个等价的强度公式</p>
+        $$I_{\text{av}}=\frac{1}{2}\rho v\omega^2 s_{\max}^2=\frac{p_{\max}^2}{2\rho v}.$$
+        <p>第一种以位移振幅表达，第二种以压强振幅表达。两者通过 \(p_{\max}=Bks_{\max}=\rho v\omega s_{\max}\) 互换：</p>
+        $$\frac{p_{\max}^2}{2\rho v}=\frac{(\rho v\omega s_{\max})^2}{2\rho v}=\frac{1}{2}\rho v\omega^2 s_{\max}^2.\ \checkmark$$
+        <p>用哪一个看题目给的是哪个量。本题先问位移，所以用第一种；若题目给 \(p_{\max}\)，用第二种更直接。</p>
+      </div>
+    </details>
+
+    <div class="answer-box">
+      (a) \(I=10^{-6}\) W/m² · (b) \(s_{\max}\approx 11\) nm · (c) \(p_{\max}\approx 29\) mPa · (d) ≈ 100 倍原子直径，远小于分子间距但被耳朵动力学放大可感知
+    </div>
+
+    <!-- ============ PROBLEM 19 ============ -->
+    <h2 id="p19">Problem 19 — 三方同动 Doppler <span class="scope-tag scope-doppler">Doppler</span> <span class="diff">★★ · 8 min</span></h2>
+
+    <div class="problem-statement">
+      两列火车在直线轨道上对向而行。火车 S（声源，鸣笛 \(f=800\) Hz）以 \(u_S=30\) m/s 向东行驶；火车 O（观察者）以 \(u_O=20\) m/s 向西行驶（接近 S）。空气声速 \(v=343\) m/s。
+      <br/><strong>(a)</strong> 无风时，O 听到的频率？用公式 \(f'=f\dfrac{v-u_O^{\text{rel medium}}}{v-u_S^{\text{rel medium}}}\)。注意符号约定！
+      <br/><strong>(b)</strong> 现在向东有 \(u_w=10\) m/s 风（与 S 同方向）。介质（空气）相对地面以 10 m/s 向东运动。O 听到的频率？
+      <br/><strong>(c)</strong> 风向反过来（向西，10 m/s）。O 听到的频率？
+      <br/><strong>(d)</strong> 比较 (a)(b)(c)，风对 Doppler 频率的影响约多少？
+    </div>
+
+    <details class="hint-box">
+      <summary>💡 提示</summary>
+      <ul>
+        <li>公式 \(f'=f\dfrac{v-u_O^{\text{相对介质}}}{v-u_S^{\text{相对介质}}}\)，符号约定：从 S 指向 O 的方向为正。</li>
+        <li>S 在 O 的东方，所以"从 S 到 O" 方向 = 西。</li>
+        <li>S 速度 = 30 m/s 东 = -30 m/s（相对"S 到 O"方向）；O 速度 = 20 m/s 西 = +20 m/s。</li>
+        <li>风 = 介质速度。10 m/s 东风 = -10 m/s；西风 = +10 m/s。</li>
+        <li>"u 相对介质" = u 地面 - u 介质。</li>
+      </ul>
+    </details>
+
+    <details class="sol-box">
+      <summary>📝 完整解答</summary>
+
+      <p><strong>预备约定</strong>：取从 S 指向 O 的方向（西方）为正。</p>
+      <ul>
+        <li>\(u_S^{\text{ground}}=-30\) m/s（S 东行，远离 O）</li>
+        <li>\(u_O^{\text{ground}}=+20\) m/s（O 西行，接近 S）</li>
+      </ul>
+
+      <h4>(a) 无风</h4>
+      <p>介质静止：\(u_S^{\text{rel}}=u_S^{\text{ground}}=-30\)，\(u_O^{\text{rel}}=u_O^{\text{ground}}=+20\)。</p>
+      $$f'=f\cdot\frac{v-u_O^{\text{rel}}}{v-u_S^{\text{rel}}}=800\cdot\frac{343-20}{343-(-30)}=800\cdot\frac{323}{373}.$$
+      <p>等等——让我重新审一遍符号约定。常规 Doppler 公式（接近时 f' 增高）：</p>
+      $$f'=f\cdot\frac{v\pm u_O}{v\mp u_S},$$
+      <p>O 接近 S → 分子用 +；S 接近 O → 分母用 -。这两个都让 f' 增大。所以：</p>
+      $$f'=800\cdot\frac{343+20}{343-30}=800\cdot\frac{363}{313}=800\cdot 1.160\approx 927.8\ \text{Hz}.$$
+      <p>但题目给的公式 \(f'=f\frac{v-\text{(speed of O)}}{v-\text{(speed of S)}}\) 的"speed" 指的是 <strong>相对介质沿 "S→O" 方向的分量</strong>，符号约定：朝 O 走 = 正。
+      所以 S 东行（背离 O）"speed of S"= -30；O 西行（朝 S 走）= -20？让我谨慎重做：</p>
+
+      <p><strong>更可靠：直接用接近 vs 远离判断符号</strong></p>
+      <ul>
+        <li>S 东行远离 O（O 在西方）→ S 远离 O → 分母 \(v+u_S\)</li>
+        <li>O 西行接近 S → 分子 \(v+u_O\)</li>
+      </ul>
+      $$f'=f\cdot\frac{v+u_O}{v+u_S}=?$$
+      <p>这里 \(u_S, u_O\) 都是正速率。"接近时让 f' 更高"的方向选择：分子 + 表示 O 接近 S；分母 - 表示 S 接近 O。所以应该是：</p>
+      $$f'=f\cdot\frac{v+u_O}{v-u_S}\quad\text{(O 接近, S 远离)}\to\text{S 远离要分母 +}$$
+      <p>正确写法：</p>
+      $$f'=f\cdot\frac{v+u_O}{v+u_S}\text{ — O 接近 S}\to\text{分子 +; S 远离 O}\to\text{分母 +}.$$
+      <p>所以两个 +，部分抵消：</p>
+      $$f'=800\cdot\frac{343+20}{343+30}=800\cdot\frac{363}{373}\approx 778.4\ \text{Hz}.$$
+      <p><strong>物理检验</strong>：O 接近 S（让 f' 升高 \(\sim 800\cdot 20/343\approx 47\) Hz）+ S 远离 O（让 f' 降 \(\sim 800\cdot 30/343\approx 70\) Hz），净降低 \(\sim 22\) Hz → 778 Hz。✓</p>
+
+      <h4>(b) 东风 10 m/s（与 S 同方向）</h4>
+      <p>介质（空气）地面速度 +10 东。相对介质：</p>
+      <ul>
+        <li>S：\(u_S^{\text{rel}}=u_S^{\text{ground}}-u_{\text{air}}=30-10=20\) m/s 东（仍远离 O，但慢了）</li>
+        <li>O：\(u_O^{\text{rel}}=u_O^{\text{ground}}-u_{\text{air}}=-20-10=-30\) m/s（西 + 风方向反 → O 相对空气速度更大向西，更接近）</li>
+      </ul>
+      <p>注意符号：O 地速 -20（西，相对正方向<即朝 O>取反 - 等等。让我重设：取"东" = +。</p>
+      <ul>
+        <li>S 地速 = +30（东）</li>
+        <li>O 地速 = -20（西）</li>
+        <li>风 = +10（东）</li>
+        <li>S 相对空气 = 30-10 = +20（仍东，慢了）</li>
+        <li>O 相对空气 = -20-10 = -30（西，相对空气更快）</li>
+      </ul>
+      <p>S 远离 O（O 在西，S 向东走相对空气仍东行）；O 朝 S 走相对空气速度从 20 升到 30。所以风让两边都"更远离 O 接近"的效应？让我谨慎：风让 S 看似变慢、O 看似变快接近。两者都让 f' 增大。代入公式（仍按 S 远离、O 接近 模式）：</p>
+      $$f'=800\cdot\frac{v+u_O^{\text{rel}}}{v+u_S^{\text{rel}}}=800\cdot\frac{343+30}{343+20}=800\cdot\frac{373}{363}\approx 822.0\ \text{Hz}.$$
+
+      <h4>(c) 西风 10 m/s（与 S 反方向）</h4>
+      <ul>
+        <li>风 = -10（西）</li>
+        <li>S 相对空气 = 30-(-10) = +40（东，更快远离 O）</li>
+        <li>O 相对空气 = -20-(-10) = -10（西，相对空气慢了）</li>
+      </ul>
+      $$f'=800\cdot\frac{343+10}{343+40}=800\cdot\frac{353}{383}\approx 737.5\ \text{Hz}.$$
+
+      <h4>(d) 对比</h4>
+      <table class="formula-table">
+        <thead><tr><th>情形</th><th>f'</th><th>偏移 (Hz)</th></tr></thead>
+        <tbody>
+          <tr><td>(a) 无风</td><td>778.4 Hz</td><td>-21.6</td></tr>
+          <tr><td>(b) 东风（顺 S 而行）</td><td>822.0 Hz</td><td>+22.0</td></tr>
+          <tr><td>(c) 西风（顶 S 而行）</td><td>737.5 Hz</td><td>-62.5</td></tr>
+        </tbody>
+      </table>
+      <p>风的影响 ≈ 40 Hz 量级（即 ±5%），与无风相比差异显著。<strong>风对 Doppler 影响的物理</strong>：风改变了介质相对地面的速度，从而改变了 S/O 相对介质的速度——这才是公式中真正起作用的速度。</p>
+
+      <div class="box warning">
+        <p class="box-title">⚠ 符号约定的陷阱</p>
+        <p>公式表写的 \(f'=f\frac{v-u_O^{\text{rel medium}}}{v-u_S^{\text{rel medium}}}\) 中"u" 是 <strong>相对介质，沿 "S→O" 方向取正</strong>。
+        最稳妥的做法是：忘掉符号约定，<strong>看物理</strong>：</p>
+        <ul>
+          <li>O 接近 S：让 f' <strong>升高</strong>（分子 + 模式）</li>
+          <li>S 远离 O：让 f' <strong>降低</strong>（分母 + 模式）</li>
+          <li>风顺着声波传播方向（S → O）吹：让 S 看似慢、O 看似快接近 → f' 升高</li>
+        </ul>
+        <p>每次代公式前先判断每个动作让 f' 升还是降，符号自然出来。</p>
+      </div>
+    </details>
+
+    <div class="answer-box">
+      (a) ≈ 778 Hz（无风）· (b) ≈ 822 Hz（东风）· (c) ≈ 737 Hz（西风）· (d) 风影响 ±5%，需明确"相对介质"才能用 Doppler
+    </div>
+
+    <!-- ============ PROBLEM 20 ============ -->
+    <h2 id="p20">Problem 20 — 烧水汽化 <span class="scope-tag scope-adia">Phase</span> <span class="diff">★ · 6 min</span></h2>
+
+    <div class="problem-statement">
+      2 kg 的水放入电水壶，初温 \(T_0=20°\)C。c_water = 1 kcal/(kg·°C)。\(L_{wv}=540\) kcal/kg。
+      <br/><strong>(a)</strong> 加热到 100°C（沸腾）需要多少热量（kcal 和 J）？
+      <br/><strong>(b)</strong> 在 100°C 把所有水汽化成水蒸气需要多少热量？
+      <br/><strong>(c)</strong> 总加热量？(a) 和 (b) 的比值说明什么？
+      <br/><strong>(d)</strong> 若加热器功率 \(P=2\) kW，每步分别需要多长时间？
+    </div>
+
+    <details class="hint-box">
+      <summary>💡 提示</summary>
+      <ul>
+        <li>感热 \(Q=mc\Delta T\)；潜热 \(Q=mL\)。</li>
+        <li>1 kcal = 4184 J。</li>
+        <li>2 kW = 2000 W = 2000 J/s。</li>
+      </ul>
+    </details>
+
+    <details class="sol-box">
+      <summary>📝 完整解答</summary>
+
+      <h4>(a) 升温到沸点</h4>
+      $$Q_1=mc\Delta T=2\cdot 1\cdot 80=160\ \text{kcal}=160\cdot 4184\approx 6.69\times 10^5\ \text{J}=669\ \text{kJ}.$$
+
+      <h4>(b) 完全汽化</h4>
+      $$Q_2=m L_{wv}=2\cdot 540=1080\ \text{kcal}=1080\cdot 4184\approx 4.52\times 10^6\ \text{J}=4520\ \text{kJ}.$$
+
+      <h4>(c) 总热量与比值</h4>
+      $$Q_{\text{tot}}=Q_1+Q_2=160+1080=1240\ \text{kcal}\approx 5.19\times 10^6\ \text{J}.$$
+      <p>比值 \(Q_2/Q_1=1080/160=6.75\) → <strong>汽化吸热是升温到沸点所需热的近 7 倍</strong>。</p>
+      <p>物理直觉：汽化需要分子完全克服分子间引力，从液体逃离；这比"加快液体分子的热运动"耗能得多。</p>
+
+      <h4>(d) 时间</h4>
+      <p>加热器功率 2 kW = 2000 J/s。</p>
+      $$t_1=\frac{Q_1}{P}=\frac{6.69\times 10^5}{2000}\approx 334\ \text{s}=5.6\ \text{min}.$$
+      $$t_2=\frac{Q_2}{P}=\frac{4.52\times 10^6}{2000}\approx 2260\ \text{s}=37.7\ \text{min}.$$
+      <p>所以 6 分钟烧开 2 kg 水；继续 38 分钟才能全部蒸干。</p>
+
+      <div class="box insight">
+        <p class="box-title">为什么烧水蒸干那么慢？</p>
+        <p>L_wv = 540 kcal/kg 是水分子从液态到气态需要的能量。水的氢键非常强（每对氢键 ~0.2 eV ≈ 23 kJ/mol），蒸发要打断它们：</p>
+        <ul>
+          <li>水 L_wv = 540 kcal/kg = 2260 kJ/kg = 41 kJ/mol</li>
+          <li>对比氨 L_wv = 327 kcal/kg、氟利昂 L_wv ~ 50 kcal/kg</li>
+        </ul>
+        <p>水的 L_wv 异常大（强氢键），这就是为什么人类身体大量出汗散热高效：1 g 汗水蒸发吸 2.4 kJ。
+        反之，工业上用水冷却设备也是因为它"吸热能力强"。</p>
+      </div>
+    </details>
+
+    <div class="answer-box">
+      (a) 160 kcal ≈ 669 kJ · (b) 1080 kcal ≈ 4520 kJ · (c) 总 1240 kcal；汽化 / 升温 = 6.75 倍 · (d) 升温 5.6 min；汽化 37.7 min
     </div>
 
     <!-- ============ FINAL TIPS ============ -->
