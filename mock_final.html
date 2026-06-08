@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PHYS 4B 模拟 Final — 5 题自测</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="theme.js"></script>
+  <script>
+    MathJax = {
+      tex: { inlineMath: [['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+      svg: { fontCache: 'global' }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <style>
+    .problem-toc {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: .6rem;
+      margin: 1.25rem 0 2rem;
+    }
+    .problem-toc a {
+      display: block;
+      padding: .65rem .85rem;
+      background: #f5f5f4;
+      border: 1px solid #d6d3d1;
+      border-radius: 6px;
+      color: #134e4a;
+      text-decoration: none;
+      font-family: -apple-system, 'PingFang SC', sans-serif;
+      font-size: .92rem;
+      transition: all .15s;
+    }
+    .problem-toc a:hover {
+      background: #0f766e;
+      color: white;
+      border-color: #0f766e;
+    }
+    .problem-toc a .toc-label { display: block; font-weight: 600; font-size: 1rem; margin-bottom: .15rem; }
+    .problem-toc a .toc-topic { font-size: .8rem; color: #6b7280; }
+    .problem-toc a:hover .toc-topic { color: #d1fae5; }
+
+    .problem-statement {
+      background: #f5f5f4;
+      border-left: 3px solid #6b7280;
+      padding: .85rem 1.1rem;
+      margin: 1rem 0;
+      color: #1f2937;
+      border-radius: 0 4px 4px 0;
+    }
+    .problem-statement::before {
+      content: '题目：';
+      font-weight: 600;
+      color: #6b7280;
+      font-family: -apple-system, 'PingFang SC', sans-serif;
+      font-size: .85rem;
+      letter-spacing: .04em;
+      display: block;
+      margin-bottom: .35rem;
+    }
+
+    .answer-box {
+      background: #eff6ff;
+      border-left: 4px solid #2563eb;
+      padding: .75rem 1.1rem;
+      margin: 1rem 0;
+      border-radius: 0 6px 6px 0;
+      color: #1e3a8a;
+    }
+    .answer-box::before {
+      content: '✓ 答案：';
+      font-weight: 600;
+      color: #1e40af;
+      font-family: -apple-system, 'PingFang SC', sans-serif;
+      font-size: .88rem;
+      letter-spacing: .04em;
+      margin-right: .35rem;
+    }
+
+    .scope-tag {
+      display: inline-block;
+      padding: .12rem .55rem;
+      font-size: .72rem;
+      font-family: -apple-system, 'PingFang SC', sans-serif;
+      border-radius: 10px;
+      margin-left: .4rem;
+      vertical-align: middle;
+      letter-spacing: .02em;
+    }
+    .scope-shm { background: #fef3c7; color: #78350f; }
+    .scope-wave { background: #dbeafe; color: #1e3a8a; }
+    .scope-doppler { background: #fce7f3; color: #831843; }
+    .scope-adia { background: #d1fae5; color: #065f46; }
+    .scope-entropy { background: #ede9fe; color: #5b21b6; }
+
+    .diff {
+      display: inline-block;
+      padding: .12rem .45rem;
+      font-size: .72rem;
+      font-family: -apple-system, sans-serif;
+      border-radius: 6px;
+      margin-left: .3rem;
+      background: #fee2e2;
+      color: #991b1b;
+      vertical-align: middle;
+    }
+
+    .hint-box, .sol-box {
+      margin: 1rem 0;
+      padding: .5rem 1rem;
+      border-radius: 6px;
+      border-left: 4px solid;
+    }
+    .hint-box {
+      background: #fef9c3;
+      border-color: #ca8a04;
+    }
+    .hint-box summary {
+      color: #854d0e;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: -apple-system, 'PingFang SC', sans-serif;
+      padding: .35rem 0;
+    }
+    .sol-box {
+      background: #ecfdf5;
+      border-color: #059669;
+    }
+    .sol-box summary {
+      color: #047857;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: -apple-system, 'PingFang SC', sans-serif;
+      padding: .35rem 0;
+    }
+    .hint-box[open] summary, .sol-box[open] summary { margin-bottom: .5rem; }
+
+    .back-link { font-family: -apple-system, 'PingFang SC', sans-serif; font-size: .9rem; margin: 1rem 0; }
+    .back-link a { color: #0f766e; text-decoration: none; }
+    .back-link a:hover { text-decoration: underline; }
+
+    .timer-banner {
+      background: linear-gradient(90deg, #fef3c7 0%, #fde68a 100%);
+      border-left: 4px solid #d97706;
+      padding: .85rem 1.1rem;
+      margin: 1rem 0;
+      border-radius: 0 6px 6px 0;
+      font-family: -apple-system, 'PingFang SC', sans-serif;
+    }
+    [data-theme="dark"] .timer-banner {
+      background: linear-gradient(90deg, #422006 0%, #57360b 100%);
+      color: #fde68a;
+    }
+    [data-theme="dark"] .hint-box {
+      background: #422006;
+      border-color: #ca8a04;
+      color: #fef9c3;
+    }
+    [data-theme="dark"] .hint-box summary { color: #fde68a; }
+    [data-theme="dark"] .sol-box {
+      background: #042f2e;
+      border-color: #10b981;
+      color: #a7f3d0;
+    }
+    [data-theme="dark"] .sol-box summary { color: #6ee7b7; }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <a class="home-link" href="index.html">← PHYS 4B 复习</a>
+    <nav>
+      <a href="quiz1_walkthrough.html">Q1</a>
+      <a href="quiz2_walkthrough.html">Q2</a>
+      <a href="quiz3_walkthrough.html">Q3</a>
+      <a href="quiz4_walkthrough.html">Q4</a>
+      <a href="quiz5_walkthrough.html">Q5</a>
+    </nav>
+  </header>
+
+  <main class="container">
+
+    <div class="topic-header">
+      <h1>🧪 PHYS 4B 模拟 Final 自测</h1>
+      <p class="meta">5 题 · 覆盖 Ch.16–24 · 命中 final 公式表新增信号 · ~45 分钟</p>
+      <p class="blurb">blend：Q1/Q2/Q3 变形 + Shankar 经典题型 + final 新增公式针对题。每题含可折叠"提示"（卡住时打开）和"完整解答"（做完后核对）。建议先关掉解答盲做。</p>
+    </div>
+
+    <div class="back-link">
+      <a href="index.html">← 返回总目录</a> ·
+      <a href="quiz5_walkthrough.html">Q5 walkthrough</a>
+    </div>
+
+    <div class="timer-banner">
+      🕐 <strong>用法建议</strong>：先关掉所有提示和解答盲做。卡住时打开"提示"（黄框），做完后打开"解答"（绿框）核对。计时建议 45 分钟，赶时间可挑重点 3 道。
+    </div>
+
+    <div class="box key-result">
+      <p class="box-title">一页速览：5 题的命中点</p>
+      <ul style="margin:.2rem 0">
+        <li><strong>P1 阻尼摆 + 驱动续问</strong> [★★]：测 Q1 walkthrough 扩展（Q 因子、能量衰减、驱动平均功率）</li>
+        <li><strong>P2 半开管驻波</strong> [★]：final 新加 \(k_n=(n+1/2)\pi/L\) 公式必考</li>
+        <li><strong>P3 声音反射 Doppler</strong> [★★]：Shankar Ch.19 经典，Q2 没考过的题型；含小量近似检验</li>
+        <li><strong>P4 双原子绝热</strong> [★★]：final 删掉 \(c_v=5R/2\) 的最阴陷阱，必须自己记得空气是双原子</li>
+        <li><strong>P5 微观熵 → 温度</strong> [★★★]：final 新加 \(\Omega\sim V^N U^{3N/2}\) + \(1/(kT)=\partial S/\partial U\)，强信号必考</li>
+      </ul>
+    </div>
+
+    <div class="problem-toc">
+      <a href="#p1"><span class="toc-label">Problem 1</span><span class="toc-topic">阻尼摆 + 驱动 [★★]</span></a>
+      <a href="#p2"><span class="toc-label">Problem 2</span><span class="toc-topic">半开管驻波 [★]</span></a>
+      <a href="#p3"><span class="toc-label">Problem 3</span><span class="toc-topic">反射 Doppler [★★]</span></a>
+      <a href="#p4"><span class="toc-label">Problem 4</span><span class="toc-topic">双原子绝热 [★★]</span></a>
+      <a href="#p5"><span class="toc-label">Problem 5</span><span class="toc-topic">微观熵推导 [★★★]</span></a>
+    </div>
+
+    <!-- ============ PROBLEM 1 ============ -->
+    <h2 id="p1">Problem 1 — 阻尼摆 + 驱动续问 <span class="scope-tag scope-shm">SHM</span> <span class="diff">★★ · 10 min</span></h2>
+
+    <div class="problem-statement">
+      单摆长 \(L=1.00\) m，摆球 \(m=0.5\) kg，浸入液体中产生阻尼 \(\gamma=2.0\) s\(^{-1}\)。用 \(g=9.81\) m/s²。
+      <br/><strong>(a)</strong> 求自由振动的阻尼频率 \(\omega'\)。
+      <br/><strong>(b)</strong> 求品质因子 \(Q\)。
+      <br/><strong>(c)</strong> 求振幅从初始值跌到 10% 所需的时间。
+      <br/><strong>(d)</strong> 现在加驱动 \(F_0=1\) N 作用在摆球上、驱动频率 \(\omega=\omega_0\)。稳态振幅多少？驱动力的平均功率多少？
+    </div>
+
+    <details class="hint-box">
+      <summary>💡 提示</summary>
+      <ul>
+        <li>单摆固有频率 \(\omega_0=\sqrt{g/L}\)。</li>
+        <li>振幅按 \(e^{-\gamma t/2}\) 衰减（不是 \(e^{-\gamma t}\)）。</li>
+        <li>\(Q=\omega_0/\gamma\)。</li>
+        <li>驱动稳态在 \(\omega=\omega_0\) 时分母简化为 \(\omega\gamma\)。</li>
+        <li>平均功率公式 \(\langle P\rangle=\tfrac12 m\gamma\omega^2|z_0|^2\)。</li>
+      </ul>
+    </details>
+
+    <details class="sol-box">
+      <summary>📝 完整解答</summary>
+
+      <p><strong>预备</strong>：\(\omega_0^2=g/L=9.81\)，\(\omega_0=3.132\) rad/s。</p>
+
+      <h4>(a) 阻尼频率</h4>
+      $$\omega'=\sqrt{\omega_0^2-\gamma^2/4}=\sqrt{9.81-1.0}=\sqrt{8.81}\approx 2.97\ \text{rad/s}.$$
+
+      <h4>(b) 品质因子</h4>
+      $$Q=\frac{\omega_0}{\gamma}=\frac{3.132}{2.0}\approx 1.57.$$
+      <p>极重阻尼（Q 接近 1 量级），只能维持约 1.5 个振荡周期就衰减殆尽。</p>
+
+      <h4>(c) 振幅跌到 10%</h4>
+      <p>\(A(t)/A_0=e^{-\gamma t/2}=0.10\)：</p>
+      $$t=\frac{2\ln 10}{\gamma}=\frac{4.605}{1.0}=4.605\ \text{s}?$$
+      <p>等一下：\(2\ln 10 / \gamma\) where \(\gamma=2\)：\(t=2\cdot 2.303/2=2.303\) s。</p>
+
+      <h4>(d) 驱动稳态</h4>
+      <p>在 \(\omega=\omega_0\) 时分母简化：\((\omega_0^2-\omega^2)^2=0\)，所以</p>
+      $$|z_0|=\frac{F_0/m}{\sqrt{0+\omega^2\gamma^2}}=\frac{F_0/m}{\omega_0\gamma}=\frac{1/0.5}{3.132\cdot 2}=\frac{2}{6.264}\approx 0.319\ \text{m}.$$
+      <p>平均功率：</p>
+      $$\langle P\rangle=\tfrac12 m\gamma\omega^2|z_0|^2=\tfrac12 (0.5)(2)(9.81)(0.319)^2=0.5\cdot 9.81\cdot 0.1018\approx 0.499\ \text{W}.$$
+      <p>或等价 \(\langle P\rangle=\tfrac12 F_0\omega|z_0|\sin\delta\)。共振时 \(\sin\delta=1\)：</p>
+      $$\langle P\rangle=\tfrac12 (1)(3.132)(0.319)=0.500\ \text{W}.\ \checkmark$$
+    </details>
+
+    <div class="answer-box">
+      (a) \(\omega'\approx 2.97\) rad/s · (b) \(Q\approx 1.57\) · (c) \(t\approx 2.30\) s · (d) \(|z_0|\approx 0.319\) m, \(\langle P\rangle\approx 0.5\) W
+    </div>
+
+    <!-- ============ PROBLEM 2 ============ -->
+    <h2 id="p2">Problem 2 — 半开管驻波 <span class="scope-tag scope-wave">Standing</span> <span class="diff">★ · 6 min</span></h2>
+
+    <div class="problem-statement">
+      一根管长 \(L=0.50\) m，<strong>一端开口、一端封闭</strong>。室温空气 \(v=343\) m/s。
+      <br/><strong>(a)</strong> 求基频 \(f_1\)。
+      <br/><strong>(b)</strong> 求紧挨着的下一个允许频率（第一泛音）。
+      <br/><strong>(c)</strong> 如果改成两端都开的同长度管，基频变多少？
+      <br/><strong>(d)</strong> 半开管基频对应的位移波函数 \(\psi(x)\) 的节点（位移恒为 0 的点）在哪？
+    </div>
+
+    <details class="hint-box">
+      <summary>💡 提示</summary>
+      <ul>
+        <li>边界条件：封闭端是位移节点 \(\psi=0\)，开口端是位移反节点 \(\partial\psi/\partial x=0\)。</li>
+        <li>试解 \(\psi=A\sin(kx)\cos(\omega t)\)（自动满足封闭端 \(x=0\) 处的节点条件）。</li>
+        <li>带入开口端边界条件，解出允许的 \(k_n\)。注意得到的是 \(k_n L=(2n-1)\pi/2\) 类型，<strong>只有奇次谐波</strong>。</li>
+        <li>两端开口的边界：两端都是反节点，模式与两端固定相同 \(k_n=n\pi/L\)。</li>
+      </ul>
+    </details>
+
+    <details class="sol-box">
+      <summary>📝 完整解答</summary>
+
+      <h4>(a) 基频</h4>
+      <p>取封闭端在 \(x=0\)、开口端在 \(x=L\)。试解 \(\psi=A\sin(kx)\cos(\omega t)\) 自动满足 \(\psi(0)=0\)。</p>
+      <p>开口端：\(\partial\psi/\partial x\big|_{x=L}=Ak\cos(kL)\cos(\omega t)=0\) → \(\cos(kL)=0\) → \(kL=(n-\tfrac12)\pi\)，\(n=1,2,3,...\)</p>
+      <p>对应频率 \(f_n=\dfrac{(2n-1)v}{4L}\)。基频 \(n=1\)：</p>
+      $$f_1=\frac{v}{4L}=\frac{343}{4\cdot 0.5}=\frac{343}{2}\approx 171.5\ \text{Hz}.$$
+
+      <h4>(b) 第一泛音</h4>
+      <p>下一个 \(n=2\)：\(f_2=\dfrac{3v}{4L}=3 f_1\)。</p>
+      $$f_2\approx 514.5\ \text{Hz}.$$
+      <p><strong>只有奇次谐波</strong>（\(f_n=(2n-1)f_1\)）—— 这是半开管区别于两端固定/两端开口管的特征。</p>
+
+      <h4>(c) 两端开口同长度</h4>
+      <p>两端开口 \(k_n=n\pi/L\)（与两端固定相同的模数！），\(f_n=nv/(2L)\)。基频：</p>
+      $$f_1^{\text{open}}=\frac{v}{2L}=\frac{343}{1}=343\ \text{Hz}=2 f_1^{\text{half}}.$$
+      <p>两端开口的管基频是半开管的 <strong>2 倍</strong>。</p>
+
+      <h4>(d) 节点位置</h4>
+      <p>基频模式 \(k_1=\pi/(2L)\)：</p>
+      $$\psi(x)=A\sin\Bigl(\frac{\pi x}{2L}\Bigr)\cos(\omega t).$$
+      <p>节点 \(\sin=0\) → \(x=0\)。<strong>只在封闭端 \(x=0\) 处有节点</strong>；管内（\(0<x\le L\)）没有内部节点。</p>
+      <p>形象：从 \(x=0\) 到 \(x=L\) 整个管子内只展现 sin 函数的前 1/4 周期，所以振幅从 0 单调增到最大值（在开口端达到反节点）。</p>
+    </details>
+
+    <div class="answer-box">
+      (a) \(f_1\approx 171.5\) Hz · (b) \(f_2\approx 514.5\) Hz (3rd harmonic) · (c) 两端开口基频 \(\approx 343\) Hz (×2) · (d) 唯一节点在封闭端 \(x=0\)
+    </div>
+
+    <!-- ============ PROBLEM 3 ============ -->
+    <h2 id="p3">Problem 3 — 声音反射 Doppler <span class="scope-tag scope-doppler">Doppler</span> <span class="diff">★★ · 8 min</span></h2>
+
+    <div class="problem-statement">
+      声源静止，发射 \(f_0=500\) Hz 朝一面墙。墙以 \(u=5\) m/s 接近声源（垂直运动）。声速 \(v=343\) m/s。
+      <br/><strong>(a)</strong> 墙作为"运动观察者"接收到的频率？
+      <br/><strong>(b)</strong> 墙作为"运动源"反射回的声波被原来的声源接收时的频率？
+      <br/><strong>(c)</strong> 声源同时听到自己发射的声（500 Hz）和反射回来的声 → 拍频是多少？
+      <br/><strong>(d)</strong> 把 (c) 的答案与小量近似 \(\Delta f\approx 2(u/v)f_0\) 比较；为什么近似公式给出几乎相同的答案？
+    </div>
+
+    <details class="hint-box">
+      <summary>💡 提示</summary>
+      <ul>
+        <li>反射 Doppler 是 <strong>两步</strong>：墙先接收（动观察者），再反射（动源）。</li>
+        <li>动观察者公式 \(f'=f(1\pm u/v)\)，接近用 +。</li>
+        <li>动源公式 \(f'=f/(1\mp u_S/v)\)，接近用 -。</li>
+        <li>拍频 = 两频率绝对差。</li>
+        <li>小量近似来自展开 \(\dfrac{1+x}{1-x}\approx 1+2x+2x^2+...\)（\(x=u/v\ll 1\)）。</li>
+      </ul>
+    </details>
+
+    <details class="sol-box">
+      <summary>📝 完整解答</summary>
+
+      <h4>(a) 墙接收</h4>
+      <p>墙作为运动观察者接近静止声源：</p>
+      $$f_1=f_0\Bigl(1+\frac{u}{v}\Bigr)=500\Bigl(1+\frac{5}{343}\Bigr)=500\cdot 1.01458\approx 507.29\ \text{Hz}.$$
+
+      <h4>(b) 反射后被原声源接收</h4>
+      <p>墙现在作为运动源，发射频率 \(f_1\) 接近静止观察者（原声源所在位置）：</p>
+      $$f_2=\frac{f_1}{1-u/v}=\frac{507.29}{1-5/343}=\frac{507.29}{0.98542}\approx 514.80\ \text{Hz}.$$
+
+      <h4>(c) 拍频</h4>
+      $$\Delta f=f_2-f_0=514.80-500.00\approx 14.80\ \text{Hz}.$$
+
+      <h4>(d) 小量近似</h4>
+      <p>组合表达：</p>
+      $$f_2=f_0\cdot\frac{1+u/v}{1-u/v}.$$
+      <p>用 Taylor \(\dfrac{1+x}{1-x}=1+2x+2x^2+2x^3+\dots\)（\(x=u/v\)）：</p>
+      $$\Delta f=f_0(2x+2x^2+\dots)\approx 2x f_0\Bigl[1+x+x^2+\dots\Bigr].$$
+      <p>领头项：</p>
+      $$\Delta f_{\text{lead}}=2(u/v)f_0=2\cdot 0.01458\cdot 500\approx 14.58\ \text{Hz}.$$
+      <p>下一阶修正：\(2x^2 f_0=2(0.01458)^2\cdot 500\approx 0.21\) Hz。
+      所以总值 ≈ 14.58 + 0.21 = 14.79 Hz，与精确值 14.80 Hz 仅差 0.01 Hz。</p>
+      <p>原因：\(u/v=0.0146\ll 1\)，所以高阶项 \((u/v)^2\) 级别远小于领头项。这是 <strong>雷达测速 / 流速仪 / 心脏多普勒超声</strong> 都用 \(\Delta f\propto u\) 线性关系的物理基础。</p>
+    </details>
+
+    <div class="answer-box">
+      (a) ≈ 507.3 Hz · (b) ≈ 514.8 Hz · (c) 拍频 ≈ 14.80 Hz · (d) 近似 14.58 Hz；差异 ~1%，来自 \((u/v)^2\) 高阶项
+    </div>
+
+    <!-- ============ PROBLEM 4 ============ -->
+    <h2 id="p4">Problem 4 — 双原子空气绝热压缩 <span class="scope-tag scope-adia">Adiabatic</span> <span class="diff">★★ · 8 min</span></h2>
+
+    <div class="problem-statement">
+      汽缸活塞，截面 \(A=0.02\) m²，内含 1 mol <strong>空气</strong>（双原子，γ=7/5），初态 \(T_1=290\) K，\(P_1=P_{\text{atm}}=101325\) Pa。在活塞上慢慢放 30 kg 重物，过程绝热准静态。
+      <br/><strong>(a)</strong> 新压强 \(P_2\)？
+      <br/><strong>(b)</strong> 体积比 \(V_2/V_1\) 与高度下降百分比？
+      <br/><strong>(c)</strong> 末态温度 \(T_2\)？
+      <br/><strong>(d)</strong> 如果你 <strong>错误地</strong> 把空气当单原子（γ=5/3、\(c_v=3R/2\)），\(T_2\) 会算出多少？误差百分比？
+    </div>
+
+    <details class="hint-box">
+      <summary>💡 提示</summary>
+      <ul>
+        <li>⚠ <strong>本题的核心陷阱</strong>：空气是双原子，γ=7/5 不是 5/3。final 公式表只给单原子值！</li>
+        <li>新压强 \(P_2=P_{\text{atm}}+mg/A\)。</li>
+        <li>绝热 \(PV^\gamma=\) const → \(V_2/V_1=(P_1/P_2)^{1/\gamma}\)。</li>
+        <li>\(TV^{\gamma-1}=\) const → \(T_2/T_1=(V_1/V_2)^{\gamma-1}\)。</li>
+        <li>(d) 把 γ 换成 5/3 重新代入，比较 \(\Delta T\) 的差异。</li>
+      </ul>
+    </details>
+
+    <details class="sol-box">
+      <summary>📝 完整解答</summary>
+
+      <h4>(a) 新压强</h4>
+      <p>重物加压 \(P_w=mg/A=30\cdot 9.81/0.02=14715\) Pa。</p>
+      $$P_2=P_{\text{atm}}+P_w=101325+14715=116040\ \text{Pa}\approx 1.146\ \text{atm}.$$
+
+      <h4>(b) 体积比 + 高度</h4>
+      <p>γ=7/5，\(1/\gamma=5/7\)：</p>
+      $$\frac{V_2}{V_1}=\Bigl(\frac{P_1}{P_2}\Bigr)^{5/7}=\Bigl(\frac{101325}{116040}\Bigr)^{0.7143}=(0.8732)^{0.7143}\approx 0.908.$$
+      <p>高度下降 \(1-0.908=0.092\)，即 <strong>~9.2%</strong>。</p>
+
+      <h4>(c) 末态温度（正确 γ=7/5）</h4>
+      <p>\(\gamma-1=2/5=0.4\)：</p>
+      $$\frac{T_2}{T_1}=\Bigl(\frac{V_1}{V_2}\Bigr)^{0.4}=\Bigl(\frac{1}{0.908}\Bigr)^{0.4}=(1.1014)^{0.4}\approx 1.0395.$$
+      $$T_2=290\cdot 1.0395\approx 301.5\ \text{K}.\ (\Delta T\approx 11.5\ \text{K})$$
+
+      <h4>(d) 错误地用单原子 γ=5/3</h4>
+      <p>\(V_2/V_1=(0.8732)^{3/5}=(0.8732)^{0.6}\approx 0.922\)。</p>
+      <p>\(T_2/T_1=(1/0.922)^{2/3}=(1.0846)^{0.667}\approx 1.0558\)。</p>
+      $$T_2^{\text{wrong}}=290\cdot 1.0558\approx 306.2\ \text{K}.\ (\Delta T^{\text{wrong}}\approx 16.2\ \text{K})$$
+
+      <p>误差对比：</p>
+      <ul>
+        <li>绝对温度：306.2 vs 301.5 → 偏高 4.7 K（1.6% 绝对值）</li>
+        <li><strong>温度上升 ΔT</strong>：16.2 vs 11.5 → <strong>偏高 41%</strong>！</li>
+      </ul>
+      <p>结论：把空气当单原子算，绝对温度差只 1.6%，但 <strong>"绝热升温量"差 41%</strong>——这才是损失分数的真正陷阱。</p>
+
+      <div class="box warning">
+        <p class="box-title">⚠ 必背：γ 速查</p>
+        <p>单原子（He, Ar）：γ=5/3，\(c_v=3R/2\)</p>
+        <p>双原子（N₂, O₂, 空气）室温：γ=7/5，\(c_v=5R/2\)</p>
+        <p>多原子（CO₂, H₂O）：γ≈4/3, \(c_v=3R\)</p>
+      </div>
+    </details>
+
+    <div class="answer-box">
+      (a) ≈ 116040 Pa · (b) \(V_2/V_1\approx 0.908\)，高度下降 9.2% · (c) \(T_2\approx 301.5\) K · (d) 错算 \(T_2\approx 306.2\) K，绝对差 1.6%，但 ΔT 偏高 41%
+    </div>
+
+    <!-- ============ PROBLEM 5 ============ -->
+    <h2 id="p5">Problem 5 — 微观熵到温度的推导 <span class="scope-tag scope-entropy">Stat Mech</span> <span class="diff">★★★ · 12 min</span></h2>
+
+    <div class="problem-statement">
+      单原子理想气体的微观态数 \(\Omega(U,V,N)\propto V^N U^{3N/2}\)。
+      <br/><strong>(a)</strong> 写出 \(S(U,V,N)\) 显式表达。
+      <br/><strong>(b)</strong> 用温度的微观定义 \(\dfrac{1}{T}=\Bigl(\dfrac{\partial S}{\partial U}\Bigr)_{V,N}\)，推出 \(U(T)\)。
+      <br/><strong>(c)</strong> 验证你的结果是否符合 \(U=\tfrac32 NkT\)。
+      <br/><strong>(d)</strong> 类似地用 \(\dfrac{P}{T}=\Bigl(\dfrac{\partial S}{\partial V}\Bigr)_{U,N}\) 推出 \(PV=NkT\)。
+    </div>
+
+    <details class="hint-box">
+      <summary>💡 提示</summary>
+      <ul>
+        <li>\(S=k\ln\Omega\)（Boltzmann 公式）。</li>
+        <li>\(\ln(V^N U^{3N/2})=N\ln V+\tfrac{3N}{2}\ln U\)。</li>
+        <li>常数项（不依赖 U、V、N）不影响后续偏导。</li>
+        <li>\(\partial\ln U/\partial U=1/U\)。</li>
+        <li><strong>关于 final 公式表的小注</strong>：表上写 \(1/(kT)=\partial S/\partial U\)，那是把"S"理解为无量纲的 \(\ln\Omega\)（不带 k 前缀）。若按 \(S=k\ln\Omega\)（J/K 单位）则 \(1/T=\partial S/\partial U\)。两者数学上等价、结果都是 \(U=\tfrac32 NkT\)。</li>
+      </ul>
+    </details>
+
+    <details class="sol-box">
+      <summary>📝 完整解答</summary>
+
+      <h4>(a) 显式 S</h4>
+      <p>取 \(\Omega=C\cdot V^N U^{3N/2}\)（\(C\) 是 U、V 无关的常数）：</p>
+      $$S=k\ln\Omega=k\bigl[N\ln V+\tfrac{3N}{2}\ln U\bigr]+\text{const}.$$
+      $$\boxed{S(U,V,N)=Nk\ln V+\tfrac{3}{2}Nk\ln U+S_0.}$$
+
+      <h4>(b) ∂S/∂U → U(T)</h4>
+      <p>对 U 求偏导（V、N 固定，常数项导数为 0）：</p>
+      $$\Bigl(\frac{\partial S}{\partial U}\Bigr)_{V,N}=\tfrac{3}{2}Nk\cdot\frac{1}{U}=\frac{3Nk}{2U}.$$
+      <p>令 \(1/T=\partial S/\partial U\)：</p>
+      $$\frac{1}{T}=\frac{3Nk}{2U}\quad\Longrightarrow\quad U=\frac{3}{2}NkT.$$
+
+      <h4>(c) 验证</h4>
+      <p>\(U=\tfrac{3}{2}NkT\) ✓ 与等分定理结果完全一致（每个单原子 3 个平动自由度，每自由度 \(\tfrac12 kT\) → 总能量 \(\tfrac32 kT\) 每分子）。</p>
+
+      <p><strong>物理意义</strong>：从纯组合学的微观态计数（\(\Omega\propto U^{3N/2}\) 是 \(3N-1\) 维动量球面的体积关系）出发，<em>不</em>引入任何动力学假设，就推出了 \(U=\tfrac32 NkT\)。Boltzmann 公式 + 温度的微观定义 = 经典热力学。</p>
+
+      <h4>(d) PV = NkT</h4>
+      <p>对 V 求偏导：</p>
+      $$\Bigl(\frac{\partial S}{\partial V}\Bigr)_{U,N}=\frac{Nk}{V}.$$
+      <p>令 \(P/T=\partial S/\partial V\)：</p>
+      $$\frac{P}{T}=\frac{Nk}{V}\quad\Longrightarrow\quad PV=NkT.$$
+      <p>同样地，<strong>理想气体状态方程也从微观态计数 + 熵的两个偏导关系自然涌现</strong>。这是统计力学的核心胜利。</p>
+
+      <div class="box insight">
+        <p class="box-title">为什么 Ω 指数是 \(3N/2\)？</p>
+        <p>位置部分：N 个分子在体积 V 中分布 → \(\Omega_{\text{pos}}\propto V^N\)。</p>
+        <p>动量部分：能量约束 \(\sum p_i^2/(2m)=U\) 给出 \(3N\) 维空间中半径 \(\sqrt{2mU}\) 的球面 → 面积 \(\propto (2mU)^{(3N-1)/2}\approx U^{3N/2}\)（大 N 极限下"-1" 可忽略）。</p>
+        <p>两部分独立相乘：\(\Omega\propto V^N U^{3N/2}\) ✓</p>
+      </div>
+    </details>
+
+    <div class="answer-box">
+      (a) \(S=Nk\ln V+\tfrac{3}{2}Nk\ln U+S_0\) · (b)(c) \(U=\tfrac{3}{2}NkT\) ✓ · (d) \(PV=NkT\) ✓
+    </div>
+
+    <!-- ============ FINAL TIPS ============ -->
+    <h2 id="tips">📋 通用 final 应试 tips</h2>
+    <div class="box remark">
+      <p class="box-title">考前 30 分钟回顾</p>
+      <ol>
+        <li>三个 ω 别混（\(\omega_0,\omega',\omega_{\max}\)）</li>
+        <li>振幅 vs 能量衰减率差 2 倍（\(e^{-\gamma t/2}\) vs \(e^{-\gamma t}\)）</li>
+        <li>空气是双原子 γ=7/5，单原子 5/3</li>
+        <li>半开管 \(f_n=(2n-1)v/(4L)\)，只有奇次谐波</li>
+        <li>声波 s 和 p 相位差 π/2，空间差 λ/4</li>
+        <li>Doppler 只用径向分量</li>
+        <li>熵 T 用 Kelvin 不用 °C</li>
+        <li>循环 / 稳态系统 ΔS = 0</li>
+        <li>Boltzmann \(S=k\ln\Omega\)，从 \(\partial S/\partial U\) 得 1/T</li>
+        <li>压强公式 \(P=F/A\)，浮力公式 \(F_b=\rho Vg\)，连续性公式 \(\rho_1A_1v_1=\rho_2A_2v_2\)</li>
+      </ol>
+    </div>
+
+    <div class="box insight">
+      <p class="box-title">考场上时间分配建议（3 小时考试）</p>
+      <p>180 分钟 ÷ 大约 6-8 题 = 22-30 分钟/题。前 15 分钟先扫所有题目难度排序，先做有把握的，把难题放最后留 buffer。
+      最后 10 分钟检查单位、绝对/相对温度、γ 是 7/5 还是 5/3 这种小陷阱。</p>
+    </div>
+
+    <nav class="page-nav">
+      <a class="nav-prev" href="quiz5_walkthrough.html">Quiz 5 walkthrough</a>
+      <a class="nav-next" href="index.html">总目录</a>
+    </nav>
+
+  </main>
+</body>
+</html>
